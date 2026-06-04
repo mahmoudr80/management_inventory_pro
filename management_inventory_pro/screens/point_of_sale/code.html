@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inventory Pro - POS Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#54647a",
+                    "inverse-surface": "#283044",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#004dea",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface-container-high": "#e2e7ff",
+                    "surface-dim": "#d2d9f4",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#e3e7eb",
+                    "surface": "#faf8ff",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "primary-fixed": "#dce1ff",
+                    "inverse-on-surface": "#eef0ff",
+                    "surface-container": "#eaedff",
+                    "inverse-primary": "#b6c4ff",
+                    "surface-bright": "#faf8ff",
+                    "on-primary-fixed-variant": "#0039b3",
+                    "on-surface": "#131b2e",
+                    "background": "#faf8ff",
+                    "on-surface-variant": "#434656",
+                    "on-secondary-fixed": "#0b1c30",
+                    "tertiary-container": "#63686c",
+                    "surface-variant": "#dae2fd",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#43474b",
+                    "on-background": "#131b2e",
+                    "outline": "#737688",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#d0e1fb",
+                    "tertiary-fixed-dim": "#c3c7cb",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "tertiary-fixed": "#dfe3e7",
+                    "outline-variant": "#c3c5d9",
+                    "tertiary": "#4b5053",
+                    "on-primary-container": "#e3e6ff",
+                    "surface-container-highest": "#dae2fd",
+                    "surface-container-low": "#f2f3ff",
+                    "on-primary-fixed": "#001551",
+                    "primary": "#0041c8",
+                    "secondary": "#505f76",
+                    "primary-container": "#0055ff",
+                    "on-tertiary-fixed": "#171c1f",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "240px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "unit": "4px",
+                    "table-row-height": "40px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display": ["Inter"],
+                    "body-md": ["Inter"],
+                    "data-mono": ["JetBrains Mono"],
+                    "headline-sm": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "data-mono": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- Persistent Sidebar (Shared Component) -->
+<aside class="w-sidebar-width h-full fixed left-0 top-0 bg-inverse-surface flex flex-col py-6 px-4 z-20">
+<div class="mb-8">
+<h1 class="font-headline-sm text-headline-sm font-bold text-surface-bright">Inventory Pro</h1>
+<p class="text-secondary-fixed-dim text-body-sm opacity-70">Global Operations</p>
+</div>
+<nav class="flex-grow flex flex-col gap-1">
+<div class="flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant rounded">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant rounded">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md">Products</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant rounded">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-body-md">Suppliers</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant rounded">
+<span class="material-symbols-outlined">warehouse</span>
+<span class="font-body-md">Warehouses</span>
+</div>
+<!-- Active State for POS -->
+<div class="flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors text-primary-fixed font-bold border-l-4 border-primary-fixed bg-on-secondary-fixed-variant rounded-r">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">point_of_sale</span>
+<span class="font-body-md">POS</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant rounded">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md">Reports</span>
+</div>
+</nav>
+<div class="mt-auto flex items-center gap-3 p-2 bg-on-secondary-fixed-variant rounded-lg">
+<img alt="User Avatar" class="w-10 h-10 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgAsQkVb4oT-IdhJAWv0Lvk2PRR-VsZ89WwMyv4MQUufGFn0R4UG3TIg_QxWsKBz3eRfpXMeHGYiYrL64g50Qr0dm0kPlgRKz184l80FuIcWnzrnt-WtFhUURzWr8ZZdKcHoF_th0Yzqe000iPy1qssP931C4ThbCl2yOvcnKxEfj6kp8ly87q7GuKJH2pNDLoiNsJfPmwPsyrgIRlXrR39gokeDljHRocNfOZTCwhdEIOsjZoCnuKtMQDXVodmX2-dmdOqAYLJqw"/>
+<div class="overflow-hidden">
+<p class="text-surface-bright font-bold truncate">Alex Rivera</p>
+<p class="text-secondary-fixed-dim text-[11px] truncate uppercase tracking-wider">Lead Associate</p>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="flex justify-between items-center h-table-row-height px-gutter w-[calc(100%-theme(spacing.sidebar-width))] fixed top-0 right-0 z-10 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-1 bg-surface-container-low border border-outline-variant rounded-lg text-body-sm w-80 focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Global Inventory Search (F1)" type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-all">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-all">settings</span>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-[#22c55e] rounded-full"></div>
+<span class="text-body-sm font-medium">Terminal 04 - Online</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-sidebar-width pt-table-row-height h-screen flex bg-surface-container-lowest">
+<!-- Left Section: Product Grid -->
+<section class="w-3/5 flex flex-col border-r border-outline-variant">
+<!-- Search & Filter Bar -->
+<div class="p-4 bg-surface flex gap-3 items-center sticky top-0 z-10">
+<div class="relative flex-grow">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">barcode_scanner</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md focus:border-primary focus:ring-1 focus:ring-primary transition-all" id="productSearch" placeholder="Search Items or Scan Barcode (Ctrl+F)" type="text"/>
+</div>
+<button class="px-6 py-3 bg-surface-container border border-outline-variant rounded-xl font-bold text-body-md hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">filter_list</span>
+                    Categories
+                </button>
+</div>
+<!-- Bento Product Grid -->
+<div class="p-4 grid grid-cols-4 gap-4 overflow-y-auto custom-scrollbar flex-grow bg-surface-container-low/30">
+<!-- Product Card 1 -->
+<button class="bg-surface border border-outline-variant rounded-xl p-2 flex flex-col items-center text-center hover:border-primary hover:shadow-sm active:scale-95 transition-all group">
+<div class="w-full aspect-square rounded-lg bg-surface-container mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist studio shot of a vibrant red athletic sneaker on a soft gray background. The lighting is bright and professional, highlighting the texture of the material. The aesthetic is modern and corporate with a focus on product clarity and high-end retail presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8AtbEph8Ux5yWUtRMsYKNAWkVYudAMNHJnYMPOH6njV71ZzHKAcJcsOE06S5cNaHYxWGXFnyy7RQr9Gqgvn3TjPBaR8pCIcU88vrYWFia1OCviasljcNNKFSdUYXUo_BW9vINjE4-R-L4HWr8gmaPOkGywPpjb-4WCJLYBdlElCph5AYVdQYXgdtg7Qkf0pKqbXwSYrY76mI6om_mJXNWU8GzywAMzjq95f2MaNfr0EvTAPIJa-5a3czi7ZJIxOk7oGkRPgCw63I"/>
+</div>
+<span class="font-body-sm font-bold block text-on-surface mb-1 truncate w-full">Apex Runner X1</span>
+<span class="font-data-mono text-primary font-bold">$129.00</span>
+</button>
+<!-- Product Card 2 -->
+<button class="bg-surface border border-outline-variant rounded-xl p-2 flex flex-col items-center text-center hover:border-primary hover:shadow-sm active:scale-95 transition-all group">
+<div class="w-full aspect-square rounded-lg bg-surface-container mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A sleek, modern white digital watch captured in a bright, high-key studio setting. The watch features a minimalist design with a smooth matte finish. The background is a clean, neutral slate, emphasizing a professional and systematic product aesthetic suitable for an operational logistics interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKgmyrvJmRBBhSxtoQBYiEoUavuMaoAE4f8lb5GUPvdxFRWc46xgTamg2Mb0euYHH9YeV5fq2FLIIWRSrKq_mNJUwv5iOw0vcvKJ1YyvFfbwS1g-lG0TAXg-QlP1NLjNR3hoRhqwbmx32aqmY3wC8U9KGQiahXTxM-qByEkN1ajpf4OCcmizxHzcHswV2ozcg8wI6q5ZaNNjlKGXZWmvfuXtAU3od0RH5iZq6jNupNadCBlkbeMnOwI-doRvIV5T25DMqRGoVM5JA"/>
+</div>
+<span class="font-body-sm font-bold block text-on-surface mb-1 truncate w-full">Tactical Watch</span>
+<span class="font-data-mono text-primary font-bold">$89.50</span>
+</button>
+<!-- Product Card 3 (Out of Stock State) -->
+<button class="bg-surface border border-outline-variant rounded-xl p-2 flex flex-col items-center text-center opacity-60 cursor-not-allowed">
+<div class="w-full aspect-square rounded-lg bg-surface-container mb-2 overflow-hidden relative">
+<div class="absolute inset-0 bg-error/10 flex items-center justify-center">
+<span class="bg-error text-white px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Out of Stock</span>
+</div>
+<img class="w-full h-full object-cover" data-alt="A pair of premium black over-ear noise-canceling headphones resting on a minimalist wooden surface. The lighting is focused and warm, creating a sense of professional grade equipment. The image style is clean, sharp, and utilitarian, fitting for a modern enterprise inventory system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ_FAvVcW5JQXccFIFOeVuiol3V9dBa9vSBHdKPiU-5ylPJzJEWuW2dbOHPlD043ypkjVnNWfTRxW7tv__QEMcrxbkOgwM0sZeA8W4Y50BJ1mSEY5hx9FXuUhCRMnqKrfQZOXAapTMqtVBiRSmYxl0lCqi-0UDQtsxf1IAHLgy9YFU3oV7iNlva9Nm5HIfbJcYH3B-UrBHEzF7H39wSkaPaK4_vUKh7_6WeBtq6gPHNZ7KttvIj3H4YXuizJN-oVoowrtKGdZNMeM"/>
+</div>
+<span class="font-body-sm font-bold block text-on-surface mb-1 truncate w-full">Studio Pro ANC</span>
+<span class="font-data-mono text-primary font-bold">$249.00</span>
+</button>
+<!-- Product Card 4 -->
+<button class="bg-surface border border-outline-variant rounded-xl p-2 flex flex-col items-center text-center hover:border-primary hover:shadow-sm active:scale-95 transition-all group">
+<div class="w-full aspect-square rounded-lg bg-surface-container mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An elegant, vintage-style film camera in a bright, modern studio. The camera body is silver and black, with detailed textures of the leather and metal visible. The shot is high-contrast with clean lines, conveying a sense of precision and professional hardware tracking." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqSHtIvz4yYnmLorS4lx22NbWxDfu3j5QEZOCngQBMUUczuYIhErXBQlSBg2gbJqukWIZr8-5hF6TDNRfzIMGKaWDeVgJ4_f98P7zkXkki9zU8ZzHFXPyg9Fn1UXchKb4BDpSfzRhVtyrH0aLmM9OLLPgKrr1yNBfr5sMbR6NxpvTlYz11W_jZIB8JAex8yEDnFDQ5A5HI2b75vqrqR8Hto8lpdvj1sh5MrVB69lGbJ9D5-GwQ0_wWtrbAN-JPWPAqXEfFGgBvvcU"/>
+</div>
+<span class="font-body-sm font-bold block text-on-surface mb-1 truncate w-full">Retro Cam 35mm</span>
+<span class="font-data-mono text-primary font-bold">$420.00</span>
+</button>
+<!-- Quick Pick Tiles (Asymmetric Category Layout) -->
+<div class="col-span-2 row-span-2 bg-primary-container text-on-primary-container p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden group">
+<div class="relative z-10">
+<h3 class="font-headline-md text-white">Daily Essentials</h3>
+<p class="text-primary-fixed text-body-sm">Fast-moving SKU Bundle</p>
+</div>
+<button class="relative z-10 self-start mt-8 bg-white text-primary px-4 py-2 rounded-lg font-bold text-body-sm flex items-center gap-2 hover:bg-primary-fixed transition-all">
+<span class="material-symbols-outlined">add_circle</span>
+                        Quick Add All
+                    </button>
+<!-- Background Pattern Decor -->
+<div class="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined !text-[180px]">shopping_basket</span>
+</div>
+</div>
+<button class="bg-surface border border-outline-variant rounded-xl p-2 flex flex-col items-center text-center hover:border-primary hover:shadow-sm active:scale-95 transition-all group">
+<div class="w-full aspect-square rounded-lg bg-surface-container mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A pair of sleek modern sunglasses with dark lenses and a minimalist frame. The product is photographed against a neutral white background with subtle, soft shadows. The lighting is crisp and clean, reflecting a professional and efficient retail catalog aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBppn1yPYH4I1sIQ7TLIieJB4Y3yWtzzJ5AAK2vPFrCby761rdGXLi2n25pJL_ikwAfWiVpzomq9ryD5JSqaRo0lksYqM19cWewT_4_MoDFLtPCzcHkN0T0G8i1dprFjIe6LpSVQWmhXmN_21GLIl4Glnm7bMvdtNM1E8P4xtJ4DF84iVgKm7qveYGYt1H3G1I53G57R8smgUdVWmWh7eaNmv4z7OeQzmhJ8Ksd3ZxQzfKmYB9L2Iraph6gAxNv5xOHfG215g1UniQ"/>
+</div>
+<span class="font-body-sm font-bold block text-on-surface mb-1 truncate w-full">Wayfarer Black</span>
+<span class="font-data-mono text-primary font-bold">$155.00</span>
+</button>
+<button class="bg-surface border border-outline-variant rounded-xl p-2 flex flex-col items-center text-center hover:border-primary hover:shadow-sm active:scale-95 transition-all group">
+<div class="w-full aspect-square rounded-lg bg-surface-container mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-quality, professional grade ergonomic computer mouse in a minimalist workspace. The mouse is dark gray with a matte finish. The lighting is overhead and even, emphasizing the sleek form factor and professional utility of the hardware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChl88ifCXkb7Ez-c0-tid4Y_FpP3cGP_Z1WQoK0QDBxxGr2yo9JSe8ppPnM9dj53RufWoA0Hv4hGuSH1GDAzoGqmuI81dP1WpcuMrsTSnYFE0cKtmG54BCplOZ0USO2I3z4EQDOtao2kWCIEpBQ5r1De072LFUaNAR7Re7lw6Eid6uBGFE5wnMQsAQ9kW1mAVNZ2AKtLF-NjdJUCQI4p01bzFtlSQGXIdDQvySeYE-2LXDtfsJw1Iz2w5A6KgdPDn9rKqe6zHTiao"/>
+</div>
+<span class="font-body-sm font-bold block text-on-surface mb-1 truncate w-full">Logi Pro Mouse</span>
+<span class="font-data-mono text-primary font-bold">$79.99</span>
+</button>
+<!-- More items can follow same pattern -->
+<button class="bg-surface border border-outline-variant rounded-xl p-2 flex flex-col items-center text-center hover:border-primary hover:shadow-sm active:scale-95 transition-all group">
+<div class="w-full aspect-square rounded-lg bg-surface-container mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-quality steel water bottle in a clean studio setting. The bottle has a matte blue finish and a modern, cylindrical design. The lighting is soft and diffused, creating a professional and disciplined look consistent with a high-efficiency retail environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4uWxEDwsDsAOzEti2BXPsYaAQsW0DO7gP_WyrYRVOawaxZaHTZXJd5yrhprYvX9Xw_Kul4CdQWBZ2JUlxYw_EATGtaJ_F5-WQxsCl4jENt5Y3aF1Enp4-nxhav7HTAnskCUfjOL_dr39Fz_9WY9YTxvlavo47yedQRkD-s0GwcCNrwu2fubjFl8-Zg5ezWctqQXWyvYKXWaTIj_tcRey7uzxUBpcs3t56_KjbgYbwS-Db7iNNKpIRvppenOEuMWsz4BRQzpJneZc"/>
+</div>
+<span class="font-body-sm font-bold block text-on-surface mb-1 truncate w-full">Steel Flask 1L</span>
+<span class="font-data-mono text-primary font-bold">$34.00</span>
+</button>
+</div>
+</section>
+<!-- Right Section: Cart Summary & Checkout -->
+<section class="w-2/5 flex flex-col bg-surface shadow-xl relative z-10 border-l border-outline-variant">
+<!-- Customer Selector -->
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low/50">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+<div>
+<p class="text-body-sm font-bold">Guest Customer</p>
+<p class="text-[11px] text-on-surface-variant font-label-caps uppercase">Add to Loyalty Program</p>
+</div>
+</div>
+<button class="text-primary font-bold text-body-sm hover:underline">Edit</button>
+</div>
+<!-- Cart Items Table -->
+<div class="flex-grow overflow-y-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface shadow-sm z-10">
+<tr class="border-b border-outline-variant">
+<th class="px-4 py-3 font-label-caps text-on-surface-variant uppercase">Item</th>
+<th class="px-4 py-3 font-label-caps text-on-surface-variant uppercase text-center">Qty</th>
+<th class="px-4 py-3 font-label-caps text-on-surface-variant uppercase text-right">Price</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-4">
+<div class="flex flex-col">
+<span class="font-body-md font-bold">Apex Runner X1</span>
+<span class="text-body-sm text-on-surface-variant">Size: 10, Color: Red</span>
+</div>
+</td>
+<td class="px-4 py-4">
+<div class="flex items-center justify-center gap-3">
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-surface-variant">-</button>
+<span class="font-data-mono font-bold">1</span>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-surface-variant">+</button>
+</div>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex flex-col">
+<span class="font-data-mono font-bold">$129.00</span>
+<button class="text-error text-[11px] opacity-0 group-hover:opacity-100 transition-opacity font-bold uppercase">Remove</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-4">
+<div class="flex flex-col">
+<span class="font-body-md font-bold">Tactical Watch</span>
+<span class="text-body-sm text-on-surface-variant">Standard Edition</span>
+</div>
+</td>
+<td class="px-4 py-4">
+<div class="flex items-center justify-center gap-3">
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-surface-variant">-</button>
+<span class="font-data-mono font-bold">1</span>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-surface-variant">+</button>
+</div>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex flex-col">
+<span class="font-data-mono font-bold">$89.50</span>
+<button class="text-error text-[11px] opacity-0 group-hover:opacity-100 transition-opacity font-bold uppercase">Remove</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Totals & Checkout Panel -->
+<div class="bg-surface-container-high p-6 border-t border-outline-variant">
+<div class="space-y-2 mb-6">
+<div class="flex justify-between text-on-surface-variant">
+<span class="font-body-md">Subtotal</span>
+<span class="font-data-mono">$218.50</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span class="font-body-md">Tax (8.5%)</span>
+<span class="font-data-mono">$18.57</span>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-outline">
+<span class="font-headline-sm font-bold">Total Payable</span>
+<span class="font-display text-primary font-bold">$237.07</span>
+</div>
+</div>
+<!-- Checkout Actions -->
+<div class="grid grid-cols-2 gap-3 mb-4">
+<button class="flex flex-col items-center justify-center gap-1 bg-surface border-2 border-primary text-primary py-4 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined">payments</span>
+                        Cash
+                    </button>
+<button class="flex flex-col items-center justify-center gap-1 bg-primary text-white py-4 rounded-xl font-bold hover:bg-on-primary-fixed-variant transition-all active:scale-95 shadow-md">
+<span class="material-symbols-outlined">credit_card</span>
+                        Card
+                    </button>
+</div>
+<div class="flex gap-3">
+<button class="flex-grow py-3 bg-white border border-outline-variant rounded-xl font-bold text-on-surface-variant flex items-center justify-center gap-2 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined">call_split</span>
+                        Split Pay
+                    </button>
+<button class="w-14 h-12 bg-white border border-outline-variant rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined">print</span>
+</button>
+</div>
+</div>
+<!-- Terminal Info / Keyboard Shortcuts -->
+<div class="px-6 py-3 bg-inverse-surface text-secondary-fixed-dim text-[11px] flex justify-between items-center font-label-caps">
+<div class="flex gap-4">
+<span>F1: Search</span>
+<span>F2: Cash</span>
+<span>F3: Card</span>
+<span>ESC: Clear</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined !text-sm">lock</span>
+                    Locked Session
+                </div>
+</div>
+</section>
+</main>
+<!-- Success Modal Overlay (Hidden by Default) -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center" id="successModal">
+<div class="bg-surface rounded-3xl p-8 max-w-md w-full shadow-2xl scale-95 opacity-0 transition-all duration-300 transform" id="modalContent">
+<div class="w-20 h-20 bg-[#22c55e]/10 text-[#22c55e] rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined !text-4xl" style="font-variation-settings: 'wght' 700;">check_circle</span>
+</div>
+<h2 class="text-headline-md font-bold text-center mb-2">Payment Successful</h2>
+<p class="text-on-surface-variant text-center mb-8">Transaction #TRX-984210 confirmed. Receipt has been printed.</p>
+<div class="grid grid-cols-2 gap-4">
+<button class="py-4 bg-surface-container border border-outline-variant rounded-xl font-bold hover:bg-surface-variant transition-all" onclick="closeModal()">Done</button>
+<button class="py-4 bg-primary text-white rounded-xl font-bold shadow-md hover:bg-on-primary-fixed-variant transition-all">Email Receipt</button>
+</div>
+</div>
+</div>
+<script>
+        // Simple Interaction logic
+        const checkoutCard = document.querySelector('button.bg-primary');
+        const modal = document.getElementById('successModal');
+        const modalContent = document.getElementById('modalContent');
+
+        checkoutCard.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        });
+
+        function closeModal() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Global Key Listener for Keyboard-Friendly Design
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F1') {
+                e.preventDefault();
+                document.getElementById('productSearch').focus();
+            }
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Search Input Focus highlight
+        const searchInput = document.getElementById('productSearch');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inventory Pro | Global Operations Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#54647a",
+                    "inverse-surface": "#283044",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#004dea",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface-container-high": "#e2e7ff",
+                    "surface-dim": "#d2d9f4",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#e3e7eb",
+                    "surface": "#faf8ff",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "primary-fixed": "#dce1ff",
+                    "inverse-on-surface": "#eef0ff",
+                    "surface-container": "#eaedff",
+                    "inverse-primary": "#b6c4ff",
+                    "surface-bright": "#faf8ff",
+                    "on-primary-fixed-variant": "#0039b3",
+                    "on-surface": "#131b2e",
+                    "background": "#faf8ff",
+                    "on-surface-variant": "#434656",
+                    "on-secondary-fixed": "#0b1c30",
+                    "tertiary-container": "#63686c",
+                    "surface-variant": "#dae2fd",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#43474b",
+                    "on-background": "#131b2e",
+                    "outline": "#737688",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#d0e1fb",
+                    "tertiary-fixed-dim": "#c3c7cb",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "tertiary-fixed": "#dfe3e7",
+                    "outline-variant": "#c3c5d9",
+                    "tertiary": "#4b5053",
+                    "on-primary-container": "#e3e6ff",
+                    "surface-container-highest": "#dae2fd",
+                    "surface-container-low": "#f2f3ff",
+                    "on-primary-fixed": "#001551",
+                    "primary": "#0041c8",
+                    "secondary": "#505f76",
+                    "primary-container": "#0055ff",
+                    "on-tertiary-fixed": "#171c1f",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "240px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "unit": "4px",
+                    "table-row-height": "40px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display": ["Inter"],
+                    "body-md": ["Inter"],
+                    "data-mono": ["JetBrains Mono"],
+                    "headline-sm": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "data-mono": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .table-pin-left { position: sticky; left: 0; background-color: inherit; z-index: 1; border-right: 1px solid #e2e8f0; }
+        .hover-row:hover { background-color: #f8fafc; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- Shared SideNavBar -->
+<nav class="bg-inverse-surface dark:bg-inverse-surface flex flex-col h-screen w-sidebar-width py-6 px-4 fixed left-0 top-0 z-20">
+<div class="mb-10 px-2">
+<h1 class="font-headline-sm text-headline-sm font-bold text-surface-bright">Inventory Pro</h1>
+<p class="text-secondary-fixed-dim text-xs opacity-70">Global Operations</p>
+</div>
+<div class="space-y-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2 text-primary-fixed font-bold border-l-4 border-primary-fixed bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Products</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span>Suppliers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="warehouse">warehouse</span>
+<span>Warehouses</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span>POS</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+</div>
+<div class="pt-4 border-t border-on-secondary-fixed-variant">
+<div class="flex items-center gap-3 px-3 py-2 text-secondary-fixed-dim">
+<img alt="User Profile" class="w-8 h-8 rounded-full object-cover" data-alt="A professional headshot of a corporate male logistics manager in his 40s wearing a crisp white shirt and a dark navy blazer. The lighting is clean, bright, and professional, characteristic of a high-end corporate office setting. The background is softly blurred with hints of architectural glass and steel, conveying a modern and systematic operational environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8thPTbriyufT9_g-y2FIUYlXmFaEDSWEgXkhQ1hb6u8ed7A3LjgOU0gCBFMhIAWChNuhmDm8b4UAe2mkDXM7RZDkAgp4c_a7Fu8bS31m6MBQUV7ih6tbE3jbI4ULv3QViLuqb1a8PsegY8oJFe8r76nE9wSBoy8KQIwpqzygmRtOY44iIjZFkSugyWSMlgWF3Jx0x3EcDIbMv96wuFPZF4K691BeGSdGs5G93oSLuhosOiDNlD11nmNxGMiv52HDl6EDrZGx80Mw"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Alex Rivera</p>
+<p class="text-xs opacity-60">Ops Lead</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Shared TopNavBar -->
+<header class="flex justify-between items-center h-table-row-height px-gutter w-[calc(100%-theme(spacing.sidebar-width))] fixed top-0 right-0 z-10 bg-surface dark:bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="w-full h-8 pl-10 pr-4 bg-surface-container-low border border-outline-variant rounded focus:outline-none focus:border-primary transition-all text-sm" placeholder="Search SKU, Product, or Warehouse..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<button class="w-8 h-8 flex items-center justify-center hover:bg-surface-container-low transition-all cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center hover:bg-surface-container-low transition-all cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-sidebar-width pt-table-row-height p-margin-desktop min-h-screen">
+<!-- Metrics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-8">
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-lg flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-secondary-container block mb-1">TOTAL INVENTORY VALUE</span>
+<h2 class="font-display text-display text-on-surface tracking-tighter">$420,000</h2>
+</div>
+<div class="flex items-center gap-1 mt-4 text-emerald-600 font-bold text-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+4.2% from last month</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-lg flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-secondary-container block mb-1">LOW STOCK ALERTS</span>
+<h2 class="font-display text-display text-error">12</h2>
+</div>
+<div class="flex items-center gap-1 mt-4 text-error font-bold text-xs">
+<span class="material-symbols-outlined text-sm">warning</span>
+<span>Action required for 3 SKUs</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-lg flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-secondary-container block mb-1">TOTAL SALES TODAY</span>
+<h2 class="font-display text-display text-primary">$12,400</h2>
+</div>
+<div class="flex items-center gap-1 mt-4 text-on-surface-variant font-bold text-xs">
+<span class="material-symbols-outlined text-sm">history</span>
+<span>Vs $10.1k yesterday</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-lg flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-secondary-container block mb-1">ACTIVE SHIPMENTS</span>
+<h2 class="font-display text-display text-on-surface">4</h2>
+</div>
+<div class="flex items-center gap-1 mt-4 text-primary font-bold text-xs">
+<span class="material-symbols-outlined text-sm">local_shipping</span>
+<span>2 arriving in 24h</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Sales Summary Chart (Asymmetric Layout) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm">Sales Summary</h3>
+<p class="text-body-sm text-on-surface-variant">Weekly performance tracking</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-xs font-bold border border-outline-variant rounded hover:bg-surface-container-low">WEEK</button>
+<button class="px-3 py-1 text-xs font-bold border border-outline-variant bg-primary text-on-primary rounded">MONTH</button>
+</div>
+</div>
+<div class="h-64 relative flex items-end gap-2 px-2">
+<!-- Simple CSS Bar Chart Simulation -->
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[40%] group relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary group-hover:bg-primary-container transition-all h-[100%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant">MON</div>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[60%] group relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary group-hover:bg-primary-container transition-all h-[100%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant">TUE</div>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[45%] group relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary group-hover:bg-primary-container transition-all h-[100%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant">WED</div>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[85%] group relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary group-hover:bg-primary-container transition-all h-[100%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant">THU</div>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[70%] group relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary group-hover:bg-primary-container transition-all h-[100%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant">FRI</div>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[95%] group relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary group-hover:bg-primary-container transition-all h-[100%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant">SAT</div>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[30%] group relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary group-hover:bg-primary-container transition-all h-[100%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant">SUN</div>
+</div>
+</div>
+</div>
+<!-- Top Selling Products -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<h3 class="font-headline-sm text-headline-sm mb-4">Top Selling</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center font-bold text-primary">01</div>
+<div class="flex-1">
+<p class="text-sm font-bold leading-tight">Steel Series Mechanical Keyboard</p>
+<p class="text-xs text-on-surface-variant">1,240 sold this month</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-emerald-600">+$24k</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center font-bold text-primary">02</div>
+<div class="flex-1">
+<p class="text-sm font-bold leading-tight">Logitech MX Master 3S</p>
+<p class="text-xs text-on-surface-variant">892 sold this month</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-emerald-600">+$18k</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center font-bold text-primary">03</div>
+<div class="flex-1">
+<p class="text-sm font-bold leading-tight">BenQ PD2700U 4K Monitor</p>
+<p class="text-xs text-on-surface-variant">450 sold this month</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-emerald-600">+$12k</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-outline-variant rounded font-bold text-xs hover:bg-surface-container-low transition-colors">VIEW FULL REPORT</button>
+</div>
+<!-- Low Stock Products List -->
+<div class="col-span-12 bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm">Low Stock Alerts</h3>
+<button class="text-primary text-xs font-bold hover:underline">Reorder All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-left">
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider table-pin-left">Item Name</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider">SKU</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider text-right">Current Stock</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider text-right">Threshold</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider text-center">Status</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover-row transition-colors">
+<td class="h-table-row-height px-6 font-bold text-sm table-pin-left">Ergonomic Office Chair V2</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono">FUR-OFF-001</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono text-right">12</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono text-right">25</td>
+<td class="h-table-row-height px-6 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-error-container text-on-error-container">CRITICAL</span>
+</td>
+<td class="h-table-row-height px-6">
+<button class="text-primary text-sm font-bold">Manage</button>
+</td>
+</tr>
+<tr class="hover-row transition-colors">
+<td class="h-table-row-height px-6 font-bold text-sm table-pin-left">Thunderbolt 4 Docking Station</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono">ACC-TBT-992</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono text-right">8</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono text-right">15</td>
+<td class="h-table-row-height px-6 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-tertiary-container text-on-tertiary-container">LOW</span>
+</td>
+<td class="h-table-row-height px-6">
+<button class="text-primary text-sm font-bold">Manage</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Recent Stock Movements -->
+<div class="col-span-12 bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm">Recent Stock Movements</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+<span class="text-xs font-bold">Inbound</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-error"></div>
+<span class="text-xs font-bold">Outbound</span>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-left">
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider">Time</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider">User</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider">Action</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider">Product</th>
+<th class="h-table-row-height px-6 text-xs font-bold text-on-secondary-container uppercase tracking-wider text-right">Change</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover-row transition-colors">
+<td class="h-table-row-height px-6 text-sm font-data-mono">14:22:10</td>
+<td class="h-table-row-height px-6 text-sm">S. Miller</td>
+<td class="h-table-row-height px-6 text-sm">Manual Adjustment</td>
+<td class="h-table-row-height px-6 text-sm font-bold">Steel Series Keyboard</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono text-right text-emerald-600 font-bold">+50</td>
+</tr>
+<tr class="hover-row transition-colors">
+<td class="h-table-row-height px-6 text-sm font-data-mono">13:45:04</td>
+<td class="h-table-row-height px-6 text-sm">System (POS)</td>
+<td class="h-table-row-height px-6 text-sm">Sale #8821</td>
+<td class="h-table-row-height px-6 text-sm font-bold">MX Master 3S</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono text-right text-error font-bold">-2</td>
+</tr>
+<tr class="hover-row transition-colors">
+<td class="h-table-row-height px-6 text-sm font-data-mono">12:10:55</td>
+<td class="h-table-row-height px-6 text-sm">Warehouse A</td>
+<td class="h-table-row-height px-6 text-sm">Transfer In</td>
+<td class="h-table-row-height px-6 text-sm font-bold">4K Monitor 27"</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono text-right text-emerald-600 font-bold">+15</td>
+</tr>
+<tr class="hover-row transition-colors">
+<td class="h-table-row-height px-6 text-sm font-data-mono">10:05:22</td>
+<td class="h-table-row-height px-6 text-sm">M. Chang</td>
+<td class="h-table-row-height px-6 text-sm">Damaged Goods</td>
+<td class="h-table-row-height px-6 text-sm font-bold">Ergo Chair V2</td>
+<td class="h-table-row-height px-6 text-sm font-data-mono text-right text-error font-bold">-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<footer class="mt-12 pt-8 border-t border-outline-variant text-center">
+<p class="text-xs text-on-surface-variant font-bold uppercase tracking-widest">Inventory Pro | Advanced Logistics Engine v4.2</p>
+<p class="text-[10px] text-on-surface-variant/60 mt-1">System Status: Optimal | Data Refresh: 45s ago</p>
+</footer>
+</main>
+<!-- FAB for Operational Action -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all group z-30">
+<span class="material-symbols-outlined text-3xl">add</span>
+<div class="absolute right-16 bg-inverse-surface text-surface px-4 py-2 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity font-bold">ADD NEW SKU</div>
+</button>
+<script>
+        // Micro-interaction: Update relative time or refresh effect
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Operational Dashboard Initialized.");
+            
+            // Simulation of data refresh pulse
+            setInterval(() => {
+                const footerStatus = document.querySelector('footer p:last-child');
+                if(footerStatus) {
+                    footerStatus.textContent = `System Status: Optimal | Data Refresh: 1s ago`;
+                }
+            }, 60000);
+        });
+    </script>
+</body></html>

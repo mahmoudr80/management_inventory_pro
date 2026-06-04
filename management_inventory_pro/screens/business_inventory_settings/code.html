@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings | LogisticsPro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for dense data views */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #faf8ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c3c5d9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #737688;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#b6c4ff",
+                      "on-surface-variant": "#434656",
+                      "surface-tint": "#004dea",
+                      "error": "#ba1a1a",
+                      "primary-container": "#0055ff",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#eef0ff",
+                      "on-surface": "#131b2e",
+                      "on-primary-container": "#e3e6ff",
+                      "tertiary-fixed-dim": "#c3c7cb",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-primary-fixed": "#001551",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#737688",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#0039b3",
+                      "surface": "#faf8ff",
+                      "tertiary": "#4b5053",
+                      "on-tertiary-container": "#e3e7eb",
+                      "on-secondary-fixed": "#0b1c30",
+                      "surface-container": "#eaedff",
+                      "surface-container-high": "#e2e7ff",
+                      "on-background": "#131b2e",
+                      "inverse-surface": "#283044",
+                      "primary-fixed": "#dce1ff",
+                      "surface-container-highest": "#dae2fd",
+                      "background": "#faf8ff",
+                      "surface-bright": "#faf8ff",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#54647a",
+                      "secondary-fixed": "#d3e4fe",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-tertiary-fixed": "#171c1f",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#43474b",
+                      "surface-container-low": "#f2f3ff",
+                      "secondary": "#505f76",
+                      "primary-fixed-dim": "#b6c4ff",
+                      "primary": "#0041c8",
+                      "on-error": "#ffffff",
+                      "outline-variant": "#c3c5d9",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed": "#dfe3e7",
+                      "surface-variant": "#dae2fd",
+                      "surface-dim": "#d2d9f4",
+                      "tertiary-container": "#63686c",
+                      "secondary-container": "#d0e1fb"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "sidebar-width": "240px",
+                      "margin-mobile": "16px",
+                      "gutter": "16px",
+                      "table-row-height": "40px",
+                      "margin-desktop": "32px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "label-caps": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "display": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "data-mono": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "data-mono": ["13px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SIDEBAR -->
+<aside class="fixed left-0 top-0 h-full w-sidebar-width bg-inverse-surface flex flex-col py-margin-desktop z-50">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary-fixed">LogisticsPro</h1>
+<p class="font-body-sm text-body-sm text-outline-variant opacity-80">Operational Excellence</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200 rounded" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<a class="flex items-center px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200 rounded" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-sm text-body-sm">Products</span>
+</a>
+<a class="flex items-center px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200 rounded" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="local_shipping">local_shipping</span>
+<span class="font-body-sm text-body-sm">Suppliers</span>
+</a>
+<a class="flex items-center px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200 rounded" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="warehouse">warehouse</span>
+<span class="font-body-sm text-body-sm">Warehouses</span>
+</a>
+<a class="flex items-center px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200 rounded" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-body-sm text-body-sm">POS</span>
+</a>
+<a class="flex items-center px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200 rounded" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="assessment">assessment</span>
+<span class="font-body-sm text-body-sm">Reports</span>
+</a>
+</nav>
+<div class="mt-auto px-3 space-y-1 border-t border-on-surface-variant/20 pt-6">
+<a class="flex items-center px-3 py-2 text-primary-fixed-dim border-l-4 border-primary-container bg-on-surface-variant/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+<a class="flex items-center px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200 rounded" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="help">help</span>
+<span class="font-body-sm text-body-sm">Support</span>
+</a>
+<div class="flex items-center mt-6 px-3">
+<img alt="Inventory Manager Avatar" class="w-8 h-8 rounded-full border border-outline-variant/30 mr-3" data-alt="A clean, professional headshot of a logistics manager in a modern, brightly lit office environment. The individual is wearing a minimalist navy blue uniform shirt, looking directly at the camera with a calm and disciplined expression. The background shows blurred industrial shelves and a digital display showing warehouse metrics, maintaining a corporate and high-tech operational aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKL2wA65GP76GFtGxQUoN0bOaiXrmwen_knzlrjG8jrdwJsxzZXQC6zqSUU_emOvs6MM4LAhdPfIcFjhZ2svMo4r9N3lnmAoJYHg898dp5WSXtsMO_3mE68ftGzMwFeMvG6iZ1N7y-WqC9mARm9pZHidyWL4QTD5tRVeY_RZ16SjXJpB13t7sEsPtXCZxurC_lEJmL633CR8L2l-5t0TK7EME9_RN9Na7velkncsYQIgiCaPrcGY8wfJwmazS7WDIGYwzs03DfUmE"/>
+<div>
+<p class="font-body-sm text-body-sm text-primary-fixed font-bold leading-tight">Marcus Thorne</p>
+<p class="text-[10px] text-outline-variant uppercase tracking-wider">Ops Lead</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT -->
+<main class="ml-sidebar-width flex-1 min-h-screen flex flex-col">
+<!-- TOP NAV BAR -->
+<header class="h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-desktop sticky top-0 z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-body-md font-body-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all" placeholder="Search settings or documentation..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6 ml-8">
+<div class="flex items-center space-x-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-150">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-headline-sm text-headline-sm flex items-center hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined mr-2 text-[20px]" data-icon="add">add</span>
+                    New Order
+                </button>
+</div>
+</header>
+<!-- SETTINGS CONTENT -->
+<div class="p-margin-desktop max-w-container-max mx-auto w-full space-y-gutter">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-display text-display text-on-surface mb-2">Business Operations</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Configure core warehouse logic, financial parameters, and system integrations.</p>
+</div>
+<div class="flex space-x-3">
+<button class="px-4 py-2 border border-outline-variant rounded bg-surface hover:bg-surface-container-low transition-colors font-headline-sm text-headline-sm text-on-surface">Discard</button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded font-headline-sm text-headline-sm shadow-sm hover:brightness-110 transition-all">Save All Changes</button>
+</div>
+</div>
+<!-- Settings Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- LEFT COLUMN: Profile & Core Config -->
+<div class="col-span-12 lg:col-span-7 space-y-gutter">
+<!-- Business Profile Section -->
+<section class="bg-surface-container-lowest p-6 rounded border border-outline-variant/30">
+<div class="flex items-center mb-6">
+<span class="material-symbols-outlined text-primary mr-3" data-icon="business">business</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Business Profile</h3>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2 md:col-span-1">
+<label class="font-label-caps text-label-caps text-outline block mb-1">LEGAL ENTITY NAME</label>
+<input class="w-full border-outline-variant rounded p-2 font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all" type="text" value="LogisticsPro Operations Ltd."/>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="font-label-caps text-label-caps text-outline block mb-1">TAX IDENTIFICATION (VAT/EIN)</label>
+<input class="w-full border-outline-variant rounded p-2 font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all" type="text" value="GB 123 4567 89"/>
+</div>
+<div class="col-span-2">
+<label class="font-label-caps text-label-caps text-outline block mb-1">HEADQUARTERS ADDRESS</label>
+<textarea class="w-full border-outline-variant rounded p-2 font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all h-20">77 Industrial Way, Tech Park North, London, E1 4NS, UK</textarea>
+</div>
+</div>
+</section>
+<!-- Inventory Preferences (FIFO/LIFO) -->
+<section class="bg-surface-container-lowest p-6 rounded border border-outline-variant/30">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary mr-3" data-icon="inventory">inventory</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Inventory Management</h3>
+</div>
+<span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-widest">Global Policy</span>
+</div>
+<div class="space-y-6">
+<div class="flex items-start justify-between p-4 bg-surface rounded border border-outline-variant/20">
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface">Valuation Method</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Determine how COGS and stock value are calculated.</p>
+</div>
+<div class="flex bg-surface-container border border-outline-variant rounded p-1">
+<button class="px-4 py-1.5 rounded bg-white shadow-sm font-headline-sm text-headline-sm text-primary">FIFO</button>
+<button class="px-4 py-1.5 rounded font-headline-sm text-headline-sm text-on-surface-variant hover:bg-white/50">LIFO</button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div>
+<label class="font-label-caps text-label-caps text-outline block mb-1">LOW STOCK THRESHOLD (%)</label>
+<div class="flex items-center space-x-3">
+<input class="flex-1 accent-primary" max="30" min="5" type="range" value="15"/>
+<span class="font-data-mono text-data-mono bg-surface-container px-3 py-1 rounded">15%</span>
+</div>
+<p class="text-[11px] text-on-surface-variant mt-2 italic">Alerts triggered when stock drops below this value relative to capacity.</p>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-outline block mb-1">AUTO-REORDER POINT</label>
+<div class="flex items-center">
+<input class="w-20 border-outline-variant rounded-l p-2 font-data-mono text-data-mono" type="number" value="100"/>
+<span class="bg-surface-container border border-l-0 border-outline-variant px-3 py-2 rounded-r font-body-sm text-body-sm text-on-surface-variant">Units</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Barcode & Tracking -->
+<section class="bg-surface-container-lowest p-6 rounded border border-outline-variant/30">
+<div class="flex items-center mb-6">
+<span class="material-symbols-outlined text-primary mr-3" data-icon="barcode_scanner">barcode_scanner</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Barcode &amp; Labeling</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Enable GS1-128 Standards</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Required for international shipping and retail compliance.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-label-caps text-label-caps text-outline block mb-1">DEFAULT LABEL SIZE</label>
+<select class="w-full border-outline-variant rounded p-2 font-body-md text-body-md">
+<option>4" x 6" (Thermal)</option>
+<option>2" x 1" (SKU Tag)</option>
+<option>A4 Sheet (8 per page)</option>
+</select>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-outline block mb-1">SKU PREFIX</label>
+<input class="w-full border-outline-variant rounded p-2 font-data-mono text-data-mono" type="text" value="LP-INV-"/>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- RIGHT COLUMN: Finance, Integration & Access -->
+<div class="col-span-12 lg:col-span-5 space-y-gutter">
+<!-- Finance & Currency -->
+<section class="bg-surface-container-lowest p-6 rounded border border-outline-variant/30">
+<div class="flex items-center mb-6">
+<span class="material-symbols-outlined text-primary mr-3" data-icon="payments">payments</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Tax &amp; Currency</h3>
+</div>
+<div class="space-y-4">
+<div>
+<label class="font-label-caps text-label-caps text-outline block mb-1">BASE CURRENCY</label>
+<div class="flex items-center bg-surface border border-outline-variant rounded overflow-hidden">
+<span class="px-3 py-2 font-headline-sm text-headline-sm border-r border-outline-variant bg-surface-container">GBP</span>
+<input class="flex-1 border-none focus:ring-0 p-2 font-body-md text-body-md" readonly="" type="text" value="British Pound Sterling (£)"/>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded border border-outline-variant/20">
+<span class="font-body-md text-body-md text-on-surface">Tax Inclusive Pricing</span>
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+</div>
+</div>
+</section>
+<!-- Integrations Section -->
+<section class="bg-surface-container-lowest p-6 rounded border border-outline-variant/30">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary mr-3" data-icon="api">api</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">External Integrations</h3>
+</div>
+<button class="text-primary font-headline-sm text-headline-sm hover:underline">Manage</button>
+</div>
+<div class="space-y-3">
+<!-- Integration Card 1 -->
+<div class="flex items-center p-3 border border-outline-variant rounded hover:bg-surface-container-low transition-colors group">
+<div class="w-10 h-10 bg-on-surface flex items-center justify-center rounded mr-4">
+<span class="material-symbols-outlined text-surface" data-icon="database">database</span>
+</div>
+<div class="flex-1">
+<p class="font-headline-sm text-headline-sm text-on-surface">Supabase DB</p>
+<div class="flex items-center">
+<span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+<span class="text-[11px] text-on-surface-variant uppercase">Connected</span>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="settings">settings</span>
+</button>
+</div>
+<!-- Integration Card 2 -->
+<div class="flex items-center p-3 border border-dashed border-outline-variant rounded hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center rounded mr-4 border border-outline-variant">
+<span class="material-symbols-outlined text-outline" data-icon="add">add</span>
+</div>
+<div class="flex-1">
+<p class="font-headline-sm text-headline-sm text-outline">Connect External ERP</p>
+<p class="font-body-sm text-body-sm text-outline-variant">Sync orders and stock data</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Role Management Shortcuts -->
+<section class="bg-surface-container-lowest p-6 rounded border border-outline-variant/30">
+<div class="flex items-center mb-6">
+<span class="material-symbols-outlined text-primary mr-3" data-icon="group">group</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Access Management</h3>
+</div>
+<div class="space-y-2">
+<a class="flex items-center justify-between p-3 rounded hover:bg-surface-container-low transition-all" href="#">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-on-surface-variant mr-3 text-lg" data-icon="shield_person">shield_person</span>
+<span class="font-body-md text-body-md">Edit Permissions</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-3 rounded hover:bg-surface-container-low transition-all" href="#">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-on-surface-variant mr-3 text-lg" data-icon="person_add">person_add</span>
+<span class="font-body-md text-body-md">Invite Team Member</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm" data-icon="chevron_right">chevron_right</span>
+</a>
+<div class="mt-4 pt-4 border-t border-outline-variant/20">
+<p class="font-label-caps text-label-caps text-outline mb-2">ACTIVE SESSIONS</p>
+<div class="flex -space-x-2 overflow-hidden">
+<img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" data-alt="Close-up of a diverse professional team member with a warm and focused expression. The image captures a high-resolution, modern workplace portrait with soft studio lighting, emphasizing a reliable and systematic professional atmosphere. The color grading is clean with subtle blue tones to align with the LogisticsPro corporate brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs4CMPdesMesh-RdMH8gmUa9bKX1qgROxc9-oJO4OX-a4vA3g75kYrc8VYvnn217F9Eg09PwyDlwUlmpn-Ixiw-jLkbY2FwSarb6oAIRXQl1XVPebRdoxKO1NiRlD2njeAU0js2X8biow5Ern_6ZOFcD54MFxYNbJMCaMSQuG3JAxSjLtwekkjdonJI2xa7pB_Nh1s18-lQ-Rux1vqZVGk_Oon_jrQuYIUTAAYWDmTw3UhXkPbwVZQf_4GcEIFLPE0jWTlZOxPFsk"/>
+<img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" data-alt="A portrait of an operations manager looking confident and disciplined. The lighting is crisp and clear, highlighting a high-key professional aesthetic suitable for a modern SaaS interface. The background is a minimalist office setting with clean lines and soft grey tones, maintaining a sense of systematic order and corporate efficiency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADTR_xlFYeECT2LgCXQ_vccYNY_Q1zQb2XRjjcOF6Tes7invWnnZL30wtkv3_4NjvsTJMbj_RQHhP7NGgH_fT_NKlSe0CcedIFrDf5HmcHUKrJXik8kJW39YgKEa23YP1M9UnV7MzSbXkMRH7GmTOthDCQoQkKrhtmKUIITT5m95vH1htHC5fomwLJtUsQsrn7Rf4b3qzL0PYNqNxW9mv2ZjbuUqQr9L4ZLIw-WRS1DzB8p9MsW4SPR8O-r8FNN3THEceWr9z1S-U"/>
+<div class="flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white bg-primary-container text-on-primary-container text-[10px] font-bold">+4</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sync Status Widget -->
+<div class="bg-inverse-surface text-surface p-4 rounded shadow-lg">
+<div class="flex items-center justify-between mb-2">
+<span class="font-headline-sm text-headline-sm">Cloud Sync Status</span>
+<span class="bg-green-500 w-2 h-2 rounded-full animate-pulse"></span>
+</div>
+<p class="font-body-sm text-body-sm text-outline-variant">Last backup performed 14 mins ago.</p>
+<div class="mt-4 flex space-x-2">
+<button class="flex-1 bg-surface/10 hover:bg-surface/20 py-1.5 rounded text-[11px] font-bold uppercase transition-colors">Manual Sync</button>
+<button class="flex-1 bg-surface/10 hover:bg-surface/20 py-1.5 rounded text-[11px] font-bold uppercase transition-colors">View Logs</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Danger Zone -->
+<section class="mt-12 p-6 border border-error/30 rounded bg-error-container/10">
+<div class="flex items-start">
+<span class="material-symbols-outlined text-error mr-4" data-icon="warning">warning</span>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-error">Danger Zone</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Critical actions that affect data integrity and business records. Proceed with extreme caution.</p>
+<div class="flex space-x-4">
+<button class="text-error font-headline-sm text-headline-sm border border-error/30 px-4 py-2 rounded hover:bg-error/5 transition-colors">Reset Inventory Data</button>
+<button class="text-error font-headline-sm text-headline-sm border border-error/30 px-4 py-2 rounded hover:bg-error/5 transition-colors">Deactivate Organization</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Spacer for Bottom -->
+<div class="h-24"></div>
+</main>
+<!-- FAB (Suppressed on Settings Page according to Logic) -->
+<script>
+        // Micro-interactions for interactive elements
+        document.querySelectorAll('input[type="range"]').forEach(range => {
+            range.addEventListener('input', (e) => {
+                const val = e.target.value;
+                const display = e.target.nextElementSibling;
+                if (display) display.textContent = val + '%';
+            });
+        });
+
+        // Search highlight mock effect
+        const searchInput = document.querySelector('input[placeholder*="Search"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+
+        // Tab selection logic (Simplified for demo)
+        const valuationButtons = document.querySelectorAll('.valuation-btn');
+        valuationButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                valuationButtons.forEach(b => {
+                    b.classList.remove('bg-white', 'shadow-sm', 'text-primary');
+                    b.classList.add('text-on-surface-variant');
+                });
+                btn.classList.add('bg-white', 'shadow-sm', 'text-primary');
+                btn.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

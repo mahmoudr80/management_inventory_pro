@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>System Health &amp; Sync Center - LogisticsPro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c3c5d9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #737688; }
+        .sync-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f2f3ff",
+                        "on-tertiary-container": "#e3e7eb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#505f76",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eaedff",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#dae2fd",
+                        "inverse-surface": "#283044",
+                        "inverse-primary": "#b6c4ff",
+                        "inverse-on-surface": "#eef0ff",
+                        "tertiary-fixed-dim": "#c3c7cb",
+                        "surface": "#faf8ff",
+                        "on-primary-container": "#e3e6ff",
+                        "tertiary": "#4b5053",
+                        "primary": "#0041c8",
+                        "on-background": "#131b2e",
+                        "secondary-container": "#d0e1fb",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-fixed": "#001551",
+                        "surface-container-highest": "#dae2fd",
+                        "on-surface": "#131b2e",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-tertiary-fixed": "#171c1f",
+                        "outline": "#737688",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#004dea",
+                        "on-surface-variant": "#434656",
+                        "outline-variant": "#c3c5d9",
+                        "on-secondary-container": "#54647a",
+                        "surface-bright": "#faf8ff",
+                        "on-tertiary-fixed-variant": "#43474b",
+                        "on-primary-fixed-variant": "#0039b3",
+                        "primary-container": "#0055ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#dfe3e7",
+                        "background": "#faf8ff",
+                        "tertiary-container": "#63686c",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d2d9f4",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-high": "#e2e7ff",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#dce1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "table-row-height": "40px",
+                        "sidebar-width": "240px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "data-mono": ["JetBrains Mono"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "data-mono": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-surface">
+<!-- SIDEBAR -->
+<aside class="fixed left-0 top-0 h-full w-sidebar-width bg-inverse-surface flex flex-col py-margin-desktop z-50">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary-fixed">LogisticsPro</h1>
+<p class="font-body-sm text-body-sm text-outline-variant opacity-80">Operational Excellence</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-sm">Products</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span class="font-body-sm">Suppliers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="warehouse">warehouse</span>
+<span class="font-body-sm">Warehouses</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-body-sm">POS</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-body-sm">Reports</span>
+</a>
+</nav>
+<div class="px-3 pt-4 border-t border-on-surface-variant/10">
+<a class="flex items-center gap-3 px-3 py-2 text-primary-fixed-dim border-l-4 border-primary-container bg-on-surface-variant/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-body-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- TOP BAR -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] h-16 bg-surface flex justify-between items-center px-margin-desktop border-b border-outline-variant z-40">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded focus:outline-none focus:border-primary w-80 text-body-md" placeholder="Search system health logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="history">history</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 font-headline-sm rounded hover:bg-primary-container transition-all">New Order</button>
+<div class="flex items-center gap-3 border-l pl-6 border-outline-variant">
+<div class="text-right">
+<p class="font-body-sm font-bold leading-none">Admin User</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">System Architect</p>
+</div>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A professional headshot of a logistics manager in a modern office, featuring soft directional lighting and a clean, high-contrast professional aesthetic that aligns with a corporate tech environment. The background is a slightly blurred architectural interior with blue and grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA56oqKm72yzxliU5qukaXpbVQpKrQfUgZ3dWHMv1XcWcX7WRTlE9J1SWGC42-vpxwGVsrP52Q0gaDOWNg4vzPLHL71NDLqRyiFMObn3PrPORSxKnfM1wE4efGMy2V_mfoJEr76ks_ptJ0sru877AB82SuMMhe3iPIVModum8pAjr3QzEigzCoTPSODROma1Ef62Q75F0XvY9t92bJh0-OZ7POWZUlOE1-bv_o-xXPdClXchrltvS8dD5En9OsHvLWuAyuCdKcmmjA"/>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT -->
+<main class="ml-[240px] pt-16 min-h-screen">
+<div class="p-margin-desktop max-w-container-max mx-auto space-y-6">
+<!-- HEADER SECTION -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display text-display text-on-surface">System Health &amp; Sync Center</h2>
+<p class="text-on-surface-variant font-body-lg">Manage edge data integrity and background synchronization tasks.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-lg border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-green-500 sync-pulse"></span>
+<span class="font-data-mono text-data-mono">LIVE CONNECTION: STABLE</span>
+</div>
+</div>
+</div>
+<!-- DASHBOARD GRID -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- STATUS CARDS (Bento Style) -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest border border-outline-variant p-5 flex flex-col justify-between h-[180px]">
+<div class="flex justify-between items-start">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Network Connectivity</p>
+<span class="material-symbols-outlined text-primary" data-icon="wifi">wifi</span>
+</div>
+<div>
+<p class="font-display text-display">Online</p>
+<p class="font-body-sm text-green-600">Latency: 24ms (Global Edge)</p>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest border border-outline-variant p-5 flex flex-col justify-between h-[180px]">
+<div class="flex justify-between items-start">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Local Database Size</p>
+<span class="material-symbols-outlined text-primary" data-icon="database">database</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<p class="font-display text-display">124.8 <span class="text-headline-md">MB</span></p>
+</div>
+<p class="font-body-sm text-on-surface-variant">SQLite / sqflite internal storage</p>
+</div>
+<div class="w-full bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 45%;"></div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest border border-outline-variant p-5 flex flex-col justify-between h-[180px]">
+<div class="flex justify-between items-start">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Background Process</p>
+<span class="material-symbols-outlined text-primary" data-icon="sync">sync</span>
+</div>
+<div>
+<p class="font-body-md font-bold mb-1">Indexing Master Inventory</p>
+<div class="flex items-center gap-3">
+<div class="flex-1 bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full transition-all duration-1000" id="global-sync-bar" style="width: 72%;"></div>
+</div>
+<span class="font-data-mono text-data-mono">72%</span>
+</div>
+</div>
+</div>
+<!-- SYNC QUEUE -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant flex flex-col h-[500px]">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+                            Pending Sync Queue
+                        </h3>
+<div class="flex gap-2">
+<button class="bg-white border border-outline-variant px-3 py-1 rounded text-body-sm hover:bg-surface-container-high transition-colors">Pause Queue</button>
+<button class="bg-primary text-on-primary px-3 py-1 rounded text-body-sm hover:bg-primary-container transition-all">Force Push All</button>
+</div>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container-high text-label-caps text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="px-4 py-3 font-semibold">OPERATION ID</th>
+<th class="px-4 py-3 font-semibold">TYPE</th>
+<th class="px-4 py-3 font-semibold">PAYLOAD SIZE</th>
+<th class="px-4 py-3 font-semibold text-right">STATUS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-data-mono text-data-mono">#SALE-402</td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="shopping_cart">shopping_cart</span>
+<span>POS Transaction</span>
+</div>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">4.2 KB</td>
+<td class="px-4 py-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-secondary-container text-on-secondary-container">QUEUED</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-data-mono text-data-mono">#STK-ADJ-12</td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="edit_calendar">edit_calendar</span>
+<span>Manual Adjustment</span>
+</div>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">1.8 KB</td>
+<td class="px-4 py-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-primary sync-pulse">SYNCING...</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-data-mono text-data-mono">#ORD-SUPP-99</td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="local_shipping">local_shipping</span>
+<span>Supplier Reorder</span>
+</div>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">12.5 KB</td>
+<td class="px-4 py-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-secondary-container text-on-secondary-container">QUEUED</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-data-mono text-data-mono">#IMG-SKU-882</td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="image">image</span>
+<span>Asset Upload</span>
+</div>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">842 KB</td>
+<td class="px-4 py-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-surface-container-high text-on-surface-variant">WAITING</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-data-mono text-data-mono">#PROF-UPD-01</td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="person">person</span>
+<span>User Profile Update</span>
+</div>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">0.4 KB</td>
+<td class="px-4 py-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-secondary-container text-on-secondary-container">QUEUED</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- SYNC HISTORY TIMELINE -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-lowest border border-outline-variant flex flex-col h-[500px]">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                            Success Timeline
+                        </h3>
+</div>
+<div class="flex-1 overflow-auto p-6">
+<div class="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-outline-variant before:to-transparent">
+<!-- Timeline Item -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-outline-variant bg-surface shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-green-500 text-sm" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<div class="w-[calc(100%-4rem)] md:w-[calc(100%-3rem)] p-4 rounded border border-outline-variant/30 bg-surface-container-lowest">
+<div class="flex items-center justify-between space-x-2 mb-1">
+<div class="font-bold text-on-surface text-body-sm">Batch #8821 Processed</div>
+<time class="font-data-mono text-[10px] text-on-surface-variant">14:02</time>
+</div>
+<div class="text-on-surface-variant text-body-sm italic">42 operations synced (Inventory Master)</div>
+</div>
+</div>
+<!-- Timeline Item -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-outline-variant bg-surface shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-green-500 text-sm" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<div class="w-[calc(100%-4rem)] md:w-[calc(100%-3rem)] p-4 rounded border border-outline-variant/30 bg-surface-container-lowest">
+<div class="flex items-center justify-between space-x-2 mb-1">
+<div class="font-bold text-on-surface text-body-sm">Sync Key Handshake</div>
+<time class="font-data-mono text-[10px] text-on-surface-variant">13:45</time>
+</div>
+<div class="text-on-surface-variant text-body-sm">New RSA-4096 key rotated successfully.</div>
+</div>
+</div>
+<!-- Timeline Item -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-outline-variant bg-surface shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-green-500 text-sm" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<div class="w-[calc(100%-4rem)] md:w-[calc(100%-3rem)] p-4 rounded border border-outline-variant/30 bg-surface-container-lowest">
+<div class="flex items-center justify-between space-x-2 mb-1">
+<div class="font-bold text-on-surface text-body-sm">Batch #8820 Processed</div>
+<time class="font-data-mono text-[10px] text-on-surface-variant">12:30</time>
+</div>
+<div class="text-on-surface-variant text-body-sm italic">12 operations synced (Logs)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ERROR HANDLING TABLE -->
+<div class="col-span-12 bg-surface-container-lowest border border-outline-variant">
+<div class="p-4 border-b border-outline-variant bg-error-container/10 flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-error flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+                            Critical Sync Failures
+                        </h3>
+<p class="text-body-sm text-on-error-container">Manual intervention required for 2 items</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high text-label-caps text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="px-6 py-4 font-semibold">OBJECT</th>
+<th class="px-6 py-4 font-semibold">ERROR CODE</th>
+<th class="px-6 py-4 font-semibold">REASON</th>
+<th class="px-6 py-4 font-semibold">TIMESTAMP</th>
+<th class="px-6 py-4 font-semibold text-right">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-error-container/5 transition-colors">
+<td class="px-6 py-4 font-bold text-on-surface">Invoice #INV-9022</td>
+<td class="px-6 py-4 font-data-mono text-data-mono text-error">ERR_CONFLICT_409</td>
+<td class="px-6 py-4 text-on-surface-variant">Database version mismatch: Item 'Steel Rod' modified locally and remotely simultaneously.</td>
+<td class="px-6 py-4 font-data-mono text-data-mono">2023-10-24 14:05:22</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="text-primary hover:underline font-bold text-body-sm">Retry</button>
+<button class="bg-primary text-on-primary px-3 py-1 rounded text-body-sm hover:shadow-lg transition-all">Resolve Conflict</button>
+</td>
+</tr>
+<tr class="hover:bg-error-container/5 transition-colors">
+<td class="px-6 py-4 font-bold text-on-surface">Asset: pallet_scan_v1.png</td>
+<td class="px-6 py-4 font-data-mono text-data-mono text-error">ERR_UPLOAD_TIMEOUT</td>
+<td class="px-6 py-4 text-on-surface-variant">Request timed out after 30s. Connection dropped during multipart upload.</td>
+<td class="px-6 py-4 font-data-mono text-data-mono">2023-10-24 13:58:10</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="text-primary hover:underline font-bold text-body-sm">Retry</button>
+<button class="bg-primary text-on-primary px-3 py-1 rounded text-body-sm hover:shadow-lg transition-all">Resolve Conflict</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for the progress bar
+        let progress = 72;
+        const progressBar = document.getElementById('global-sync-bar');
+        
+        setInterval(() => {
+            if (progress < 99) {
+                progress += Math.random() * 0.5;
+                if (progressBar) {
+                    progressBar.style.width = progress + '%';
+                }
+            } else {
+                progress = 0; // Reset for visual demo effect
+            }
+        }, 3000);
+
+        // Simple tab/active logic (Visual only for the prompt requirement)
+        console.log("System Health & Sync Center Initialized.");
+    </script>
+</body></html>

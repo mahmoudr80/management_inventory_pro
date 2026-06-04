@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Management | Inventory Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#54647a",
+                    "inverse-surface": "#283044",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#004dea",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface-container-high": "#e2e7ff",
+                    "surface-dim": "#d2d9f4",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#e3e7eb",
+                    "surface": "#faf8ff",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "primary-fixed": "#dce1ff",
+                    "inverse-on-surface": "#eef0ff",
+                    "surface-container": "#eaedff",
+                    "inverse-primary": "#b6c4ff",
+                    "surface-bright": "#faf8ff",
+                    "on-primary-fixed-variant": "#0039b3",
+                    "on-surface": "#131b2e",
+                    "background": "#faf8ff",
+                    "on-surface-variant": "#434656",
+                    "on-secondary-fixed": "#0b1c30",
+                    "tertiary-container": "#63686c",
+                    "surface-variant": "#dae2fd",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#43474b",
+                    "on-background": "#131b2e",
+                    "outline": "#737688",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#d0e1fb",
+                    "tertiary-fixed-dim": "#c3c7cb",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "tertiary-fixed": "#dfe3e7",
+                    "outline-variant": "#c3c5d9",
+                    "tertiary": "#4b5053",
+                    "on-primary-container": "#e3e6ff",
+                    "surface-container-highest": "#dae2fd",
+                    "surface-container-low": "#f2f3ff",
+                    "on-primary-fixed": "#001551",
+                    "primary": "#0041c8",
+                    "secondary": "#505f76",
+                    "primary-container": "#0055ff",
+                    "on-tertiary-fixed": "#171c1f",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "240px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "unit": "4px",
+                    "table-row-height": "40px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display": ["Inter"],
+                    "body-md": ["Inter"],
+                    "data-mono": ["JetBrains Mono"],
+                    "headline-sm": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "data-mono": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #faf8ff;
+            font-family: 'Inter', sans-serif;
+            color: #131b2e;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c3c5d9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #737688;
+        }
+        .table-container {
+            max-height: calc(100vh - 240px);
+            overflow-y: auto;
+        }
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background-color: inherit;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Persistent SideNavBar -->
+<aside class="bg-inverse-surface dark:bg-inverse-surface w-sidebar-width h-full fixed left-0 top-0 flex flex-col py-6 px-4 z-20">
+<div class="mb-10">
+<h1 class="font-headline-sm text-headline-sm font-bold text-surface-bright">Inventory Pro</h1>
+<p class="text-secondary-fixed-dim text-[11px] uppercase tracking-wider mt-1 opacity-70">Global Operations</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-3 py-2.5 rounded-lg text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center px-3 py-2.5 rounded-lg text-primary-fixed font-bold border-l-4 border-primary-fixed bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2">inventory_2</span>
+<span>Products</span>
+</a>
+<a class="flex items-center px-3 py-2.5 rounded-lg text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="local_shipping">local_shipping</span>
+<span>Suppliers</span>
+</a>
+<a class="flex items-center px-3 py-2.5 rounded-lg text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="warehouse">warehouse</span>
+<span>Warehouses</span>
+</a>
+<a class="flex items-center px-3 py-2.5 rounded-lg text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="point_of_sale">point_of_sale</span>
+<span>POS</span>
+</a>
+<a class="flex items-center px-3 py-2.5 rounded-lg text-secondary-fixed-dim font-medium hover:bg-on-secondary-fixed-variant transition-colors cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-on-secondary-fixed-variant">
+<div class="flex items-center space-x-3">
+<img alt="Company Logo" class="w-8 h-8 rounded-lg bg-surface-container-high p-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs2sGBRihAesqI1_t_c1UeOtAUEewXvwBuslHNxbZ6vyI37-yX5GA7agiV6K8nX0QSX4IyIG0Z7mSZRpGzYdeZd0CM-hamm9Z2W7OAVqq8rpMUJvDg7Js4fa38Nn7QMN3J26JMypriF87BBt2Z2cD_QVno6l_XGnNdHt9OCJSOh8ZW71Jb1Yj4ecFa-bRKoU6fU-CXUwwGoWJM_RbMb4dlBoMQVhfq5U1wF0OOVoVKLAFHxCab49KH0goIvHimoR7VQePP19vo6pI"/>
+<div>
+<p class="text-surface-bright font-bold text-sm leading-tight">North Warehouse</p>
+<p class="text-secondary-fixed-dim text-xs">Admin Console</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="flex justify-between items-center h-table-row-height px-gutter w-[calc(100%-theme(spacing.sidebar-width))] fixed top-0 right-0 z-10 bg-surface dark:bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-1.5 text-body-sm focus:ring-1 focus:ring-primary" placeholder="Search across all products, SKUs, or barcodes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center space-x-3 cursor-pointer active:scale-95">
+<span class="text-right">
+<p class="text-on-surface font-bold text-xs">Alex Rivera</p>
+<p class="text-on-surface-variant text-[10px] uppercase tracking-tighter">Ops Manager</p>
+</span>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm-z2qfDWWeguGoKgr4NfFrJ1XTreKX5Si09dDFck8I5DEGpqq_39_Z5JsiaPVnadABi2wPRkR3z04e3G7UvaWYoocdEATiZpMNqzPWx7XOAukHxU6OtBczm3bAiLJI6IWqMz2RE8fKXTzxVGDa-t0Zaz2qI9qUon5eBWw71_8vxrJHXkRL5xkupPaP4V7BiOQRuRYZDog5R1qwc9ZVQHh4S2kPf6rZhrmJo4F-QkM6EbwqMsuMb5A5H-FExNhnFRA5BDm1k5eqU0"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-sidebar-width pt-[40px] p-8 min-h-screen">
+<!-- Action Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<nav class="flex items-center text-[11px] text-on-surface-variant uppercase tracking-widest mb-1">
+<a class="hover:text-primary transition-colors" href="#">Inventory</a>
+<span class="mx-2">/</span>
+<span class="font-bold text-primary">Products</span>
+</nav>
+<h2 class="font-headline-md text-headline-md text-on-surface">Product Catalog</h2>
+</div>
+<button class="bg-primary-container text-on-primary hover:opacity-90 transition-all px-6 py-2.5 rounded-lg flex items-center space-x-2 shadow-sm active:scale-[0.98]">
+<span class="material-symbols-outlined text-lg">add</span>
+<span class="font-bold">Add Product</span>
+</button>
+</div>
+<!-- Filter Bar -->
+<div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Category</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm px-3 py-2 outline-none focus:border-primary">
+<option>All Categories</option>
+<option>Electronics</option>
+<option>Hardware</option>
+<option>Furniture</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Supplier</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm px-3 py-2 outline-none focus:border-primary">
+<option>All Suppliers</option>
+<option>Apex Logistics</option>
+<option>Global Parts Inc.</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Stock Level</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm px-3 py-2 outline-none focus:border-primary">
+<option>All Levels</option>
+<option>Healthy</option>
+<option>Low Stock</option>
+<option>Out of Stock</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Warehouse</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm px-3 py-2 outline-none focus:border-primary">
+<option>All Locations</option>
+<option>North Hub</option>
+<option>East Distribution</option>
+</select>
+</div>
+<div class="flex items-end space-x-2 lg:col-span-2">
+<button class="bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors px-4 py-2 rounded-lg flex items-center space-x-2 text-body-sm">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+<span>Advanced</span>
+</button>
+<button class="text-primary hover:underline text-body-sm px-2 py-2">Clear All</button>
+</div>
+</div>
+<!-- Table Controls & Bulk Actions (Floating Bar on selection) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<div class="px-6 py-3 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<span class="text-body-sm text-on-surface-variant font-medium">Showing 1-12 of 1,248 products</span>
+<div class="flex items-center space-x-2">
+<button class="p-1.5 hover:bg-surface-container-high rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container-high rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">print</span>
+</button>
+</div>
+</div>
+<!-- Data Table -->
+<div class="table-container">
+<table class="w-full text-left border-collapse min-w-[1200px]">
+<thead class="bg-surface-container-low sticky top-0 z-10 border-b border-outline-variant">
+<tr class="h-table-row-height">
+<th class="w-12 px-6 sticky-col bg-surface-container-low">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</th>
+<th class="px-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Product Name / SKU</th>
+<th class="px-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Barcode</th>
+<th class="px-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Category</th>
+<th class="px-4 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Stock</th>
+<th class="px-4 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Cost</th>
+<th class="px-4 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Selling</th>
+<th class="px-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Location</th>
+<th class="px-6 font-label-caps text-label-caps text-on-surface-variant uppercase text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1: Low Stock -->
+<tr class="h-table-row-height hover:bg-surface-container-low transition-colors group">
+<td class="px-6 sticky-col">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="px-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Precision Calibrator X-90</span>
+<span class="text-on-surface-variant text-[11px] font-data-mono">SKU-293-8821</span>
+</div>
+</td>
+<td class="px-4 font-data-mono text-body-sm">692138842103</td>
+<td class="px-4">
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[11px] font-bold">Hardware</span>
+</td>
+<td class="px-4 text-right">
+<div class="flex flex-col items-end">
+<span class="text-error font-bold text-body-md">14 units</span>
+<span class="bg-error-container text-on-error-container text-[10px] px-1 rounded font-bold uppercase tracking-tighter">Low Stock</span>
+</div>
+</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$412.50</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$899.00</td>
+<td class="px-4">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">location_on</span>
+<span class="text-body-sm">Aisle 4, Rack B</span>
+</div>
+</td>
+<td class="px-6">
+<div class="flex items-center justify-center space-x-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Edit"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="History"><span class="material-symbols-outlined text-lg">history</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Adjust Stock"><span class="material-symbols-outlined text-lg">inventory</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Healthy -->
+<tr class="h-table-row-height hover:bg-surface-container-low transition-colors group">
+<td class="px-6 sticky-col">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="px-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Ergo-Flow Desk Lamp</span>
+<span class="text-on-surface-variant text-[11px] font-data-mono">SKU-LMP-0012</span>
+</div>
+</td>
+<td class="px-4 font-data-mono text-body-sm">400213192201</td>
+<td class="px-4">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded text-[11px] font-bold">Furniture</span>
+</td>
+<td class="px-4 text-right">
+<div class="flex flex-col items-end">
+<span class="text-on-surface font-medium text-body-md">248 units</span>
+<span class="text-[10px] text-emerald-600 font-bold uppercase flex items-center">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1"></span> Healthy
+                                    </span>
+</div>
+</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$24.00</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$59.99</td>
+<td class="px-4 text-body-sm">Warehouse North - Z1</td>
+<td class="px-6">
+<div class="flex items-center justify-center space-x-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Edit"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="History"><span class="material-symbols-outlined text-lg">history</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Adjust Stock"><span class="material-symbols-outlined text-lg">inventory</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Out of Stock -->
+<tr class="h-table-row-height hover:bg-surface-container-low transition-colors group">
+<td class="px-6 sticky-col">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="px-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md opacity-60 italic line-through">Thunderbolt 4 Pro Cable</span>
+<span class="text-on-surface-variant text-[11px] font-data-mono">SKU-CAB-9920</span>
+</div>
+</td>
+<td class="px-4 font-data-mono text-body-sm">881002231192</td>
+<td class="px-4">
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[11px] font-bold">Electronics</span>
+</td>
+<td class="px-4 text-right">
+<div class="flex flex-col items-end">
+<span class="text-error font-bold text-body-md">0 units</span>
+<span class="bg-error text-on-error text-[10px] px-1 rounded font-bold uppercase tracking-tighter">Out of Stock</span>
+</div>
+</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$12.20</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$32.00</td>
+<td class="px-4 text-body-sm text-on-surface-variant">Unassigned</td>
+<td class="px-6">
+<div class="flex items-center justify-center space-x-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Edit"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="History"><span class="material-symbols-outlined text-lg">history</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Adjust Stock"><span class="material-symbols-outlined text-lg">inventory</span></button>
+</div>
+</td>
+</tr>
+<!-- Repeat pattern for density -->
+<tr class="h-table-row-height hover:bg-surface-container-low transition-colors">
+<td class="px-6 sticky-col"><input class="rounded border-outline-variant text-primary" type="checkbox"/></td>
+<td class="px-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Titanium Hex Screws (100pk)</span>
+<span class="text-on-surface-variant text-[11px] font-data-mono">SKU-FIX-1111</span>
+</div>
+</td>
+<td class="px-4 font-data-mono text-body-sm">772111000213</td>
+<td class="px-4"><span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[11px] font-bold">Hardware</span></td>
+<td class="px-4 text-right"><span class="text-on-surface font-medium text-body-md">1,402 units</span></td>
+<td class="px-4 text-right font-data-mono text-body-sm">$2.10</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$5.50</td>
+<td class="px-4 text-body-sm">Aisle 12, Bin 9</td>
+<td class="px-6 text-center"><button class="text-on-surface-variant p-1"><span class="material-symbols-outlined text-lg">more_horiz</span></button></td>
+</tr>
+<tr class="h-table-row-height hover:bg-surface-container-low transition-colors">
+<td class="px-6 sticky-col"><input class="rounded border-outline-variant text-primary" type="checkbox"/></td>
+<td class="px-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Matrix UHD Projector</span>
+<span class="text-on-surface-variant text-[11px] font-data-mono">SKU-ELE-4040</span>
+</div>
+</td>
+<td class="px-4 font-data-mono text-body-sm">221144558800</td>
+<td class="px-4"><span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[11px] font-bold">Electronics</span></td>
+<td class="px-4 text-right"><span class="text-error font-bold text-body-md">4 units</span></td>
+<td class="px-4 text-right font-data-mono text-body-sm">$1,200.00</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$1,899.00</td>
+<td class="px-4 text-body-sm">Secure Room 1</td>
+<td class="px-6 text-center"><button class="text-on-surface-variant p-1"><span class="material-symbols-outlined text-lg">more_horiz</span></button></td>
+</tr>
+<tr class="h-table-row-height hover:bg-surface-container-low transition-colors">
+<td class="px-6 sticky-col"><input class="rounded border-outline-variant text-primary" type="checkbox"/></td>
+<td class="px-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Solid Oak Board (2m)</span>
+<span class="text-on-surface-variant text-[11px] font-data-mono">SKU-WUD-0902</span>
+</div>
+</td>
+<td class="px-4 font-data-mono text-body-sm">119922004455</td>
+<td class="px-4"><span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded text-[11px] font-bold">Furniture</span></td>
+<td class="px-4 text-right"><span class="text-on-surface font-medium text-body-md">45 units</span></td>
+<td class="px-4 text-right font-data-mono text-body-sm">$32.00</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$85.00</td>
+<td class="px-4 text-body-sm">Outdoor Yard B</td>
+<td class="px-6 text-center"><button class="text-on-surface-variant p-1"><span class="material-symbols-outlined text-lg">more_horiz</span></button></td>
+</tr>
+<tr class="h-table-row-height hover:bg-surface-container-low transition-colors">
+<td class="px-6 sticky-col"><input class="rounded border-outline-variant text-primary" type="checkbox"/></td>
+<td class="px-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Industrial HVAC Fan</span>
+<span class="text-on-surface-variant text-[11px] font-data-mono">SKU-HVC-2022</span>
+</div>
+</td>
+<td class="px-4 font-data-mono text-body-sm">990088112233</td>
+<td class="px-4"><span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[11px] font-bold">Hardware</span></td>
+<td class="px-4 text-right"><span class="text-on-surface font-medium text-body-md">8 units</span></td>
+<td class="px-4 text-right font-data-mono text-body-sm">$890.00</td>
+<td class="px-4 text-right font-data-mono text-body-sm">$1,450.00</td>
+<td class="px-4 text-body-sm">Aisle 2, High Shelf</td>
+<td class="px-6 text-center"><button class="text-on-surface-variant p-1"><span class="material-symbols-outlined text-lg">more_horiz</span></button></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-outline-variant flex justify-between items-center bg-surface-container-low">
+<div class="flex items-center space-x-2 text-body-sm text-on-surface-variant">
+<span>Rows per page:</span>
+<select class="bg-transparent border-none focus:ring-0 cursor-pointer font-bold">
+<option>10</option>
+<option selected="">25</option>
+<option>50</option>
+</select>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-body-sm text-on-surface-variant">1-25 of 1,248</span>
+<div class="flex space-x-1">
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-high transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- System Stats Bar -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Total Catalog Value</p>
+<div class="flex justify-between items-end">
+<h3 class="font-display text-display text-on-surface">$1,422,904</h3>
+<span class="text-emerald-600 text-[11px] font-bold flex items-center mb-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> +2.4%
+                    </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Active SKUs</p>
+<div class="flex justify-between items-end">
+<h3 class="font-display text-display text-on-surface">1,248</h3>
+<span class="text-on-surface-variant text-[11px] mb-1">98% In Stock</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Low Stock Alerts</p>
+<div class="flex justify-between items-end">
+<h3 class="font-display text-display text-error">32</h3>
+<button class="text-primary font-bold text-xs hover:underline mb-1">Review All</button>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant relative overflow-hidden">
+<div class="relative z-10">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Inventory Health</p>
+<div class="flex items-end space-x-3">
+<h3 class="font-display text-display text-on-surface">94%</h3>
+<div class="flex-1 h-2 bg-surface-container-high rounded-full mb-2 overflow-hidden">
+<div class="h-full bg-primary w-[94%]"></div>
+</div>
+</div>
+</div>
+<!-- Subtle pattern -->
+<div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', (e) => {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = row.querySelector('input[type="checkbox"]');
+                    if (checkbox) checkbox.checked = !checkbox.checked;
+                }
+            });
+        });
+
+        // Search highlight effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>
