@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LogisticsPro - Receive Stock</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#b6c4ff",
+                        "on-surface-variant": "#434656",
+                        "surface-tint": "#004dea",
+                        "error": "#ba1a1a",
+                        "primary-container": "#0055ff",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-surface": "#131b2e",
+                        "on-primary-container": "#e3e6ff",
+                        "tertiary-fixed-dim": "#c3c7cb",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-fixed": "#001551",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737688",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#0039b3",
+                        "surface": "#faf8ff",
+                        "tertiary": "#4b5053",
+                        "on-tertiary-container": "#e3e7eb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container": "#eaedff",
+                        "surface-container-high": "#e2e7ff",
+                        "on-background": "#131b2e",
+                        "inverse-surface": "#283044",
+                        "primary-fixed": "#dce1ff",
+                        "surface-container-highest": "#dae2fd",
+                        "background": "#faf8ff",
+                        "surface-bright": "#faf8ff",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#54647a",
+                        "secondary-fixed": "#d3e4fe",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-tertiary-fixed": "#171c1f",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#43474b",
+                        "surface-container-low": "#f2f3ff",
+                        "secondary": "#505f76",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "primary": "#0041c8",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#c3c5d9",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#dfe3e7",
+                        "surface-variant": "#dae2fd",
+                        "surface-dim": "#d2d9f4",
+                        "tertiary-container": "#63686c",
+                        "secondary-container": "#d0e1fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "sidebar-width": "240px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "table-row-height": "40px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "data-mono": ["JetBrains Mono"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .data-table-input:focus {
+            outline: none;
+            border-color: #0055ff;
+            box-shadow: 0 0 0 2px rgba(0, 85, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Fixed SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-sidebar-width bg-inverse-surface flex flex-col py-margin-desktop z-50">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary-fixed">LogisticsPro</h1>
+<p class="font-body-sm text-body-sm text-outline-variant opacity-80">Operational Excellence</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<!-- Products -->
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-sm text-body-sm">Products</span>
+</a>
+<!-- Suppliers -->
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="local_shipping">local_shipping</span>
+<span class="font-body-sm text-body-sm">Suppliers</span>
+</a>
+<!-- Warehouses (ACTIVE) -->
+<a class="flex items-center px-6 py-3 text-primary-fixed-dim border-l-4 border-primary-container bg-on-surface-variant/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="warehouse">warehouse</span>
+<span class="font-body-sm text-body-sm">Warehouses</span>
+</a>
+<!-- POS -->
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-body-sm text-body-sm">POS</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="assessment">assessment</span>
+<span class="font-body-sm text-body-sm">Reports</span>
+</a>
+</nav>
+<div class="px-6 pt-4 border-t border-on-surface-variant/20 space-y-1">
+<a class="flex items-center py-2 text-outline-variant hover:text-surface-bright" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+<a class="flex items-center py-2 text-outline-variant hover:text-surface-bright" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="help">help</span>
+<span class="font-body-sm text-body-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[240px] min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-desktop sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary">Receive Stock</span>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center text-on-surface-variant gap-2">
+<span class="font-label-caps text-label-caps uppercase text-outline">PO Number</span>
+<span class="font-data-mono text-data-mono font-bold text-primary">PO #1029</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-low rounded border border-outline-variant">
+<span class="material-symbols-outlined text-primary" data-icon="barcode_scanner">barcode_scanner</span>
+<span class="font-body-sm text-body-sm font-semibold text-primary">Scanner Ready</span>
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="history">history</span>
+<img alt="Inventory Manager Avatar" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A professional headshot of a logistics manager in a modern industrial office. He wears a clean charcoal polo shirt and looks confidently toward the camera with a subtle smile. The background shows blurred warehouse racks and natural lighting coming through large industrial windows, emphasizing a clean, productive workspace environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0KJryg-jf0De2R3AQCfzBe5NLo6Z4FsrxKn1Wh20A1rmDRGoScmyifT6TCg5k0NNoIhnVZD1oqg2guPXF105IPItPDBJi67lq8Gkx2I1FvOF2zuxZtmNL_dnItr2dXq7O_8JbrusLwmZACTMoXojjzGOez2H2qAbGLQEEgjLMPenjESAwh5RPVuC6PNyMggiBecc_ffysTrtqm4RjSyjljKsC4P3Y1utwnvTBRue15bRWcYVQe2Dqvs_3S0wZucgPGR-8uLGZyEw"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-margin-desktop space-y-6 flex-1 pb-32">
+<!-- Header Info Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded shadow-sm">
+<span class="font-label-caps text-label-caps text-outline uppercase">Supplier</span>
+<h3 class="font-headline-sm text-headline-sm mt-1 text-on-surface">Green Valley Organics</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">ID: SUP-GV-042</p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded shadow-sm">
+<span class="font-label-caps text-label-caps text-outline uppercase">Receiving Status</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">In-Progress</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Started: Today, 08:45 AM</p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded shadow-sm">
+<span class="font-label-caps text-label-caps text-outline uppercase">Intake Progress</span>
+<div class="mt-2 w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 65%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant">8 of 12 items</span>
+<span class="font-body-sm text-body-sm font-bold text-primary">65%</span>
+</div>
+</div>
+</div>
+<!-- Main Intake Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="font-headline-sm text-headline-sm">Purchase Order Line Items</h2>
+<div class="flex gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-8 pr-4 py-1 bg-white border border-outline-variant text-body-sm font-body-sm rounded focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Filter SKU or Name..." type="text"/>
+</div>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline-variant">
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase">SKU</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase">Product Name</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Expected</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Received</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Diff</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase">Status</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase text-center">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1: Matches -->
+<tr class="hover:bg-surface-container-low transition-colors h-[40px]">
+<td class="px-6 py-2 font-data-mono text-data-mono text-on-surface font-medium">GVO-00122</td>
+<td class="px-6 py-2 font-body-sm text-body-sm">Organic Chia Seeds (1kg)</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">500</td>
+<td class="px-6 py-2 text-right">
+<input class="data-table-input w-20 text-right px-2 py-1 border border-outline-variant rounded font-data-mono text-data-mono" type="number" value="500"/>
+</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right text-on-surface">0</td>
+<td class="px-6 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200 text-[11px] font-bold uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Matches
+                                </span>
+</td>
+<td class="px-6 py-2 text-center">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Shortage -->
+<tr class="hover:bg-surface-container-low transition-colors h-[40px]">
+<td class="px-6 py-2 font-data-mono text-data-mono text-on-surface font-medium">GVO-00159</td>
+<td class="px-6 py-2 font-body-sm text-body-sm">Fair Trade Cocoa Powder</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">250</td>
+<td class="px-6 py-2 text-right">
+<input class="data-table-input w-20 text-right px-2 py-1 border border-error/30 rounded font-data-mono text-data-mono bg-error-container/10" type="number" value="242"/>
+</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right text-error font-bold">-8</td>
+<td class="px-6 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-error-container text-on-error-container border border-error/20 text-[11px] font-bold uppercase">
+                                    Shortage
+                                </span>
+</td>
+<td class="px-6 py-2 text-center">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Damaged -->
+<tr class="hover:bg-surface-container-low transition-colors h-[40px]">
+<td class="px-6 py-2 font-data-mono text-data-mono text-on-surface font-medium">GVO-00201</td>
+<td class="px-6 py-2 font-body-sm text-body-sm">Cold Pressed Avocado Oil</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">100</td>
+<td class="px-6 py-2 text-right">
+<input class="data-table-input w-20 text-right px-2 py-1 border border-outline-variant rounded font-data-mono text-data-mono" type="number" value="95"/>
+</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right text-on-surface-variant font-bold">-5</td>
+<td class="px-6 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 border border-orange-200 text-[11px] font-bold uppercase">
+                                    Damaged
+                                </span>
+</td>
+<td class="px-6 py-2 text-center">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="photo_camera">photo_camera</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Pending -->
+<tr class="hover:bg-surface-container-low transition-colors h-[40px] opacity-60">
+<td class="px-6 py-2 font-data-mono text-data-mono text-on-surface">GVO-00344</td>
+<td class="px-6 py-2 font-body-sm text-body-sm">Quinoa Tri-Color Blend</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">1200</td>
+<td class="px-6 py-2 text-right">
+<input class="data-table-input w-20 text-right px-2 py-1 border border-outline-variant rounded font-data-mono text-data-mono" placeholder="0" type="number"/>
+</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">-</td>
+<td class="px-6 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container text-outline text-[11px] font-bold uppercase">
+                                    Pending
+                                </span>
+</td>
+<td class="px-6 py-2 text-center">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="barcode_scanner">barcode_scanner</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Notes & Audit Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-outline" data-icon="notes">notes</span>
+<h3 class="font-headline-sm text-headline-sm">Receiving Clerk Notes</h3>
+</div>
+<textarea class="w-full h-32 p-3 bg-white border border-outline-variant rounded font-body-sm text-body-sm focus:ring-1 focus:ring-primary outline-none" placeholder="Enter notes regarding batch quality, pallet condition, or carrier issues..."></textarea>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-outline" data-icon="verified_user">verified_user</span>
+<h3 class="font-headline-sm text-headline-sm">Audit &amp; Certification</h3>
+</div>
+<div class="space-y-4">
+<label class="flex items-start gap-3 cursor-pointer group">
+<input class="mt-1 w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div>
+<span class="font-body-md text-body-md block group-hover:text-primary transition-colors">Confirm temperature check for perishables</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Required for SKU GVO-00201</span>
+</div>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<input class="mt-1 w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div>
+<span class="font-body-md text-body-md block group-hover:text-primary transition-colors">Pallets sanitized and free of debris</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">General facility safety requirement</span>
+</div>
+</label>
+<div class="pt-2">
+<div class="flex items-center gap-2 px-3 py-2 bg-secondary-container/30 rounded border border-secondary-container">
+<span class="material-symbols-outlined text-secondary" data-icon="info">info</span>
+<p class="font-body-sm text-body-sm text-on-secondary-container">2 discrepancy reports were auto-generated based on input values.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Footer Actions -->
+<footer class="fixed bottom-0 right-0 w-[calc(100%-240px)] h-20 bg-surface border-t border-outline-variant px-margin-desktop flex items-center justify-between z-40 bg-opacity-95 backdrop-blur-sm">
+<div class="flex items-center gap-4">
+<button class="px-6 py-2 font-body-md text-body-md font-semibold text-secondary hover:bg-secondary-container transition-colors rounded">
+                    Save Draft
+                </button>
+<div class="w-[1px] h-6 bg-outline-variant"></div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-outline uppercase">Total Units Recv.</span>
+<span class="font-data-mono text-data-mono font-bold text-on-surface">1,237 / 2,050</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-6 py-2 font-body-md text-body-md font-semibold text-error bg-error-container/20 border border-error/20 hover:bg-error-container/40 transition-colors rounded">
+<span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+                    Report Discrepancy
+                </button>
+<button class="px-8 py-2 font-body-md text-body-md font-bold text-white bg-primary-container hover:bg-primary transition-all shadow-md active:scale-95 rounded">
+                    Finalize Receipt
+                </button>
+</div>
+</footer>
+</main>
+<!-- Micro-interactions Script -->
+<script>
+        // Simulation of barcode scan effect
+        document.addEventListener('keydown', function(e) {
+            // If the user presses 'Enter' (simulating a barcode scanner return)
+            if (e.key === 'Enter') {
+                const scannerIndicator = document.querySelector('.animate-pulse');
+                if (scannerIndicator) {
+                    scannerIndicator.classList.remove('bg-primary');
+                    scannerIndicator.classList.add('bg-green-500');
+                    setTimeout(() => {
+                        scannerIndicator.classList.remove('bg-green-500');
+                        scannerIndicator.classList.add('bg-primary');
+                    }, 500);
+                }
+            }
+        });
+
+        // Simple table calculation simulation
+        const inputs = document.querySelectorAll('.data-table-input');
+        inputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const row = this.closest('tr');
+                const expected = parseInt(row.querySelector('td:nth-child(3)').innerText);
+                const received = parseInt(this.value);
+                const diffCell = row.querySelector('td:nth-child(5)');
+                
+                const diff = received - expected;
+                diffCell.innerText = diff === 0 ? '0' : (diff > 0 ? '+' + diff : diff);
+                
+                if (diff < 0) {
+                    diffCell.className = 'px-6 py-2 font-data-mono text-data-mono text-right text-error font-bold';
+                } else if (diff > 0) {
+                    diffCell.className = 'px-6 py-2 font-data-mono text-data-mono text-right text-primary font-bold';
+                } else {
+                    diffCell.className = 'px-6 py-2 font-data-mono text-data-mono text-right text-on-surface';
+                }
+            });
+        });
+    </script>
+</body></html>

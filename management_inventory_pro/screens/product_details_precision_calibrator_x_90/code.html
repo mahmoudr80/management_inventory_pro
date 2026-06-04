@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OptimaERP - Precision Calibrator X-90</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .data-table-row:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#faf8ff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container-highest": "#dae2fd",
+                        "primary-container": "#0055ff",
+                        "secondary": "#505f76",
+                        "tertiary-fixed-dim": "#c3c7cb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#43474b",
+                        "inverse-surface": "#283044",
+                        "outline-variant": "#c3c5d9",
+                        "on-surface-variant": "#434656",
+                        "tertiary-fixed": "#dfe3e7",
+                        "surface-variant": "#dae2fd",
+                        "tertiary-container": "#63686c",
+                        "surface-dim": "#d2d9f4",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#004dea",
+                        "on-background": "#131b2e",
+                        "tertiary": "#4b5053",
+                        "on-tertiary-fixed": "#171c1f",
+                        "on-surface": "#131b2e",
+                        "on-primary-fixed-variant": "#0039b3",
+                        "on-tertiary-container": "#e3e7eb",
+                        "on-secondary-container": "#54647a",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f2f3ff",
+                        "surface-container": "#eaedff",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e2e7ff",
+                        "inverse-primary": "#b6c4ff",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-secondary": "#ffffff",
+                        "outline": "#737688",
+                        "primary": "#0041c8",
+                        "surface-bright": "#faf8ff",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "secondary-container": "#d0e1fb",
+                        "surface": "#faf8ff",
+                        "primary-fixed": "#dce1ff",
+                        "on-primary-fixed": "#001551",
+                        "inverse-on-surface": "#eef0ff",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#e3e6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "margin-mobile": "16px",
+                        "container-max": "1440px",
+                        "sidebar-width": "240px",
+                        "margin-desktop": "32px",
+                        "unit": "4px",
+                        "table-row-height": "40px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "data-mono": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "data-mono": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- Persistent SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[240px] py-4 z-50 bg-surface-container-low border-r border-outline-variant flex flex-col">
+<div class="px-4 mb-8">
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-surface">OptimaERP</h1>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Global Inventory</p>
+</div>
+<nav class="flex-1 px-2">
+<div class="flex items-center gap-unit px-4 py-2 my-1 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</div>
+<div class="flex items-center gap-unit px-4 py-2 my-1 cursor-pointer transition-all bg-secondary-container text-on-secondary-container border-l-4 border-primary font-body-sm text-body-sm">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Products</span>
+</div>
+<div class="flex items-center gap-unit px-4 py-2 my-1 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span>Suppliers</span>
+</div>
+<div class="flex items-center gap-unit px-4 py-2 my-1 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined" data-icon="warehouse">warehouse</span>
+<span>Warehouses</span>
+</div>
+<div class="flex items-center gap-unit px-4 py-2 my-1 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span>POS</span>
+</div>
+<div class="flex items-center gap-unit px-4 py-2 my-1 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Reports</span>
+</div>
+</nav>
+<div class="px-2 mt-auto">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-2 rounded-lg font-headline-sm text-[14px] mb-4 active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined !text-[18px]" data-icon="add">add</span>
+                Add New SKU
+            </button>
+<div class="flex items-center gap-unit px-4 py-2 my-1 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-[240px] h-12 bg-surface border-b border-outline-variant flex items-center justify-between px-margin-desktop z-40">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="arrow_back">arrow_back</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Precision Calibrator X-90</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="sync">sync</span>
+<span class="text-on-surface-variant font-body-md text-body-md cursor-pointer hover:underline">Help</span>
+<img alt="User avatar" class="w-8 h-8 rounded-full bg-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxlt3XGHf1nuJWQy1R1uvacm8IUhJUJMxvEcBgo856XoI6e6aeEHMU6d0xJg_vSeyZGRNQgAyo2-ZjSeVXkMLHGfn5csVYOFuQhWqQ5Fjo4_DJoMMZLt6stvggZjfGDGIGiXatwzbe09-rgrn6blSGc8vR266XmSO6cXZWEkW44Z9y2i1Fmshz2JHYwbv9jUZAqwZ3XOYUE1oe2MnCtVbqbbU_by_Mhg8NIPnpmTTahdpEU2wEsShJF3ynb4YSGoq0Sg3Xd588I90"/>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[240px] pt-12 min-h-screen p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left/Main Section (8 Columns) -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Product Overview Card -->
+<section class="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant flex gap-8 shadow-sm">
+<div class="w-48 h-48 bg-surface-container rounded-lg flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="Precision Calibrator X-90" class="object-cover w-full h-full mix-blend-multiply" data-alt="A high-precision industrial calibration device featuring a sleek metal housing, digital LED interface, and intricate sensory knobs. The product is photographed in a crisp, high-key studio setting with soft diffused lighting that highlights its professional, utilitarian build. The color palette is composed of metallic silvers, deep blues, and industrial grays, conveying accuracy and engineering excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMDmWm36bzlhm0WLsQ2wkBQ8dlZlH76yndJ_xAeZiXo4U24fMYi5C6gzSvsDE_lQs62UICaAVnzFoc6vKWqoPrCGKTM9Mh0vzknsRVFn0RC04DKOPwbtlYbwBjvegLzg-Sqq0I5sDxQ4Sim0TeeXGNYWsAg5k3HpSqIBTLT25CHwaIfL2a2_kE3Zg5aOXUiVu1L3HAI-IZStI8Z_m1wBT_AXSVr_51hGfsqEesMETugRuRAMdt_O9_LvCGkP8B04e2wLpvCPkPWyw"/>
+</div>
+<div class="flex-1 grid grid-cols-2 gap-y-4 gap-x-8">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">SKU Identifier</p>
+<p class="font-data-mono text-data-mono font-bold text-primary">OPT-CAL-X90-PRC</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Barcode / EAN</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant !text-[18px]" data-icon="barcode">barcode</span>
+<p class="font-data-mono text-data-mono">4510002934812</p>
+</div>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Product Category</p>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[12px] font-semibold rounded">Precision Instruments</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Stock Status</p>
+<span class="px-2 py-0.5 bg-green-100 text-green-800 text-[12px] font-semibold rounded flex items-center gap-1 w-fit">
+<span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>
+                            Healthy Stock
+                        </span>
+</div>
+<div class="col-span-2 pt-4 flex gap-4">
+<div class="flex-1 bg-surface-container-low p-3 rounded-lg">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Total On Hand</p>
+<p class="font-display text-[24px] text-on-surface">1,248 <span class="text-[14px] font-normal text-on-surface-variant">Units</span></p>
+</div>
+<div class="flex-1 bg-surface-container-low p-3 rounded-lg">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Total Asset Value</p>
+<p class="font-display text-[24px] text-on-surface">$186,576.00</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Warehouse Stock Breakdown -->
+<section class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm">Warehouse Stock Breakdown</h3>
+<button class="text-primary font-label-caps text-label-caps hover:underline">View Map View</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant">Warehouse Name</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant text-right">On Hand</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant text-right">Available</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant text-right">Incoming</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant text-right">Value (USD)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="data-table-row transition-colors h-table-row-height">
+<td class="px-6 py-2 font-body-sm text-body-sm font-semibold">Central Logistics Hub - Berlin</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">840</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">720</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right text-primary">150</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">$125,580.00</td>
+</tr>
+<tr class="data-table-row transition-colors h-table-row-height">
+<td class="px-6 py-2 font-body-sm text-body-sm font-semibold">North Coast Storage - Oslo</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">208</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">208</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">0</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">$31,096.00</td>
+</tr>
+<tr class="data-table-row transition-colors h-table-row-height">
+<td class="px-6 py-2 font-body-sm text-body-sm font-semibold">East Distribution Center - Warsaw</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">156</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">120</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">25</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">$23,322.00</td>
+</tr>
+<tr class="data-table-row transition-colors h-table-row-height bg-error-container/10">
+<td class="px-6 py-2 font-body-sm text-body-sm font-semibold flex items-center gap-2">
+                                    South Point Overflow - Lyon
+                                    <span class="px-1.5 py-0.5 bg-error-container text-on-error-container text-[10px] rounded">LOW</span>
+</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right text-error font-bold">44</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">44</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right text-primary">100</td>
+<td class="px-6 py-2 font-data-mono text-data-mono text-right">$6,578.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Inventory History Timeline -->
+<section class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm">Inventory Movement History</h3>
+<div class="flex gap-2">
+<button class="flex items-center gap-1 border border-outline-variant px-3 py-1 rounded text-body-sm hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined !text-[16px]" data-icon="filter_list">filter_list</span>
+                            Filter
+                        </button>
+<button class="flex items-center gap-1 border border-outline-variant px-3 py-1 rounded text-body-sm hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined !text-[16px]" data-icon="download">download</span>
+                            Export
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant">Date &amp; Time</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant">Type</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant text-right">Qty Change</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant">Location</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant">Authorized User</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="data-table-row transition-colors">
+<td class="px-6 py-3 font-data-mono text-data-mono whitespace-nowrap">2023-10-24 14:32</td>
+<td class="px-6 py-3">
+<span class="flex items-center gap-2 font-body-sm">
+<span class="material-symbols-outlined text-primary !text-[18px]" data-icon="input">input</span>
+                                        Stock Receiving
+                                    </span>
+</td>
+<td class="px-6 py-3 font-data-mono text-data-mono text-right text-green-600 font-bold">+150</td>
+<td class="px-6 py-3 font-body-sm">Berlin Hub</td>
+<td class="px-6 py-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold">MK</div>
+<span class="font-body-sm">M. Kowalski</span>
+</div>
+</td>
+</tr>
+<tr class="data-table-row transition-colors">
+<td class="px-6 py-3 font-data-mono text-data-mono whitespace-nowrap">2023-10-24 09:15</td>
+<td class="px-6 py-3">
+<span class="flex items-center gap-2 font-body-sm">
+<span class="material-symbols-outlined text-secondary !text-[18px]" data-icon="move_up">move_up</span>
+                                        Inter-Warehouse Transfer
+                                    </span>
+</td>
+<td class="px-6 py-3 font-data-mono text-data-mono text-right text-error font-bold">-25</td>
+<td class="px-6 py-3 font-body-sm">Warsaw Center</td>
+<td class="px-6 py-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold">JD</div>
+<span class="font-body-sm">J. Doe</span>
+</div>
+</td>
+</tr>
+<tr class="data-table-row transition-colors">
+<td class="px-6 py-3 font-data-mono text-data-mono whitespace-nowrap">2023-10-23 16:45</td>
+<td class="px-6 py-3">
+<span class="flex items-center gap-2 font-body-sm">
+<span class="material-symbols-outlined text-on-error-container !text-[18px]" data-icon="shopping_cart_checkout">shopping_cart_checkout</span>
+                                        Sales Order Fulfilled
+                                    </span>
+</td>
+<td class="px-6 py-3 font-data-mono text-data-mono text-right text-error font-bold">-12</td>
+<td class="px-6 py-3 font-body-sm">Oslo Storage</td>
+<td class="px-6 py-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold">SYS</div>
+<span class="font-body-sm italic">Automated System</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-container-low border-t border-outline-variant flex justify-center">
+<button class="text-primary font-body-sm font-semibold hover:underline">Load More History</button>
+</div>
+</section>
+</div>
+<!-- Right Sidebar Section (4 Columns) -->
+<aside class="lg:col-span-4 space-y-8">
+<!-- Quick Actions -->
+<section class="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant shadow-sm">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase">Inventory Controls</h4>
+<div class="flex flex-col gap-3">
+<button class="w-full flex items-center justify-between bg-primary text-on-primary px-4 py-3 rounded-lg hover:bg-primary-container transition-colors active:scale-[0.98]">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="inventory">inventory</span>
+<span class="font-semibold">Adjust Stock Level</span>
+</span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between bg-surface border border-outline-variant text-on-surface px-4 py-3 rounded-lg hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="swap_horiz">swap_horiz</span>
+<span class="font-semibold">Transfer Inventory</span>
+</span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between bg-surface border border-outline-variant text-on-surface px-4 py-3 rounded-lg hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="edit">edit</span>
+<span class="font-semibold">Edit SKU Details</span>
+</span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between bg-surface border border-outline-variant text-error px-4 py-3 rounded-lg hover:bg-error-container/10 transition-colors active:scale-[0.98]">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+<span class="font-semibold">Archive Product</span>
+</span>
+</button>
+</div>
+</section>
+<!-- Analytics Summary -->
+<section class="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant shadow-sm">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase">Performance Metrics</h4>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between items-end mb-2">
+<p class="text-body-sm text-on-surface-variant">Avg. Monthly Sales</p>
+<p class="font-headline-sm text-headline-sm">412 Units</p>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 72%"></div>
+</div>
+<p class="text-[11px] text-green-600 mt-1 font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined !text-[12px]" data-icon="trending_up">trending_up</span>
+                            +8.4% from previous quarter
+                        </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-3 rounded border border-outline-variant">
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase">Avg. Lead Time</p>
+<p class="font-headline-sm text-headline-sm">14 Days</p>
+</div>
+<div class="bg-surface-container-low p-3 rounded border border-outline-variant">
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase">Reorder Point</p>
+<p class="font-headline-sm text-headline-sm">250 U</p>
+</div>
+</div>
+<div class="pt-2 border-t border-outline-variant">
+<p class="text-body-sm text-on-surface-variant mb-3">Inventory Value Trend</p>
+<!-- Sparkline Placeholder -->
+<div class="h-16 flex items-end gap-1 px-1">
+<div class="flex-1 bg-primary/20 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[55%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[45%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[65%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/60 h-[80%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-[95%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-[85%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Supplier Info -->
+<section class="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant shadow-sm">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase">Primary Supplier</h4>
+<div class="flex items-start gap-4 mb-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="factory">factory</span>
+</div>
+<div>
+<p class="font-headline-sm text-[15px] mb-0.5">Global Precision Systems GmbH</p>
+<p class="text-body-sm text-on-surface-variant">Stuttgart, Germany</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-body-sm">
+<span class="material-symbols-outlined !text-[18px] text-on-surface-variant" data-icon="mail">mail</span>
+<span>orders@gps-stuttgart.de</span>
+</div>
+<div class="flex items-center gap-3 text-body-sm">
+<span class="material-symbols-outlined !text-[18px] text-on-surface-variant" data-icon="phone">phone</span>
+<span>+49 711 9302-0</span>
+</div>
+<div class="flex items-center gap-3 text-body-sm">
+<span class="material-symbols-outlined !text-[18px] text-on-surface-variant" data-icon="verified">verified</span>
+<span class="text-primary font-semibold">Tier 1 Verified Supplier</span>
+</div>
+</div>
+<button class="w-full mt-6 text-primary font-body-sm font-semibold border border-primary/20 py-2 rounded-lg hover:bg-primary/5 transition-colors">
+                    Place Purchase Order
+                </button>
+</section>
+</aside>
+</main>
+<!-- Simple Notification Toast (Logic Mockup) -->
+<div class="fixed bottom-8 right-8 bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-lg shadow-xl translate-y-24 opacity-0 transition-all duration-300 z-50 flex items-center gap-3" id="toast">
+<span class="material-symbols-outlined text-green-400" data-icon="check_circle">check_circle</span>
+<span class="font-body-md">Stock level updated successfully.</span>
+</div>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                const toast = document.getElementById('toast');
+                if (this.innerText.includes('Adjust') || this.innerText.includes('Edit')) {
+                    toast.classList.remove('translate-y-24', 'opacity-0');
+                    setTimeout(() => {
+                        toast.classList.add('translate-y-24', 'opacity-0');
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body></html>

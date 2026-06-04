@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LogisticsPro | Command Palette &amp; Search</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf8ff;
+        }
+        .command-palette-overlay {
+            backdrop-filter: blur(4px);
+            background-color: rgba(19, 27, 46, 0.4);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f2f3ff",
+                        "on-tertiary-container": "#e3e7eb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#505f76",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eaedff",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#dae2fd",
+                        "inverse-surface": "#283044",
+                        "inverse-primary": "#b6c4ff",
+                        "inverse-on-surface": "#eef0ff",
+                        "tertiary-fixed-dim": "#c3c7cb",
+                        "surface": "#faf8ff",
+                        "on-primary-container": "#e3e6ff",
+                        "tertiary": "#4b5053",
+                        "primary": "#0041c8",
+                        "on-background": "#131b2e",
+                        "secondary-container": "#d0e1fb",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-fixed": "#001551",
+                        "surface-container-highest": "#dae2fd",
+                        "on-surface": "#131b2e",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-tertiary-fixed": "#171c1f",
+                        "outline": "#737688",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#004dea",
+                        "on-surface-variant": "#434656",
+                        "outline-variant": "#c3c5d9",
+                        "on-secondary-container": "#54647a",
+                        "surface-bright": "#faf8ff",
+                        "on-tertiary-fixed-variant": "#43474b",
+                        "on-primary-fixed-variant": "#0039b3",
+                        "primary-container": "#0055ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#dfe3e7",
+                        "background": "#faf8ff",
+                        "tertiary-container": "#63686c",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d2d9f4",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-high": "#e2e7ff",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#dce1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "table-row-height": "40px",
+                        "sidebar-width": "240px",
+                        "container-max": "1440px"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Persistent SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-sidebar-width bg-inverse-surface flex flex-col py-margin-desktop z-40">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary-fixed">LogisticsPro</h1>
+<p class="text-[11px] uppercase tracking-widest text-outline-variant opacity-70">Operational Excellence</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard Active -->
+<a class="flex items-center px-6 py-3 text-primary-fixed-dim border-l-4 border-primary-container bg-on-surface-variant/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">inventory_2</span>
+<span class="font-body-sm text-body-sm">Products</span>
+</a>
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">local_shipping</span>
+<span class="font-body-sm text-body-sm">Suppliers</span>
+</a>
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">warehouse</span>
+<span class="font-body-sm text-body-sm">Warehouses</span>
+</a>
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">point_of_sale</span>
+<span class="font-body-sm text-body-sm">POS</span>
+</a>
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">assessment</span>
+<span class="font-body-sm text-body-sm">Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-on-surface-variant/10">
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+<a class="flex items-center px-6 py-3 text-outline-variant hover:bg-on-surface-variant/5 hover:text-surface-bright transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">help</span>
+<span class="font-body-sm text-body-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-desktop z-30">
+<div class="flex items-center flex-1 max-w-2xl">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-body-md font-body-md focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer transition-all" id="main-search-trigger" placeholder="Search Products, SKUs, Suppliers (⌘+K)" type="text"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1 items-center">
+<kbd class="px-1.5 py-0.5 rounded bg-outline-variant/20 text-[10px] font-semibold text-on-surface-variant border border-outline-variant/30">⌘</kbd>
+<kbd class="px-1.5 py-0.5 rounded bg-outline-variant/20 text-[10px] font-semibold text-on-surface-variant border border-outline-variant/30">K</kbd>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6 ml-6">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">history</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-body-md text-body-md font-semibold hover:bg-primary-container transition-all">New Order</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwh4r9Mj6Z8ri4TpqhEwlfpHrGuVymk07a3fhUANLpzK7NF63yqaFh-u-s3z9Gvd3dqoTh52jMu8Uq7aDrR91Zl7fB_r--bslnzaKPkrz1vAkzR5_6_3M0U8JdqUG3c6qHKd4pSnv93sw4n7XurXfgnOqKpmi93xTxRo_afeR3LTaVRhm4Au-hrzZ9UKMGoS95Batzwvz81n8JEPlpUD9FwnuayCas6wd-vLRr9vYNUJRZH6xaBfijnQB0DeJebEwDjdRGWe1mRB8"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] pt-16 p-margin-desktop min-h-screen">
+<div class="max-w-container-max mx-auto">
+<div class="mb-8">
+<h2 class="text-[32px] font-semibold leading-[40px] tracking-tight text-on-surface">Operational Overview</h2>
+<p class="text-on-surface-variant font-body-md">Real-time inventory and logistics performance metrics.</p>
+</div>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- KPI Card 1 -->
+<div class="col-span-12 md:col-span-3 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant">
+<p class="text-[11px] font-semibold tracking-widest text-secondary uppercase mb-2">Total Inventory Value</p>
+<h3 class="text-display font-semibold text-on-surface">$1,420,890</h3>
+<div class="flex items-center mt-2 text-green-600 font-semibold text-body-sm">
+<span class="material-symbols-outlined text-[18px] mr-1">trending_up</span>
+<span>+4.2% from last month</span>
+</div>
+</div>
+<!-- KPI Card 2 -->
+<div class="col-span-12 md:col-span-3 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant">
+<p class="text-[11px] font-semibold tracking-widest text-secondary uppercase mb-2">Low Stock Alerts</p>
+<h3 class="text-display font-semibold text-error">24 SKU</h3>
+<div class="flex items-center mt-2 text-error font-semibold text-body-sm">
+<span class="material-symbols-outlined text-[18px] mr-1">warning</span>
+<span>Requires immediate action</span>
+</div>
+</div>
+<!-- KPI Card 3 -->
+<div class="col-span-12 md:col-span-3 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant">
+<p class="text-[11px] font-semibold tracking-widest text-secondary uppercase mb-2">Active Shipments</p>
+<h3 class="text-display font-semibold text-on-surface">156</h3>
+<div class="flex items-center mt-2 text-on-surface-variant font-semibold text-body-sm">
+<span class="material-symbols-outlined text-[18px] mr-1">local_shipping</span>
+<span>42 in transit today</span>
+</div>
+</div>
+<!-- KPI Card 4 -->
+<div class="col-span-12 md:col-span-3 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant">
+<p class="text-[11px] font-semibold tracking-widest text-secondary uppercase mb-2">Warehouse Capacity</p>
+<h3 class="text-display font-semibold text-on-surface">82%</h3>
+<div class="w-full bg-surface-container rounded-full h-2 mt-4">
+<div class="bg-primary h-2 rounded-full" style="width: 82%"></div>
+</div>
+</div>
+<!-- Table Preview -->
+<div class="col-span-12 bg-surface-container-lowest rounded-lg border border-outline-variant overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Recent Stock Movements</h4>
+<button class="text-primary font-semibold text-body-sm">View All</button>
+</div>
+<table class="w-full text-left font-body-sm">
+<thead>
+<tr class="bg-surface-container text-on-surface-variant border-b border-outline-variant">
+<th class="px-6 py-3 font-semibold">SKU / PRODUCT</th>
+<th class="px-6 py-3 font-semibold">WAREHOUSE</th>
+<th class="px-6 py-3 font-semibold">MOVEMENT</th>
+<th class="px-6 py-3 font-semibold">STATUS</th>
+<th class="px-6 py-3 font-semibold text-right">TIMESTAMP</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/50">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded bg-surface-variant mr-3 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">inventory</span>
+</div>
+<div>
+<div class="font-semibold">PR-9082</div>
+<div class="text-[11px] text-on-surface-variant">Logitech MX Master 3S</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">North-East Alpha (NE-A)</td>
+<td class="px-6 py-4 text-green-600 font-semibold">+400 Units</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider">Healthy</span>
+</td>
+<td class="px-6 py-4 text-right text-on-surface-variant font-data-mono">14:22:10 PST</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded bg-surface-variant mr-3 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">inventory</span>
+</div>
+<div>
+<div class="font-semibold">PR-1244</div>
+<div class="text-[11px] text-on-surface-variant">Dell UltraSharp 27"</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">West-Coast Beta (WC-B)</td>
+<td class="px-6 py-4 text-error font-semibold">-12 Units</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full bg-error-container text-on-error-container text-[10px] font-bold uppercase tracking-wider">Low Stock</span>
+</td>
+<td class="px-6 py-4 text-right text-on-surface-variant font-data-mono">13:05:44 PST</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- Command Palette Overlay (Hidden by Default) -->
+<div class="fixed inset-0 z-50 command-palette-overlay hidden transition-opacity duration-300" id="command-palette">
+<div class="flex justify-center pt-[153px]">
+<div class="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-2xl border border-outline-variant overflow-hidden transform scale-95 transition-transform duration-200" id="palette-content">
+<!-- Search Bar -->
+<div class="flex items-center px-6 py-4 border-b border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant mr-4 text-[24px]">search</span>
+<input class="flex-1 bg-transparent border-none outline-none text-headline-sm font-body-lg text-on-surface placeholder-outline focus:ring-0" id="palette-input" placeholder="Search everything... (Products, SKUs, People, Orders)" type="text"/>
+<kbd class="ml-4 px-2 py-1 rounded border border-outline-variant text-[11px] font-bold text-on-surface-variant shadow-sm">ESC</kbd>
+</div>
+<!-- Scrollable Content -->
+<div class="max-h-[614px] overflow-y-auto custom-scrollbar p-2">
+<!-- Group: Commands -->
+<div class="mb-4">
+<h5 class="px-4 py-2 text-[11px] font-semibold text-secondary tracking-widest uppercase">Quick Commands</h5>
+<div class="space-y-0.5">
+<button class="w-full flex items-center px-4 py-3 rounded-lg hover:bg-primary-container/10 group transition-all text-left">
+<span class="material-symbols-outlined mr-3 text-on-surface-variant group-hover:text-primary">warehouse</span>
+<div class="flex-1">
+<p class="text-body-md font-semibold text-on-surface">Go to Warehouse A</p>
+<p class="text-[12px] text-on-surface-variant">Jump to Alpha-Zone inventory</p>
+</div>
+<span class="text-[12px] font-data-mono text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity">G + W</span>
+</button>
+<button class="w-full flex items-center px-4 py-3 rounded-lg hover:bg-primary-container/10 group transition-all text-left">
+<span class="material-symbols-outlined mr-3 text-on-surface-variant group-hover:text-primary">add_shopping_cart</span>
+<div class="flex-1">
+<p class="text-body-md font-semibold text-on-surface">Create New Purchase Order</p>
+<p class="text-[12px] text-on-surface-variant">Draft a new PO for global suppliers</p>
+</div>
+<span class="text-[12px] font-data-mono text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity">N + P</span>
+</button>
+<button class="w-full flex items-center px-4 py-3 rounded-lg hover:bg-primary-container/10 group transition-all text-left">
+<span class="material-symbols-outlined mr-3 text-on-surface-variant group-hover:text-primary">person_add</span>
+<div class="flex-1">
+<p class="text-body-md font-semibold text-on-surface">Invite Employee</p>
+<p class="text-[12px] text-on-surface-variant">Add new staff to the warehouse team</p>
+</div>
+<span class="text-[12px] font-data-mono text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity">I + E</span>
+</button>
+</div>
+</div>
+<!-- Group: Recent Search Previews (Products) -->
+<div class="mb-4">
+<h5 class="px-4 py-2 text-[11px] font-semibold text-secondary tracking-widest uppercase">Products &amp; SKUs</h5>
+<div class="space-y-0.5">
+<!-- Product Item -->
+<div class="flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-low cursor-pointer transition-all">
+<div class="w-12 h-12 bg-surface rounded border border-outline-variant flex-shrink-0 overflow-hidden mr-4">
+<img alt="Tablet Product" class="w-full h-full object-cover" data-alt="A professional top-down studio product photograph of a modern high-end tablet computer lying on a minimalist white surface. The lighting is crisp and cool, casting soft, architectural shadows that highlight the tablet's sleek metallic frame and glass screen. The overall aesthetic is clean, technological, and corporate, following a strictly professional light-mode design language." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4p7ZBLCItQiLB3I_wboS7-EeG3Eby_RWLQak1QqbQ5l0kiML4_mYzVe9VValSRlmGl8U67Wz2VFAf0zlzEU2Twnb3T19skrSEvbUTyQf6TXPpFJ92cE2OnHKvPRM3oEufx_V9RaqRo7dBh6ygCt-Y2-VFFWGeyOqeN0LdOHeCA8O1n6tzqA8ovFAdB3jMbWUF3wFan9X4Flf32_crfBZNvCuWrPgsJ0EufT1gvw-M_2sQXwWsVWoTlEmZSr99CZLdr_e7NYlfsD0"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<p class="text-body-md font-semibold text-on-surface">Precision Pro Tablet 12"</p>
+<span class="text-[10px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded font-bold">STOCK: 1,204</span>
+</div>
+<p class="text-[12px] text-on-surface-variant font-data-mono">SKU: TAB-12-PPR-001</p>
+</div>
+</div>
+<!-- Product Item (Low Stock) -->
+<div class="flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-low cursor-pointer transition-all">
+<div class="w-12 h-12 bg-surface rounded border border-outline-variant flex-shrink-0 overflow-hidden mr-4">
+<img alt="Monitor Product" class="w-full h-full object-cover" data-alt="A side-profile studio shot of a curved ultra-wide professional computer monitor against a bright, airy office background. The scene is illuminated with diffused natural morning light, creating a serene and highly productive atmosphere. The visual style is focused and systematic, using a palette of soft grays and bright whites to emphasize modern logistics and workspace efficiency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfbYs_2ny2QXpeuEv_utWB4jxbSc4DeDxQp0f3ELEfASOPAHiWG-VH157w5XFfgSxwMNIV3JQke2ExnmmgZX8LYBYpdDD5dTMbnmnBJ7ZN-lItc0t16uz78hd2zsNt1DlNi0gWJ1fe4rgP8XH9AzdhMuUXJS1pxtj6e-qEbsQ_gts7uY2OrTWLz3wJYXdc3KcJrgLZ_jaXwOmTJikEJUiFLC_vCI4LW-sFd8H_3rjjSCPyG4IuS6-XLuNxDW_z00VKKNhh2nfUuxw"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<p class="text-body-md font-semibold text-on-surface">Curved Ultrawide 34"</p>
+<span class="text-[10px] px-1.5 py-0.5 bg-error-container text-on-error-container rounded font-bold">STOCK: 08</span>
+</div>
+<p class="text-[12px] text-on-surface-variant font-data-mono">SKU: MON-34-CW-992</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Group: Suppliers -->
+<div class="mb-4">
+<h5 class="px-4 py-2 text-[11px] font-semibold text-secondary tracking-widest uppercase">Suppliers</h5>
+<div class="space-y-0.5">
+<div class="flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-low cursor-pointer transition-all">
+<span class="material-symbols-outlined mr-4 text-on-surface-variant p-2 bg-surface rounded-full">business</span>
+<div class="flex-1">
+<p class="text-body-md font-semibold text-on-surface">Global Micro-Systems Ltd.</p>
+<p class="text-[12px] text-on-surface-variant">Tier 1 • Active Supplier • Shenzhen Hub</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] font-bold text-green-600">VERIFIED</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / Navigation -->
+<div class="bg-surface-container p-4 border-t border-outline-variant flex items-center justify-between text-[11px] text-on-surface-variant">
+<div class="flex gap-4">
+<span class="flex items-center"><kbd class="bg-surface px-1 py-0.5 rounded mr-1 border border-outline-variant shadow-sm">↑↓</kbd> to navigate</span>
+<span class="flex items-center"><kbd class="bg-surface px-1 py-0.5 rounded mr-1 border border-outline-variant shadow-sm">Enter</kbd> to select</span>
+<span class="flex items-center"><kbd class="bg-surface px-1 py-0.5 rounded mr-1 border border-outline-variant shadow-sm">Esc</kbd> to close</span>
+</div>
+<div class="flex items-center gap-1 opacity-60">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span class="font-semibold uppercase tracking-wider">LogisticsPro AI Search</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+        const palette = document.getElementById('command-palette');
+        const content = document.getElementById('palette-content');
+        const input = document.getElementById('palette-input');
+        const trigger = document.getElementById('main-search-trigger');
+
+        function openPalette() {
+            palette.classList.remove('hidden');
+            setTimeout(() => {
+                palette.classList.add('opacity-100');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+                input.focus();
+            }, 10);
+        }
+
+        function closePalette() {
+            palette.classList.remove('opacity-100');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                palette.classList.add('hidden');
+            }, 200);
+        }
+
+        trigger.addEventListener('click', openPalette);
+        
+        palette.addEventListener('click', (e) => {
+            if (e.target === palette) closePalette();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                openPalette();
+            }
+            if (e.key === 'Escape') {
+                closePalette();
+            }
+            if (e.key === '/') {
+                if (document.activeElement.tagName !== 'INPUT') {
+                    e.preventDefault();
+                    openPalette();
+                }
+            }
+        });
+
+        // Simple row highlight logic for the list items in the palette
+        const rows = document.querySelectorAll('#palette-content button, #palette-content .cursor-pointer');
+        rows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                // Future logic for active navigation index
+            });
+        });
+    </script>
+</body></html>

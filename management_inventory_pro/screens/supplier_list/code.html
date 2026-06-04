@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Suppliers - RetailFlow Inventory System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#faf8ff",
+                    "surface-container-high": "#e2e7ff",
+                    "outline-variant": "#c3c5d9",
+                    "tertiary": "#4b5053",
+                    "on-tertiary-container": "#e3e7eb",
+                    "surface-bright": "#faf8ff",
+                    "primary": "#0041c8",
+                    "surface-variant": "#dae2fd",
+                    "on-background": "#131b2e",
+                    "secondary-container": "#d0e1fb",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f2f3ff",
+                    "primary-container": "#0055ff",
+                    "on-surface": "#131b2e",
+                    "on-secondary-fixed": "#0b1c30",
+                    "secondary": "#505f76",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#737688",
+                    "on-tertiary-fixed-variant": "#43474b",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#eef0ff",
+                    "secondary-fixed": "#d3e4fe",
+                    "on-primary-fixed": "#001551",
+                    "tertiary-fixed-dim": "#c3c7cb",
+                    "surface-dim": "#d2d9f4",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-highest": "#dae2fd",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "on-surface-variant": "#434656",
+                    "on-tertiary": "#ffffff",
+                    "background": "#faf8ff",
+                    "tertiary-fixed": "#dfe3e7",
+                    "on-primary-container": "#e3e6ff",
+                    "on-primary-fixed-variant": "#0039b3",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#b6c4ff",
+                    "primary-fixed": "#dce1ff",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#63686c",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#004dea",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "inverse-surface": "#283044",
+                    "on-tertiary-fixed": "#171c1f",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#eaedff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "table-row-height": "40px",
+                    "margin-mobile": "16px",
+                    "sidebar-width": "240px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "data-mono": ["JetBrains Mono"],
+                    "headline-sm": ["Inter"],
+                    "display": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "data-mono": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .sidebar-active {
+            font-weight: 600;
+            background-color: rgba(208, 225, 251, 0.3);
+            border-right: 4px solid #0041c8;
+        }
+        .table-fixed-column {
+            position: sticky;
+            left: 0;
+            background: inherit;
+            z-index: 1;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+<!-- SideNavBar Anchor -->
+<aside class="w-[240px] h-screen fixed left-0 top-0 bg-surface-container-highest dark:bg-inverse-surface border-r border-outline-variant flex flex-col py-4 z-20">
+<div class="px-6 mb-8">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">RetailFlow</h1>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Inventory Mgmt</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md text-body-md">Products</span>
+</a>
+<a class="flex items-center px-6 py-3 text-primary dark:text-primary-fixed border-r-4 border-primary font-semibold bg-secondary-container/30 transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="factory">factory</span>
+<span class="font-body-md text-body-md">Suppliers</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="warehouse">warehouse</span>
+<span class="font-body-md text-body-md">Warehouses</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-body-md text-body-md">POS</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="assessment">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</nav>
+<div class="px-4 mb-4">
+<button class="w-full bg-primary-container text-on-primary font-body-sm text-body-sm py-2 px-4 rounded transition-all active:scale-95 hover:opacity-90">
+                Quick Transaction
+            </button>
+</div>
+<div class="border-t border-outline-variant pt-4">
+<a class="flex items-center px-6 py-2 text-on-surface-variant hover:bg-surface-variant/50 transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="flex items-center px-6 py-2 text-on-surface-variant hover:bg-surface-variant/50 transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="help">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar Anchor -->
+<header class="h-14 fixed top-0 right-0 left-[240px] z-10 bg-surface border-b border-outline-variant flex items-center justify-between px-margin-desktop w-full">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md focus-within:ring-1 focus-within:ring-primary rounded">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded text-body-sm font-body-sm focus:ring-0" placeholder="Search suppliers, categories, or SKUs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded transition-all" title="Notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded transition-all" title="History">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded transition-all" title="Help">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User Avatar" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCR0kDDuko2V_bNqRVNPxNLz9i_0Z1wybUSEGul1coUuDpo0Ze_rAGrY4L90xTQmcx1zY_IWql6H6TQYlLAo_3HNUOa1q1h1oR0LzP_sgnK1V1NuOoQMWhgOlK3_jQa7815SdvLgmCsGKDoagvhveZJDnSycmTZXKpr9LNBLioIaLYgw-0kDc3bibalCJTFiuYxewlv4yds7RNsqQRKegy0FsnfHsJsAMMBLhj9sxweH_GE-GowBE_QCgfsKJldtKgu1ow9nSdiGmU"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] pt-14 p-margin-desktop min-h-screen">
+<!-- Dashboard Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-display text-display text-on-surface mb-1">Suppliers</h2>
+<p class="text-on-surface-variant font-body-md text-body-md">Manage and monitor 124 strategic vendor partnerships.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded font-headline-sm text-headline-sm flex items-center gap-2 transition-all hover:bg-primary/90 active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                Add Supplier
+            </button>
+</div>
+<!-- Statistical KPI Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-8">
+<!-- Total Outstanding Balance -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">TOTAL OUTSTANDING BALANCE</span>
+<span class="material-symbols-outlined text-primary" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-on-surface">$284,910</span>
+<span class="text-error font-body-sm text-body-sm flex items-center">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+                        4.2%
+                    </span>
+</div>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Across 42 active credit lines</p>
+</div>
+<!-- Active Suppliers -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">ACTIVE SUPPLIERS</span>
+<span class="material-symbols-outlined text-primary" data-icon="group">group</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-on-surface">124</span>
+<span class="text-secondary font-body-sm text-body-sm flex items-center">
+<span class="material-symbols-outlined text-xs" data-icon="remove">remove</span>
+                        Steady
+                    </span>
+</div>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">98% fulfillment rate average</p>
+</div>
+<!-- Pending Deliveries -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">PENDING DELIVERIES</span>
+<span class="material-symbols-outlined text-primary" data-icon="local_shipping">local_shipping</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-on-surface">18</span>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[11px] font-bold">5 URGENT</span>
+</div>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Scheduled for arrival in 48h</p>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="flex flex-wrap items-center gap-4 mb-6 bg-surface-container-low p-4 rounded-lg border border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant font-label-caps text-label-caps">FILTER BY:</span>
+<select class="bg-surface border border-outline-variant rounded px-3 py-1 text-body-sm font-body-sm focus:ring-primary focus:border-primary">
+<option>All Categories</option>
+<option>Fresh Produce</option>
+<option>Packaging</option>
+<option>Dairy &amp; Eggs</option>
+<option>Beverages</option>
+</select>
+<select class="bg-surface border border-outline-variant rounded px-3 py-1 text-body-sm font-body-sm focus:ring-primary focus:border-primary">
+<option>All Debt Status</option>
+<option>No Debt</option>
+<option>Overdue</option>
+<option>Within Limit</option>
+</select>
+</div>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex gap-2">
+<button class="bg-surface border border-outline-variant text-body-sm px-4 py-1 rounded hover:bg-surface-variant transition-all">Clear All</button>
+<button class="bg-primary-container text-on-primary px-4 py-1 rounded text-body-sm flex items-center gap-1 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="save">save</span>
+                    Save View
+                </button>
+</div>
+<div class="ml-auto flex items-center gap-2 text-on-surface-variant font-body-sm">
+<span>Displaying 1-15 of 124</span>
+<div class="flex border border-outline-variant rounded overflow-hidden">
+<button class="p-1 hover:bg-surface-variant"><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-1 hover:bg-surface-variant"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- High-Density Data Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant">
+<th class="table-fixed-column px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider min-w-[200px]">Supplier Name</th>
+<th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Category</th>
+<th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Contact Person</th>
+<th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Phone</th>
+<th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-right">Active Balance</th>
+<th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Performance</th>
+<th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="table-fixed-column px-4 py-3 font-semibold text-primary">
+                                Global Agri-Co
+                                <div class="text-[11px] text-on-surface-variant font-normal">SKU-GRP: VEG-001</div>
+</td>
+<td class="px-4 py-3">
+<span class="bg-secondary-container/50 text-on-secondary-container px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-tight">Fresh Produce</span>
+</td>
+<td class="px-4 py-3">Sarah Mitchell</td>
+<td class="px-4 py-3 font-data-mono text-data-mono">+1 (555) 902-3421</td>
+<td class="px-4 py-3 text-right font-data-mono font-semibold text-error">
+                                $12,450.00
+                            </td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="star">star</span>
+<span class="ml-1 text-[11px] text-on-surface-variant">4.8</span>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="table-fixed-column px-4 py-3 font-semibold text-primary">
+                                PackRight Solutions
+                                <div class="text-[11px] text-on-surface-variant font-normal">SKU-GRP: PCK-229</div>
+</td>
+<td class="px-4 py-3">
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-tight">Packaging</span>
+</td>
+<td class="px-4 py-3">David Chen</td>
+<td class="px-4 py-3 font-data-mono text-data-mono">+1 (555) 123-8877</td>
+<td class="px-4 py-3 text-right font-data-mono font-semibold text-on-surface">
+                                $0.00
+                            </td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1 text-[11px] text-on-surface-variant">5.0</span>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="table-fixed-column px-4 py-3 font-semibold text-primary">
+                                Northern Dairy Hub
+                                <div class="text-[11px] text-on-surface-variant font-normal">SKU-GRP: DRY-881</div>
+</td>
+<td class="px-4 py-3">
+<span class="bg-secondary-container/50 text-on-secondary-container px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-tight">Dairy &amp; Eggs</span>
+</td>
+<td class="px-4 py-3">Linda Foster</td>
+<td class="px-4 py-3 font-data-mono text-data-mono">+1 (555) 441-0092</td>
+<td class="px-4 py-3 text-right font-data-mono font-semibold text-on-surface">
+                                $3,210.45
+                            </td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="star">star</span>
+<span class="ml-1 text-[11px] text-on-surface-variant">3.2</span>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="table-fixed-column px-4 py-3 font-semibold text-primary">
+                                EcoLogistics Ltd
+                                <div class="text-[11px] text-on-surface-variant font-normal">SKU-GRP: GEN-404</div>
+</td>
+<td class="px-4 py-3">
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-tight">Logistics</span>
+</td>
+<td class="px-4 py-3">Marcus Thorne</td>
+<td class="px-4 py-3 font-data-mono text-data-mono">+1 (555) 301-2291</td>
+<td class="px-4 py-3 text-right font-data-mono font-semibold text-on-surface">
+                                $850.00
+                            </td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="star">star</span>
+<span class="ml-1 text-[11px] text-on-surface-variant">4.1</span>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="table-fixed-column px-4 py-3 font-semibold text-primary">
+                                Zenith Bottling
+                                <div class="text-[11px] text-on-surface-variant font-normal">SKU-GRP: BEV-102</div>
+</td>
+<td class="px-4 py-3">
+<span class="bg-secondary-container/50 text-on-secondary-container px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-tight">Beverages</span>
+</td>
+<td class="px-4 py-3">Julia Vance</td>
+<td class="px-4 py-3 font-data-mono text-data-mono">+1 (555) 609-1144</td>
+<td class="px-4 py-3 text-right font-data-mono font-semibold text-error">
+                                $45,800.00
+                            </td>
+<td class="px-4 py-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="star">star</span>
+<span class="ml-1 text-[11px] text-on-surface-variant">2.1</span>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Empty State / Footer Loader -->
+<div class="p-4 bg-surface-container-low border-t border-outline-variant flex justify-center">
+<button class="text-primary font-body-sm text-body-sm hover:underline flex items-center gap-2">
+<span class="material-symbols-outlined animate-spin text-sm" data-icon="refresh">refresh</span>
+                    Load more suppliers...
+                </button>
+</div>
+</div>
+<!-- Details Overlay (Mock Asymmetric Layout) -->
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<div class="lg:col-span-8 bg-surface-container-low rounded-lg p-6 border border-outline-variant">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Supplier Geographic Distribution</h3>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-[11px] font-medium text-on-surface-variant"><span class="w-2 h-2 rounded-full bg-primary"></span> REGIONAL</span>
+<span class="flex items-center gap-1 text-[11px] font-medium text-on-surface-variant"><span class="w-2 h-2 rounded-full bg-outline"></span> INTERNATIONAL</span>
+</div>
+</div>
+<div class="w-full h-48 rounded bg-surface-container overflow-hidden relative border border-outline-variant">
+<!-- Map Placeholder -->
+<img class="w-full h-full object-cover opacity-80" data-alt="A clean, minimalist vector map of North America with blue glowing dots representing supplier locations. The map is rendered in a soft slate gray and white aesthetic, consistent with a professional corporate dashboard. Subtle data lines connect major supply hubs, creating a sense of logistics and global connectivity." data-location="Chicago" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5-UJ4Z9rmTuVFkIfRV1TbEr1XTybb1PH8yZFYuyj3fKNzVJU-rjLlLhkyuwZG8Tj_SWqYELOQgO55wUSJ4fjbZLvnsb797qIzjUwgCKoY79xEMikUKu1ptU99nYYPyzsenK7h60-F8Lquk1i2k6mJLH_N_DfemNs7iJAMpgxh_4nasGzRV8_AnBj_HzDC9MEsRJDnAix2Y6gy5hD59T0lz0IoIuE3ic35oq603Aw7iDatssuDovF43EG_FPKGz4dsTYai1v7pYv4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent pointer-events-none"></div>
+</div>
+</div>
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<div class="flex-1 bg-surface-container-highest rounded-lg p-6 border border-outline-variant relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="font-headline-sm text-headline-sm mb-2 text-primary">Strategic Insight</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+                            Suppliers in the <b>Fresh Produce</b> category show a 15% increase in volatility this quarter. We recommend diversifying sourcing locations to mitigate climate-related logistics delays.
+                        </p>
+<button class="mt-4 text-primary font-label-caps text-label-caps flex items-center gap-1 group-hover:gap-2 transition-all">
+                            VIEW RISK REPORT <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Decorative element -->
+<div class="absolute -right-8 -bottom-8 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple micro-interactions for focus and clarity
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // Clear previous selection
+                document.querySelectorAll('tr').forEach(r => r.classList.remove('bg-secondary-container/10'));
+                // Highlight current
+                row.classList.add('bg-secondary-container/10');
+            });
+        });
+
+        // Search highlight effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>
