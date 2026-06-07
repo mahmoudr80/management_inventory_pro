@@ -19,3 +19,8 @@ class AuthFailure extends AuthState {
 
   AuthFailure({required this.message});
 }
+
+class VerifyState extends AuthState {
+  final String verify;
+  VerifyState({required this.verify});
+}

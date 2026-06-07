@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:management_inventory_pro/features/auth/presentation/cubit/auth_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
 import '../../../../generated/locale_keys.g.dart';
+import '../cubit/auth_state.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -23,13 +22,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
-  void _onResetPressed() {
-    if (_formKey.currentState?.validate() ?? false) {
-      context.read<AuthBloc>().add(
-        ForgotPasswordRequested(email: _emailController.text),
-      );
-    }
-  }
+  // void _onResetPressed(BuildContext context) {
+  //   if (_formKey.currentState?.validate() ?? false) {
+  //     context.read<AuthCubit>().forgotPassword();
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -86,7 +83,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       prefixIcon: const Icon(Icons.email_outlined),
                     ),
                     SizedBox(height: 32.h),
-                    BlocConsumer<AuthBloc, AuthState>(
+                    BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
                         if (state is AuthFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -112,7 +109,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         return PrimaryButton(
                           text: 'Reset Password',
                           isLoading: state is AuthLoading,
-                          onPressed: _onResetPressed,
+                          onPressed:() {} ,
                         );
                       },
                     ),

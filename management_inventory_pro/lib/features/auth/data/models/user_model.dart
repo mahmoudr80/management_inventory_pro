@@ -5,7 +5,6 @@ class UserModel {
 
   UserModel({required this.id, required this.email, this.name});
 
-  // Placeholder for fromJson
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'] as String,
@@ -14,7 +13,6 @@ class UserModel {
     );
   }
 
-  // Placeholder for toJson
   Map<String, dynamic> toJson() {
     return {'id': id, 'email': email, 'name': name};
   }

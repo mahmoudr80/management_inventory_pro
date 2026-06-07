@@ -7,11 +7,14 @@
     "forgot_password": "Forgot Password?",
     "submit": "Submit",
     "no_account": "Don't have an account?",
-    "have_account": "Already have an account?"
+    "have_account": "Already have an account?",
+  "verificationEmailSent": "Verification email sent.\nPlease check your inbox and verify your email before signing in.",
+    "loginSuccessfully": "Logged in successfully."
   },
   "errors": {
     "required_field": "This field is required",
     "invalid_email": "Please enter a valid email address",
-    "short_password": "Password must be at least 6 characters"
+    "short_password": "Password must be at least 6 characters",
+    "userNotFound": "User not found"
   }
 }
