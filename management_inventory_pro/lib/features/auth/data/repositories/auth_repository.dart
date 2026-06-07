@@ -1,3 +1,5 @@
+import 'package:management_inventory_pro/core/networking/api_result.dart';
+
 import '../models/user_model.dart';
 import '../datasources/auth_remote_data_source.dart';
 
@@ -6,14 +8,16 @@ class AuthRepository {
 
   AuthRepository({required this.remoteDataSource});
 
-  Future<UserModel> login(String email, String password) async {
+  Future<ApiResult> login(String email, String password) async {
     return await remoteDataSource.login(email, password);
   }
 
-  Future<UserModel> register(String email, String password, String name) async {
+  Future<ApiResult> register(String email, String password, String name) async {
     return await remoteDataSource.register(email, password, name);
   }
-
+  Stream<ApiResult<UserModel>> authStateChanges(){
+    return remoteDataSource.authStateChanges();
+  }
   Future<void> forgotPassword(String email) async {
     return await remoteDataSource.forgotPassword(email);
   }
