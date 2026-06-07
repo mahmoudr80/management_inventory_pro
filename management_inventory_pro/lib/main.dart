@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
 import 'package:management_inventory_pro/features/home/home_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:window_manager/window_manager.dart';
@@ -18,15 +18,14 @@ import 'features/auth/presentation/screens/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  if(!kIsWeb &&
+  if (!kIsWeb &&
       (Platform.isWindows ||
           Platform.isLinux ||
           Platform.isMacOS)) {
     await windowManager.ensureInitialized();
     await windowManager.setMinimumSize(
-        Size(1000,650)
+        Size(1000, 650)
     );
-
   }
 
   // Initialize Dependency Injection
@@ -76,8 +75,11 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
             ),
             home:
-            !kIsWeb&& defaultTargetPlatform==TargetPlatform.windows?
-            HomeScreen(): LoginScreen(),
+            !kIsWeb && defaultTargetPlatform == TargetPlatform.windows ?
+            BlocProvider(
+              create: (context) => HomeCubit(),
+              child: HomeScreen(),
+            ) : LoginScreen(),
           ),
         );
       },

@@ -294,6 +294,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.1"
+  flutter_gen:
+    dependency: "direct main"
+    description:
+      name: flutter_gen
+      sha256: "303d72d4ee86f29243792e4022b67a47737f28f268d45348cb97b31a52e85887"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.14.1"
   flutter_gen_core:
     dependency: transitive
     description:
@@ -303,7 +311,7 @@ packages:
     source: hosted
     version: "5.14.1"
   flutter_gen_runner:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_gen_runner
       sha256: db00922dd5f4c1aa33aeab7f74117f1cd224e7a1e8bea1e312b8d09b8101a909
@@ -331,6 +339,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.9.3"
+  flutter_svg:
+    dependency: "direct main"
+    description:
+      name: flutter_svg
+      sha256: "35882981abcbfb8c15b286f0cd690ff25bac12d95eff3e25ee207f37d4c42e7f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -1042,6 +1058,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.5"
+  vector_graphics:
+    dependency: transitive
+    description:
+      name: vector_graphics
+      sha256: "2306c03da2ba81724afeb589c351ebbc0aa7d86005925be8f8735856dbe5e42d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
   vector_graphics_codec:
     dependency: transitive
     description:
