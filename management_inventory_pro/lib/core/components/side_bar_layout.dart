@@ -148,41 +148,43 @@ class SideBarLayout extends StatelessWidget {
                 backgroundColor: AppColors.primaryContainer,
                 backgroundImage: Assets.images.userProfile.image().image,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Mahmoud Saeid',
-                    style: AppTextStyles.bodySm.copyWith(
-                      color: AppColors.sideBarItemsActive,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.sp.clamp(9, 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Mahmoud Saeid',
+                      style: AppTextStyles.bodySm.copyWith(
+                        color: AppColors.sideBarItemsActive,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12.sp.clamp(9, 15),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    'Flutter Lead',
-                    style: AppTextStyles.labelCaps.copyWith(
-                      color: AppColors.sideBarItems.withAlpha(125),
-                      fontSize: 8.sp.clamp(6, 14),
+                    Text(
+                      'Flutter Lead',
+                      style: AppTextStyles.labelCaps.copyWith(
+                        color: AppColors.sideBarItems.withAlpha(125),
+                        fontSize: 8.sp.clamp(6, 14),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                  ],
+                ),
               ),
               IconButton(
                 icon:  Icon(
                   Icons.logout_rounded,
                   color: AppColors.sideBarItems,
-                  size: 16,
+                  size: 20.r.clamp(15, 25),
                 ),
                 onPressed: onLogout,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                splashRadius: 20.r,
+                splashRadius: 20.r.clamp(16, 23),
                 tooltip: 'Logout',
               ),
             ],

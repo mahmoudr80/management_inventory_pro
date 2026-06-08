@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
 import 'package:management_inventory_pro/features/home/home_screen.dart';
+import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 import 'core/dependency_injection/service_locator.dart';
@@ -28,12 +32,15 @@ void main() async {
     );
   }
 
-  // Initialize Dependency Injection
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
+
+  // Initialize Dependency Injection & database init
   await setupServiceLocator();
 
   await Supabase.initialize(
     url: 'https://vulfkiimpxlhgtusbchw.supabase.co',
-    anonKey: 'sb_publishable_h2-ihk3Rqzq9DKiqCWzz4A_Hj2OHylr',
+    publishableKey: 'sb_publishable_h2-ihk3Rqzq9DKiqCWzz4A_Hj2OHylr',
   );
   runApp(
     EasyLocalization(
@@ -43,6 +50,8 @@ void main() async {
       child: const MyApp(),
     ),
   );
+
+
 }
 
 class MyApp extends StatelessWidget {
@@ -59,8 +68,10 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider<AuthCubit>(create: (context) => getIt<AuthCubit>()),
+
           ],
           child: MaterialApp(
+            scrollBehavior: AppScrollBehavior(),
             title: AppConstants.appName,
             debugShowCheckedModeBanner: false,
             localizationsDelegates: context.localizationDelegates,
@@ -76,13 +87,21 @@ class MyApp extends StatelessWidget {
             ),
             home:
             !kIsWeb && defaultTargetPlatform == TargetPlatform.windows ?
-            BlocProvider(
-              create: (context) => HomeCubit(),
-              child: HomeScreen(),
-            ) : LoginScreen(),
+          LoginScreen() : LoginScreen(),
           ),
         );
       },
     );
   }
+}
+
+
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+    PointerDeviceKind.stylus,
+  };
 }
