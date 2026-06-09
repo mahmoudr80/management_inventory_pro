@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:management_inventory_pro/core/database/database_service.dart';
 import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
@@ -17,14 +20,20 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<AuthRepository>(() => AuthRepository(remoteDataSource: getIt()));
   getIt.registerFactory<AuthCubit>(() => AuthCubit(authRepository: getIt()));
 
-  //Database
-  DatabaseService databaseService=DatabaseService();
-  await databaseService.init();
-  getIt.registerSingleton(databaseService);
+  if(!kIsWeb&&Platform.isWindows){
+    print("DatabaseService init");
+    //Database
+    DatabaseService databaseService=DatabaseService();
+    await databaseService.init();
+    getIt.registerSingleton(databaseService);
 
 
-  //Product
-  getIt.registerLazySingleton<ProductLocalDatasource>(() =>
-      ProductLocalDatasource(getIt<DatabaseService>().db),);
-  getIt.registerLazySingleton(() => ProductRepository(getIt<ProductLocalDatasource>()),);
+
+    //Product
+    getIt.registerLazySingleton<ProductLocalDatasource>(() =>
+        ProductLocalDatasource(getIt<DatabaseService>().db),);
+    getIt.registerLazySingleton(() => ProductRepository(getIt<ProductLocalDatasource>()),);
+  }
+
+
 }

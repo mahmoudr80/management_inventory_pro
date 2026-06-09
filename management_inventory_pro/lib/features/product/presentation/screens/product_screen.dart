@@ -11,6 +11,7 @@ import 'package:management_inventory_pro/features/product/presentation/widgets/p
 
 import '../../../../core/dependency_injection/service_locator.dart';
 import '../../data/models/product_model.dart';
+import 'add_product_screen.dart';
 
 
 class ProductScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class ProductScreen extends StatelessWidget {
           actions: [
             PrimaryButton(text: "Add Product",
                 onPressed:() {
-
+              Navigator.push(context,MaterialPageRoute(builder: (context) => AddProductScreen(),));
                 },)
           ],),
           BlocProvider(create:(context) => ProductCubit(getIt<ProductRepository>())..getProducts(),

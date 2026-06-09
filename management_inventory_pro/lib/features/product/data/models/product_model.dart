@@ -3,20 +3,39 @@ import 'package:management_inventory_pro/core/database/database_constants.dart';
 import '../../../../../core/components/status_chip.dart';
 
 class ProductModel {
+
+  final String id;
+  final String ?barcode;
+  final int categoryId;
+  final int unitId;
+  final double costPrice;
+  final double sellingPrice;
+  final double minStock;
+  final String? imageUrl;
+  final String? note;
+  final String ?createdAt;
+  final String ?updatedAt;
+  final double currentStock;
+
   final String sku;
   final String name;
-  final String category;
-  final double stock;
+  final String ?category;
   final StatusType status;
-  final String statusText;
+  final String ?statusText;
 
   ProductModel({
     required this.sku,
     required this.name,
-    required this.category,
-    required this.stock,
+     this.category,
     required this.status,
-    required this.statusText,
+     this.statusText, required this.id,
+    this.barcode, required this.categoryId,
+    required this.unitId,
+    required this.costPrice,
+    required this.sellingPrice,
+    required this.minStock, this.imageUrl,
+    this.note,  this.createdAt,  this.updatedAt,
+    required this.currentStock,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -40,9 +59,17 @@ class ProductModel {
       sku: json[DatabaseConstants.skuColumn] as String,
       name: json[DatabaseConstants.nameColumn] as String,
       category: json[DatabaseConstants.categoryName] as String,
-      stock: (json[DatabaseConstants.currentStockColumn] as num).toDouble(),
       status:newStatus,
       statusText: newStatusText,
+      id:json[DatabaseConstants.idColumn],
+      categoryId: json[DatabaseConstants.categoryIdColumn],
+      unitId: json[DatabaseConstants.unitIdColumn],
+      costPrice: json[DatabaseConstants.costPriceColumn],
+      sellingPrice:json[DatabaseConstants.sellingPriceColumn],
+      minStock: json[DatabaseConstants.minimumStockColumn],
+      createdAt: json[DatabaseConstants.createdAtColumn],
+      updatedAt: json[DatabaseConstants.updatedAtColumn],
+      currentStock: json[DatabaseConstants.currentStockColumn],
     );
   }
 
@@ -51,7 +78,7 @@ class ProductModel {
       'sku': sku,
       'name': name,
       'category': category,
-      'stock': stock,
+      'stock': currentStock,
       'status': status.name,
       'statusText': statusText,
     };
@@ -64,14 +91,27 @@ class ProductModel {
     double? stock,
     StatusType? status,
     String? statusText,
+    String ?id,
+    int ?categoryId,
+    int ?unitId,
+    double ?costPrice,
+    double ?sellingPrice,
+    double ?minStock,
+    String ?createdAt,
+    String ?updatedAt,
+    double ? currentStock
   }) {
     return ProductModel(
       sku: sku ?? this.sku,
       name: name ?? this.name,
       category: category ?? this.category,
-      stock: stock ?? this.stock,
       status: status ?? this.status,
       statusText: statusText ?? this.statusText,
+      id: id??this.id, categoryId: categoryId??this.categoryId,
+      unitId: unitId??this.unitId,
+      costPrice: costPrice??this.costPrice, sellingPrice: sellingPrice??this.sellingPrice,
+      minStock: minStock??this.minStock, createdAt: createdAt??this.createdAt,
+      updatedAt:updatedAt??this.updatedAt, currentStock: currentStock??this.currentStock,
     );
   }
 }

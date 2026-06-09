@@ -26,14 +26,19 @@ void main() async {
       (Platform.isWindows ||
           Platform.isLinux ||
           Platform.isMacOS)) {
+    print("windowManager.ensureInitialized");
     await windowManager.ensureInitialized();
     await windowManager.setMinimumSize(
         Size(1000, 650)
     );
   }
 
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
+  if (!kIsWeb && Platform.isWindows) {
+    print("sqfliteFfiInit");
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
 
   // Initialize Dependency Injection & database init
   await setupServiceLocator();
@@ -50,8 +55,6 @@ void main() async {
       child: const MyApp(),
     ),
   );
-
-
 }
 
 class MyApp extends StatelessWidget {
@@ -68,7 +71,6 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider<AuthCubit>(create: (context) => getIt<AuthCubit>()),
-
           ],
           child: MaterialApp(
             scrollBehavior: AppScrollBehavior(),
@@ -87,7 +89,10 @@ class MyApp extends StatelessWidget {
             ),
             home:
             !kIsWeb && defaultTargetPlatform == TargetPlatform.windows ?
-          LoginScreen() : LoginScreen(),
+            BlocProvider(
+              create: (context) => HomeCubit(),
+              child: HomeScreen(),
+            ) : LoginScreen(),
           ),
         );
       },
@@ -98,10 +103,11 @@ class MyApp extends StatelessWidget {
 
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
-  Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    PointerDeviceKind.trackpad,
-    PointerDeviceKind.stylus,
-  };
+  Set<PointerDeviceKind> get dragDevices =>
+      {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.stylus,
+      };
 }

@@ -26,6 +26,8 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.39
   path: ^1.9.1
   lottie: ^3.3.3
+  image_picker: ^1.2.2
+  file_picker: ^11.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -7,12 +7,15 @@ import '../theme/app_text_styles.dart';
 class CustomTextField extends StatelessWidget {
   final String label;
   final String? hint;
+  final String? helperText;
+  final String? prefixText;
   final bool obscureText;
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final int? maxLines;
 
   const CustomTextField({
     super.key,
@@ -23,7 +26,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.validator,
     this.prefixIcon,
-    this.suffixIcon,
+    this.suffixIcon, this.maxLines, this.helperText, this.prefixText,
   });
 
   @override
@@ -39,13 +42,14 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8.h),
-        TextFormField(
+        TextFormField(maxLines:maxLines ,
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,
           validator: validator,
           style: AppTextStyles.body,
-          decoration: InputDecoration(
+          decoration: InputDecoration(prefixText: prefixText,
+            helperText: helperText,
             hintText: hint,
             hintStyle: AppTextStyles.body.copyWith(
               color: AppColors.textSecondary,
