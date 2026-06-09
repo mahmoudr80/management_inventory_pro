@@ -18,7 +18,8 @@ class DesktopAuthLayout extends StatelessWidget {
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 32),
-              child:ConstrainedBox(
+              child:
+              ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 900),
                 child: child,
               ),

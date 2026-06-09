@@ -11,23 +11,34 @@ class ProductLocalDatasource {
 
   Future<ApiResult<List<ProductModel>>>getProducts() async {
    try{
-     List<Map<String, dynamic>> list = await _database.rawQuery("""
+     List<Map<String, dynamic>> list = await _database.rawQuery('''
     SELECT
-    ${DatabaseConstants.skuColumn},
-    p.name AS name,
-    c.name AS category,
-    ${DatabaseConstants.currentStockColumn},
-    ${DatabaseConstants.minimumStockColumn}
-FROM products p
-INNER JOIN categories c
-    ON c.id = p.category_id
-ORDER BY p.name;
-    
-    """);
+      p.*,
+      c.name AS ${DatabaseConstants.categoryName}
+    FROM ${DatabaseConstants.productTable} p
+    INNER JOIN ${DatabaseConstants.categoryTable} c
+      ON c.id = p.${DatabaseConstants.categoryIdColumn}
+    ORDER BY p.${DatabaseConstants.createdAtColumn} DESC
+  ''');
+//      _database.rawQuery("""
+//     SELECT
+//     ${DatabaseConstants.skuColumn},
+//     p.name AS name,
+//     c.name AS category,
+//     ${DatabaseConstants.currentStockColumn},
+//     ${DatabaseConstants.minimumStockColumn}
+// FROM products p
+// INNER JOIN categories c
+//     ON c.id = p.category_id
+// ORDER BY p.name;
+//
+//     """);
 
      List<ProductModel> products = [];
      for (final Map<String, dynamic> element in list) {
        products.add(ProductModel.fromJson(element));
+       print("element:");
+       print(element.toString());
      }
     return ApiResult.success(products);
    }catch(e){
