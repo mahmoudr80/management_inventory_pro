@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../core/widgets/custom_text_field.dart';
-import '../category_drop_down.dart';
+import '../../../../../../core/widgets/custom_text_field.dart';
+import '../category_dropdown.dart';
 import '../product_section_card.dart';
 import '../unit_dropdown.dart';
 
@@ -35,6 +35,29 @@ class BasicInformationSection extends StatelessWidget {
           label: 'Product name *',
           controller: nameController,
           validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+        ),
+        SizedBox(height: 12.h),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: CustomTextField(
+                label: 'SKU *',
+                controller: skuController,
+                validator: (v) =>
+                v == null || v.trim().isEmpty ? 'Required' : null,
+              ),
+            ),
+            SizedBox(width: 8.w),
+            OutlinedButton.icon(
+              onPressed: onGenerateSku,
+              icon: Icon(Icons.auto_fix_high, size: 16.r.clamp(10, 20)),
+              label: Text(
+                'Auto-gen',
+                style: TextStyle(fontSize: 8.sp.clamp(6, 10)),
+              ),
+            ),
+          ],
         ),
         SizedBox(height: 12.h),
         CustomTextField(

@@ -21,6 +21,8 @@ import 'core/theme/app_colors.dart';
 import 'core/utils/app_constants.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
+import 'features/category/data/datasource/category_datasource.dart';
+import 'features/unit/data/datasource/unit_datasource.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,27 +61,8 @@ void main() async {
     ),
   );
 
-  // final response =await getIt<ProductLocalDatasource>().addProduct(
-  //     ProductModel(sku: 'RIC-020', name: 'Rice 2kg', id: Uuid().v4(),
-  //         categoryId: 1, unitId: 1, costPrice:200,
-  //         sellingPrice: 300, minStock: 20, currentStock: 100));
-  // switch(response){
-  //   case Success(data:final id):
-  //     print(id);
-  //   case Failure(errorModel:final error):
-  //     print(error.message);
-  // }
-//  final response =await getIt<ProductLocalDatasource>().addProduct(
-//      ProductModel(sku: 'RIC-020', name: 'Rice 2kg', id: Uuid().v4(),
-//          categoryId: 1, unitId: 1, costPrice:200,
-//          sellingPrice: 300, minStock: 20, currentStock: 100));
-//  switch(response){
-//    case Success(data:final id):
-//      print(id);
-//    case Failure(errorModel:final error):
-//      print(error.message);
-//  }
-}
+  }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

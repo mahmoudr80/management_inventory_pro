@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:management_inventory_pro/core/networking/api_result.dart';
-import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
 import 'package:management_inventory_pro/features/product/data/models/product_model.dart';
 import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
 import 'package:meta/meta.dart';

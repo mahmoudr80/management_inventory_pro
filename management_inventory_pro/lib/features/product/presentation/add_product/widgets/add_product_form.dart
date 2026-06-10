@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/product_section_card.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/product_summary_panel.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/basic_information_section.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/inventory_section.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/notes_section.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/pricing_section.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/product_image_section.dart';
-import '../../../../core/components/status_chip.dart';
-import '../../../product/data/models/product_model.dart';
+import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/cubit/add_product_cubit.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/product_section_card.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/product_summary_panel.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/basic_information_section.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/inventory_section.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/notes_section.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/pricing_section.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/product_image_section.dart';
+import 'package:uuid/uuid.dart';
+import '../../../../../core/components/status_chip.dart';
+import '../../../data/models/product_model.dart';
 import 'marginCard.dart';
 
 class AddProductForm extends StatefulWidget {
@@ -53,10 +57,8 @@ class _AddProductFormState extends State<AddProductForm> {
 
   double get _cost => double.tryParse(_costPriceController.text) ?? 0;
   double get _sell => double.tryParse(_sellingPriceController.text) ?? 0;
-  double get _stock =>
-      double.tryParse(_initialStockController.text) ?? 0;
-  double get _minStock =>
-      double.tryParse(_minStockController.text) ?? 0;
+  double get _stock => double.tryParse(_initialStockController.text) ?? 0;
+  double get _minStock => double.tryParse(_minStockController.text) ?? 0;
 
   double? get _marginPercent {
     if (_sell <= 0) return null;
@@ -83,19 +85,27 @@ class _AddProductFormState extends State<AddProductForm> {
   void _genSku() {
     setState(() {
       _skuController.text =
-      'PRD-${DateTime.now().millisecondsSinceEpoch % 100000}';
+          'PRD-${DateTime.now().millisecondsSinceEpoch % 100000}';
     });
   }
 
   // ── Submit ───────────────────────────────────────────────────────────────
 
-  Future<void> _submit() async {
+  Future<void> _submit(BuildContext context) async {
     if (_formKey.currentState?.validate() != true) return;
+    if (_selectedUnitId == null) {
+      AppSnackBar.showError(context, message: 'Please, select unit');
+      return;
+    }
+    if (_selectedCategoryId == null) {
+      AppSnackBar.showError(context, message: 'Please, select category');
+      return;
+    }
 
     setState(() => _isSaving = true);
 
     final product = ProductModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id: Uuid().v4(),
       name: _nameController.text.trim(),
       sku: _skuController.text.trim(),
       barcode: _barcodeController.text.trim(),
@@ -114,26 +124,26 @@ class _AddProductFormState extends State<AddProductForm> {
       statusText: _previewStatusText,
     );
 
-    //context.read<ProductCubit>().addProduct(product);
+    context.read<AddProductCubit>().addProduct(product);
 
     setState(() => _isSaving = false);
 
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('"${product.name}" saved successfully.'),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color(0xFF3B6D11),
-        ),
-      );
-      Navigator.of(context).pop();
-    }
+
   }
 
-
-   @override
+  @override
   Widget build(BuildContext context) {
-    return Form(
+    return BlocListener<AddProductCubit,AddProductState>(
+  listener: (context, state) {
+    if(state.product!=null&&!state.isSaving){
+      AppSnackBar.showSuccess(context, message:"${state.product?.id} added successfully");
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+    }
+
+  },
+  child: Form(
       key: _formKey,
       onChanged: () => setState(() {}), // keeps preview + checklist live
       child: Row(
@@ -147,44 +157,52 @@ class _AddProductFormState extends State<AddProductForm> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // ── Basic information ──────────────────────────────────
-                 BasicInformationSection(onCategoryChanged: (value) {
-                   setState(() {
-                     _selectedCategoryId = value;
-                   });
-                 },
-                     nameController: _nameController, skuController: _skuController,
-                     barcodeController: _barcodeController, onUnitChanged: (value) {
-                     setState(() {
-                       _selectedUnitId = value;
-                     });
-                     },
-                 onGenerateSku: () => _genSku(),)
-
-,
+                  BasicInformationSection(
+                    onCategoryChanged: (value) {
+                      setState(() {
+                        _selectedCategoryId = value;
+                      });
+                    },
+                    nameController: _nameController,
+                    skuController: _skuController,
+                    barcodeController: _barcodeController,
+                    onUnitChanged: (value) {
+                      setState(() {
+                        _selectedUnitId = value;
+                      });
+                    },
+                    onGenerateSku: () => _genSku(),
+                  ),
                   // // ── Pricing ────────────────────────────────────────────
-                  PricingSection(costPriceController: _costPriceController,
+                  PricingSection(
+                    costPriceController: _costPriceController,
                     sellingPriceController: _sellingPriceController,
-                    marginCard:MarginCard(sell: _sell, cost: _cost,marginPercent: _marginPercent,),),
-              
+                    marginCard: MarginCard(
+                      sell: _sell,
+                      cost: _cost,
+                      marginPercent: _marginPercent,
+                    ),
+                  ),
+
                   // ── Inventory ──────────────────────────────────────────
-                  InventorySection(initialStockController: _initialStockController,
-                    minStockController: _minStockController,),
-              
-              
+                  InventorySection(
+                    initialStockController: _initialStockController,
+                    minStockController: _minStockController,
+                  ),
+
                   // ── Product image ──────────────────────────────────────
                   ProductSectionCard(
                     icon: Icons.photo_outlined,
                     title: 'Product image',
                     children: [
                       ImagePickerWidget(
-                        onImagePicked: (url) =>
-                            setState(() => _imageUrl = url),
+                        onImagePicked: (url) => setState(() => _imageUrl = url),
                       ),
                     ],
                   ),
-              
+
                   // ── Notes ─────────────────────────────────────────────
-                  NotesSection(noteController: _noteController,),
+                  NotesSection(noteController: _noteController),
                   // ── Action row ─────────────────────────────────────────
                   SizedBox(height: 8.h),
                   Row(
@@ -195,18 +213,25 @@ class _AddProductFormState extends State<AddProductForm> {
                         child: const Text('Discard'),
                       ),
                       SizedBox(width: 12.w),
-                      FilledButton.icon(
-                        onPressed: _isSaving ? null : _submit,
-                        icon: _isSaving
-                            ? SizedBox(
-                          width: 16.r,
-                          height: 16.r,
-                          child: const CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white),
-                        )
-                            : const Icon(Icons.save_rounded, size: 18),
-                        label: Text(_isSaving ? 'Saving…' : 'Save product'),
+                      BlocBuilder<AddProductCubit, AddProductState>(
+                        builder: (context, state) {
+                          return FilledButton.icon(
+                            onPressed: () {
+                              _isSaving ? null : _submit(context);
+                            },
+                            icon: _isSaving
+                                ? SizedBox(
+                                    width: 16.r,
+                                    height: 16.r,
+                                    child: const CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Icon(Icons.save_rounded, size: 18),
+                            label: Text(_isSaving ? 'Saving…' : 'Save product'),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -220,13 +245,19 @@ class _AddProductFormState extends State<AddProductForm> {
           SizedBox(width: 10.w.clamp(6, 15)),
           SizedBox(
             width: 300,
-            child: ProductSummaryPanel(sell: _sell,selectedCategoryId: _selectedCategoryId,
-              nameController: _nameController, skuController:_skuController,
-              stock: _stock, previewStatusText: _previewStatusText,
-              previewStatus:_previewStatus,),
+            child: ProductSummaryPanel(
+              sell: _sell,
+              selectedCategoryId: _selectedCategoryId,
+              nameController: _nameController,
+              skuController: _skuController,
+              stock: _stock,
+              previewStatusText: _previewStatusText,
+              previewStatus: _previewStatus,
+            ),
           ),
         ],
       ),
-    );
+    ),
+);
   }
 }

@@ -4,12 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/components/page_header.dart';
 import 'package:management_inventory_pro/core/widgets/primary_button.dart';
 import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
-import 'package:management_inventory_pro/features/product/presentation/cubit/product_cubit.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/product_list.dart';
 
-import '../../../../core/dependency_injection/service_locator.dart';
-import '../../../add_product/presentation/screens/add_product_screen.dart';
-
+import '../../../../../core/dependency_injection/service_locator.dart';
+import '../../add_product/screens/add_product_screen.dart';
+import '../cubit/product_cubit.dart';
+import '../widgets/product_list.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
