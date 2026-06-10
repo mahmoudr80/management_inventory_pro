@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../product/data/models/category_model.dart';
+import '../../../category/data/models/category_model.dart';
 
 typedef CategoryChanged = void Function(String? id);
 

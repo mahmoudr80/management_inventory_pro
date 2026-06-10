@@ -1,7 +1,7 @@
 import 'package:management_inventory_pro/core/database/database_constants.dart';
 import 'package:management_inventory_pro/core/networking/api_error_model.dart';
 import 'package:management_inventory_pro/core/networking/api_result.dart';
-import 'package:management_inventory_pro/features/product/data/models/category_model.dart';
+import 'package:management_inventory_pro/features/category/data/models/category_model.dart';
 import 'package:management_inventory_pro/features/product/data/models/product_model.dart';
 import 'package:sqflite/sqflite.dart';
 
