@@ -20,14 +20,14 @@ class ProductModel {
   final String sku;
   final String name;
   final String ?category;
-  final StatusType status;
+  final StatusType? status;
   final String ?statusText;
 
   ProductModel({
     required this.sku,
     required this.name,
      this.category,
-    required this.status,
+     this.status,
      this.statusText, required this.id,
     this.barcode, required this.categoryId,
     required this.unitId,
@@ -75,12 +75,20 @@ class ProductModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'sku': sku,
-      'name': name,
-      'category': category,
-      'stock': currentStock,
-      'status': status.name,
-      'statusText': statusText,
+      DatabaseConstants.idColumn:id,
+      DatabaseConstants.skuColumn:sku,
+      DatabaseConstants.nameColumn:name,
+      DatabaseConstants.categoryIdColumn:categoryId,
+      DatabaseConstants.currentStockColumn:currentStock,
+      DatabaseConstants.minimumStockColumn:minStock,
+      DatabaseConstants.updatedAtColumn:updatedAt??DateTime.now().toString(),
+      DatabaseConstants.createdAtColumn:createdAt??DateTime.now().toString(),
+      DatabaseConstants.sellingPriceColumn:sellingPrice,
+      DatabaseConstants.costPriceColumn:costPrice,
+      DatabaseConstants.unitIdColumn:unitId,
+      DatabaseConstants.barcodeColumn:barcode,
+      DatabaseConstants.imageUrlColumn:imageUrl,
+      DatabaseConstants.noteColumn:note,
     };
   }
 

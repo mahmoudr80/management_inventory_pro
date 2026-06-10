@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/marginCard.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/product_section_card.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/product_summary_panel.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/sections/basic_information_section.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/sections/inventory_section.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/sections/notes_section.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/sections/pricing_section.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/sections/product_image_section.dart';
-import '../../data/models/product_model.dart';
+import 'package:management_inventory_pro/features/add_product/presentation/widgets/product_section_card.dart';
+import 'package:management_inventory_pro/features/add_product/presentation/widgets/product_summary_panel.dart';
+import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/basic_information_section.dart';
+import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/inventory_section.dart';
+import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/notes_section.dart';
+import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/pricing_section.dart';
+import 'package:management_inventory_pro/features/add_product/presentation/widgets/sections/product_image_section.dart';
 import '../../../../core/components/status_chip.dart';
+import '../../../product/data/models/product_model.dart';
+import 'marginCard.dart';
 
 class AddProductForm extends StatefulWidget {
   const AddProductForm({super.key});

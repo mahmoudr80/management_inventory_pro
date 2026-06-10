@@ -47,7 +47,7 @@ class ProductCard extends StatelessWidget {
                     SizedBox(width: 8.w),
                     StatusChip(
                       label: product.statusText??'in active',
-                      type: product.status,
+                      type: product.status??StatusType.inStock,
                     ),
                   ],
                 ),

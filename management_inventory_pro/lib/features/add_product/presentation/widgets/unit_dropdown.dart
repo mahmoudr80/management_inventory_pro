@@ -1,7 +1,6 @@
-// lib/features/products/presentation/widgets/unit_dropdown.dart
 
 import 'package:flutter/material.dart';
-import '../../data/models/unit_model.dart';
+import '../../../unit/data/models/unit_model.dart';
 
 typedef UnitChanged = void Function(String? id);
 
@@ -15,9 +14,9 @@ class UnitDropdownWidget extends StatefulWidget {
 
 class _UnitDropdownWidgetState extends State<UnitDropdownWidget> {
   final List<UnitModel> _units = [
-    UnitModel(id: '1', name: 'Piece'),
-    UnitModel(id: '2', name: 'Box'),
-    UnitModel(id: '3', name: 'Kg'),
+    UnitModel(id: '1', name: 'Piece', symbol: ''),
+    UnitModel(id: '2', name: 'Box', symbol: ''),
+    UnitModel(id: '3', name: 'Kg', symbol: ''),
   ];
 
   String? _selectedId;
