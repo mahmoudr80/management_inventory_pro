@@ -6,12 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:management_inventory_pro/core/networking/api_result.dart';
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
 import 'package:management_inventory_pro/features/home/home_screen.dart';
 import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
+import 'package:management_inventory_pro/features/product/data/models/product_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 import 'core/dependency_injection/service_locator.dart';
 import 'core/theme/app_colors.dart';
@@ -55,6 +58,27 @@ void main() async {
       child: const MyApp(),
     ),
   );
+
+  // final response =await getIt<ProductLocalDatasource>().addProduct(
+  //     ProductModel(sku: 'RIC-020', name: 'Rice 2kg', id: Uuid().v4(),
+  //         categoryId: 1, unitId: 1, costPrice:200,
+  //         sellingPrice: 300, minStock: 20, currentStock: 100));
+  // switch(response){
+  //   case Success(data:final id):
+  //     print(id);
+  //   case Failure(errorModel:final error):
+  //     print(error.message);
+  // }
+//  final response =await getIt<ProductLocalDatasource>().addProduct(
+//      ProductModel(sku: 'RIC-020', name: 'Rice 2kg', id: Uuid().v4(),
+//          categoryId: 1, unitId: 1, costPrice:200,
+//          sellingPrice: 300, minStock: 20, currentStock: 100));
+//  switch(response){
+//    case Success(data:final id):
+//      print(id);
+//    case Failure(errorModel:final error):
+//      print(error.message);
+//  }
 }
 
 class MyApp extends StatelessWidget {

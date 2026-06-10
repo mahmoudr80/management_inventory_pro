@@ -1,7 +1,6 @@
-// lib/features/products/presentation/widgets/unit_dropdown.dart
 
 import 'package:flutter/material.dart';
-import '../../data/models/unit_model.dart';
+import '../../../product/data/models/unit_model.dart';
 
 typedef UnitChanged = void Function(String? id);
 

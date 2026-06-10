@@ -1,7 +1,7 @@
-// lib/features/products/presentation/widgets/category_dropdown.dart
 
 import 'package:flutter/material.dart';
-import '../../data/models/category_model.dart';
+
+import '../../../product/data/models/category_model.dart';
 
 typedef CategoryChanged = void Function(String? id);
 
@@ -15,9 +15,9 @@ class CategoryDropdownWidget extends StatefulWidget {
 
 class _CategoryDropdownWidgetState extends State<CategoryDropdownWidget> {
   final List<CategoryModel> _categories = [
-    CategoryModel(id: '1', name: 'Electronics'),
-    CategoryModel(id: '2', name: 'Clothing'),
-    CategoryModel(id: '3', name: 'Food'),
+    CategoryModel(id: 1, name: 'Electronics'),
+    CategoryModel(id: 2, name: 'Clothing'),
+    CategoryModel(id: 3, name: 'Food'),
   ];
 
   String? _selectedId;
@@ -28,7 +28,7 @@ class _CategoryDropdownWidgetState extends State<CategoryDropdownWidget> {
       decoration: const InputDecoration(labelText: 'Category'),
       value: _selectedId,
       items: _categories
-          .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
+          .map((c) => DropdownMenuItem(value: c.id.toString(), child: Text(c.name)))
           .toList(),
       onChanged: (value) {
         setState(() => _selectedId = value);

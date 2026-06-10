@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_it/get_it.dart';
 import '../../../../core/components/page_header.dart';
-import '../cubit/product_cubit.dart';
 import '../widgets/add_product_form.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:ui';
 
 class AddProductScreen extends StatelessWidget {
