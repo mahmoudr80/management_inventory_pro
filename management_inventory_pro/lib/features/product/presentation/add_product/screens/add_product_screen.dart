@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/components/page_header.dart';
+import '../../../../../core/components/page_header.dart';
 import '../widgets/add_product_form.dart';
 import 'dart:ui';
 

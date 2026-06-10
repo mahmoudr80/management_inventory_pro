@@ -4,7 +4,7 @@ import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_text_styles.dart';
 import '../../../../../../core/components/app_card.dart';
 import '../../../../../../core/components/status_chip.dart';
-import '../../data/models/product_model.dart';
+import '../../../data/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:management_inventory_pro/features/product/presentation/cubit/product_cubit.dart';
-import 'package:management_inventory_pro/features/product/presentation/widgets/product_card.dart';
-import '../../../../generated/assets.gen.dart';
+import 'package:management_inventory_pro/features/product/presentation/products/widgets/product_card.dart';
+
+import '../../../../../generated/assets.gen.dart';
+import '../cubit/product_cubit.dart';
 class ProductList extends StatelessWidget {
   const ProductList({super.key});
 

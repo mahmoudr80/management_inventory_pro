@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../core/widgets/custom_text_field.dart';
+import '../../../../../../core/widgets/custom_text_field.dart';
 import '../product_section_card.dart';
 
 class InventorySection extends StatelessWidget {

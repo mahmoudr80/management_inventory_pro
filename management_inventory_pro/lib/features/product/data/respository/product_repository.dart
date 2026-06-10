@@ -11,4 +11,7 @@ class ProductRepository {
   Future<ApiResult<List<ProductModel>>>getProducts() async {
     return await _datasource.getProducts();
   }
+  Future<ApiResult<int>>addProduct(ProductModel product) async {
+    return await _datasource.addProduct(product);
+  }
 }

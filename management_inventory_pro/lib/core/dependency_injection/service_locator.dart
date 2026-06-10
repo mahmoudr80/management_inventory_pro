@@ -5,8 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:management_inventory_pro/core/database/database_service.dart';
 import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
 import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
-import 'package:sqflite/sqflite.dart';
-
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';

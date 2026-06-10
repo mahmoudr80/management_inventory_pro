@@ -32,7 +32,7 @@ class AuthRemoteDataSource{
   Future<ApiResult<void>> register(String email, String password, String name) async {
 
     try {
-     final response = await Supabase.instance.client.auth.signUp(
+     await Supabase.instance.client.auth.signUp(
         email: email,
         password: password,
       );

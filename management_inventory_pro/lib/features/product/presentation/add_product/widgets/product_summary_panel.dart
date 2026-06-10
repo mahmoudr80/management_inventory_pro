@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/preview_row.dart';
-import 'package:management_inventory_pro/features/add_product/presentation/widgets/side_card.dart';
-import '../../../../core/components/status_chip.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/preview_row.dart';
+import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/side_card.dart';
+import '../../../../../core/components/status_chip.dart';
 import 'check_row.dart';
 
 class ProductSummaryPanel extends StatelessWidget {
