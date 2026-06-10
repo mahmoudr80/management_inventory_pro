@@ -1,17 +1,68 @@
 part of 'add_product_cubit.dart';
 
 @immutable
-sealed class AddProductState {}
+class AddProductState {
+  final bool isLoading;
+  final bool isSaving;
 
-final class AddProductInitial extends AddProductState {}
-final class AddProductLoading extends AddProductState {}
-final class AddProductSuccess extends AddProductState {
-  final ProductModel products;
+  final List<CategoryModel> categories;
+  final List<UnitModel> units;
 
-  AddProductSuccess(this.products);
+  final ProductModel? product;
+
+  final String? error;
+
+  const AddProductState({
+    this.isLoading = false,
+    this.isSaving = false,
+    this.categories = const [],
+    this.units = const [],
+    this.product,
+    this.error,
+  });
+
+  AddProductState copyWith({
+    bool? isLoading,
+    bool? isSaving,
+    List<CategoryModel>? categories,
+    List<UnitModel>? units,
+    ProductModel? product,
+    String? error,
+  }) {
+    return AddProductState(
+      isLoading: isLoading ?? this.isLoading,
+      isSaving: isSaving ?? this.isSaving,
+      categories: categories ?? this.categories,
+      units: units ?? this.units,
+      product: product ?? this.product,
+      error: error,
+    );
+  }
 }
-final class AddProductFailure extends AddProductState {
-  final String message;
 
-  AddProductFailure(this.message);
-}
+// @immutable
+// sealed class AddProductState {}
+//
+// final class AddProductInitial extends AddProductState {}
+// final class AddProductLoading extends AddProductState {}
+// final class AddProductSuccess extends AddProductState {
+//   final ProductModel products;
+//
+//   AddProductSuccess(this.products);
+// }
+// final class AddProductFailure extends AddProductState {
+//   final String message;
+//
+//   AddProductFailure(this.message);
+// }
+//
+// final class GetCategoriesSuccess extends AddProductState {
+//   final List<CategoryModel> categories;
+//
+//   GetCategoriesSuccess(this.categories);
+// }
+// final class GetUnitsSuccess extends AddProductState {
+//   final List<UnitModel> units;
+//
+//   GetUnitsSuccess(this.units);
+// }

@@ -61,31 +61,8 @@ void main() async {
     ),
   );
 
-  // final response =await getIt<ProductLocalDatasource>().addProduct(
-  //     ProductModel(sku: 'RIC-020', name: 'Rice 2kg', id: Uuid().v4(),
-  //         categoryId: 1, unitId: 1, costPrice:200,
-  //         sellingPrice: 300, minStock: 20, currentStock: 100));
-  // switch(response){
-  //   case Success(data:final id):
-  //     print(id);
-  //   case Failure(errorModel:final error):
-  //     print(error.message);
-  // }
- final response =await getIt<CategoryLocalDatasource>().getCategories();
- switch(response){
-   case Success(data:final data):
-     print(data[0].toString());
-   case Failure(errorModel:final error):
-     print(error.message);
- }
-  final response2 =await getIt<UnitLocalDatasource>().getUnits();
-  switch(response2){
-    case Success(data:final data2):
-      print(data2[0].toString());
-    case Failure(errorModel:final error):
-      print(error.message);
   }
-}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
