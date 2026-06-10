@@ -5,9 +5,13 @@ import 'package:get_it/get_it.dart';
 import 'package:management_inventory_pro/core/database/database_service.dart';
 import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
 import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
+import 'package:management_inventory_pro/features/unit/data/datasource/unit_datasource.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
+import '../../features/category/data/datasource/category_datasource.dart';
+import '../../features/category/data/respository/category_repository.dart';
+import '../../features/unit/data/respository/unit_repository.dart';
 
 final getIt = GetIt.instance;
 
@@ -31,6 +35,16 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<ProductLocalDatasource>(() =>
         ProductLocalDatasource(getIt<DatabaseService>().db),);
     getIt.registerLazySingleton(() => ProductRepository(getIt<ProductLocalDatasource>()),);
+
+    //Unit
+    getIt.registerLazySingleton<UnitLocalDatasource>(() =>
+        UnitLocalDatasource(getIt<DatabaseService>().db),);
+    getIt.registerLazySingleton(() => UnitRepository(getIt<UnitLocalDatasource>()),);
+
+    //category
+    getIt.registerLazySingleton<CategoryLocalDatasource>(() =>
+        CategoryLocalDatasource(getIt<DatabaseService>().db),);
+    getIt.registerLazySingleton(() => CategoryRepository(getIt<CategoryLocalDatasource>()),);
   }
 
 

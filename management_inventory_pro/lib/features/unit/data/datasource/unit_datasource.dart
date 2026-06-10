@@ -23,7 +23,7 @@ class UnitLocalDatasource {
       }
       return ApiResult.success(units);
     }catch(e){
-      return ApiResult.failure(ApiErrorModel(message: "could not find categories"));
+      return ApiResult.failure(ApiErrorModel(message: "could not find Units"));
     }
   }
 

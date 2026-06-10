@@ -14,9 +14,9 @@ class UnitDropdownWidget extends StatefulWidget {
 
 class _UnitDropdownWidgetState extends State<UnitDropdownWidget> {
   final List<UnitModel> _units = [
-    UnitModel(id: '1', name: 'Piece', symbol: ''),
-    UnitModel(id: '2', name: 'Box', symbol: ''),
-    UnitModel(id: '3', name: 'Kg', symbol: ''),
+    UnitModel(id: 1, name: 'Piece', symbol: ''),
+    UnitModel(id: 2, name: 'Box', symbol: ''),
+    UnitModel(id: 3, name: 'Kg', symbol: ''),
   ];
 
   String? _selectedId;
@@ -27,7 +27,7 @@ class _UnitDropdownWidgetState extends State<UnitDropdownWidget> {
       decoration: const InputDecoration(labelText: 'Unit'),
       initialValue: _selectedId,
       items: _units
-          .map((u) => DropdownMenuItem(value: u.id, child: Text(u.name)))
+          .map((u) => DropdownMenuItem(value: u.id.toString(), child: Text(u.name)))
           .toList(),
       onChanged: (value) {
         setState(() => _selectedId = value);

@@ -37,6 +37,29 @@ class BasicInformationSection extends StatelessWidget {
           validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
         ),
         SizedBox(height: 12.h),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: CustomTextField(
+                label: 'SKU *',
+                controller: skuController,
+                validator: (v) =>
+                v == null || v.trim().isEmpty ? 'Required' : null,
+              ),
+            ),
+            SizedBox(width: 8.w),
+            OutlinedButton.icon(
+              onPressed: onGenerateSku,
+              icon: Icon(Icons.auto_fix_high, size: 16.r.clamp(10, 20)),
+              label: Text(
+                'Auto-gen',
+                style: TextStyle(fontSize: 8.sp.clamp(6, 10)),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
         CustomTextField(
           label: 'Barcode (EAN / UPC)',
           controller: barcodeController,
