@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/components/side_bar_layout.dart';
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
+import '../../core/dependency_injection/service_locator.dart';
+import '../product/data/respository/product_repository.dart';
+import '../product/presentation/products/cubit/product_cubit.dart';
 import '../product/presentation/products/screens/product_screen.dart';
 
 List<Widget>screens=[Placeholder(),
-ProductScreen(),
+BlocProvider(create:(context) => ProductCubit(getIt<ProductRepository>())..getProducts(),
+child: ProductScreen()),
   Placeholder(),
   Placeholder(),
   Placeholder(),

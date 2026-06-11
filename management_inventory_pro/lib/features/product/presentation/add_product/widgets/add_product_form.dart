@@ -138,7 +138,7 @@ class _AddProductFormState extends State<AddProductForm> {
     if(state.product!=null&&!state.isSaving){
       AppSnackBar.showSuccess(context, message:"${state.product?.id} added successfully");
       if (context.mounted) {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(state.product);
       }
     }
 

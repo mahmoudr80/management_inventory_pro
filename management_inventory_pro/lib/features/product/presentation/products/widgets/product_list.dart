@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:management_inventory_pro/features/product/data/models/product_model.dart';
 import 'package:management_inventory_pro/features/product/presentation/products/widgets/product_card.dart';
 
 import '../../../../../generated/assets.gen.dart';

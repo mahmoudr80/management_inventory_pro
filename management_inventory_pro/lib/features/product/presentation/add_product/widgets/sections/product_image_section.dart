@@ -123,13 +123,13 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         else
           Column(
             children: [
-              ClipRRect(
+              ClipRRect(clipBehavior: Clip.antiAlias,
                 borderRadius: BorderRadius.circular(8),
                 child: Image.file(
                   _imageFile!,
                   height: 180,
                   width: double.infinity,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.scaleDown,
                 ),
               ),
               const SizedBox(height: 12),

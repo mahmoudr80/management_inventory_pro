@@ -60,6 +60,7 @@ class ProductModel {
       name: json[DatabaseConstants.nameColumn] as String,
       category: json[DatabaseConstants.categoryName] as String,
       status:newStatus,
+      imageUrl:  json[DatabaseConstants.imageUrlColumn],
       statusText: newStatusText,
       id:json[DatabaseConstants.idColumn],
       categoryId: json[DatabaseConstants.categoryIdColumn],
