@@ -21,4 +21,12 @@ class ProductCubit extends Cubit<ProductState> {
         break;
     }
   }
-}
+  Future<void> updateProducts(ProductModel? product) async {
+    if(product!=null){
+      final currentState = state as ProductSuccess;
+      emit(ProductSuccess([product,...currentState.products]));
+    }
+
+    }
+  }
+

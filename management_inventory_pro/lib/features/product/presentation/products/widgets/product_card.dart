@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/theme/app_colors.dart';
@@ -10,11 +12,7 @@ class ProductCard extends StatelessWidget {
   final ProductModel product;
   final VoidCallback onDelete;
 
-  const ProductCard({
-    super.key,
-    required this.product,
-    required this.onDelete,
-  });
+  const ProductCard({super.key, required this.product, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +20,26 @@ class ProductCard extends StatelessWidget {
       child: Row(
         children: [
           Container(
-           // padding: EdgeInsets.all(12.r),
+            // padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
               color: AppColors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(4.r),
             ),
-            child: const Icon(Icons.inventory_2_outlined, color: AppColors.primary),
+            child: product.imageUrl != null && product.imageUrl!.isNotEmpty
+                ? ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(
+                File(product.imageUrl!),
+                width: 40.r,
+                height: 40.r,
+                fit: BoxFit.scaleDown,
+              ),
+            )
+                :  Icon(
+                    Icons.inventory_2_outlined,
+                    color: AppColors.primary,
+              size: 40.r,
+                  ),
           ),
           SizedBox(width: 16.w),
           Expanded(
@@ -39,15 +51,16 @@ class ProductCard extends StatelessWidget {
                   children: [
                     Text(
                       product.name,
-                      style: AppTextStyles.
-                      headlineSm.
-                      copyWith(fontSize: 14.sp.clamp(10, 18),fontWeight: FontWeight.bold),
+                      style: AppTextStyles.headlineSm.copyWith(
+                        fontSize: 14.sp.clamp(10, 18),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
 
                     SizedBox(width: 8.w),
                     StatusChip(
-                      label: product.statusText??'in active',
-                      type: product.status??StatusType.inStock,
+                      label: product.statusText ?? 'in active',
+                      type: product.status ?? StatusType.inStock,
                     ),
                   ],
                 ),
@@ -62,7 +75,7 @@ class ProductCard extends StatelessWidget {
                 Text(
                   'Category: ${product.category}',
                   style: AppTextStyles.bodySm.copyWith(
-                    fontSize: 10.sp.clamp(8, 14)
+                    fontSize: 10.sp.clamp(8, 14),
                   ),
                 ),
               ],
@@ -80,7 +93,10 @@ class ProductCard extends StatelessWidget {
               ),
               SizedBox(height: 8.h),
               IconButton(
-                icon: const Icon(Icons.delete_outline_rounded, color: AppColors.error),
+                icon: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppColors.error,
+                ),
                 onPressed: onDelete,
               ),
             ],
