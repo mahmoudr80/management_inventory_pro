@@ -26,7 +26,7 @@ class SuppliersStatisticsSection extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               childAspectRatio: crossAxisCount == 1 ? 2.8 : 2.2,
               children: [
-                SupplierStatCard(
+                SupplierStatisticsCard(
                   label: 'Total Suppliers',
                   value: total.toString(),
                   icon: Icons.storefront_outlined,
@@ -34,13 +34,13 @@ class SuppliersStatisticsSection extends StatelessWidget {
                   badge: '— Steady',
                   badgeColor: AppColors.surfaceContainerHigh,
                 ),
-                SupplierStatCard(
+                SupplierStatisticsCard(
                   label: 'Showing',
                   value: state.filteredSuppliers.length.toString(),
                   icon: Icons.filter_list_outlined,
                   subtitle: 'Matching current filter',
                 ),
-                SupplierStatCard(
+                SupplierStatisticsCard(
                   label: 'Last Updated',
                   value: _lastUpdated(state),
                   icon: Icons.update_outlined,
