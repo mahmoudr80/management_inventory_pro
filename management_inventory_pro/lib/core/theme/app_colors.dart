@@ -47,4 +47,27 @@ class AppColors {
   static const Color primaryDark = Color(0xFF0039B3);
   static const Color primaryLight = Color(0xFF60A5FA);
   static const Color secondaryDark = Color(0xFF0B1C30);
+
+  static const Color onPrimaryFixed = Color(0xFF001551);
+  static const Color primaryFixedDim = Color(0xFFB6C4FF);
+
+  static const Color onSecondaryContainer = Color(0xFF54647A);
+
+  static const Color surfaceBright = Color(0xFFFAF8FF);
+  static const Color surfaceVariant = Color(0xFFDAE2FD);
+
+  static const Color onSurface = Color(0xFF131B2E);
+  static const Color onSurfaceVariant = Color(0xFF434656);
+  static const Color onBackground = Color(0xFF131B2E);
+
+  static const Color onErrorContainer = Color(0xFF93000A);
+
+  static const Color inverseSurface = Color(0xFF283044);
+  static const Color inverseOnSurface = Color(0xFFEEF0FF);
+  static const Color inversePrimary = Color(0xFFB6C4FF);
+
+  static const Color successGreen = Color(0xFF1A6B3C);
+
+  static const Color secondaryContainer = Color(0xFFD0E1FB);
+
 }
