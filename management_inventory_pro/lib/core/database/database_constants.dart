@@ -4,6 +4,7 @@ class DatabaseConstants {
   static const String productTable = "products";
   static const String categoryTable = "categories";
   static const String unitTable = "units";
+  static const String supplierTable = "suppliers";
 
   //columns
   static const String idColumn = "id";
@@ -21,6 +22,11 @@ class DatabaseConstants {
   static const String updatedAtColumn = "updated_at";
   static const String currentStockColumn = "current_stock";
   static const String symbolColumn = "symbol";//units table
+  //supplier table
+  static const String companyNameColumn = "company_name";
+  static const String phoneColumn = "phone";
+  static const String emailColumn = "email";
+  static const String addressColumn = "address";
 
 
   //Alias
