@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 import 'package:management_inventory_pro/core/widgets/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_decoration.dart';
@@ -31,11 +32,11 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
   void initState() {
     super.initState();
     final s = widget.supplier;
-    _nameCtrl = TextEditingController(text: s?.name ?? '');
+    _nameCtrl = TextEditingController(text: s?.companyName ?? '');
     _phoneCtrl = TextEditingController(text: s?.phone ?? '');
     _emailCtrl = TextEditingController(text: s?.email ?? '');
     _addressCtrl = TextEditingController(text: s?.address ?? '');
-    _notesCtrl = TextEditingController(text: s?.notes ?? '');
+    _notesCtrl = TextEditingController(text: s?.note ?? '');
   }
 
   @override
@@ -70,15 +71,19 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
     } else {
       final newSupplier = SupplierModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        name: _nameCtrl.text.trim(),
+        companyName: _nameCtrl.text.trim(),
         phone: _phoneCtrl.text.trim(),
         email: _emailCtrl.text.trim(),
         address: _addressCtrl.text.trim(),
-        notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
+        note: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
         createdAt: now,
         updatedAt: now,
       );
       cubit.addSupplier(newSupplier);
+    }
+    if(mounted){
+      AppSnackBar.showSuccess(context, message: "supplier saved successfully");
+      Navigator.pop(context);
     }
   }
 
@@ -124,8 +129,12 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () =>
-                          context.read<SuppliersCubit>().closeForm(),
+                      onPressed: () {
+                        context.read<SuppliersCubit>().closeForm();
+                        if(mounted){
+                          Navigator.pop(context);
+                        }
+                      },
                       icon: const Icon(Icons.close, size: 20),
                       color: AppColors.outline,
                     ),
@@ -225,8 +234,12 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     _CancelButton(
-                      onPressed: () =>
-                          context.read<SuppliersCubit>().closeForm(),
+                      onPressed: () {
+                        context.read<SuppliersCubit>().closeForm();
+                        if(mounted){
+                          Navigator.pop(context);
+                        }
+                      }
                     ),
                     const SizedBox(width: 12),
                     _SubmitButton(

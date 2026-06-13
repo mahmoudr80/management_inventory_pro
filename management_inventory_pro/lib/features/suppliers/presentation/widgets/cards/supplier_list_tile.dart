@@ -38,7 +38,7 @@ class SupplierListTile extends StatelessWidget {
           child: Row(
             children: [
               // Avatar
-              _SupplierAvatar(name: supplier.name),
+              _SupplierAvatar(name: supplier.companyName),
               const SizedBox(width: 12),
 
               // Name & email
@@ -48,7 +48,7 @@ class SupplierListTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      supplier.name,
+                      supplier.companyName,
                       style: AppTextStyles.headlineSm.copyWith(
                         color: AppColors.primary,
                         fontSize: 14,

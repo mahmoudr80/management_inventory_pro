@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decoration.dart';
@@ -53,8 +54,11 @@ class SuppliersListView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => DeleteConfirmDialog(
-        supplierName: s.name,
-        onConfirm: () => context.read<SuppliersCubit>().deleteSupplier(s.id),
+        supplierName: s.companyName,
+        onConfirm: (){
+          context.read<SuppliersCubit>().deleteSupplier(s.id);
+          AppSnackBar.showSuccess(context, message:"Supplier deleted successfully");
+        },
       ),
     );
   }
