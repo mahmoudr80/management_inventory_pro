@@ -17,14 +17,14 @@ class SuppliersStatisticsSection extends StatelessWidget {
 
         return LayoutBuilder(
           builder: (context, constraints) {
-            final crossAxisCount = constraints.maxWidth < 600 ? 1 : 3;
+            final crossAxisCount = constraints.maxWidth < 1000 ? 2 : 3;
             return GridView.count(
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: crossAxisCount == 1 ? 2.8 : 2.2,
+              childAspectRatio: crossAxisCount == 1 ? 4.8 : 2.9,
               children: [
                 SupplierStatisticsCard(
                   label: 'Total Suppliers',
@@ -57,7 +57,7 @@ class SuppliersStatisticsSection extends StatelessWidget {
   String _lastUpdated(SuppliersState state) {
     if (state.suppliers.isEmpty) return '—';
     final latest = state.suppliers
-        .map((s) => s.updatedAt)
+        .map((s) => s.updatedAt??DateTime.now())
         .reduce((a, b) => a.isAfter(b) ? a : b);
     final diff = DateTime.now().difference(latest);
     if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
