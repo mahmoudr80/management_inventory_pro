@@ -49,21 +49,21 @@ class SupplierDetailCard extends StatelessWidget {
                     label: 'Address',
                     value: supplier.address,
                   ),
-                  if (supplier.notes != null && supplier.notes!.isNotEmpty) ...[
+                  if (supplier.note != null && supplier.note!.isNotEmpty) ...[
                     const SizedBox(height: 16),
-                    _NotesSection(notes: supplier.notes!),
+                    _NotesSection(notes: supplier.note!),
                   ],
                   const SizedBox(height: 24),
                   const Divider(height: 1, color: AppColors.outlineVariant),
                   const SizedBox(height: 16),
                   _MetaRow(
                     label: 'Created',
-                    value: _formatDate(supplier.createdAt),
+                    value: _formatDate(supplier.createdAt??DateTime.now()),
                   ),
                   const SizedBox(height: 8),
                   _MetaRow(
                     label: 'Last updated',
-                    value: _formatDate(supplier.updatedAt),
+                    value: _formatDate(supplier.updatedAt??DateTime.now()),
                   ),
                 ],
               ),
@@ -100,7 +100,7 @@ class _DetailHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initials = supplier.name
+    final initials = supplier.companyName
         .split(' ')
         .take(2)
         .map((w) => w.isNotEmpty ? w[0].toUpperCase() : '')
@@ -129,7 +129,7 @@ class _DetailHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(supplier.name, style: AppTextStyles.headlineSm),
+                Text(supplier.companyName, style: AppTextStyles.headlineSm),
                 const SizedBox(height: 2),
                 Text(
                   'ID: ${supplier.id}',

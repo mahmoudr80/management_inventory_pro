@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
+import 'package:management_inventory_pro/features/suppliers/data/repository/supplier_repository.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../cubit/suppliers_cubit.dart';
 import '../cubit/suppliers_state.dart';
@@ -12,7 +14,7 @@ class SupplierScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SuppliersCubit()..loadSuppliers(),
+      create: (_) => SuppliersCubit(getIt<SupplierRepository>())..loadSuppliers(),
       child: const _SuppliersView(),
     );
   }
@@ -39,7 +41,6 @@ class _SuppliersView extends StatelessWidget {
                 ),
               ),
             ).then((_) {
-              // Ensure form state is cleaned up if dismissed via barrier
               if (context.mounted) {
                 context.read<SuppliersCubit>().closeForm();
               }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
 
 class AppSnackBar {
 
@@ -6,9 +8,9 @@ class AppSnackBar {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: Duration(milliseconds: duration??600),
+        duration: Duration(milliseconds: duration??600),width: 200.w,
         content: Text(message),
-        backgroundColor: Colors.red.withAlpha(230),
+        backgroundColor: Colors.red.withAlpha(200),
         behavior: SnackBarBehavior.floating,
         shape: OutlineInputBorder(
           borderSide: BorderSide.none,
@@ -21,9 +23,10 @@ class AppSnackBar {
   static void showSuccess(BuildContext context, { required String message, int? duration}) {
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(duration: Duration(milliseconds:duration??600),
+      SnackBar(duration: Duration(milliseconds:duration??600),width: 200.w,
+clipBehavior: Clip.antiAlias,
         content: Text(message),
-        backgroundColor: Colors.green,
+        backgroundColor: AppColors.primary.withAlpha(200),
         behavior: SnackBarBehavior.floating,
         shape: OutlineInputBorder(
           borderSide: BorderSide.none,

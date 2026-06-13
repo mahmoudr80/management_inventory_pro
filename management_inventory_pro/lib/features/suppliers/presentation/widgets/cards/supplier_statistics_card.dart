@@ -29,29 +29,33 @@ class SupplierStatisticsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: AppDecorations.card(color: AppColors.surfaceContainerLowest),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(15),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  label.toUpperCase(),
-                  style: AppTextStyles.labelCaps,
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    label.toUpperCase(),
+                    style: AppTextStyles.labelCaps,
+                  ),
                 ),
-              ),
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerHigh,
-                  borderRadius: BorderRadius.circular(8),
+                Container(
+                  width: 36,
+                  height: 33,
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerHigh,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
                 ),
-                child: Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 10),
           Row(
@@ -76,7 +80,7 @@ class SupplierStatisticsCard extends StatelessWidget {
           ),
           if (subtitle != null) ...[
             const SizedBox(height: 4),
-            Text(subtitle!, style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant)),
+            Expanded(child: Text(subtitle!, style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant))),
           ],
         ],
       ),
