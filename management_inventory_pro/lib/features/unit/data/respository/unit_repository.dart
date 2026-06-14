@@ -9,4 +9,12 @@ class UnitRepository {
   Future<ApiResult<List<UnitModel>>>getUnits() async {
     return await _datasource.getUnits();
   }
+
+  Future<ApiResult>addUnit({required String name, String ?symbol}) async {
+    symbol = symbol?.trim()==''?null:symbol;
+    return await _datasource.addUnit(name: name,symbol: symbol);
+  }
+  Future<ApiResult> deleteUnit(int id) async {
+    return _datasource.deleteUnit(id);
+  }
 }

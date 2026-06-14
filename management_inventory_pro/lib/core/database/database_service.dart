@@ -25,7 +25,10 @@ class DatabaseService {
 
     db =await openDatabase(dbPath
       ,  version: 1,
-      onCreate: _onCreate,);
+      onCreate: _onCreate,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },);
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -66,6 +69,19 @@ class DatabaseService {
 	PRIMARY KEY("id"),
 	FOREIGN KEY("category_id") REFERENCES "categories"("id") ON DELETE RESTRICT,
 	FOREIGN KEY("unit_id") REFERENCES "units"("id") ON DELETE RESTRICT
+);
+   """);
+    await db.execute("""
+ CREATE TABLE IF NOT EXISTS "${DatabaseConstants.supplierTable}" (
+		"id"	TEXT NOT NULL,
+	"company_name"	TEXT NOT NULL,
+	"phone"	TEXT UNIQUE,
+	"email"	TEXT UNIQUE,
+	"address"	TEXT,
+	"notes"	TEXT,
+	"created_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"updated_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY("id")
 );
    """);
   }

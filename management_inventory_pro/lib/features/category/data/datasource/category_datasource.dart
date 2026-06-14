@@ -26,5 +26,48 @@ class CategoryLocalDatasource {
       return ApiResult.failure(ApiErrorModel(message: "could not find categories"));
     }
   }
+  Future<ApiResult>addCategory(String name) async {
+    try{
+      final response = await _database.
+      insert(DatabaseConstants.categoryTable,{DatabaseConstants.nameColumn:name});
+      print("success added ${response.toString()}");
+      return ApiResult.success(response);
+    }catch(e){
+      return ApiResult.failure(ApiErrorModel(message: e.toString()));
+    }
+
+  }
+  Future<ApiResult> deleteCategory(int id) async {
+    try {
+      // Check if any product uses this category
+      final countResult = await _database.rawQuery(
+        '''
+  SELECT COUNT(*) as count
+  FROM ${DatabaseConstants.productTable}
+  WHERE ${DatabaseConstants.categoryIdColumn} = ?
+  ''',
+        [id],
+      );
+      final inUseCount = Sqflite.firstIntValue(countResult) ?? 0;
+      if (inUseCount > 0) {
+        return ApiResult.failure(ApiErrorModel(
+          message: 'Cannot delete — $inUseCount product(s) use this category.',
+        ));
+      }
+
+      final rowsDeleted = await _database.delete(
+        DatabaseConstants.categoryTable,
+        where: '${DatabaseConstants.idColumn} = ?',
+        whereArgs: [id],
+      );
+      if (rowsDeleted == 0) {
+        return ApiResult.failure(ApiErrorModel(message: "Category not found"));
+      }
+      return ApiResult.success(rowsDeleted);
+    } catch (e) {
+      print(e.toString());
+      return ApiResult.failure(ApiErrorModel(message: e.toString()));
+    }
+  }
 
 }
