@@ -31,7 +31,8 @@ class DatabaseConstants {
 
   //Alias
   static const String productName = "product_name";
-  static const String categoryName = "category";
+  static const String categoryName = "category_name";
+  static const String unitName = "unit_name";
 
 
 }
