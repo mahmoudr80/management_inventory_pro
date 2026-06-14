@@ -17,22 +17,27 @@ class ProductList extends StatelessWidget {
       child: BlocBuilder<ProductCubit,ProductState>(
   builder: (context, state) {
     if(state is ProductSuccess){
-      return Scrollbar(
-        controller: controller,
-        thumbVisibility: true,
-        child: ListView.separated(
-          controller:  controller,
-          itemBuilder: (context, index) =>
-              ProductCard(product:
-              state.products[index],
-                onDelete:() {
-                },), separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(height: 4.h,);
-        }, itemCount: 10,
-          scrollDirection: Axis.vertical,
-          shrinkWrap:true ,
-        ),
-      );
+      if(state.products.isNotEmpty){
+        return Scrollbar(
+          controller: controller,
+          thumbVisibility: true,
+          child: ListView.separated(
+            controller:  controller,
+            itemBuilder: (context, index) =>
+                ProductCard(product:
+                state.products[index],
+                  onDelete:() {
+                  },), separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(height: 4.h,);
+          }, itemCount: state.products.length,
+            scrollDirection: Axis.vertical,
+            shrinkWrap:true ,
+          ),
+        );
+      }
+      else{
+       return Lottie.asset(Assets.lottie.notFound);
+      }
     }
     else if(state is ProductLoading){
       return LottieBuilder.asset(Assets.lottie.loading);

@@ -109,7 +109,7 @@ class SideBarLayout extends StatelessWidget {
                             color: isActive
                                 ? AppColors.sideBarItemsActive
                                 : AppColors.sideBarItems,
-                            size: 25.r,
+                            size: 24.r,
                           ),
                           Text(
                             item.label,

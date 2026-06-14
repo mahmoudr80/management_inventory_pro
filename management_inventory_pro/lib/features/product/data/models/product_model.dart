@@ -20,6 +20,7 @@ class ProductModel {
   final String sku;
   final String name;
   final String ?category;
+  final String? unit;
   final StatusType? status;
   final String ?statusText;
 
@@ -35,7 +36,7 @@ class ProductModel {
     required this.sellingPrice,
     required this.minStock, this.imageUrl,
     this.note,  this.createdAt,  this.updatedAt,
-    required this.currentStock,
+    required this.currentStock, this.unit,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -60,6 +61,7 @@ class ProductModel {
       name: json[DatabaseConstants.nameColumn] as String,
       category: json[DatabaseConstants.categoryName] as String,
       status:newStatus,
+      unit: json[DatabaseConstants.unitName] as String?,
       imageUrl:  json[DatabaseConstants.imageUrlColumn],
       statusText: newStatusText,
       id:json[DatabaseConstants.idColumn],
@@ -98,6 +100,7 @@ class ProductModel {
     String? name,
     String? category,
     double? stock,
+    String? unit,
     StatusType? status,
     String? statusText,
     String ?id,
@@ -114,6 +117,7 @@ class ProductModel {
       sku: sku ?? this.sku,
       name: name ?? this.name,
       category: category ?? this.category,
+      unit: unit ?? this.unit,
       status: status ?? this.status,
       statusText: statusText ?? this.statusText,
       id: id??this.id, categoryId: categoryId??this.categoryId,
