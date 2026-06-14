@@ -7,8 +7,11 @@ import 'package:management_inventory_pro/features/product/data/models/product_mo
 import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
 
 import '../../../../../core/dependency_injection/service_locator.dart';
+import '../../../../category/presentation/cubit/category_cubit.dart';
+import '../../../../unit/presentation/cubit/unit_cubit.dart';
 import '../../add_product/screens/add_product_screen.dart';
 import '../cubit/product_cubit.dart';
+import '../widgets/product_filter_bar.dart';
 import '../widgets/product_list.dart';
 
 class ProductScreen extends StatelessWidget {
@@ -33,6 +36,12 @@ class ProductScreen extends StatelessWidget {
               context.read<ProductCubit>().updateProducts(product);
             },)
           ],),
+          SizedBox(height: 8.h),
+          ProductFilterBar(
+            categoryCubit: context.read<CategoryCubit>()..getCategories(),
+            unitCubit: context.read<UnitCubit>()..getUnits(),
+          ),
+          SizedBox(height: 4.h),
           ProductList(),
 
         ],

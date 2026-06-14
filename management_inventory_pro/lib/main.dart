@@ -11,6 +11,8 @@ import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
 import 'package:management_inventory_pro/features/home/home_screen.dart';
 import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
 import 'package:management_inventory_pro/features/product/data/models/product_model.dart';
+import 'package:management_inventory_pro/features/suppliers/data/datasource/supplier_datasource.dart';
+import 'package:management_inventory_pro/features/suppliers/data/models/supplier_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -60,7 +62,6 @@ void main() async {
       child: const MyApp(),
     ),
   );
-
   }
 
 
