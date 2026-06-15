@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:management_inventory_pro/core/dialogs/app_confirm_dialog.dart';
+import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 import 'package:management_inventory_pro/features/product/data/models/product_model.dart';
 import 'package:management_inventory_pro/features/product/presentation/products/widgets/product_card.dart';
 
+import '../../../../../core/dialogs/dialog_utils.dart';
 import '../../../../../generated/assets.gen.dart';
 import '../cubit/product_cubit.dart';
 class ProductList extends StatelessWidget {
@@ -26,8 +29,14 @@ class ProductList extends StatelessWidget {
             itemBuilder: (context, index) =>
                 ProductCard(product:
                 state.products[index],
-                  onDelete:() {
-                  },), separatorBuilder: (BuildContext context, int index) {
+                  onDelete:()  =>
+                      showDeleteConfirmation(
+                        context: context,
+                        title: 'Delete product',
+                        itemName: state.products[index].name,
+                        onConfirm: () => _delete(context, state.products[index].id),
+                      ))
+            , separatorBuilder: (BuildContext context, int index) {
             return SizedBox(height: 4.h,);
           }, itemCount: state.products.length,
             scrollDirection: Axis.vertical,
@@ -49,5 +58,19 @@ class ProductList extends StatelessWidget {
   },
 ),
     );
+  }
+  Future<void> _delete(BuildContext context,String id)  async {
+
+          final deleted = await context.read<ProductCubit>().delete(id);
+          if(deleted){
+            if(context.mounted){
+              AppSnackBar.showSuccess(context, message: "Product $id deleted successfully",duration: 2000);
+            }
+          }
+          else{
+            if(context.mounted){
+              AppSnackBar.showError(context, message: "Can not delete Product $id");
+            }
+          }
   }
 }
