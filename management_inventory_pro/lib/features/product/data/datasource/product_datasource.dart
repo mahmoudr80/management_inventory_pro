@@ -44,6 +44,17 @@ class ProductLocalDatasource {
       return ApiResult.failure(ApiErrorModel(message: e.toString()));
     }
   }
+  Future<ApiResult<int>>delete(String id) async {
+   try{
+     final response = await _database
+         .delete(DatabaseConstants.productTable,
+         where: '${DatabaseConstants.idColumn}=?',
+         whereArgs: [id]);
+     return ApiResult.success(response);
+   }catch(e){
+     return ApiResult.failure(ApiErrorModel(message: e.toString()));
+   }
+  }
   Future<int> countProductsByCategory(String categoryName) async {
     final result = await _database.rawQuery(
       'SELECT COUNT(*) as count FROM ${DatabaseConstants.productTable} '

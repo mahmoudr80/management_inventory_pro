@@ -14,4 +14,7 @@ class ProductRepository {
   Future<ApiResult<int>>addProduct(ProductModel product) async {
     return await _datasource.addProduct(product);
   }
+  Future<ApiResult<int>>delete(String id) async {
+    return await _datasource.delete(id);
+  }
 }
