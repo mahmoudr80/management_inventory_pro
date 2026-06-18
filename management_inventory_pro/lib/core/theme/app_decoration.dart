@@ -41,4 +41,34 @@ class AppDecorations {
           borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
       );
+
+  /// Input field — inactive state.
+  static InputDecoration inputField({
+    String? hint,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
+  }) =>
+      InputDecoration(
+        hintText: hint,
+        hintStyle: AppTextStyles.bodyMd.copyWith(color: AppColors.outline),
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
+        filled: true,
+        fillColor: AppColors.surface,
+        contentPadding:
+        const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: const BorderSide(color: AppColors.outline),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: const BorderSide(color: AppColors.outline),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        ),
+        isDense: true,
+      );
 }
