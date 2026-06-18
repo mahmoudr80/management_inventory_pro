@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../generated/assets.gen.dart';
 import '../theme/app_colors.dart';
@@ -20,12 +21,12 @@ class SideBarLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<_SidebarItem> items = [
-      _SidebarItem(icon: Icons.dashboard_outlined, label: 'Dashboard'),
-      _SidebarItem(icon: Icons.inventory_2_outlined, label: 'Products'),
-      _SidebarItem(icon: Icons.category_outlined, label: 'Categories'),
-      _SidebarItem(icon: Icons.business_outlined, label: 'Suppliers'),
-      _SidebarItem(icon: Icons.analytics_outlined, label: 'Reports'),
-      _SidebarItem(icon: Icons.settings_outlined, label: 'Settings'),
+      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.dashboardIcon),icon: Icons.dashboard_outlined, label: 'Dashboard'),
+      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.productIcon),icon: Icons.inventory_2_outlined, label: 'Products'),
+      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.supplierIcon),icon: Icons.business_outlined, label: 'Suppliers'),
+      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.stockReceipts), label: 'Stock Receipts', icon: Icons.inventory),
+      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.reportIcon),icon: Icons.analytics_outlined, label: 'Reports'),
+      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.settings),icon: Icons.settings_outlined, label: 'Settings'),
     ];
 
     return Container(
@@ -104,7 +105,7 @@ class SideBarLayout extends StatelessWidget {
                         spacing: 5.w.clamp(3,7),
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          item.assetIcon!=null?item.assetIcon!: Icon(
                             item.icon,
                             color: isActive
                                 ? AppColors.sideBarItemsActive
@@ -197,7 +198,8 @@ class SideBarLayout extends StatelessWidget {
 
 class _SidebarItem {
   final IconData icon;
+  final Widget? assetIcon;
   final String label;
 
-  _SidebarItem({required this.icon, required this.label});
+  _SidebarItem({required this.icon, required this.label, this.assetIcon});
 }

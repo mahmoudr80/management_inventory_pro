@@ -26,6 +26,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/reportIcon.svg
   String get reportIcon => 'assets/icons/reportIcon.svg';
 
+  /// File path: assets/icons/settings.svg
+  String get settings => 'assets/icons/settings.svg';
+
+  /// File path: assets/icons/stock_receipts.svg
+  String get stockReceipts => 'assets/icons/stock_receipts.svg';
+
   /// File path: assets/icons/supplierIcon.svg
   String get supplierIcon => 'assets/icons/supplierIcon.svg';
 
@@ -38,6 +44,8 @@ class $AssetsIconsGen {
     posIcon,
     productIcon,
     reportIcon,
+    settings,
+    stockReceipts,
     supplierIcon,
     warehouseIcon,
   ];
