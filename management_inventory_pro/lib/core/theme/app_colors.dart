@@ -70,4 +70,24 @@ class AppColors {
 
   static const Color secondaryContainer = Color(0xFFD0E1FB);
 
+  static const onPrimaryContainer   = Color(0xFFE3E6FF);
+  static const primaryFixed         = Color(0xFFDCE1FF);
+  static const onPrimaryFixedVariant= Color(0xFF0039B3);
+
+
+  // Status pill colours (functional accents)
+  static const statusHealthyBg      = Color(0xFFECFDF5); // emerald-50
+  static const statusHealthyFg      = Color(0xFF065F46); // emerald-700
+  static const statusHealthyBorder  = Color(0xFFD1FAE5); // emerald-200
+  static const statusHealthyDot     = Color(0xFF059669); // emerald-600
+
+  static const statusPendingBg      = Color(0xFFFFFBEB); // amber-50
+  static const statusPendingFg      = Color(0xFFB45309); // amber-700
+  static const statusPendingBorder  = Color(0xFFFDE68A); // amber-200
+  static const statusPendingDot     = Color(0xFFD97706); // amber-600
+
+  static const statusCancelledBg    = Color(0xFFFFDAD6);
+  static const statusCancelledFg    = Color(0xFF93000A);
+  static const statusCancelledBorder= Color(0xFFFFB4AB);
+  static const statusCancelledDot   = Color(0xFFBA1A1A);
 }
