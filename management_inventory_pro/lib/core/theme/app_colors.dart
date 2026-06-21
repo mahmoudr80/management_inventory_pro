@@ -90,4 +90,25 @@ class AppColors {
   static const statusCancelledFg    = Color(0xFF93000A);
   static const statusCancelledBorder= Color(0xFFFFB4AB);
   static const statusCancelledDot   = Color(0xFFBA1A1A);
+  static const posPrimaryDark = Color(0xFF0039B3);
+  static const posSurface = Color(0xFFF7F8FC);
+  static const posBorder = Color(0xFFE5E8F2);
+  static const posTextPrimary = Color(0xFF131B2E);
+  static const posTextSecondary = Color(0xFF6B7280);
+  static const posSuccess = Color(0xFF22C55E);
+  static const posError = Color(0xFFBA1A1A);
+
+  // POS Layout
+  static const posSidebarBg = Color(0xFF131B2E);
+  static const posSidebarBgLight = Color(0xFF1B2438);
+  static const posSidebarActive = Color(0xFF22304F);
+  static const posPrimary = Color(0xFF0041C8);
+
+// POS Surfaces
+  static const posCardBg = Color(0xFFFFFFFF);
+  static const posCartBg = Color(0xFFFAFAFE);
+  static const posSummaryBg = Color(0xFFE9ECFB);
+
+// POS Text
+  static const posTextMuted = Color(0xFF9CA3AF);
 }
