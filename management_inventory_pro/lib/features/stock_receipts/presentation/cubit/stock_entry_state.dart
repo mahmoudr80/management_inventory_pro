@@ -17,6 +17,7 @@ class StockEntryState extends Equatable {
   final int currentPage;
   final int totalCount;
   final int pageSize;
+  final SupplierRef ?selectedSupplier;
 
   // ── Action feedback (add / update / delete) ────────────────────────────────
   final StockEntryActionStatus actionStatus;
@@ -35,11 +36,11 @@ class StockEntryState extends Equatable {
     this.pageSize = 20,
     this.actionStatus = StockEntryActionStatus.idle,
     this.actionError,
-    this.loadError,
+    this.loadError, this.selectedSupplier,
   });
 
   bool get hasMorePages => (currentPage * pageSize) < totalCount;
-
+  static const _unset = Object();
   StockEntryState copyWith({
     StockEntryLoadStatus? loadStatus,
     List<StockEntryModel>? entries,
@@ -47,12 +48,14 @@ class StockEntryState extends Equatable {
     StockEntryFilter? filter,
     int? currentPage,
     int? totalCount,
+    Object? selectedSupplier = _unset,
     int? pageSize,
     StockEntryActionStatus? actionStatus,
     String? actionError,
     String? loadError,
     bool clearActionError = false,
     bool clearLoadError = false,
+
   }) =>
       StockEntryState(
         loadStatus: loadStatus ?? this.loadStatus,
@@ -65,6 +68,9 @@ class StockEntryState extends Equatable {
         actionStatus: actionStatus ?? this.actionStatus,
         actionError: clearActionError ? null : actionError ?? this.actionError,
         loadError: clearLoadError ? null : loadError ?? this.loadError,
+          selectedSupplier: selectedSupplier == _unset
+              ? this.selectedSupplier
+              : selectedSupplier as SupplierRef?
       );
 
   @override
@@ -79,5 +85,6 @@ class StockEntryState extends Equatable {
         actionStatus,
         actionError,
         loadError,
+        selectedSupplier
       ];
 }
