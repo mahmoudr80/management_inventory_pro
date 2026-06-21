@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/components/page_header.dart';
+import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
+import 'package:management_inventory_pro/features/stock_receipts/data/models/supplier_ref.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
+import 'package:management_inventory_pro/features/suppliers/data/repository/supplier_repository.dart';
+import 'package:management_inventory_pro/features/suppliers/presentation/cubit/suppliers_cubit.dart';
 import '../../../../core/dialogs/dialog_utils.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -42,10 +46,10 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
 
   // ── Navigation ─────────────────────────────────────────────────────────────
 
-  void _openNewEntry() {
-    Navigator.of(context).push(
+  Future<StockEntryModel?> _openNewEntry() async {
+   return await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) =>  BlocProvider(
-  create: (context) => StockEntryCubit(StockEntryRepository()),
+  create: (context) => StockEntryCubit(getIt<StockEntryRepository>()),
   child: NewStockEntryScreen(),
 )),
     );
@@ -54,7 +58,10 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
   void _openEditEntry(StockEntryModel entry) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => NewStockEntryScreen(existingEntry: entry),
+        builder: (_) =>  BlocProvider.value(
+          value: context.read<StockEntryCubit>(),
+          child: NewStockEntryScreen(existingEntry: entry,),
+        ),
       ),
     );
   }
@@ -69,6 +76,8 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
       onConfirm: () => context.read<StockEntryCubit>().deleteEntry(entry.id),
     );
   }
+
+  SupplierRef? selectedSupplier;
 
   // ── Build ──────────────────────────────────────────────────────────────────
 
@@ -109,15 +118,20 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
               BlocBuilder<StockEntryCubit, StockEntryState>(
                 builder: (context, state) {
                   return StockEntryFilterBar(
+                    selectedSupplier: state.selectedSupplier,
                     searchController: _searchController,
                     activeFilter: state.filter,
                     onSearch: (q) => context.read<StockEntryCubit>().search(q),
                     onFilterStatus: (s) async => await context
                         .read<StockEntryCubit>()
                         .applyFilter(status: s, clearStatus: s == null),
-                    onFilterSupplier: (id) => context
-                        .read<StockEntryCubit>()
-                        .applyFilter(supplierId: id, clearSupplier: id == null),
+                    onFilterSupplier: (supplier) {
+                        context
+                            .read<StockEntryCubit>()
+                            .applyFilter(selectedSupplier: supplier,
+                          supplierId: supplier?.id,
+                          clearSupplier: supplier == null,);
+                    },
                     onFilterDateRange: (dr) => context
                         .read<StockEntryCubit>()
                         .applyFilter(dateRange: dr, clearDate: dr == null),
@@ -173,7 +187,14 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
     return  PageHeader(title: 'Stock Receipts Ledger',subtitle: 'Stock Receipts Ledger',
     actions: [
       ElevatedButton.icon(
-        onPressed: _openNewEntry,
+        onPressed: () async {
+          final entry = await _openNewEntry();
+          if(entry!=null){
+            if(mounted){
+              context.read<StockEntryCubit>().clearFilters();
+            }
+          }
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onPrimary,

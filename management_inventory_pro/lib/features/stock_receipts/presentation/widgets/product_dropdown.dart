@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:management_inventory_pro/features/product/presentation/products/cubit/product_cubit.dart';
 
 import '../../../../core/widgets/search_select_dropdown.dart';
 import '../../data/models/product_ref.dart';
@@ -34,18 +36,38 @@ class ProductDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = products?.isNotEmpty == true ? products! : _stubs;
 
-    return SearchSelectDropdown<ProductRef>(
-      selected: selected,
-      items: items,
-      onChanged: onChanged,
-      labelBuilder: (p) => p.name,
-      // Lets typing a SKU find the product even though the SKU isn't
-      // part of the visible label.
-      searchTextBuilder: (p) => '${p.name} ${p.sku ?? ''}',
-      itemIcon: Icons.inventory_2_outlined,
-      placeholder: 'select product',
-      searchHint: 'Search products or SKU…',
-      emptyText: 'No products found.',
+    return BlocBuilder<ProductCubit,ProductState>(
+      builder: (context, state) {
+        if(state is ProductSuccess){
+          return SearchSelectDropdown<ProductRef>(
+            selected: selected,
+            items: state.allProducts.map((e) => ProductRef.fromProductModel(e),).toList(),
+            onChanged: onChanged,
+            labelBuilder: (p) => p.name,
+            // Lets typing a SKU find the product even though the SKU isn't
+            // part of the visible label.
+            searchTextBuilder: (p) => '${p.name} ${p.sku ?? ''}',
+            itemIcon: Icons.inventory_2_outlined,
+            placeholder: 'select product',
+            searchHint: 'Search products or SKU…',
+            emptyText: 'No products found.',
+          );
+        }
+        return SearchSelectDropdown<ProductRef>(
+          selected: selected,
+          items: items,
+          onChanged: onChanged,
+          labelBuilder: (p) => p.name,
+          // Lets typing a SKU find the product even though the SKU isn't
+          // part of the visible label.
+          searchTextBuilder: (p) => '${p.name} ${p.sku ?? ''}',
+          itemIcon: Icons.inventory_2_outlined,
+          placeholder: 'select product',
+          searchHint: 'Search products or SKU…',
+          emptyText: 'No products found.',
+        );
+
+      },
     );
   }
 }

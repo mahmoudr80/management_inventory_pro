@@ -49,7 +49,7 @@ class StockEntryTable extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               itemCount: entries.length + (_hasMore || isLoadingMore ? 1 : 0),
-              separatorBuilder: (_, __) =>
+              separatorBuilder: (_, _) =>
                   const Divider(height: 1, color: AppColors.outlineVariant),
               itemBuilder: (context, index) {
                 if (index == entries.length) {

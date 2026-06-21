@@ -161,7 +161,7 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
   @override
   Widget build(BuildContext context) {
     final selected = widget.selected;
-
+    print('Selected item: $selected');
     return CompositedTransformTarget(
       link: _layerLink,
       child: GestureDetector(
