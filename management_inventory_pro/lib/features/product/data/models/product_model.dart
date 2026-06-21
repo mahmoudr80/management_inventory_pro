@@ -59,9 +59,9 @@ class ProductModel {
     return ProductModel(
       sku: json[DatabaseConstants.skuColumn] as String,
       name: json[DatabaseConstants.nameColumn] as String,
-      category: json[DatabaseConstants.categoryName] as String,
+      category: json[DatabaseConstants.categoryNameAlias] as String,
       status:newStatus,
-      unit: json[DatabaseConstants.unitName] as String?,
+      unit: json[DatabaseConstants.unitNameAlias] as String?,
       imageUrl:  json[DatabaseConstants.imageUrlColumn],
       statusText: newStatusText,
       id:json[DatabaseConstants.idColumn],

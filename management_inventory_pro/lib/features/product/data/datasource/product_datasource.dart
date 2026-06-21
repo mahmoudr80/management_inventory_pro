@@ -15,8 +15,8 @@ class ProductLocalDatasource {
       List<Map<String, dynamic>> list = await _database.rawQuery('''
       SELECT
         p.*,
-        c.name AS ${DatabaseConstants.categoryName},
-        u.name AS ${DatabaseConstants.unitName}
+        c.name AS ${DatabaseConstants.categoryNameAlias},
+        u.name AS ${DatabaseConstants.unitNameAlias}
       FROM ${DatabaseConstants.productTable} p
       INNER JOIN ${DatabaseConstants.categoryTable} c
         ON c.id = p.${DatabaseConstants.categoryIdColumn}

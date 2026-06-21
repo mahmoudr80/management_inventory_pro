@@ -1,55 +1,49 @@
+import 'package:management_inventory_pro/features/stock_receipts/data/models/product_ref.dart';
+
+import '../../../../core/database/database_constants.dart';
+
 class StockEntryLineModel {
   final String id;
-  final String? productId;
-  final String productName;   // denormalized for display
-  final String? productSku;   // denormalized for display
+  final ProductRef product;
   final String? unitId;
   final String? unitName;     // denormalized for display
   final int quantity;
   final double unitCost;
+  final double? total;
 
   const StockEntryLineModel({
     required this.id,
-    this.productId,
-    required this.productName,
-    this.productSku,
+    required this.product,
     this.unitId,
     this.unitName,
     required this.quantity,
-    required this.unitCost,
+    required this.unitCost, this.total,
   });
 
   double get lineTotal => quantity * unitCost;
 
   factory StockEntryLineModel.fromMap(Map<String, dynamic> map) {
     return StockEntryLineModel(
-      id: map['id'] as String,
-      productId: map['product_id'] as String?,
-      productName: map['product_name'] as String,
-      productSku: map['product_sku'] as String?,
-      unitId: map['unit_id'] as String?,
-      unitName: map['unit_name'] as String?,
-      quantity: map['quantity'] as int,
-      unitCost: (map['unit_cost'] as num).toDouble(),
+      id: map[DatabaseConstants.lineIdAlias] as String,
+      product: ProductRef.fromMap(map),
+      unitId: map[DatabaseConstants.unitIdColumn].toString(),
+      unitName: map[DatabaseConstants.unitNameAlias] as String?,
+      quantity: (map[DatabaseConstants.quantityColumn] as double).toInt(),
+      unitCost: (map[DatabaseConstants.costPriceColumn] as num).toDouble(),
     );
   }
 
   Map<String, dynamic> toMap() => {
-    'id': id,
-    'product_id': productId,
-    'product_name': productName,
-    'product_sku': productSku,
-    'unit_id': unitId,
-    'unit_name': unitName,
-    'quantity': quantity,
-    'unit_cost': unitCost,
+    DatabaseConstants.idColumn: id,
+    DatabaseConstants.productIdColumn:product.id,
+    DatabaseConstants.quantityColumn: quantity,
+    DatabaseConstants.costPriceColumn: unitCost,
+    DatabaseConstants.totalColumn:total??quantity*unitCost
   };
 
   StockEntryLineModel copyWith({
     String? id,
-    String? productId,
-    String? productName,
-    String? productSku,
+    ProductRef ?product,
     String? unitId,
     String? unitName,
     int? quantity,
@@ -57,9 +51,7 @@ class StockEntryLineModel {
   }) =>
       StockEntryLineModel(
         id: id ?? this.id,
-        productId: productId ?? this.productId,
-        productName: productName ?? this.productName,
-        productSku: productSku ?? this.productSku,
+        product:product??this.product ,
         unitId: unitId ?? this.unitId,
         unitName: unitName ?? this.unitName,
         quantity: quantity ?? this.quantity,
