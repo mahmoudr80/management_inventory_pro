@@ -11,6 +11,7 @@ import 'package:management_inventory_pro/features/suppliers/presentation/screens
 import 'package:management_inventory_pro/features/unit/data/respository/unit_repository.dart';
 import '../../core/dependency_injection/service_locator.dart';
 import '../category/presentation/cubit/category_cubit.dart';
+import '../pos/screens/pos_screen.dart';
 import '../product/data/respository/product_repository.dart';
 import '../product/presentation/products/cubit/product_cubit.dart';
 import '../product/presentation/products/screens/product_screen.dart';
@@ -39,6 +40,7 @@ List<Widget>screens = [Placeholder(),
           create: (context) => StockEntryCubit(getIt<StockEntryRepository>())..loadEntries(),
         ),
       ], child: StockEntryScreen()),
+  PosScreen(),
   Placeholder(),
   Placeholder(),
 
