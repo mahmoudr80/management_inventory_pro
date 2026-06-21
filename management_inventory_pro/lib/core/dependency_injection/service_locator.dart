@@ -5,6 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:management_inventory_pro/core/database/database_service.dart';
 import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
 import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
+import 'package:management_inventory_pro/features/stock_receipts/data/datasource/stock_entry_datasource.dart';
+import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import 'package:management_inventory_pro/features/suppliers/data/datasource/supplier_datasource.dart';
 import 'package:management_inventory_pro/features/unit/data/datasource/unit_datasource.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
@@ -53,6 +55,12 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<SupplierLocalDatasource>(() =>
         SupplierLocalDatasource(getIt<DatabaseService>().db),);
     getIt.registerLazySingleton(() => SupplierRepository(getIt<SupplierLocalDatasource>()),);
+
+
+    //Stock receipts
+    getIt.registerLazySingleton<StockEntryDatasource>(() =>
+        StockEntryDatasource(getIt<DatabaseService>().db),);
+    getIt.registerLazySingleton(() => StockEntryRepository(getIt<StockEntryDatasource>()),);
   }
 
 

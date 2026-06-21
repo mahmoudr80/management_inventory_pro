@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/features/stock_receipts/data/models/stock_entry_status.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/table/status_pill.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -62,7 +63,7 @@ class _EntryRowState extends State<EntryRow> {
             Expanded(
               flex: 4,
               child: Text(
-                e.supplierName ?? '—',
+                e.supplier.name ?? '—',
                 style: AppTextStyles.bodyMd,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -82,7 +83,7 @@ class _EntryRowState extends State<EntryRow> {
             Expanded(
               flex: 3,
               child: Text(
-                _currencyFmt.format(e.totalValue),
+                _currencyFmt.format(e.totalCost),
                 textAlign: TextAlign.left,
                 style: AppTextStyles.dataMono,
               ),
@@ -104,7 +105,7 @@ class _EntryRowState extends State<EntryRow> {
               flex: 3,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: StatusPill(status: e.status),
+                child: StatusPill(status: e.status??StockEntryStatus.verified),
               ),
             ),
 

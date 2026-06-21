@@ -5,6 +5,8 @@ import 'package:management_inventory_pro/features/category/data/respository/cate
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/screens/stock_entry_screen.dart';
+import 'package:management_inventory_pro/features/suppliers/data/repository/supplier_repository.dart';
+import 'package:management_inventory_pro/features/suppliers/presentation/cubit/suppliers_cubit.dart';
 import 'package:management_inventory_pro/features/suppliers/presentation/screens/suppliers_screen.dart';
 import 'package:management_inventory_pro/features/unit/data/respository/unit_repository.dart';
 import '../../core/dependency_injection/service_locator.dart';
@@ -25,10 +27,18 @@ List<Widget>screens = [Placeholder(),
           ..getProducts()),
       ], child: ProductScreen()),
   SupplierScreen(),
-  BlocProvider(
-    create: (context) => StockEntryCubit(StockEntryRepository())..loadEntries(),
-    child: StockEntryScreen(),
-  ),
+  MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) =>
+        ProductCubit(getIt<ProductRepository>())
+          ..getProducts()),
+        BlocProvider(create: (_) =>
+        SuppliersCubit(getIt<SupplierRepository>())
+          ..loadSuppliers()),
+        BlocProvider(
+          create: (context) => StockEntryCubit(getIt<StockEntryRepository>())..loadEntries(),
+        ),
+      ], child: StockEntryScreen()),
   Placeholder(),
   Placeholder(),
 

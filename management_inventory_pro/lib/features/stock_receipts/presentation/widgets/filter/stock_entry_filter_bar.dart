@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/features/stock_receipts/presentation/cubit/stock_entry_cubit.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/filter/status_toggle_group.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -9,14 +11,15 @@ import '../../../data/models/stock_entry_status.dart';
 import '../../../data/models/supplier_ref.dart';
 import '../supplier_dropdown.dart';
 import 'date_range_button.dart';
+
 class StockEntryFilterBar extends StatefulWidget {
   final TextEditingController searchController;
   final ValueChanged<String> onSearch;
   final ValueChanged<StockEntryStatus?> onFilterStatus;
-  final ValueChanged<String?> onFilterSupplier;
+  final ValueChanged<SupplierRef?> onFilterSupplier;
   final ValueChanged<DateTimeRange?> onFilterDateRange;
   final VoidCallback onClearFilters;
-
+  final SupplierRef? selectedSupplier;
 
   final StockEntryFilter? activeFilter;
 
@@ -28,7 +31,7 @@ class StockEntryFilterBar extends StatefulWidget {
     required this.onFilterSupplier,
     required this.onFilterDateRange,
     required this.onClearFilters,
-    this.activeFilter,
+    this.activeFilter, this.selectedSupplier,
   });
 
   @override
@@ -47,16 +50,17 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
       firstDate: DateTime(2020),
       lastDate: now.add(const Duration(days: 365)),
       initialDateRange: _selectedDateRange,
-      builder: (context, child) => Theme(
-        data: Theme.of(context).copyWith(
-          colorScheme: const ColorScheme.light(
-            primary: AppColors.primary,
-            onPrimary: AppColors.onPrimary,
-            surface: AppColors.surfaceContainerLowest,
+      builder: (context, child) =>
+          Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: AppColors.primary,
+                onPrimary: AppColors.onPrimary,
+                surface: AppColors.surfaceContainerLowest,
+              ),
+            ),
+            child: child!,
           ),
-        ),
-        child: child!,
-      ),
     );
 
     if (picked != null) {
@@ -82,7 +86,8 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
 
   String _formatDateRange(DateTimeRange dr) {
     String _d(DateTime d) =>
-        '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
+        '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(
+            2, '0')}/${d.year}';
     return '${_d(dr.start)} – ${_d(dr.end)}';
   }
 
@@ -99,13 +104,27 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         spacing: 12.w,
-       mainAxisAlignment: MainAxisAlignment.start,
-       // runSpacing: 10.h,
-      //  crossAxisAlignment: WrapCrossAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // ── Search ─────────────────────────────────────────────────────────
           Expanded(
-            child: SupplierDropdown(onChanged: (SupplierRef? value) {  },)),
+              child: BlocBuilder<StockEntryCubit, StockEntryState>(
+                builder: (context, state) {
+                  print(
+                    'Builder selected supplier = ${state.selectedSupplier?.name}',
+                  );
+                  return SupplierDropdown(onChanged: (SupplierRef? supplier)
+                  {
+                    print('SELECTED On Change: ${supplier?.name}');
+                    context.read<StockEntryCubit>()..selectSupplier(supplier)
+                      ..search(supplier?.id ?? '');
+                  }
+                  ,
+                    selected:state.selectedSupplier,
+                    clear: state.filter.isEmpty,
+                    );
+                },
+              )),
           // ── Date Range ─────────────────────────────────────────────────────
           Expanded(
             child: DateRangeButton(
@@ -137,7 +156,7 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
               style: TextButton.styleFrom(
                 foregroundColor: AppColors.outline,
                 padding:
-                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 visualDensity: VisualDensity.compact,
               ),
             ),

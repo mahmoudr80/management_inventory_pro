@@ -5,6 +5,8 @@ class DatabaseConstants {
   static const String categoryTable = "categories";
   static const String unitTable = "units";
   static const String supplierTable = "suppliers";
+  static const String stockEntryTable = "stock_entries";
+  static const String stockEntryItemTable= "stock_entry_items";
 
   //columns
   static const String idColumn = "id";
@@ -20,8 +22,19 @@ class DatabaseConstants {
   static const String noteColumn = "note";
   static const String createdAtColumn = "created_at";
   static const String updatedAtColumn = "updated_at";
+  static const String receiptDateColumn = "receipt_date";
   static const String currentStockColumn = "current_stock";
   static const String symbolColumn = "symbol";//units table
+  static const String quantityColumn = "quantity";//stock entry table
+  static const String supplierIdColumn = "supplier_id";//stock entry table
+  static const String productIdColumn = "product_id";//stock entry items table
+  static const String stockEntryIdColumn = "stock_entry_id";
+  static const String totalItemColumn = "total_items";
+  static const String totalQuantityColumn = "total_quantity";
+  static const String totalCostColumn = "total_cost";
+  static const String totalColumn = "total";
+
+
   //supplier table
   static const String companyNameColumn = "company_name";
   static const String phoneColumn = "phone";
@@ -30,9 +43,11 @@ class DatabaseConstants {
 
 
   //Alias
-  static const String productName = "product_name";
-  static const String categoryName = "category_name";
-  static const String unitName = "unit_name";
+  static const String productNameAlias = "product_name";
+  static const String categoryNameAlias = "category_name";
+  static const String unitNameAlias = "unit_name";
+  static const String supplierNameAlias = "supplier_name";
+  static const String lineIdAlias = "line_id";
 
 
 }

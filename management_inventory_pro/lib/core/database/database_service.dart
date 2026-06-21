@@ -78,10 +78,56 @@ class DatabaseService {
 	"phone"	TEXT UNIQUE,
 	"email"	TEXT UNIQUE,
 	"address"	TEXT,
-	"notes"	TEXT,
+	"note"	TEXT,
 	"created_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"updated_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY("id")
+);
+   """);
+
+    await db.execute("""
+CREATE TABLE IF NOT EXISTS ${DatabaseConstants.stockEntryTable} (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    supplier_id TEXT NOT NULL,
+
+    note TEXT,
+
+    total_items INTEGER NOT NULL DEFAULT 0,
+    total_quantity REAL NOT NULL DEFAULT 0,
+    total_cost REAL NOT NULL DEFAULT 0,
+
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "receipt_date"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+
+
+    FOREIGN KEY (supplier_id)
+        REFERENCES suppliers(id)
+        ON DELETE RESTRICT
+);
+   """);
+    await db.execute("""
+CREATE TABLE IF NOT EXISTS ${DatabaseConstants.stockEntryItemTable} (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    stock_entry_id TEXT NOT NULL,
+    product_id TEXT NOT NULL,
+
+    quantity REAL NOT NULL CHECK(quantity > 0),
+
+    cost_price REAL NOT NULL CHECK(cost_price >= 0),
+
+    total REAL NOT NULL CHECK(total >= 0),
+
+    FOREIGN KEY (stock_entry_id)
+        REFERENCES stock_entries(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (product_id)
+        REFERENCES products(id)
+        ON DELETE RESTRICT
 );
    """);
   }

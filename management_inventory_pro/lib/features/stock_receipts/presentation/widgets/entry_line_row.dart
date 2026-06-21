@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
+import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
+import 'package:management_inventory_pro/features/product/presentation/products/cubit/product_cubit.dart';
+import 'package:management_inventory_pro/features/stock_receipts/presentation/cubit/stock_entry_cubit.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/product_dropdown.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -40,11 +45,11 @@ class _EntryLineRowState extends State<EntryLineRow> {
     // Seed the dropdown's selection from the existing line, if any.
     // Note: this only has a name/sku to go on (no product id), since
     // StockEntryLineModel doesn't carry one yet — see note below.
-    _selectedProduct = widget.line.productName.isNotEmpty
+    _selectedProduct = widget.line.product.name.isNotEmpty
         ? ProductRef(
             id: '',
-            name: widget.line.productName,
-            sku: widget.line.productSku,
+            name: widget.line.product.name,
+            sku: widget.line.product.sku,
           )
         : null;
 
@@ -68,12 +73,16 @@ class _EntryLineRowState extends State<EntryLineRow> {
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   void _emit() {
-    final qty  = int.tryParse(_qtyCtrl.text) ?? 0;
+    final qty = int.tryParse(_qtyCtrl.text) ?? 0;
     final cost = double.tryParse(_costCtrl.text) ?? 0.0;
     widget.onChanged(
       widget.line.copyWith(
-        productName: _selectedProduct?.name ?? '',
-        productSku: _selectedProduct?.sku,
+        product: ProductRef(
+          name: _selectedProduct?.name ?? '',
+          sku: _selectedProduct?.sku,
+          id: _selectedProduct?.id,
+        ),
+
         quantity: qty,
         unitCost: cost,
       ),
@@ -81,7 +90,7 @@ class _EntryLineRowState extends State<EntryLineRow> {
   }
 
   double get _lineTotal {
-    final qty  = int.tryParse(_qtyCtrl.text) ?? 0;
+    final qty = int.tryParse(_qtyCtrl.text) ?? 0;
     final cost = double.tryParse(_costCtrl.text) ?? 0.0;
     return qty * cost;
   }
@@ -107,8 +116,7 @@ class _EntryLineRowState extends State<EntryLineRow> {
               width: 32.w,
               child: Text(
                 '${widget.index + 1}',
-                style: AppTextStyles.bodySm
-                    .copyWith(color: AppColors.outline),
+                style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
               ),
             ),
 
@@ -119,12 +127,16 @@ class _EntryLineRowState extends State<EntryLineRow> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ProductDropdown(
-                    selected: _selectedProduct,
-                    onChanged: (product) {
-                      setState(() => _selectedProduct = product);
-                      _emit();
-                    },
+                  BlocProvider(
+                    create: (context) =>
+                        ProductCubit(getIt<ProductRepository>())..getProducts(),
+                    child: ProductDropdown(
+                      selected: _selectedProduct,
+                      onChanged: (product) {
+                        setState(() => _selectedProduct = product);
+                        _emit();
+                      },
+                    ),
                   ),
                   if (_selectedProduct?.sku != null) ...[
                     SizedBox(height: 4.h),
@@ -182,9 +194,7 @@ class _EntryLineRowState extends State<EntryLineRow> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  _lineTotal > 0
-                      ? '\$${_lineTotal.toStringAsFixed(2)}'
-                      : '—',
+                  _lineTotal > 0 ? '\$${_lineTotal.toStringAsFixed(2)}' : '—',
                   style: AppTextStyles.dataMono.copyWith(
                     color: _lineTotal > 0
                         ? AppColors.primary
@@ -248,8 +258,7 @@ class _NumericField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       textAlign: TextAlign.center,
-      keyboardType:
-          TextInputType.numberWithOptions(decimal: allowDecimal),
+      keyboardType: TextInputType.numberWithOptions(decimal: allowDecimal),
       inputFormatters: [
         FilteringTextInputFormatter.allow(
           allowDecimal ? RegExp(r'[\d.]') : RegExp(r'\d'),
@@ -259,18 +268,14 @@ class _NumericField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         prefixText: prefixText,
-        prefixStyle: AppTextStyles.dataMono.copyWith(
-          color: AppColors.outline,
-        ),
+        prefixStyle: AppTextStyles.dataMono.copyWith(color: AppColors.outline),
         hintStyle: AppTextStyles.dataMono.copyWith(color: AppColors.outline),
         isDense: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
         border: InputBorder.none,
         enabledBorder: InputBorder.none,
         focusedBorder: UnderlineInputBorder(
-          borderSide:
-              const BorderSide(color: AppColors.primary, width: 1),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1),
         ),
       ),
     );
