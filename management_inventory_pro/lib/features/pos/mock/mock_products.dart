@@ -1,0 +1,113 @@
+import '../models/pos_product.dart';
+
+class MockProducts {
+  static final List<PosProduct> products = [
+    PosProduct(
+      id: 'p1',
+      name: 'Apex Runner X1',
+      price: 129.00,
+      imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',
+      category: 'Footwear',
+    ),
+    PosProduct(
+      id: 'p2',
+      name: 'Tactical Watch',
+      price: 89.50,
+      imageUrl: 'https://images.unsplash.com/photo-1539874754764-5a96559165b0?w=400&q=80',
+      category: 'Accessories',
+    ),
+    PosProduct(
+      id: 'p3',
+      name: 'Studio Pro Audio',
+      price: 249.00,
+      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80',
+      outOfStock: true,
+      category: 'Electronics',
+    ),
+    PosProduct(
+      id: 'p4',
+      name: 'Retro Cam 35',
+      price: 420.00,
+      imageUrl: 'https://images.unsplash.com/photo-1495707902641-75cac588d2e9?w=400&q=80',
+      category: 'Electronics',
+    ),
+    PosProduct(
+      id: 'p5',
+      name: 'Wayfarer Black',
+      price: 155.00,
+      imageUrl: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80',
+      category: 'Accessories',
+    ),
+    PosProduct(
+      id: 'p6',
+      name: 'Logi Pro Mouse',
+      price: 79.99,
+      imageUrl: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&q=80',
+      category: 'Electronics',
+    ),
+    PosProduct(
+      id: 'p7',
+      name: 'Steel Flask 1L',
+      price: 34.00,
+      imageUrl: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&q=80',
+      category: 'Daily Essentials',
+    ),
+    PosProduct(
+      id: 'p8',
+      name: 'Urban Backpack',
+      price: 99.00,
+      imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80',
+      category: 'Accessories',
+    ),
+    PosProduct(
+      id: 'p9',
+      name: 'Wireless Earbuds',
+      price: 145.00,
+      imageUrl: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400&q=80',
+      category: 'Electronics',
+    ),
+    PosProduct(
+      id: 'p10',
+      name: 'Classic Denim Jacket',
+      price: 110.00,
+      imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&q=80',
+      category: 'Apparel',
+    ),
+    PosProduct(
+      id: 'p11',
+      name: 'Mechanical Keyboard',
+      price: 159.00,
+      imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80',
+      outOfStock: true,
+      category: 'Electronics',
+    ),
+    PosProduct(
+      id: 'p12',
+      name: 'Leather Wallet',
+      price: 65.00,
+      imageUrl: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&q=80',
+      category: 'Accessories',
+    ),
+    PosProduct(
+      id: 'p13',
+      name: 'Desk Lamp Mini',
+      price: 42.50,
+      imageUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80',
+      category: 'Home',
+    ),
+    PosProduct(
+      id: 'p14',
+      name: 'Travel Mug',
+      price: 24.00,
+      imageUrl: 'https://images.unsplash.com/photo-1577937927133-66ef06acdf18?w=400&q=80',
+      category: 'Daily Essentials',
+    ),
+    PosProduct(
+      id: 'p15',
+      name: 'Sport Cap',
+      price: 29.00,
+      imageUrl: 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=400&q=80',
+      category: 'Apparel',
+    ),
+  ];
+}
