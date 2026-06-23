@@ -7,6 +7,8 @@ class DatabaseConstants {
   static const String supplierTable = "suppliers";
   static const String stockEntryTable = "stock_entries";
   static const String stockEntryItemTable= "stock_entry_items";
+  static const String saleTable= "sales";
+  static const String saleItemTable= "sale_items";
 
   //columns
   static const String idColumn = "id";
@@ -33,6 +35,8 @@ class DatabaseConstants {
   static const String totalQuantityColumn = "total_quantity";
   static const String totalCostColumn = "total_cost";
   static const String totalColumn = "total";
+  static const String totalAmountColumn = "total_amount"; //sale table
+  static const String saleIdColumn = "sale_id"; //sale table
 
 
   //supplier table
