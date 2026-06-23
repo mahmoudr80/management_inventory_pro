@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/features/pos/widgets/analytics/sales_action_button.dart';
-import 'package:management_inventory_pro/features/pos/widgets/analytics/sales_actions_row.dart';
-import 'package:management_inventory_pro/features/pos/widgets/analytics/sales_insight_header.dart';
-import 'package:management_inventory_pro/features/pos/widgets/analytics/sales_stat_block.dart';
-import '../../models/top_selling_product.dart';
+import 'package:management_inventory_pro/features/pos/presentation/widgets/analytics/sales_actions_row.dart';
+import 'package:management_inventory_pro/features/pos/presentation/widgets/analytics/sales_insight_header.dart';
+import 'package:management_inventory_pro/features/pos/presentation/widgets/analytics/sales_stat_block.dart';
+import '../../../data/models/top_selling_product.dart';
 import 'sales_trend_badge.dart';
 import 'top_selling_product_tile.dart';
 

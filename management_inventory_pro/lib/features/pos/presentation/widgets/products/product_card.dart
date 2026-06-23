@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../models/pos_product.dart';
-import '../../../../core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../data/models/pos_product.dart';
 
 class ProductCard extends StatefulWidget {
   final PosProduct product;
@@ -56,7 +58,7 @@ class _ProductCardState extends State<ProductCard> {
                 : [],
           ),
           transform: (_hovered && !disabled)
-              ? (Matrix4.identity()..translate(0.0, -3.0))
+              ? Matrix4.translationValues(0, -3, 0)
               : Matrix4.identity(),
           child: Opacity(
             opacity: disabled ? 0.5 : 1,
@@ -71,26 +73,18 @@ class _ProductCardState extends State<ProductCard> {
                         borderRadius: BorderRadius.circular(12),
                         child: AspectRatio(
                           aspectRatio: 1,
-                          child: Image.network(
-                            product.imageUrl,
-                            fit: BoxFit.cover,
+                          child:product.imageUrl==null?  Icon(
+                            Icons.inventory_2_outlined,
+                            color: AppColors.primary,
+                            size: 40.r,
+                          ):
+                          Image.file(
+                            File(product.imageUrl!),
+                            fit: BoxFit.scaleDown,
                             errorBuilder: (_, __, ___) => Container(
                               color: AppColors.posSurface,
                               child: const Icon(Icons.image_not_supported_outlined, color: AppColors.posTextMuted),
                             ),
-                            loadingBuilder: (context, child, progress) {
-                              if (progress == null) return child;
-                              return Container(
-                                color: AppColors.posSurface,
-                                child: const Center(
-                                  child: SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                  ),
-                                ),
-                              );
-                            },
                           ),
                         ),
                       ),

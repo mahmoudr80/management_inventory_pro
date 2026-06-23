@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/cart_item.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../data/models/cart_item.dart';
 
 class CartItemRow extends StatefulWidget {
-  final CartItem item;
+  final CartItemModel item;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
   final VoidCallback onRemove;
