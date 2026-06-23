@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/features/pos/widgets/cart/payment_buttons.dart';
-import '../../models/cart_item.dart';
-import '../../../../core/theme/app_colors.dart';
+import 'package:management_inventory_pro/features/pos/presentation/widgets/cart/payment_buttons.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../data/models/cart_item.dart';
 import 'cart_item_row.dart';
 import 'complete_sale_button.dart';
 import 'customer_card.dart';
 import 'order_summary.dart';
 
 class CartPanel extends StatelessWidget {
-  final List<CartItem> items;
+  final List<CartItemModel> items;
   final PaymentMethod? selectedPayment;
   final ValueChanged<PaymentMethod> onSelectPayment;
-  final void Function(CartItem) onIncrement;
-  final void Function(CartItem) onDecrement;
-  final void Function(CartItem) onRemove;
+  final void Function(CartItemModel) onIncrement;
+  final void Function(CartItemModel) onDecrement;
+  final void Function(CartItemModel) onRemove;
   final VoidCallback? onEditCustomer;
   final VoidCallback? onSplitPay;
   final VoidCallback? onPrint;
@@ -83,7 +83,7 @@ class CartPanel extends StatelessWidget {
                 : ListView.separated(
                     padding: EdgeInsets.zero,
                     itemCount: items.length,
-                    separatorBuilder: (_, __) => const Divider(height: 1, color: AppColors.posBorder),
+                    separatorBuilder: (_, _) => const Divider(height: 1, color: AppColors.posBorder),
                     itemBuilder: (context, index) {
                       final item = items[index];
                       return CartItemRow(

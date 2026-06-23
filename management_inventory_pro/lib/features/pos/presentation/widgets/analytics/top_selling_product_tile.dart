@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/top_selling_product.dart';
+import '../../../data/models/top_selling_product.dart';
 
 class TopSellingProductTile extends StatelessWidget {
   final TopSellingProduct product;
@@ -20,7 +20,7 @@ class TopSellingProductTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.08),
+        color: Colors.white.withAlpha(20),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -30,7 +30,7 @@ class TopSellingProductTile extends StatelessWidget {
             height: 26,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.14),
+              color: Colors.white.withAlpha(36),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -66,7 +66,7 @@ class TopSellingProductTile extends StatelessWidget {
                     Text(
                       '${product.soldUnits} units',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withAlpha(217),
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                       ),
@@ -79,7 +79,7 @@ class TopSellingProductTile extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: ratio.clamp(0.0, 1.0),
                     minHeight: 5,
-                    backgroundColor: Colors.white.withOpacity(0.15),
+                    backgroundColor: Colors.white.withAlpha(38),
                     valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 ),

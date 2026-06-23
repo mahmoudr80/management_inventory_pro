@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/features/pos/widgets/cart/payment_buttons.dart';
-import '../../../../core/theme/app_colors.dart';
+import 'package:management_inventory_pro/features/pos/presentation/widgets/cart/payment_buttons.dart';
+
+import '../../../../../core/theme/app_colors.dart';
 
 /// Primary checkout CTA for the POS cart panel.
 ///
@@ -125,7 +126,7 @@ class _CompleteSaleButtonState extends State<CompleteSaleButton> {
               boxShadow: enabled && !_pressed
                   ? [
                       BoxShadow(
-                        color: AppColors.posPrimary.withOpacity(0.28),
+                        color: AppColors.posPrimary.withAlpha(72),
                         blurRadius: 16,
                         offset: const Offset(0, 6),
                       ),

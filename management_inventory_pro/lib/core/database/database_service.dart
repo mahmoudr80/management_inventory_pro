@@ -34,102 +34,124 @@ class DatabaseService {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute("""
    CREATE TABLE IF NOT EXISTS "${DatabaseConstants.categoryTable}" (
-	"id"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	"created_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY("id" AUTOINCREMENT)
+	${DatabaseConstants.idColumn}	INTEGER NOT NULL,
+	${DatabaseConstants.nameColumn}	TEXT NOT NULL,
+	${DatabaseConstants.createdAtColumn}	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(${DatabaseConstants.idColumn} AUTOINCREMENT)
 );
    """);
 
     await db.execute("""
  CREATE TABLE IF NOT EXISTS "${DatabaseConstants.unitTable}" (
-	"id"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	"symbol"	TEXT NOT NULL,
-	PRIMARY KEY("id" AUTOINCREMENT)
+	${DatabaseConstants.idColumn}	INTEGER NOT NULL,
+	${DatabaseConstants.nameColumn}	TEXT NOT NULL,
+	${DatabaseConstants.symbolColumn}	TEXT NOT NULL,
+	PRIMARY KEY(${DatabaseConstants.idColumn} AUTOINCREMENT)
 );
 
    """);
     await db.execute("""
  CREATE TABLE IF NOT EXISTS "${DatabaseConstants.productTable}" (
-	"id"	TEXT NOT NULL,
-	"name"	TEXT NOT NULL,
-	"sku"	TEXT UNIQUE,
-	"barcode"	TEXT UNIQUE,
-	"category_id"	INTEGER NOT NULL,
-	"unit_id"	INTEGER NOT NULL,
-	"cost_price"	REAL NOT NULL CHECK("cost_price" >= 0),
-	"selling_price"	REAL NOT NULL CHECK("selling_price" >= 0),
-	"min_stock"	REAL DEFAULT 0,
-	"image_url"	TEXT,
-	"note"	TEXT,
-	"created_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	"updated_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	"current_stock"	REAL NOT NULL DEFAULT 0 CHECK("current_stock" >= 0),
-	PRIMARY KEY("id"),
-	FOREIGN KEY("category_id") REFERENCES "categories"("id") ON DELETE RESTRICT,
-	FOREIGN KEY("unit_id") REFERENCES "units"("id") ON DELETE RESTRICT
+	${DatabaseConstants.idColumn}	TEXT NOT NULL,
+	${DatabaseConstants.nameColumn}	TEXT NOT NULL,
+	${DatabaseConstants.skuColumn}	TEXT UNIQUE,
+	${DatabaseConstants.barcodeColumn}	TEXT UNIQUE,
+	${DatabaseConstants.categoryIdColumn}	INTEGER NOT NULL,
+	${DatabaseConstants.unitIdColumn}	INTEGER NOT NULL,
+	${DatabaseConstants.costPriceColumn}	REAL NOT NULL CHECK(${DatabaseConstants.costPriceColumn} >= 0),
+	${DatabaseConstants.sellingPriceColumn}	REAL NOT NULL CHECK(${DatabaseConstants.sellingPriceColumn} >= 0),
+	${DatabaseConstants.minimumStockColumn}	REAL DEFAULT 0,
+	${DatabaseConstants.imageUrlColumn}	TEXT,
+	${DatabaseConstants.noteColumn}	TEXT,
+	${DatabaseConstants.createdAtColumn}	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	${DatabaseConstants.updatedAtColumn}	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	${DatabaseConstants.currentStockColumn}	REAL NOT NULL DEFAULT 0 CHECK(${DatabaseConstants.currentStockColumn} >= 0),
+	PRIMARY KEY(${DatabaseConstants.idColumn}),
+	FOREIGN KEY(${DatabaseConstants.categoryIdColumn}) REFERENCES "${DatabaseConstants.categoryTable}" ("${DatabaseConstants.idColumn}") ON DELETE RESTRICT,
+	FOREIGN KEY("${DatabaseConstants.unitIdColumn}") REFERENCES "${DatabaseConstants.unitTable}"("${DatabaseConstants.idColumn}") ON DELETE RESTRICT
 );
    """);
     await db.execute("""
  CREATE TABLE IF NOT EXISTS "${DatabaseConstants.supplierTable}" (
-		"id"	TEXT NOT NULL,
-	"company_name"	TEXT NOT NULL,
-	"phone"	TEXT UNIQUE,
-	"email"	TEXT UNIQUE,
-	"address"	TEXT,
-	"note"	TEXT,
-	"created_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	"updated_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY("id")
+		${DatabaseConstants.idColumn}	TEXT NOT NULL,
+	${DatabaseConstants.companyNameColumn}	TEXT NOT NULL,
+	${DatabaseConstants.phoneColumn}	TEXT UNIQUE,
+	${DatabaseConstants.emailColumn}	TEXT UNIQUE,
+	${DatabaseConstants.addressColumn}	TEXT,
+	${DatabaseConstants.noteColumn}	TEXT,
+	${DatabaseConstants.createdAtColumn}	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	${DatabaseConstants.updatedAtColumn}	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY("${DatabaseConstants.idColumn}")
 );
    """);
 
     await db.execute("""
 CREATE TABLE IF NOT EXISTS ${DatabaseConstants.stockEntryTable} (
-    id TEXT NOT NULL PRIMARY KEY,
+    ${DatabaseConstants.idColumn} TEXT NOT NULL PRIMARY KEY,
+    ${DatabaseConstants.supplierIdColumn} TEXT NOT NULL,
+    ${DatabaseConstants.noteColumn} TEXT,
+    ${DatabaseConstants.totalItemColumn} INTEGER NOT NULL DEFAULT 0,
+    ${DatabaseConstants.totalQuantityColumn} REAL NOT NULL DEFAULT 0,
+    ${DatabaseConstants.totalCostColumn} REAL NOT NULL DEFAULT 0,
+    ${DatabaseConstants.createdAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ${DatabaseConstants.receiptDateColumn}	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ${DatabaseConstants.updatedAtColumn}	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    supplier_id TEXT NOT NULL,
-
-    note TEXT,
-
-    total_items INTEGER NOT NULL DEFAULT 0,
-    total_quantity REAL NOT NULL DEFAULT 0,
-    total_cost REAL NOT NULL DEFAULT 0,
-
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "receipt_date"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at"	TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-
-
-    FOREIGN KEY (supplier_id)
-        REFERENCES suppliers(id)
+    FOREIGN KEY (${DatabaseConstants.supplierIdColumn})
+        REFERENCES ${DatabaseConstants.supplierTable}(${DatabaseConstants.idColumn})
         ON DELETE RESTRICT
 );
    """);
     await db.execute("""
 CREATE TABLE IF NOT EXISTS ${DatabaseConstants.stockEntryItemTable} (
-    id TEXT NOT NULL PRIMARY KEY,
+    ${DatabaseConstants.idColumn} TEXT NOT NULL PRIMARY KEY,
+    ${DatabaseConstants.stockEntryIdColumn} TEXT NOT NULL,
+    ${DatabaseConstants.productIdColumn} TEXT NOT NULL,
+    ${DatabaseConstants.quantityColumn} REAL NOT NULL CHECK(quantity > 0),
+    ${DatabaseConstants.costPriceColumn} REAL NOT NULL CHECK(cost_price >= 0),
+    ${DatabaseConstants.totalColumn} REAL NOT NULL CHECK(total >= 0),
 
-    stock_entry_id TEXT NOT NULL,
-    product_id TEXT NOT NULL,
-
-    quantity REAL NOT NULL CHECK(quantity > 0),
-
-    cost_price REAL NOT NULL CHECK(cost_price >= 0),
-
-    total REAL NOT NULL CHECK(total >= 0),
-
-    FOREIGN KEY (stock_entry_id)
-        REFERENCES stock_entries(id)
+    FOREIGN KEY (${DatabaseConstants.stockEntryIdColumn})
+        REFERENCES ${DatabaseConstants.stockEntryTable}(${DatabaseConstants.idColumn})
         ON DELETE CASCADE,
 
-    FOREIGN KEY (product_id)
-        REFERENCES products(id)
+    FOREIGN KEY (${DatabaseConstants.productIdColumn})
+        REFERENCES ${DatabaseConstants.productTable}(${DatabaseConstants.idColumn})
         ON DELETE RESTRICT
 );
    """);
+
+    await db.execute("""
+CREATE TABLE IF NOT EXISTS ${DatabaseConstants.saleTable} (
+    ${DatabaseConstants.idColumn} TEXT NOT NULL PRIMARY KEY,
+
+    ${DatabaseConstants.totalItemColumn} INTEGER NOT NULL DEFAULT 0,
+    ${DatabaseConstants.totalQuantityColumn} REAL NOT NULL DEFAULT 0,
+    ${DatabaseConstants.totalAmountColumn} REAL NOT NULL DEFAULT 0,
+    ${DatabaseConstants.noteColumn} TEXT,
+    ${DatabaseConstants.createdAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ${DatabaseConstants.updatedAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+   """);
+    await db.execute("""
+CREATE TABLE  IF NOT EXISTS ${DatabaseConstants.saleItemTable} (
+    ${DatabaseConstants.idColumn} TEXT NOT NULL PRIMARY KEY,
+    ${DatabaseConstants.saleIdColumn}  TEXT NOT NULL,
+    ${DatabaseConstants.productIdColumn} TEXT NOT NULL,
+    ${DatabaseConstants.quantityColumn} REAL NOT NULL CHECK(${DatabaseConstants.quantityColumn} > 0),
+    ${DatabaseConstants.sellingPriceColumn} REAL NOT NULL CHECK(${DatabaseConstants.sellingPriceColumn} >= 0),
+    ${DatabaseConstants.totalColumn} REAL NOT NULL CHECK(${DatabaseConstants.totalColumn} >= 0),
+
+    FOREIGN KEY (${DatabaseConstants.saleIdColumn})
+        REFERENCES ${DatabaseConstants.saleTable}(${DatabaseConstants.idColumn})
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (${DatabaseConstants.productIdColumn})
+        REFERENCES ${DatabaseConstants.productTable}(${DatabaseConstants.idColumn})
+        ON DELETE RESTRICT
+);
+   """);
+
   }
 
 }
