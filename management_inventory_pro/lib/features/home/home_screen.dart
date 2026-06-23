@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/components/side_bar_layout.dart';
 import 'package:management_inventory_pro/features/category/data/respository/category_repository.dart';
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
+import 'package:management_inventory_pro/features/pos/data/repository/pos_repository.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/screens/stock_entry_screen.dart';
 import 'package:management_inventory_pro/features/suppliers/data/repository/supplier_repository.dart';
@@ -11,7 +12,8 @@ import 'package:management_inventory_pro/features/suppliers/presentation/screens
 import 'package:management_inventory_pro/features/unit/data/respository/unit_repository.dart';
 import '../../core/dependency_injection/service_locator.dart';
 import '../category/presentation/cubit/category_cubit.dart';
-import '../pos/screens/pos_screen.dart';
+import '../pos/presentation/cubit/pos_cubit.dart';
+import '../pos/presentation/screens/pos_screen.dart';
 import '../product/data/respository/product_repository.dart';
 import '../product/presentation/products/cubit/product_cubit.dart';
 import '../product/presentation/products/screens/product_screen.dart';
@@ -37,10 +39,15 @@ List<Widget>screens = [Placeholder(),
         SuppliersCubit(getIt<SupplierRepository>())
           ..loadSuppliers()),
         BlocProvider(
-          create: (context) => StockEntryCubit(getIt<StockEntryRepository>())..loadEntries(),
+          create: (context) =>
+          StockEntryCubit(getIt<StockEntryRepository>())
+            ..loadEntries(),
         ),
       ], child: StockEntryScreen()),
-  PosScreen(),
+  BlocProvider(
+    create: (context) => PosCubit(getIt<PosRepository>()),
+    child: PosScreen(),
+  ),
   Placeholder(),
   Placeholder(),
 
