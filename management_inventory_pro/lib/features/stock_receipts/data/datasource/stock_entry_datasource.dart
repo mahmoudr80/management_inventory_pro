@@ -25,9 +25,7 @@ class StockEntryDatasource {
     e.${DatabaseConstants.noteColumn},
     e.${DatabaseConstants.createdAtColumn},
     e.${DatabaseConstants.updatedAtColumn},
-    e.${DatabaseConstants.totalItemColumn},
-    e.${DatabaseConstants.totalItemColumn},
-    e.${DatabaseConstants.totalCostColumn},
+
 
     l.${DatabaseConstants.idColumn} AS ${DatabaseConstants.lineIdAlias},
     l.${DatabaseConstants.productIdColumn},
@@ -38,7 +36,8 @@ class StockEntryDatasource {
     p.${DatabaseConstants.skuColumn} ,
     p.${DatabaseConstants.unitIdColumn},
 
-    u.${DatabaseConstants.nameColumn} AS ${DatabaseConstants.unitNameAlias}
+    u.${DatabaseConstants.nameColumn} AS ${DatabaseConstants.unitNameAlias},
+    u.${DatabaseConstants.symbolColumn} 
 
 FROM ${DatabaseConstants.stockEntryTable} e
 
@@ -91,8 +90,8 @@ ORDER BY e.${DatabaseConstants.receiptDateColumn} DESC;
    try{
      final entryResponse = await _database.insert(DatabaseConstants.stockEntryTable, entry.toMap());
      for(final line in entry.lines){
-       if(line.product.id==null){
-         print('product id not exist');
+       if ((line.product.id ?? '').isEmpty) {
+         print('Invalid product id: "${line.product.id}"');
          continue;
        }
        await _database.insert(DatabaseConstants.stockEntryItemTable, {...line.toMap(),
@@ -119,6 +118,7 @@ ORDER BY e.${DatabaseConstants.receiptDateColumn} DESC;
      }
     return ApiResult.success(entryResponse);
    }catch(e){
+     print(e.toString());
      return ApiResult.failure(ApiErrorModel(message: e.toString()));
    }
 
@@ -146,6 +146,7 @@ ORDER BY e.${DatabaseConstants.receiptDateColumn} DESC;
       });
       return ApiResult.success(true);
     } catch (e) {
+      print(e.toString());
       return ApiResult.failure(
         ApiErrorModel(message: e.toString()),
       );
@@ -201,14 +202,21 @@ ORDER BY e.${DatabaseConstants.receiptDateColumn} DESC;
   }
   Future<void> _insertNewLines(Transaction txn,StockEntryModel entry,String now) async {
     for (final line in entry.lines) {
-      if (line.product.id == null) continue;
+      if (line.product.id == null) {
+        print("no product id");
+        continue;
+      }
+      final map = {
+        ...line.toMap(),
+        DatabaseConstants.stockEntryIdColumn: entry.id,
+      };
+
+      print('map');
+      print(map);
 
       await txn.insert(
         DatabaseConstants.stockEntryItemTable,
-        {
-          ...line.toMap(),
-          DatabaseConstants.stockEntryIdColumn: entry.id,
-        },
+        map,
       );
 
       // 6. Apply new stock impact

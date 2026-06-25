@@ -7,9 +7,9 @@ class StockEntryLineModel {
   final ProductRef product;
   final String? unitId;
   final String? unitName;     // denormalized for display
+  final String? unitSymbol;     // denormalized for display
   final int quantity;
   final double unitCost;
-  final double? total;
 
   const StockEntryLineModel({
     required this.id,
@@ -17,7 +17,7 @@ class StockEntryLineModel {
     this.unitId,
     this.unitName,
     required this.quantity,
-    required this.unitCost, this.total,
+    required this.unitCost,this.unitSymbol,
   });
 
   double get lineTotal => quantity * unitCost;
@@ -28,6 +28,7 @@ class StockEntryLineModel {
       product: ProductRef.fromMap(map),
       unitId: map[DatabaseConstants.unitIdColumn].toString(),
       unitName: map[DatabaseConstants.unitNameAlias] as String?,
+      unitSymbol: map[DatabaseConstants.symbolColumn] as String?,
       quantity: (map[DatabaseConstants.quantityColumn] as double).toInt(),
       unitCost: (map[DatabaseConstants.costPriceColumn] as num).toDouble(),
     );
@@ -38,7 +39,7 @@ class StockEntryLineModel {
     DatabaseConstants.productIdColumn:product.id,
     DatabaseConstants.quantityColumn: quantity,
     DatabaseConstants.costPriceColumn: unitCost,
-    DatabaseConstants.totalColumn:total??quantity*unitCost
+    DatabaseConstants.totalColumn: lineTotal,
   };
 
   StockEntryLineModel copyWith({

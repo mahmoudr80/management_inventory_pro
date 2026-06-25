@@ -13,9 +13,6 @@ class StockEntryModel {
   final StockEntryStatus ?status;
   final DateTime ?createdAt;
   final DateTime ?updatedAt;
-  final int ?totalItems;
-  final double? totalQuantity;
-  final double ?totalCost;
   const StockEntryModel({
     required this.id,
     required this.supplier,
@@ -24,11 +21,14 @@ class StockEntryModel {
     this.notes,
      this.status,
      this.createdAt,
-     this.updatedAt, this.totalItems=0, this.totalQuantity=0, this.totalCost=0,
+     this.updatedAt,
   });
 
-
-
+  int get totalItems=>lines.length;
+  double get totalQuantity =>
+      lines.fold(0.0, (sum, line) => sum + line.quantity);
+  double get totalCost =>
+      lines.fold(0.0, (sum, line) => sum + line.lineTotal);
   // ── Factory / serialisation ────────────────────────────────────────────────
 
   factory StockEntryModel.fromMap(Map<String, dynamic> map) {
@@ -41,15 +41,15 @@ class StockEntryModel {
       createdAt: DateTime.parse(map[DatabaseConstants.createdAtColumn] as String),
       updatedAt: DateTime.parse(map[DatabaseConstants.updatedAtColumn] as String),
         supplier: SupplierRef.fromMap(map),
-      totalCost:  map[DatabaseConstants.totalCostColumn] as double?,
-      totalItems:  map[DatabaseConstants.totalItemColumn] as int?,
-      totalQuantity:  map[DatabaseConstants.totalQuantityColumn] as double?,
     );
 
   }
 
   Map<String, dynamic> toMap() => {
         DatabaseConstants.idColumn: id,
+        DatabaseConstants.totalQuantityColumn: totalQuantity,
+        DatabaseConstants.totalItemColumn: totalItems,
+        DatabaseConstants.totalCostColumn:totalCost,
         DatabaseConstants.supplierIdColumn: supplier.id,
         DatabaseConstants.receiptDateColumn: receiptDate.toIso8601String()
             .split('.')

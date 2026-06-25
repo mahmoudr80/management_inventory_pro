@@ -66,6 +66,13 @@ class StockEntryCubit extends Cubit<StockEntryState> {
   void selectSupplier(SupplierRef? supplier) {
     emit(state.copyWith(selectedSupplier: supplier));
   }
+  void selectEntry(StockEntryModel entry) {
+    emit(state.copyWith(selectedEntry: entry));
+  }
+
+  void clearSelection() {
+    emit(state.copyWith(clearSelectedEntry: true));
+  }
 
   Future<void> applyFilter({
     SupplierRef? selectedSupplier,
@@ -132,9 +139,9 @@ class StockEntryCubit extends Cubit<StockEntryState> {
 
   /// Persist a new stock receipt. On success refreshes the ledger.
   Future<void> addEntry(StockEntryModel entry) async {
-    if (isClosed) {
-      return;
-    }
+    // if (isClosed) {
+    //   return;
+    // }
     emit(state.copyWith(loadStatus: StockEntryLoadStatus.loading));
 
     final response = await _repository.addEntry(entry);

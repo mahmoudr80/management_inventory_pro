@@ -10,13 +10,18 @@ import '../../../data/models/stock_entry_model.dart';
 
 class EntryRow extends StatefulWidget {
   final StockEntryModel entry;
+  final bool isSelected;       // ← NEW
+  final VoidCallback onTap;    // ← NEW
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  const EntryRow({super.key,
+  const EntryRow({
+    super.key,
     required this.entry,
+    required this.onTap,
     required this.onEdit,
     required this.onDelete,
+    this.isSelected = false,
   });
 
   @override
@@ -26,117 +31,129 @@ class EntryRow extends StatefulWidget {
 class _EntryRowState extends State<EntryRow> {
   bool _hovering = false;
 
-  static final _currencyFmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+  static final _currencyFmt =
+      NumberFormat.currency(symbol: '\$', decimalDigits: 2);
   static final _dateFmt = DateFormat('yyyy-MM-dd HH:mm');
 
   @override
   Widget build(BuildContext context) {
     final e = widget.entry;
-    final bg = _hovering
-        ? AppColors.surfaceContainerLow
-        : AppColors.surfaceContainerLowest;
+
+    Color bg;
+    if (widget.isSelected) {
+      bg = AppColors.primary.withOpacity(0.08);
+    } else if (_hovering) {
+      bg = AppColors.surfaceContainerLow;
+    } else {
+      bg = AppColors.surfaceContainerLowest;
+    }
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovering = true),
       onExit: (_) => setState(() => _hovering = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        height: 40.h,
-        color: bg,
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            // Receipt ID
-            Expanded(
-              flex: 3,
-              child: Text(
-                e.id,
-                style: AppTextStyles.dataMono.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
+      child: InkWell(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          height: 40.h,
+          color: bg,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              // Receipt ID
+              Expanded(
+                flex: 3,
+                child: Text(
+                  e.id,
+                  style: AppTextStyles.dataMono.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
-            ),
 
-            // Supplier
-            Expanded(
-              flex: 4,
-              child: Text(
-                e.supplier.name ?? '—',
-                style: AppTextStyles.bodyMd,
-                overflow: TextOverflow.ellipsis,
+              // Supplier
+              Expanded(
+                flex: 4,
+                child: Text(
+                  e.supplier.name ?? '—',
+                  style: AppTextStyles.bodyMd,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
 
-            // Items
-            Expanded(
-              flex: 2,
-              child: Text(
-                e.totalItems.toString(),
-                textAlign: TextAlign.left,
-                style: AppTextStyles.dataMono,
+              // Items
+              Expanded(
+                flex: 2,
+                child: Text(
+                  e.totalItems.toString(),
+                  textAlign: TextAlign.left,
+                  style: AppTextStyles.dataMono,
+                ),
               ),
-            ),
 
-            // Total Value
-            Expanded(
-              flex: 3,
-              child: Text(
-                _currencyFmt.format(e.totalCost),
-                textAlign: TextAlign.left,
-                style: AppTextStyles.dataMono,
+              // Total Value
+              Expanded(
+                flex: 3,
+                child: Text(
+                  _currencyFmt.format(e.totalCost),
+                  textAlign: TextAlign.left,
+                  style: AppTextStyles.dataMono,
+                ),
               ),
-            ),
 
-            // Date
-            Expanded(
-              flex: 3,
-              child: Text(
-                _dateFmt.format(e.receiptDate),
-                style: AppTextStyles.bodySm
-                    .copyWith(color: AppColors.outline),
-                overflow: TextOverflow.ellipsis,
+              // Date
+              Expanded(
+                flex: 3,
+                child: Text(
+                  _dateFmt.format(e.receiptDate),
+                  style: AppTextStyles.bodySm
+                      .copyWith(color: AppColors.outline),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
 
-            // Status
-            Expanded(
-              flex: 3,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: StatusPill(status: e.status??StockEntryStatus.verified),
-              ),
-            ),
-
-            // Actions
-            SizedBox(
-              width: 72.w.clamp(50, 100),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _RowAction(
-                    icon: Icons.edit_outlined,
-                    tooltip: 'Edit',
-                    onTap: widget.onEdit,
+              // Status
+              Expanded(
+                flex: 3,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: StatusPill(
+                    status: e.status ?? StockEntryStatus.verified,
                   ),
-                 // SizedBox(width: 4.w.clamp(2,8)),
-                  _RowAction(
-                    icon: Icons.delete_outline,
-                    tooltip: 'Delete',
-                    color: AppColors.error,
-                    onTap: widget.onDelete,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
+
+              // Actions
+              SizedBox(
+                width: 72.w.clamp(50, 100),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _RowAction(
+                      icon: Icons.edit_outlined,
+                      tooltip: 'Edit',
+                      onTap: widget.onEdit,
+                    ),
+                    _RowAction(
+                      icon: Icons.delete_outline,
+                      tooltip: 'Delete',
+                      color: AppColors.error,
+                      onTap: widget.onDelete,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
 class _RowAction extends StatelessWidget {
   final IconData icon;
   final String tooltip;

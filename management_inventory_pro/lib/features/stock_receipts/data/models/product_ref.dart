@@ -11,7 +11,7 @@ class ProductRef {
   final String? sku;
 
   const ProductRef({
-     this.id,
+    required this.id,
     required this.name,
     this.sku,
   });
