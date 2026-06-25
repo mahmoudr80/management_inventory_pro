@@ -17,7 +17,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final int? maxLines;
   final InputDecoration? inputDecoration;
-
+  final void Function(String)? onChanged;
   const CustomTextField({
     super.key,
     required this.label,
@@ -27,7 +27,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.validator,
     this.prefixIcon,
-    this.suffixIcon, this.maxLines, this.helperText, this.prefixText, this.inputDecoration,
+    this.suffixIcon, this.maxLines, this.helperText, this.prefixText, this.inputDecoration, this.onChanged,
   });
 
   @override
@@ -45,6 +45,7 @@ class CustomTextField extends StatelessWidget {
         SizedBox(height: 8.h),
         TextFormField(maxLines:maxLines ,
           controller: controller,
+          onChanged: onChanged,
           obscureText: obscureText,
           keyboardType: keyboardType,
           validator: validator,
