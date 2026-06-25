@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
 import 'package:management_inventory_pro/features/sale_history/data/repository/sale_history_repository.dart';
-import 'package:management_inventory_pro/features/sale_history/presentation/widgets/states/sale_empty_body.dart';
+import 'package:management_inventory_pro/features/sale_history/presentation/widgets/states/empty_sale_state.dart';
 import '../cubit/sales_history_cubit.dart';
-import '../widgets/states/sale_error_state.dart';
+import '../widgets/states/error_sale_state.dart';
 import '../widgets/states/sale_loaded_body.dart';
 import '../widgets/sale_page_header.dart';
-import '../widgets/states/sales_loading_state.dart';
+import '../widgets/states/loading_sale_state.dart';
 
 
 class SalesHistoryScreen extends StatelessWidget {
