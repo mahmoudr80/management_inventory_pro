@@ -4,6 +4,7 @@ import 'package:management_inventory_pro/core/components/side_bar_layout.dart';
 import 'package:management_inventory_pro/features/category/data/respository/category_repository.dart';
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
 import 'package:management_inventory_pro/features/pos/data/repository/pos_repository.dart';
+import 'package:management_inventory_pro/features/sale_history/presentation/screens/sales_history_screen.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/screens/stock_entry_screen.dart';
 import 'package:management_inventory_pro/features/suppliers/data/repository/supplier_repository.dart';
@@ -44,10 +45,19 @@ List<Widget>screens = [Placeholder(),
             ..loadEntries(),
         ),
       ], child: StockEntryScreen()),
-  BlocProvider(
-    create: (context) => PosCubit(getIt<PosRepository>()),
+  MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (context) => ProductCubit(getIt<ProductRepository>())..getProducts(),
+      ),
+      BlocProvider(
+        create: (context) => PosCubit(getIt<PosRepository>()),
+      ),
+
+    ],
     child: PosScreen(),
   ),
+  SalesHistoryScreen(),
   Placeholder(),
   Placeholder(),
 

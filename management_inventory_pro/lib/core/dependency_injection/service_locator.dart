@@ -7,6 +7,8 @@ import 'package:management_inventory_pro/features/pos/data/datasource/pos_dataso
 import 'package:management_inventory_pro/features/pos/data/repository/pos_repository.dart';
 import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
 import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
+import 'package:management_inventory_pro/features/sale_history/data/datasource/sale_history_datasource.dart';
+import 'package:management_inventory_pro/features/sale_history/data/repository/sale_history_repository.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/datasource/stock_entry_datasource.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import 'package:management_inventory_pro/features/suppliers/data/datasource/supplier_datasource.dart';
@@ -68,6 +70,13 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<PosDatasource>(() =>
         PosDatasource(getIt<DatabaseService>().db),);
     getIt.registerLazySingleton(() => PosRepository(getIt<PosDatasource>()),);
+
+
+    //pos
+    getIt.registerLazySingleton<SaleHistoryDatasource>(() =>
+        SaleHistoryDatasource(getIt<DatabaseService>().db),);
+    getIt.registerLazySingleton(() => SaleHistoryRepository(getIt<SaleHistoryDatasource>()),);
+
   }
 
 
