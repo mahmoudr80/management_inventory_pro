@@ -18,6 +18,8 @@ class StockEntryState extends Equatable {
   final int totalCount;
   final int pageSize;
   final SupplierRef ?selectedSupplier;
+  final StockEntryModel ?selectedEntry;
+  final bool? clearSelectedEntry;
 
   // ── Action feedback (add / update / delete) ────────────────────────────────
   final StockEntryActionStatus actionStatus;
@@ -36,7 +38,7 @@ class StockEntryState extends Equatable {
     this.pageSize = 20,
     this.actionStatus = StockEntryActionStatus.idle,
     this.actionError,
-    this.loadError, this.selectedSupplier,
+    this.loadError, this.selectedSupplier, this.selectedEntry, this.clearSelectedEntry=false,
   });
 
   bool get hasMorePages => (currentPage * pageSize) < totalCount;
@@ -49,15 +51,19 @@ class StockEntryState extends Equatable {
     int? currentPage,
     int? totalCount,
     Object? selectedSupplier = _unset,
+    StockEntryModel? selectedEntry ,
     int? pageSize,
     StockEntryActionStatus? actionStatus,
     String? actionError,
     String? loadError,
     bool clearActionError = false,
     bool clearLoadError = false,
+    bool clearSelectedEntry = false,
 
   }) =>
       StockEntryState(
+        selectedEntry: selectedEntry??this.selectedEntry,
+        clearSelectedEntry: clearSelectedEntry,
         loadStatus: loadStatus ?? this.loadStatus,
         entries: entries ?? this.entries,
         summary: summary ?? this.summary,
@@ -85,6 +91,8 @@ class StockEntryState extends Equatable {
         actionStatus,
         actionError,
         loadError,
-        selectedSupplier
+        selectedSupplier,
+        selectedEntry,
+        clearSelectedEntry
       ];
 }

@@ -47,7 +47,7 @@ class _EntryLineRowState extends State<EntryLineRow> {
     // StockEntryLineModel doesn't carry one yet — see note below.
     _selectedProduct = widget.line.product.name.isNotEmpty
         ? ProductRef(
-            id: '',
+            id:  widget.line.product.id,
             name: widget.line.product.name,
             sku: widget.line.product.sku,
           )

@@ -42,7 +42,7 @@ class AuthCubit extends Cubit<AuthState> {
     // emit(AuthLoading());
     // try {
     //   await _repository.forgotPassword(email);
-    //   emit(AuthInitial()); // Or a specific state like ForgotPasswordEmailSent
+    //   emit(AuthInitial()); // Or a specific states like ForgotPasswordEmailSent
     // } catch (e) {
     //   emit(AuthFailure(message: e.toString()));
     // }

@@ -105,13 +105,15 @@ class _NewStockEntryScreenState extends State<NewStockEntryScreen> {
       AppSnackBar.showError(context, message: 'Add at least one product line.');
       return;
     }
-
+    for (final line in _lines) {
+      print(
+        'Before Build Entry -> id="${line.product.id}", '
+            'name="${line.product.name}"',
+      );
+    }
     final now = DateTime.now();
     final entry = StockEntryModel(
       id: _receiptId,
-      totalCost: _subtotal,
-      totalQuantity: _totalItems.toDouble(),
-      totalItems: _lines.length,
       supplier: SupplierRef(
         id: _selectedSupplier?.id,
         name: _selectedSupplier?.name,
@@ -134,7 +136,7 @@ class _NewStockEntryScreenState extends State<NewStockEntryScreen> {
         print('${entry.id} - ${entry.status} -${entry.supplier.toString()} - ${entry.lines.length} -'
             ' ${entry.receiptDate.toString()} - totalQuantity: ${entry.totalQuantity.toString()}'
             ' - totalItems: ${entry.totalItems.toString()} - totalCost: ${entry.totalCost.toString()}'
-            ' - products: ${entry.lines.map((e) => e.product.id.toString(),).toString()}'
+            ' - product ID: ${entry.lines.map((e) => e.product.id.toString(),).toString()}'
             ' - products: ${entry.lines[0].product.id}');
         await context.read<StockEntryCubit>().addEntry(entry);
       }

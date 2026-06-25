@@ -42,7 +42,7 @@ class AppDecorations {
         ),
       );
 
-  /// Input field — inactive state.
+  /// Input field — inactive states.
   static InputDecoration inputField({
     String? hint,
     Widget? prefixIcon,

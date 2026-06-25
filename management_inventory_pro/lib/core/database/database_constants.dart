@@ -37,6 +37,9 @@ class DatabaseConstants {
   static const String totalColumn = "total";
   static const String totalAmountColumn = "total_amount"; //sale table
   static const String saleIdColumn = "sale_id"; //sale table
+  static const String paymentMethodColumn = "payment_method"; //sale table
+  static const String cashierNameColumn = "cashier_name"; //sale table
+  static const String statusColumn = "status"; //sale table
 
 
   //supplier table
@@ -52,6 +55,8 @@ class DatabaseConstants {
   static const String unitNameAlias = "unit_name";
   static const String supplierNameAlias = "supplier_name";
   static const String lineIdAlias = "line_id";
+  static const String saleItemId = "sale_item_id";
+  static const String productPrice = "product_price";
 
 
 }

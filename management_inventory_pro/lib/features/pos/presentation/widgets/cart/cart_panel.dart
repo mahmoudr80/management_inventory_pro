@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/features/pos/presentation/widgets/cart/payment_buttons.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../sale_history/data/models/sale_item_model.dart';
 import '../../../data/models/cart_item.dart';
 import 'cart_item_row.dart';
 import 'complete_sale_button.dart';
