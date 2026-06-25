@@ -21,13 +21,13 @@ class OrderSummary extends StatelessWidget {
       decoration: const BoxDecoration(color: AppColors.posSummaryBg),
       child: Column(
         children: [
-          _SummaryRow(label: 'Subtotal', value: subtotal),
-          const SizedBox(height: 8),
-          _SummaryRow(label: 'Tax (${(taxRate * 100).toStringAsFixed(1)}%)', value: tax),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Divider(height: 1, color: Color(0xFFC6CCEC)),
-          ),
+          // _SummaryRow(label: 'Subtotal', value: subtotal),
+          // const SizedBox(height: 8),
+          // _SummaryRow(label: 'Tax (${(taxRate * 100).toStringAsFixed(1)}%)', value: tax),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(vertical: 10),
+          //   child: Divider(height: 1, color: Color(0xFFC6CCEC)),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -134,6 +134,25 @@ class _ProductCardState extends State<ProductCard> {
                       color: AppColors.posPrimary,
                     ),
                   ),
+                  const SizedBox(height: 4),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${product.sku}',
+                        style:  TextStyle(
+                          fontSize: 3.sp,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      Text(
+                        '${product.currentStock}',
+                        style:  TextStyle(
+                          fontSize: 3.sp,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

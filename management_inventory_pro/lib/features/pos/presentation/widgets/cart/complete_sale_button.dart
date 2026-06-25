@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/features/pos/presentation/widgets/cart/payment_buttons.dart';
-
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../sale_history/data/models/sale_item_model.dart';
 
 /// Primary checkout CTA for the POS cart panel.
 ///
@@ -10,9 +9,9 @@ import '../../../../../core/theme/app_colors.dart';
 /// elevated shadow that disappears on press. It sits directly beneath the
 /// payment method section and finalizes the sale via a confirmation dialog.
 ///
-/// UI only: this widget does not mutate cart state itself. It surfaces a
+/// UI only: this widget does not mutate cart states itself. It surfaces a
 /// confirmation dialog and, once the cashier confirms, simply invokes
-/// [onConfirm] — the parent (which owns the cart/order state) is
+/// [onConfirm] — the parent (which owns the cart/order states) is
 /// responsible for clearing the cart, resetting the payment method, and
 /// showing the success snackbar.
 class CompleteSaleButton extends StatefulWidget {

@@ -117,7 +117,7 @@ class _ProductGrid extends StatelessWidget {
         crossAxisCount: (showAnalytics ?? false) ? 3 : 4,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: (showAnalytics ?? false) ? 0.7 : 0.8.r,
+        childAspectRatio: (showAnalytics ?? false) ? 0.7.r : 0.76.r,
       ),
       itemCount: products.length,
       itemBuilder: (context, index) {
@@ -133,7 +133,7 @@ class _ProductGrid extends StatelessWidget {
   }
 }
 
-/// Professional empty state shown when [PosState.filteredProducts] is
+/// Professional empty states shown when [PosState.filteredProducts] is
 /// empty. Purely presentational — never triggers a refetch.
 class _EmptySearchState extends StatelessWidget {
   final String searchQuery;

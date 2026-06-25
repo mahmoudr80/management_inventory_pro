@@ -8,6 +8,9 @@ class PosProduct {
   final String? imageUrl;
   final bool outOfStock;
   final String category;
+  final String ?unit;
+  final num? currentStock;
+  final int? categoryId;
 
   /// Stock-keeping unit code, used as a secondary search key alongside
   /// [name] and [barcode]. Null/empty when the product has none.
@@ -25,7 +28,7 @@ class PosProduct {
     this.outOfStock = false,
     this.category = 'General',
     this.sku,
-    this.barcode,
+    this.barcode, this.currentStock, this.categoryId, this.unit,
   });
 
   factory PosProduct.fromProduct(ProductModel product) => PosProduct(
@@ -40,5 +43,6 @@ class PosProduct {
         // the names differ — they're required for SKU/barcode search.
         sku: product.sku,
         barcode: product.barcode,
+        currentStock:product.currentStock
       );
 }

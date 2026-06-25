@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../sale_history/data/models/sale_item_model.dart';
 
-enum PaymentMethod { cash, card }
 
 class PaymentButtons extends StatelessWidget {
   final PaymentMethod? selected;

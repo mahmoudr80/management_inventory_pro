@@ -12,12 +12,12 @@ enum PosStatus {
 }
 
 /// Identifies which specific cart action most recently produced the
-/// current state.
+/// current states.
 ///
 /// Lets the UI react to a specific action (e.g. show a "Sale completed"
 /// snackbar only when [ActionStatus.completeSale] succeeds, or flash an
 /// item row when [ActionStatus.addItem] fires) without diffing the whole
-/// state object.
+/// states object.
 enum ActionStatus {
   none,
   addItem,
@@ -28,7 +28,7 @@ enum ActionStatus {
   completeSale,
 }
 
-/// Immutable state for the POS (Point of Sale) feature.
+/// Immutable states for the POS (Point of Sale) feature.
 ///
 /// [PosState] never exposes a way to mutate [cart] (or anything inside it)
 /// in place. Every change is produced by [PosCubit] via [copyWith], which
@@ -63,7 +63,7 @@ class PosState extends Equatable {
     this.searchQuery = '',
   });
 
-  /// The cubit's starting state: nothing loaded yet, no cart, no error.
+  /// The cubit's starting states: nothing loaded yet, no cart, no error.
   factory PosState.initial() => const PosState();
 
   /// Number of unique product line items in the cart. `0` when there is
@@ -81,10 +81,10 @@ class PosState extends Equatable {
   bool get hasItems => cart != null && cart!.items.isNotEmpty;
 
   /// True when a search is active but it matched nothing — the trigger for
-  /// the "No products found" empty state in the UI.
+  /// the "No products found" empty states in the UI.
   bool get hasNoSearchResults => searchQuery.isNotEmpty && filteredProducts.isEmpty;
 
-  /// Returns a copy of this state with the given fields replaced.
+  /// Returns a copy of this states with the given fields replaced.
   ///
   /// [cart] and [errorMessage] are nullable fields. Dart's `??` operator
   /// alone can't distinguish "field not passed" from "field explicitly set
