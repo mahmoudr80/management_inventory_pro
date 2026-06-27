@@ -18,11 +18,17 @@ import '../../data/models/stock_entry_status.dart';
 import '../../data/models/supplier_ref.dart';
 import '../cubit/stock_entry_cubit.dart';
 import '../widgets/entry_summary_footer.dart';
-
+enum StockEntryMode {
+  create,
+  edit,
+  restock,
+}
 class NewStockEntryScreen extends StatefulWidget {
   final StockEntryModel? existingEntry;
-
-  const NewStockEntryScreen({super.key, this.existingEntry});
+  final ProductRef? initialProduct;
+  final SupplierRef? initialSupplier;
+  final StockEntryMode mode;
+  const NewStockEntryScreen({super.key, this.existingEntry, this.initialProduct, this.initialSupplier, required this.mode});
 
   @override
   State<NewStockEntryScreen> createState() => _NewStockEntryScreenState();
@@ -37,35 +43,54 @@ class _NewStockEntryScreenState extends State<NewStockEntryScreen> {
   late DateTime _receiptDate;
   late List<StockEntryLineModel> _lines;
 
-  bool _isEditMode = false;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _isEditMode = widget.existingEntry != null;
+    switch (widget.mode) {
+      case StockEntryMode.create:
+        _receiptDate = DateTime.now();
+        _lines = [];
+        _receiptId = '';
+        // Generate receipt ID from repository.
+        context.read<StockEntryCubit>().generateReceiptId().then((id) {
+          if (mounted) setState(() => _receiptId = id);
+        });
+        break;
 
-    if (_isEditMode) {
-      final e = widget.existingEntry!;
-      _receiptId = e.id;
-      _receiptDate = e.receiptDate;
-      _lines = List.from(e.lines);
-      _notesController.text = e.notes ?? '';
-      if (e.supplier.id != null) {
-        _selectedSupplier = SupplierRef(
-          id: e.supplier.id!,
-          name: e.supplier.name ?? '',
-        );
-      }
-    } else {
-      _receiptDate = DateTime.now();
-      _lines = [];
-      _receiptId = '';
-      // Generate receipt ID from repository.
-      context.read<StockEntryCubit>().generateReceiptId().then((id) {
-        if (mounted) setState(() => _receiptId = id);
-      });
+      case StockEntryMode.edit:
+        final e = widget.existingEntry!;
+        _receiptId = e.id;
+        _receiptDate = e.receiptDate;
+        _lines = List.from(e.lines);
+        _notesController.text = e.notes ?? '';
+        if (e.supplier.id != null) {
+          _selectedSupplier = SupplierRef(
+            id: e.supplier.id!,
+            name: e.supplier.name ?? '',
+          );
+        }
+        break;
+
+      case StockEntryMode.restock:
+        _receiptDate = DateTime.now();
+        _lines = [
+          StockEntryLineModel(
+            id: const Uuid().v4(),
+            product: widget.initialProduct!,
+            quantity: 1,
+            unitCost: 0,
+          ),
+        ];
+        _receiptId = '';
+        // Generate receipt ID from repository.
+        context.read<StockEntryCubit>().generateReceiptId().then((id) {
+          if (mounted) setState(() => _receiptId = id);
+        });
+        break;
     }
+
   }
 
   @override
@@ -130,7 +155,7 @@ class _NewStockEntryScreenState extends State<NewStockEntryScreen> {
 
     setState(() => _isLoading = true);
     try {
-      if (_isEditMode) {
+      if (widget.mode==StockEntryMode.edit) {
         await context.read<StockEntryCubit>().updateEntry(entry);
       } else {
         print('${entry.id} - ${entry.status} -${entry.supplier.toString()} - ${entry.lines.length} -'
@@ -171,7 +196,7 @@ class _NewStockEntryScreenState extends State<NewStockEntryScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     StockEntryHeader(
-                      isEditMode: _isEditMode,
+                      isEditMode: widget.mode==StockEntryMode.edit,
                       receiptId: _receiptId,
                     ),
                     SizedBox(height: 24.h),
