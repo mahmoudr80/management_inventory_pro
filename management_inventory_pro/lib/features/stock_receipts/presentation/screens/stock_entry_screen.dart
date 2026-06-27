@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/components/page_header.dart';
 import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
+import 'package:management_inventory_pro/features/stock_receipts/data/models/product_ref.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/models/supplier_ref.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import '../../../../core/dialogs/dialog_utils.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/app_snackBar.dart';
+import '../../../home/cubit/home_cubit.dart';
 import '../../data/models/stock_entry_model.dart';
 import '../cubit/stock_entry_cubit.dart';
 import '../widgets/filter/stock_entry_filter_bar.dart';
@@ -37,6 +39,33 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final homeState = context.read<HomeCubit>().state;
+
+    if (homeState.action == PageAction.createStockEntry) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _openNewEntry();
+        // Navigator.push(context,MaterialPageRoute(builder: (context) => NewStockEntryScreen(),));
+        context.read<HomeCubit>().clearAction();
+      });
+    }
+    else if (homeState.action == PageAction.restock) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _openNewEntry(mode: StockEntryMode.restock,product: homeState.restock);
+        // Navigator.push(context,MaterialPageRoute(builder: (context) => NewStockEntryScreen(),));
+        context.read<HomeCubit>().clearAction();
+      });
+    }
+    else if (homeState.action == PageAction.selectStockEntry) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        homeState.selectEntry!=null?context.read<StockEntryCubit>().selectEntry(homeState.selectEntry!):null;
+        context.read<HomeCubit>().clearAction();
+      });
+    }
+  }
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -44,12 +73,13 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
 
   // ── Navigation ─────────────────────────────────────────────────────────────
 
-  Future<StockEntryModel?> _openNewEntry() async {
+  Future<StockEntryModel?> _openNewEntry({ProductRef?product,StockEntryMode ?mode,SupplierRef ?initialSupplier}) async {
     return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => BlocProvider(
           create: (context) => StockEntryCubit(getIt<StockEntryRepository>()),
-          child: NewStockEntryScreen(),
+          child: NewStockEntryScreen(mode: mode??StockEntryMode.create,
+            initialProduct: product,initialSupplier: initialSupplier,),
         ),
       ),
     );
@@ -60,7 +90,7 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
       MaterialPageRoute(
         builder: (_) => BlocProvider.value(
           value: context.read<StockEntryCubit>(),
-          child: NewStockEntryScreen(existingEntry: entry),
+          child: NewStockEntryScreen(existingEntry: entry,mode: StockEntryMode.edit,),
         ),
       ),
     );

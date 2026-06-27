@@ -8,15 +8,35 @@ import 'package:management_inventory_pro/features/product/data/respository/produ
 
 import '../../../../../core/dependency_injection/service_locator.dart';
 import '../../../../category/presentation/cubit/category_cubit.dart';
+import '../../../../home/cubit/home_cubit.dart';
 import '../../../../unit/presentation/cubit/unit_cubit.dart';
 import '../../add_product/screens/add_product_screen.dart';
 import '../cubit/product_cubit.dart';
 import '../widgets/product_filter_bar.dart';
 import '../widgets/product_list.dart';
 
-class ProductScreen extends StatelessWidget {
+class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
 
+  @override
+  State<ProductScreen> createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends State<ProductScreen> {
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final homeState = context.read<HomeCubit>().state;
+
+    if (homeState.action == PageAction.createProduct) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.push(context,MaterialPageRoute(builder: (context) => AddProductScreen(),));
+        context.read<HomeCubit>().clearAction();
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     ProductModel ? product;

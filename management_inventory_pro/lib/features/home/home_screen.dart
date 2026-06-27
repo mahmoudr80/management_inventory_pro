@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/components/side_bar_layout.dart';
 import 'package:management_inventory_pro/features/category/data/respository/category_repository.dart';
+import 'package:management_inventory_pro/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
 import 'package:management_inventory_pro/features/pos/data/repository/pos_repository.dart';
+import 'package:management_inventory_pro/features/sale_history/data/repository/sale_history_repository.dart';
+import 'package:management_inventory_pro/features/sale_history/presentation/cubit/sales_history_cubit.dart';
 import 'package:management_inventory_pro/features/sale_history/presentation/screens/sales_history_screen.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/screens/stock_entry_screen.dart';
@@ -21,7 +24,7 @@ import '../product/presentation/products/screens/product_screen.dart';
 import '../stock_receipts/presentation/cubit/stock_entry_cubit.dart';
 import '../unit/presentation/cubit/unit_cubit.dart';
 
-List<Widget>screens = [Placeholder(),
+List<Widget>screens = [DashboardScreen(),
   MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => CategoryCubit(getIt<CategoryRepository>())),
@@ -48,7 +51,9 @@ List<Widget>screens = [Placeholder(),
   MultiBlocProvider(
     providers: [
       BlocProvider(
-        create: (context) => ProductCubit(getIt<ProductRepository>())..getProducts(),
+        create: (context) =>
+        ProductCubit(getIt<ProductRepository>())
+          ..getProducts(),
       ),
       BlocProvider(
         create: (context) => PosCubit(getIt<PosRepository>()),
@@ -57,7 +62,10 @@ List<Widget>screens = [Placeholder(),
     ],
     child: PosScreen(),
   ),
-  SalesHistoryScreen(),
+  BlocProvider(
+    create: (context) => SalesHistoryCubit(getIt<SaleHistoryRepository>())..loadSales(),
+    child: SalesHistoryScreen(),
+  ),
   Placeholder(),
   Placeholder(),
 
