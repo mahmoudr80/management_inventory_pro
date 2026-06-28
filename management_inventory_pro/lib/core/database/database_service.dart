@@ -128,11 +128,17 @@ CREATE TABLE IF NOT EXISTS ${DatabaseConstants.saleTable} (
     ${DatabaseConstants.totalItemColumn} INTEGER NOT NULL DEFAULT 0,
     ${DatabaseConstants.totalQuantityColumn} REAL NOT NULL DEFAULT 0,
     ${DatabaseConstants.totalAmountColumn} REAL NOT NULL DEFAULT 0,
+
     ${DatabaseConstants.noteColumn} TEXT,
+
     ${DatabaseConstants.createdAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    ${DatabaseConstants.updatedAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ${DatabaseConstants.updatedAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    ${DatabaseConstants.paymentMethodColumn} TEXT DEFAULT 'Cash',
+    ${DatabaseConstants.cashierNameColumn} TEXT DEFAULT 'Admin',
+    ${DatabaseConstants.statusColumn} TEXT DEFAULT 'completed'
 );
-   """);
+""");
     await db.execute("""
 CREATE TABLE  IF NOT EXISTS ${DatabaseConstants.saleItemTable} (
     ${DatabaseConstants.idColumn} TEXT NOT NULL PRIMARY KEY,
