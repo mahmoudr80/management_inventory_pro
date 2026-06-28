@@ -9,10 +9,10 @@ import '../../data/models/top_selling_product.dart';
 class DashboardState {
   final DashboardSummary? summary;
   final List<QuickAction> quickActions;
-  final List<TopSellingProduct> topSellingProducts;
-  final List<LowStockProduct> lowStockProducts;
-  final List<RecentSale> recentSales;
-  final List<RecentStockEntry> recentStockEntries;
+  final List<TopSellingProductRef> topSellingProducts;
+  final List<LowStockProductRef> lowStockProducts;
+  final List<RecentSaleRef> recentSales;
+  final List<RecentStockEntryRef> recentStockEntries;
   final List<BusinessInsight> businessInsights;
   final List<double> weeklyRevenue;
   final List<double> weeklyOrders;
@@ -42,10 +42,10 @@ class DashboardState {
   DashboardState copyWith({
     DashboardSummary? summary,
     List<QuickAction>? quickActions,
-    List<TopSellingProduct>? topSellingProducts,
-    List<LowStockProduct>? lowStockProducts,
-    List<RecentSale>? recentSales,
-    List<RecentStockEntry>? recentStockEntries,
+    List<TopSellingProductRef>? topSellingProducts,
+    List<LowStockProductRef>? lowStockProducts,
+    List<RecentSaleRef>? recentSales,
+    List<RecentStockEntryRef>? recentStockEntries,
     List<BusinessInsight>? businessInsights,
     List<double>? weeklyRevenue,
     List<double>? weeklyOrders,
