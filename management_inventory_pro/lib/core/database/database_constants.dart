@@ -57,6 +57,16 @@ class DatabaseConstants {
   static const String lineIdAlias = "line_id";
   static const String saleItemId = "sale_item_id";
   static const String productPrice = "product_price";
+  static const String todayRevenue = "today_revenue";
+  static const String totalOrders = "total_orders";
+  static const String totalProducts = "total_products";
+  static const String totalLowStockProducts = "total_low_stock_products";
+  static const String inventoryValue = "inventory_value";
+  static const String unitSold = "units_sold";
+  static const String revenue = "revenue";
+  static const String totalRevenue = "total_revenue";
+  static const String profit = "profit";
+  static const String totalCategories = "total_categories";
 
 
 }
