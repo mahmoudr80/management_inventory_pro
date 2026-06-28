@@ -9,7 +9,7 @@ class RecentStockEntryRow extends StatelessWidget {
     required this.onTap,
   });
 
-  final RecentStockEntry entry;
+  final RecentStockEntryRef entry;
   final VoidCallback onTap;
 
   @override

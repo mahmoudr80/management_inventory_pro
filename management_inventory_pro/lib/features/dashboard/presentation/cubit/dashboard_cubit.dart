@@ -1,32 +1,44 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../data/mock/dashboard_mock_data.dart';
+import 'package:management_inventory_pro/core/networking/api_result.dart';
+import 'package:management_inventory_pro/features/dashboard/data/repository/dashboard_repository.dart';
 import '../../data/models/quick_action.dart';
 import 'dashboard_state.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
-  DashboardCubit() : super(const DashboardState());
-
+  DashboardCubit(this._repository) : super(const DashboardState());
+final DashboardRepository _repository;
   Future<void> loadDashboard() async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
-
-    // Simulate network / DB fetch delay
-    await Future.delayed(const Duration(milliseconds: 600));
-
     emit(
-      DashboardState(
-        summary: DashboardMockData.summary,
-        quickActions: DashboardMockData.quickActions,
-        topSellingProducts: DashboardMockData.topSellingProducts,
-        lowStockProducts: DashboardMockData.lowStockProducts,
-        recentSales: DashboardMockData.recentSales,
-        recentStockEntries: DashboardMockData.recentStockEntries,
-        businessInsights: DashboardMockData.businessInsights,
-        weeklyRevenue: DashboardMockData.weeklyRevenue,
-        weeklyOrders: DashboardMockData.weeklyOrders,
-        isLoading: false,
+      state.copyWith(
+        isLoading: true,
+        errorMessage: null,
       ),
     );
+
+    final response = await _repository.getDashboard();
+    switch(response){
+      case Success(data:final dashboard):
+        emit(
+          state.copyWith(
+            summary: dashboard.summary,
+            topSellingProducts: dashboard.topSellingProducts,
+            lowStockProducts: dashboard.lowStockProducts,
+            recentSales: dashboard.recentSales,
+            recentStockEntries: dashboard.recentStockEntries,
+            businessInsights: dashboard.businessInsights,
+            weeklyRevenue: dashboard.weeklyRevenue,
+            weeklyOrders: dashboard.weeklyOrders,
+            isLoading: false,
+          ),
+        );
+      case Failure(errorModel:final error):
+        emit(
+          state.copyWith(
+            isLoading: false,
+            errorMessage: error.message,
+          ),
+        );
+    }
   }
 
   Future<void> refresh() async {

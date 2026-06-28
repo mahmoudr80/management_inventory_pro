@@ -3,17 +3,28 @@ import '../../../data/models/business_insight.dart';
 
 class InsightTile extends StatelessWidget {
   const InsightTile({super.key, required this.insight});
-
   final BusinessInsight insight;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final (iconColor, iconBg) = switch (insight.severity) {
-      InsightSeverity.info => (const Color(0xFF0041C8), const Color(0xFFDCE1FF)),
-      InsightSeverity.warning => (const Color(0xFF8A6200), const Color(0xFFFFF3CD)),
-      InsightSeverity.alert => (const Color(0xFFBA1A1A), const Color(0xFFFFDAD6)),
+    final (icon, iconColor, iconBg) = switch (insight.severity) {
+      InsightSeverity.info => (
+      Icons.info_outline,
+      Color(0xFF0041C8),
+      Color(0xFFDCE1FF),
+      ),
+      InsightSeverity.warning => (
+      Icons.warning_amber_rounded,
+      Color(0xFF8A6200),
+      Color(0xFFFFF3CD),
+      ),
+      InsightSeverity.alert => (
+      Icons.error_outline_rounded,
+      Color(0xFFBA1A1A),
+      Color(0xFFFFDAD6),
+      ),
     };
+    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -27,7 +38,7 @@ class InsightTile extends StatelessWidget {
               color: iconBg,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(insight.icon, size: 16, color: iconColor),
+            child: Icon(icon, size: 16, color: iconColor),
           ),
           const SizedBox(width: 10),
           Expanded(

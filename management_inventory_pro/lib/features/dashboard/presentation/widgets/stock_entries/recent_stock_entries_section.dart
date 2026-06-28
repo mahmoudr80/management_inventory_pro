@@ -13,9 +13,9 @@ class RecentStockEntriesSection extends StatelessWidget {
     required this.onSelectEntry,
   });
 
-  final List<RecentStockEntry> entries;
+  final List<RecentStockEntryRef> entries;
   final bool isLoading;
-  final void Function(RecentStockEntry) onSelectEntry;
+  final void Function(RecentStockEntryRef) onSelectEntry;
 
   @override
   Widget build(BuildContext context) {

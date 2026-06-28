@@ -34,7 +34,7 @@ class HomeCubit extends Cubit<HomeState> {
         NavigateState(currentIndex: 3,action: PageAction.createStockEntry )
     );
   }
-  void selectEntry(RecentStockEntry entry) {
+  void selectEntry(RecentStockEntryRef entry) {
     emit(
         NavigateState(currentIndex: 3,action: PageAction.selectStockEntry, selectEntry:
         StockEntryModel(id: entry.receiptId, supplier:entry.supplier, receiptDate: entry.date,
@@ -43,7 +43,7 @@ class HomeCubit extends Cubit<HomeState> {
         ) )
     );
   }
-  void selectSale(RecentSale sale) {
+  void selectSale(RecentSaleRef sale) {
     emit(
         NavigateState(currentIndex: 5,action: PageAction.selectSale, selectSale:
         SaleModel(id: sale.id,
@@ -56,7 +56,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  void restock(LowStockProduct product) {
+  void restock(LowStockProductRef product) {
     emit(
         NavigateState(currentIndex: 3,action: PageAction.restock,restock: ProductRef(id: product.id, name:product.name) )
     );

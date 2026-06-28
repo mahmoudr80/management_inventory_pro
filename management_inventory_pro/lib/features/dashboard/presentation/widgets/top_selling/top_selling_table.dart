@@ -10,7 +10,7 @@ class TopSellingTable extends StatelessWidget {
     required this.products,
   });
 
-  final List<TopSellingProduct> products;
+  final List<TopSellingProductRef> products;
 
   @override
   Widget build(BuildContext context) {

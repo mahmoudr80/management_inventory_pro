@@ -11,7 +11,7 @@ class RecentSaleRow extends StatelessWidget {
     required this.onTap,
   });
 
-  final RecentSale sale;
+  final RecentSaleRef sale;
   final VoidCallback onTap;
 
   @override
@@ -61,7 +61,7 @@ class RecentSaleRow extends StatelessWidget {
             _Cell(
               align: CrossAxisAlignment.end,
               child: Text(
-                '${egp.format(sale.amount)} EGP',
+                '${egp.format(sale.totalAmount)} EGP',
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,

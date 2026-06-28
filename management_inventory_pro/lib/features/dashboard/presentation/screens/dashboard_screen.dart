@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:management_inventory_pro/features/dashboard/data/repository/dashboard_repository.dart';
+import '../../../../core/dependency_injection/service_locator.dart';
 import '../../../home/cubit/home_cubit.dart';
 import '../../data/models/quick_action.dart';
 import '../cubit/dashboard_cubit.dart';
@@ -23,7 +25,7 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => DashboardCubit()..loadDashboard(),
+      create: (_) => DashboardCubit(getIt<DashboardRepository>())..loadDashboard(),
       child: const _DashboardView(),
     );
   }
@@ -70,11 +72,7 @@ class _DashboardView extends StatelessWidget {
                   const SizedBox(height: 28),
 
                   // ── Quick Actions ────────────────────────────────────────
-                  if (state.quickActions.isEmpty && state.isLoading)
-                    const LoadingCard(height: 96)
-                  else
                     QuickActionsSection(
-                      actions: state.quickActions,
                       onActionTap: (action) {
                       quicAction(action, context.read<HomeCubit>());
                       }

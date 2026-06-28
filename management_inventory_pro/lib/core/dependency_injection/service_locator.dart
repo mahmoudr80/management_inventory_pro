@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:management_inventory_pro/core/database/database_service.dart';
+import 'package:management_inventory_pro/features/dashboard/data/datasource/dashboard_datasource.dart';
+import 'package:management_inventory_pro/features/dashboard/data/repository/dashboard_repository.dart';
 import 'package:management_inventory_pro/features/pos/data/datasource/pos_datasource.dart';
 import 'package:management_inventory_pro/features/pos/data/repository/pos_repository.dart';
 import 'package:management_inventory_pro/features/product/data/datasource/product_datasource.dart';
@@ -76,6 +78,11 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<SaleHistoryDatasource>(() =>
         SaleHistoryDatasource(getIt<DatabaseService>().db),);
     getIt.registerLazySingleton(() => SaleHistoryRepository(getIt<SaleHistoryDatasource>()),);
+
+    //dashboard
+    getIt.registerLazySingleton<DashboardDatasource>(() =>
+        DashboardDatasource(getIt<DatabaseService>().db),);
+    getIt.registerLazySingleton(() => DashboardRepository(getIt<DashboardDatasource>()),);
 
   }
 
