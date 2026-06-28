@@ -15,7 +15,7 @@ class TopSellingSection extends StatelessWidget {
     required this.isLoading,
   });
 
-  final List<TopSellingProduct> products;
+  final List<TopSellingProductRef> products;
   final bool isLoading;
 
   @override

@@ -8,7 +8,7 @@ class LowStockRow extends StatelessWidget {
     required this.onRestock,
   });
 
-  final LowStockProduct product;
+  final LowStockProductRef product;
   final VoidCallback onRestock;
 
   @override

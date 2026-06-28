@@ -11,8 +11,8 @@ class LowStockTable extends StatelessWidget {
     required this.onRestock,
   });
 
-  final List<LowStockProduct> products;
-  final void Function(LowStockProduct) onRestock;
+  final List<LowStockProductRef> products;
+  final void Function(LowStockProductRef) onRestock;
 
   @override
   Widget build(BuildContext context) {

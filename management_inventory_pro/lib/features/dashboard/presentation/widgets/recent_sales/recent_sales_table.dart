@@ -11,8 +11,8 @@ class RecentSalesTable extends StatelessWidget {
     required this.onSelectSale,
   });
 
-  final List<RecentSale> sales;
-  final void Function(RecentSale) onSelectSale;
+  final List<RecentSaleRef> sales;
+  final void Function(RecentSaleRef) onSelectSale;
 
   @override
   Widget build(BuildContext context) {

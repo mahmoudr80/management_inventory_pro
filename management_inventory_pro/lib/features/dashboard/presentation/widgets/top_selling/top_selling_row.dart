@@ -10,7 +10,7 @@ class TopSellingRow extends StatelessWidget {
     required this.rank,
   });
 
-  final TopSellingProduct product;
+  final TopSellingProductRef product;
   final int rank;
 
   @override
@@ -62,7 +62,7 @@ class TopSellingRow extends StatelessWidget {
 
 class _ProductCell extends StatelessWidget {
   const _ProductCell({required this.product, required this.rank});
-  final TopSellingProduct product;
+  final TopSellingProductRef product;
   final int rank;
 
   @override

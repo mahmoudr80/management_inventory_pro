@@ -13,9 +13,9 @@ class RecentSalesSection extends StatelessWidget {
     required this.onSelectSale,
   });
 
-  final List<RecentSale> sales;
+  final List<RecentSaleRef> sales;
   final bool isLoading;
-  final void Function(RecentSale) onSelectSale;
+  final void Function(RecentSaleRef) onSelectSale;
 
   @override
   Widget build(BuildContext context) {

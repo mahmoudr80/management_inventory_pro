@@ -14,9 +14,9 @@ class LowStockSection extends StatelessWidget {
     required this.onRestock,
   });
 
-  final List<LowStockProduct> products;
+  final List<LowStockProductRef> products;
   final bool isLoading;
-  final void Function(LowStockProduct) onRestock;
+  final void Function(LowStockProductRef) onRestock;
 
   @override
   Widget build(BuildContext context) {
