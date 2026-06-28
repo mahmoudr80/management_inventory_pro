@@ -25,6 +25,7 @@ class DashboardSummary {
       yesterdayRevenue == 0
           ? 0
           : ((todayRevenue - yesterdayRevenue) / yesterdayRevenue) * 100;
+  bool get hasRevenueGrowth => revenueChangePercent > 0;
 
   DashboardSummary copyWith({
     double? todayRevenue,
@@ -50,4 +51,14 @@ class DashboardSummary {
           inventoryTurnoverChange ?? this.inventoryTurnoverChange,
     );
   }
+  const DashboardSummary.empty()
+      : todayRevenue = 0,
+        yesterdayRevenue = 0,
+        todayOrders = 0,
+        avgOrderValue = 0,
+        totalProducts = 0,
+        activeCategories = 0,
+        lowStockCount = 0,
+        inventoryValue = 0,
+        inventoryTurnoverChange = 0;
 }
