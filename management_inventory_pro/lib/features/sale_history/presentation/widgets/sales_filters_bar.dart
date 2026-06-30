@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:management_inventory_pro/features/sale_history/presentation/widgets/filter_dropdown.dart';
 import 'package:management_inventory_pro/features/sale_history/presentation/widgets/sale_search_field.dart';
+import '../../../../core/widgets/dropdown_item.dart';
+import '../../../../core/widgets/filter_dropdown.dart';
 import '../../data/models/sale_item_model.dart';
 import '../cubit/sales_history_cubit.dart';
 
@@ -114,11 +115,25 @@ class _DateRangeDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilterDropdown<DateRangeFilter>(
-      value: value,
       icon: Icons.calendar_today_rounded,
-      items: DateRangeFilter.values,
-      labelBuilder: _label,
-      onChanged: onChanged,
+      label: 'Date',
+      selectedItem: DropdownItem(
+        id: value,
+        label: _label(value),
+      ),
+      items: DateRangeFilter.values
+          .map(
+            (e) => DropdownItem<DateRangeFilter>(
+          id: e,
+          label: _label(e),
+        ),
+      )
+          .toList(),
+      onChanged: (item) {
+        if (item != null) {
+          onChanged(item.id);
+        }
+      },
     );
   }
 }
@@ -138,8 +153,26 @@ class _PaymentMethodDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilterDropdown(value: value, icon: Icons.payment_rounded,
-        items: PaymentMethod.values, labelBuilder: _label, onChanged: onChanged);
+    final paymentMethodItems = PaymentMethod.values
+        .map(
+          (e) => DropdownItem<PaymentMethod>(
+        id: e,
+        label: _label(e),
+      ),
+    )
+        .toList();
+
+    return FilterDropdown<PaymentMethod>(
+      icon: Icons.payment_rounded,
+      label: 'Payment Method',
+      items: paymentMethodItems,
+      selectedItem: paymentMethodItems.firstWhere((e) => e.id == value),
+      onChanged: (item) {
+        if (item != null) {
+          onChanged(item.id);
+        }
+      },
+    );
   }
 }
 

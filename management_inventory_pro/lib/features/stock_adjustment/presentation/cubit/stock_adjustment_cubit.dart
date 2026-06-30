@@ -1,16 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/mock/mock_adjustments.dart';
-import '../../data/mock/mock_products.dart';
+import 'package:management_inventory_pro/core/networking/api_result.dart';
+import 'package:management_inventory_pro/features/stock_adjustment/data/repository/stock_adjustment_repository.dart';
+import 'package:uuid/uuid.dart';
 import '../../data/models/adjustment_reason.dart';
 import '../../data/models/stock_adjustment_item_model.dart';
 import '../../data/models/stock_adjustment_model.dart';
 import 'stock_adjustment_state.dart';
 
 class StockAdjustmentCubit extends Cubit<StockAdjustmentState> {
-  StockAdjustmentCubit() : super(StockAdjustmentInitial());
+  StockAdjustmentCubit(this._repository) : super(StockAdjustmentInitial());
+final StockAdjustmentRepository _repository;
 
   void initialize() {
-    emit(StockAdjustmentLoaded(adjustment: MockAdjustments.sampleDraft));
+    emit(StockAdjustmentLoaded(adjustment: StockAdjustmentModel(id: Uuid().v4(),
+        status: AdjustmentStatus.completed)));
   }
 
   StockAdjustmentLoaded? get _loaded =>
@@ -27,7 +30,7 @@ class StockAdjustmentCubit extends Cubit<StockAdjustmentState> {
     }
 
     final existingIds = loaded.adjustment.items.map((e) => e.productId).toSet();
-    final results = MockProductCatalog.products
+    final results = loaded.adjustment.items
         .where((p) =>
             !existingIds.contains(p.productId) &&
             (p.productName.toLowerCase().contains(q) ||
@@ -131,12 +134,50 @@ class StockAdjustmentCubit extends Cubit<StockAdjustmentState> {
   }
 
   void discardDraft() {
-    emit(StockAdjustmentDiscarded());
-  }
-
-  void requestCompleteAdjustment() {
     final loaded = _loaded;
     if (loaded == null) return;
+
+    final newAdjustment = StockAdjustmentModel(
+      id: Uuid().v4(),
+      createdBy: loaded.adjustment.createdBy,
+      createdAt: DateTime.now(),
+      status: AdjustmentStatus.draft,
+      items: const [],
+    );
+
+    emit(
+      loaded.copyWith(
+        adjustment: newAdjustment,
+        searchQuery: '',
+        searchResults: const [],
+        isDraftSaved: false,
+        clearSelectedRow: true,
+      ),
+    );
+  }
+  void clearSuccessMessage() {
+    final loaded = _loaded;
+    if (loaded == null) return;
+
+    emit(
+      loaded.copyWith(
+        clearSuccessMessage: true,
+      ),
+    );
+  }
+  void clearErrorMessage() {
+    final loaded = _loaded;
+    if (loaded == null) return;
+
+    emit(
+      loaded.copyWith(
+        clearErrorMessage: true,
+      ),
+    );
+  }
+  void requestCompleteAdjustment() {
+    final loaded = _loaded;
+    if (loaded == null ) return;
     emit(loaded.copyWith(showCompleteDialog: true));
   }
 
@@ -146,13 +187,43 @@ class StockAdjustmentCubit extends Cubit<StockAdjustmentState> {
     emit(loaded.copyWith(showCompleteDialog: false));
   }
 
-  void completeAdjustment() {
+  Future<void> completeAdjustment() async {
     final loaded = _loaded;
     if (loaded == null) return;
 
-    final completed = loaded.adjustment.copyWith(
-      status: AdjustmentStatus.completed,
+    if(loaded.adjustment.reason==null){
+      emit(
+        loaded.copyWith(
+          showCompleteDialog: false,
+          errorMessage: 'you should choose a reason.',
+        ),
+      );
+      return;
+    }
+
+    final response = await _repository.addStockAdjustment(
+      loaded.adjustment,
     );
-    emit(StockAdjustmentCompleted(adjustment: completed));
-  }
-}
+
+    switch (response) {
+      case Success():
+        final completed = loaded.adjustment.copyWith(
+          status: AdjustmentStatus.completed,
+        );
+
+        emit(
+          loaded.copyWith(
+            adjustment: completed,
+            showCompleteDialog: false,
+            successMessage: 'Stock adjustment completed successfully.',
+          ),
+        );
+
+      case Failure(errorModel: final error):
+        emit(
+          StockAdjustmentError(
+            message: error.message,
+          ),
+        );
+    }
+  }}

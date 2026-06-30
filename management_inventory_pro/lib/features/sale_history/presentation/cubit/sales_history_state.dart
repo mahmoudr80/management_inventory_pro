@@ -4,7 +4,7 @@ part of 'sales_history_cubit.dart';
 // Enums
 // ---------------------------------------------------------------------------
 
-enum DateRangeFilter { today, yesterday, last7Days, thisMonth, custom }
+enum  DateRangeFilter { today, yesterday, last7Days, thisMonth, custom }
 
 enum SortColumn { saleId, dateTime, itemsCount, quantity, totalAmount }
 

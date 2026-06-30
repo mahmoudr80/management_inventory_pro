@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
+import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
+import 'package:management_inventory_pro/features/stock_adjustment/data/repository/stock_adjustment_repository.dart';
+import '../../../product/data/respository/product_repository.dart';
+import '../../../product/presentation/products/cubit/product_cubit.dart';
 import '../cubit/stock_adjustment_cubit.dart';
 import '../cubit/stock_adjustment_state.dart';
 import '../widgets/dialogs/complete_adjustment_dialog.dart';
@@ -24,7 +29,8 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
   @override
   void initState() {
     super.initState();
-    _cubit = StockAdjustmentCubit()..initialize();
+    _cubit = StockAdjustmentCubit(getIt<StockAdjustmentRepository>())
+      ..initialize();
   }
 
   @override
@@ -36,7 +42,8 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
 
-    final isCtrl = HardwareKeyboard.instance.isControlPressed ||
+    final isCtrl =
+        HardwareKeyboard.instance.isControlPressed ||
         HardwareKeyboard.instance.isMetaPressed;
 
     if (isCtrl && event.logicalKey == LogicalKeyboardKey.keyS) {
@@ -66,7 +73,10 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
       value: _cubit,
       child: BlocConsumer<StockAdjustmentCubit, StockAdjustmentState>(
         listener: (context, state) {
-          if (state is StockAdjustmentLoaded && state.showCompleteDialog) {
+
+          if (state is! StockAdjustmentLoaded) return;
+
+          if (state.showCompleteDialog) {
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -77,22 +87,27 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
             );
           }
 
-          if (state is StockAdjustmentCompleted) {
-            Navigator.of(context).maybePop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Stock adjustment completed successfully!'),
-                backgroundColor: const Color(0xFF0041C8),
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-              ),
+          if (state.successMessage != null) {
+            Navigator.of(context).pop(); // Close the dialog
+
+            AppSnackBar.showSuccess(
+              context,
+              message: state.successMessage!,
             );
+
+            _cubit.clearSuccessMessage();
           }
 
-          if (state is StockAdjustmentDiscarded) {
-            Navigator.of(context).maybePop();
+
+          if (state.errorMessage != null) {
+            Navigator.of(context).pop(); // Close the dialog
+            AppSnackBar.showError(
+              context,
+              message: state.errorMessage!,
+              duration: 2000
+            );
+
+            _cubit.clearErrorMessage();
           }
         },
         builder: (context, state) {
@@ -112,7 +127,12 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
                       Expanded(
                         child: Column(
                           children: [
-                            const ProductSearchSection(),
+                            BlocProvider(
+                              create: (context) =>
+                                  ProductCubit(getIt<ProductRepository>())
+                                    ..getProducts(),
+                              child: const ProductSearchSection(),
+                            ),
                             Expanded(
                               child: SingleChildScrollView(
                                 padding: EdgeInsets.only(bottom: 16.h),
