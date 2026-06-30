@@ -9,6 +9,8 @@ class DatabaseConstants {
   static const String stockEntryItemTable= "stock_entry_items";
   static const String saleTable= "sales";
   static const String saleItemTable= "sale_items";
+  static const String stockAdjustmentsTable= "stock_adjustments";
+  static const String stockAdjustmentItemsTable= "stock_adjustment_items";
 
   //columns
   static const String idColumn = "id";
@@ -40,6 +42,13 @@ class DatabaseConstants {
   static const String paymentMethodColumn = "payment_method"; //sale table
   static const String cashierNameColumn = "cashier_name"; //sale table
   static const String statusColumn = "status"; //sale table
+  static const String createdByColumn = "created_by"; //stock adjustment table
+  static const String reasonColumn = "reason"; //stock adjustment table
+  static const String adjustmentQuantityColumn = "adjustment_quantity"; //stock adjustment Item table
+  static const String stockAdjustmentIdColumn = "stock_adjustment_id"; //stock adjustment Item table
+  static const String newStockColumn = "new_stock"; //stock adjustment Item table
+  static const String totalInventoryValueChangeColumn = "total_inventory_value_change"; //stock adjustment Item table
+  static const String inventoryValueChangeColumn = "inventory_value_change"; //stock adjustment Item table
 
 
   //supplier table
