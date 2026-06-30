@@ -21,6 +21,7 @@ import '../pos/presentation/screens/pos_screen.dart';
 import '../product/data/respository/product_repository.dart';
 import '../product/presentation/products/cubit/product_cubit.dart';
 import '../product/presentation/products/screens/product_screen.dart';
+import '../stock_adjustment/presentation/screens/stock_adjustment_page.dart';
 import '../stock_receipts/presentation/cubit/stock_entry_cubit.dart';
 import '../unit/presentation/cubit/unit_cubit.dart';
 
@@ -66,6 +67,7 @@ List<Widget>screens = [DashboardScreen(),
     create: (context) => SalesHistoryCubit(getIt<SaleHistoryRepository>())..loadSales(),
     child: SalesHistoryScreen(),
   ),
+  StockAdjustmentPage(),
   Placeholder(),
   Placeholder(),
 

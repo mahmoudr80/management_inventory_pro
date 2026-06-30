@@ -27,6 +27,7 @@ class SideBarLayout extends StatelessWidget {
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.stockReceipts), label: 'Stock Receipts', icon: Icons.inventory),
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.posIcon),icon: Icons.shopping_bag_outlined, label: 'POS'),
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.saleHistory),icon: Icons.menu_book_outlined, label: 'Sale History'),
+      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.stockAdjustment),icon: Icons.edit, label: 'Stock Adjustments'),
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.reportIcon),icon: Icons.analytics_outlined, label: 'Reports'),
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.settings),icon: Icons.settings_outlined, label: 'Settings'),
     ];
@@ -96,7 +97,7 @@ class SideBarLayout extends StatelessWidget {
                     child: AnimatedContainer(clipBehavior: Clip.antiAlias,
 
                       duration: const Duration(milliseconds: 150),
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                      padding: EdgeInsets.only(left: 4.w,top: 10.h,bottom: 10.h ),
                       decoration: BoxDecoration(
                         color: isActive
                             ? AppColors.sideBarBackgroundActive
@@ -116,6 +117,7 @@ class SideBarLayout extends StatelessWidget {
                           ),
                           Text(
                             item.label,
+                            overflow: TextOverflow.ellipsis,
                             style: AppTextStyles.bodySm.copyWith(
                               color: isActive
                                   ? AppColors.sideBarItemsActive
