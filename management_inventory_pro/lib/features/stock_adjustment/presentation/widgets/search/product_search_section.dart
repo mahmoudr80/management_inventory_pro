@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:management_inventory_pro/core/widgets/search_select_dropdown.dart';
+import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
+import 'package:management_inventory_pro/features/product/presentation/products/cubit/product_cubit.dart';
+import '../../../../../core/dependency_injection/service_locator.dart';
+import '../../../../../generated/assets.gen.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 import '../../cubit/stock_adjustment_cubit.dart';
 import '../../cubit/stock_adjustment_state.dart';
@@ -22,7 +27,8 @@ class ProductSearchSection extends StatelessWidget {
         // `cubit.searchProducts` query target) — SearchSelectDropdown
         // filters this list locally as the user types, so it needs the
         // full set, not just the last query's results.
-        final products = loaded?.adjustment.items ?? <StockAdjustmentItemModel>[];
+        final products = loaded?.adjustment.items ??
+            <StockAdjustmentItemModel>[];
         final reason = loaded?.adjustment.reason;
 
         return Padding(
@@ -31,22 +37,29 @@ class ProductSearchSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: SearchSelectDropdown<StockAdjustmentItemModel>(
-                  // Always null: this field adds a product and resets,
-                  // it doesn't hold a persistent selection.
-                  selected: null,
-                  items: products,
-                  labelBuilder: (p) => p.productName,
-                  searchTextBuilder: (p) =>
-                      '${p.productName} ${p.sku} ${p.barcode ?? ''}',
-                  subtitleBuilder: (p) => p.sku,
-                  trailingBuilder: (p) => '${p.currentStock}',
-                  itemIcon: Icons.inventory_2_outlined,
-                  placeholder: 'Search by SKU, Barcode, or Product Name...',
-                  emptyText: 'No products found.',
-                  clearable: false,
-                  onChanged: (p) {
-                    if (p != null) cubit.addProduct(p);
+                child: BlocBuilder<ProductCubit,ProductState>(
+                  builder: (context, state) {
+                    if(state is ProductSuccess){
+                      return SearchSelectDropdown<StockAdjustmentItemModel>(
+                        // Always null: this field adds a product and resets,
+                        // it doesn't hold a persistent selection.
+                        selected: null,
+                        items: state.allProducts.map((product) =>StockAdjustmentItemModel.fromProduct(product) ,).toList(),
+                        labelBuilder: (p) => p.productName,
+                        searchTextBuilder: (p) =>
+                        '${p.productName} ${p.sku} ${p.barcode ?? ''}',
+                        subtitleBuilder: (p) => p.sku,
+                        trailingBuilder: (p) => '${p.currentStock}',
+                        itemIcon: Icons.inventory_2_outlined,
+                        placeholder: 'Search by SKU, Barcode, or Product Name...',
+                        emptyText: 'No products found.',
+                        clearable: false,
+                        onChanged: (p) {
+                          if (p != null) cubit.addProduct(p);
+                        },
+                      );
+                    }
+                   return Lottie.asset(Assets.lottie.notFound);
                   },
                 ),
               ),
