@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../../core/dialogs/dialog_utils.dart';
 import '../../../../../core/utils/app_snackBar.dart';
+import '../../../../../core/widgets/dropdown_item.dart';
+import '../../../../../core/widgets/filter_dropdown.dart';
 import '../../../../unit/presentation/add_unit_dialog.dart';
 import '../../../../unit/presentation/cubit/unit_cubit.dart';
 import '../cubit/product_cubit.dart';
-import 'custom_drop_down.dart';
 
 class UnitFilterDropdown extends StatelessWidget {
   const UnitFilterDropdown({super.key, required this.unitCubit, this.selUnit});
@@ -41,30 +41,45 @@ final String?selUnit;
           bloc: unitCubit,
           builder: (context, unitState) {
             final units = switch (unitState) {
-              GetUnitSuccess(units: final list) =>
-                  list
-                      .map((u) => DropdownItem(id: u.id, name: u.name))
-                      .toList(),
-              _ => <DropdownItem>[],
+              GetUnitSuccess(units: final list) => list
+                  .map((u) => DropdownItem<int>(
+                id: u.id,
+                label: u.name,
+              ))
+                  .toList(),
+              _ => <DropdownItem<int>>[],
             };
-            return CustomDropDown(
+
+            final selectedUnit = units
+                .where((u) => u.label == selUnit)
+                .cast<DropdownItem<int>?>()
+                .firstOrNull;
+
+            return FilterDropdown<int>(
               icon: Icons.straighten_outlined,
               label: 'Unit',
-              selectedValue: selUnit,
               items: units,
-              onSelect: (val) =>
-              val == null
-                  ? context.read<ProductCubit>().clearFilters()
-                  : context.read<ProductCubit>().filterByUnit(val),
-              onAddNew: () => _openAddUnit(context),
+              selectedItem: selectedUnit,
+
+              onChanged: (item) {
+                if (item == null) {
+                  context.read<ProductCubit>().clearFilters();
+                } else {
+                  context.read<ProductCubit>().filterByUnit(item.label);
+                  // Better: filterByUnit(item.id)
+                }
+              },
+
+              onAdd: () => _openAddUnit(context),
+
               addLabel: 'New unit',
-              onDelete: (id) {
-                final item = units.firstWhere((u) => u.id == id);
+
+              onDelete: (item) {
                 showDeleteConfirmation(
                   context: context,
                   title: 'Delete unit',
-                  itemName: item.name,
-                  onConfirm: () => unitCubit.deleteUnit(id),
+                  itemName: item.label,
+                  onConfirm: () => unitCubit.deleteUnit(item.id),
                 );
               },
             );

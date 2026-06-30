@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/dialogs/dialog_utils.dart';
 import '../../../../../core/utils/app_snackBar.dart';
+import '../../../../../core/widgets/dropdown_item.dart';
+import '../../../../../core/widgets/filter_dropdown.dart';
 import '../../../../category/presentation/add_category_dialog.dart';
 import '../../../../category/presentation/cubit/category_cubit.dart';
 import '../cubit/product_cubit.dart';
@@ -38,26 +40,36 @@ final String ?selCat;
         builder: (context, catState) {
           final categories = switch (catState) {
             GetCategorySuccess(categories: final list) =>
-                list.map((c) => DropdownItem(id: c.id, name: c.name)).toList(),
-            _ => <DropdownItem>[],
+                list
+                    .map((c) => DropdownItem<int>(id: c.id, label: c.name))
+                    .toList(),
+            _ => <DropdownItem<int>>[],
           };
-          return CustomDropDown(
+          final selectedCategory = categories
+              .where((e) => e.label == selCat)
+              .firstOrNull;
+
+          return FilterDropdown<int>(
             icon: Icons.category_outlined,
             label: 'Category',
-            selectedValue: selCat,
             items: categories,
-            onSelect: (val) => val == null
-                ? context.read<ProductCubit>().clearFilters()
-                : context.read<ProductCubit>().filterByCategory(val),
-            onAddNew: () => _openAddCategory(context),
+            selectedItem: selectedCategory,
+            onChanged: (item) {
+              if (item == null) {
+                context.read<ProductCubit>().clearFilters();
+              } else {
+                context.read<ProductCubit>().filterByCategory(item.label);
+                // Better: filterByCategory(item.id)
+              }
+            },
+            onAdd: () => _openAddCategory(context),
             addLabel: 'New category',
-            onDelete: (id) {
-              final item = categories.firstWhere((c) => c.id == id);
+            onDelete: (item) {
               showDeleteConfirmation(
                 context: context,
                 title: 'Delete category',
-                itemName: item.name,
-                onConfirm: () => categoryCubit.deleteCategory(id),
+                itemName: item.label,
+                onConfirm: () => categoryCubit.deleteCategory(item.id),
               );
             },
           );
