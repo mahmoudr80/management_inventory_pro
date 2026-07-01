@@ -4,14 +4,14 @@ import '../../data/models/adjustment_model.dart';
 import '../../data/models/adjustment_reason.dart';
 import '../../data/models/adjustment_status.dart';
 import '../../data/models/date_range_filter.dart';
-import '../../domain/repositories/i_stock_adjustment_history_repository.dart';
+import '../../data/repositories/mock_stock_adjustment_history_repository.dart';
 import 'stock_adjustment_history_state.dart';
 
 class StockAdjustmentHistoryCubit extends Cubit<StockAdjustmentHistoryState> {
   StockAdjustmentHistoryCubit(this._repository)
       : super(const StockAdjustmentHistoryState());
 
-  final IStockAdjustmentHistoryRepository _repository;
+  final StockAdjustmentHistoryRepository _repository;
 
   Future<void> loadAdjustments() async {
     emit(state.copyWith(
