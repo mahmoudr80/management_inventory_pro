@@ -16,7 +16,7 @@ class StockAdjustmentHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => StockAdjustmentHistoryCubit(
-        MockStockAdjustmentHistoryRepository(),
+        StockAdjustmentHistoryRepository(),
       )..loadAdjustments(),
       child: const StockAdjustmentHistoryView(),
     );
