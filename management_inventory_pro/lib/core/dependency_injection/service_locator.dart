@@ -12,6 +12,7 @@ import 'package:management_inventory_pro/features/product/data/respository/produ
 import 'package:management_inventory_pro/features/sale_history/data/datasource/sale_history_datasource.dart';
 import 'package:management_inventory_pro/features/sale_history/data/repository/sale_history_repository.dart';
 import 'package:management_inventory_pro/features/stock_adjustment/data/datasource/stock_adjustment_datasource.dart';
+import 'package:management_inventory_pro/features/stock_adjustment_history/data/datasource/stock_adjustment_history_datasource.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/datasource/stock_entry_datasource.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import 'package:management_inventory_pro/features/suppliers/data/datasource/supplier_datasource.dart';
@@ -22,6 +23,7 @@ import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/category/data/datasource/category_datasource.dart';
 import '../../features/category/data/respository/category_repository.dart';
 import '../../features/stock_adjustment/data/repository/stock_adjustment_repository.dart';
+import '../../features/stock_adjustment_history/data/repositories/stock_adjustment_history_repository.dart';
 import '../../features/suppliers/data/repository/supplier_repository.dart';
 import '../../features/unit/data/respository/unit_repository.dart';
 
@@ -91,6 +93,10 @@ Future<void> setupServiceLocator() async {
         StockAdjustmentDatasource(getIt<DatabaseService>().db),);
     getIt.registerLazySingleton(() => StockAdjustmentRepository(getIt<StockAdjustmentDatasource>()),);
 
+    //stock adjustment history
+    getIt.registerLazySingleton<StockAdjustmentHistoryDatasource>(() =>
+        StockAdjustmentHistoryDatasource(getIt<DatabaseService>().db),);
+    getIt.registerLazySingleton(() => StockAdjustmentHistoryRepository(getIt<StockAdjustmentHistoryDatasource>()),);
   }
 
 
