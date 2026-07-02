@@ -18,6 +18,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final InputDecoration? inputDecoration;
   final void Function(String)? onChanged;
+  final TextStyle? hintStyle;
   const CustomTextField({
     super.key,
     required this.label,
@@ -27,7 +28,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.validator,
     this.prefixIcon,
-    this.suffixIcon, this.maxLines, this.helperText, this.prefixText, this.inputDecoration, this.onChanged,
+    this.suffixIcon, this.maxLines, this.helperText, this.prefixText, this.inputDecoration, this.onChanged, this.hintStyle,
   });
 
   @override
@@ -53,7 +54,7 @@ class CustomTextField extends StatelessWidget {
           decoration:inputDecoration?? InputDecoration(prefixText: prefixText,
             helperText: helperText,
             hintText: hint,
-            hintStyle: AppTextStyles.body.copyWith(
+            hintStyle: hintStyle??AppTextStyles.body.copyWith(
               color: AppColors.textSecondary,
             ),
             prefixIcon: prefixIcon,

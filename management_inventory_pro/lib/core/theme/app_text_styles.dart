@@ -6,7 +6,7 @@ class AppTextStyles {
   // Display style (display-lg/md)
   static TextStyle get display => TextStyle(
     fontFamily: 'Inter',
-    fontSize: 32.sp.clamp(24.0, 40.0),
+    fontSize: 6.sp,
     fontWeight: FontWeight.w600,
     height: 40 / 32,
     letterSpacing: -0.02 * 32,
@@ -26,7 +26,7 @@ class AppTextStyles {
   // Headline Small
   static TextStyle get headlineSm => TextStyle(
     fontFamily: 'Inter',
-    fontSize: 16.sp.clamp(14.0, 20.0),
+    fontSize: 6.sp,
     fontWeight: FontWeight.w600,
     height: 24 / 16,
     color: AppColors.textPrimary,
@@ -44,7 +44,7 @@ class AppTextStyles {
   // Body Medium
   static TextStyle get bodyMd => TextStyle(
     fontFamily: 'Inter',
-    fontSize: 14.sp.clamp(12.0, 16.0),
+    fontSize: 5.sp,
     fontWeight: FontWeight.w400,
     height: 20 / 14,
     color: AppColors.textPrimary,
@@ -53,7 +53,7 @@ class AppTextStyles {
   // Body Small
   static TextStyle get bodySm => TextStyle(
     fontFamily: 'Inter',
-    fontSize: 13.sp.clamp(11.0, 15.0),
+    fontSize: 4.sp,
     fontWeight: FontWeight.w400,
     height: 18 / 13,
     color: AppColors.textSecondary,
@@ -62,8 +62,8 @@ class AppTextStyles {
   // Label Caps
   static TextStyle get labelCaps => TextStyle(
     fontFamily: 'Inter',
-    fontSize: 11.sp.clamp(9.0, 13.0),
-    fontWeight: FontWeight.w600,
+    fontSize: 4.sp,
+    fontWeight: FontWeight.w700,
     height: 16 / 11,
     letterSpacing: 0.05 * 11,
     color: AppColors.textSecondary,
@@ -72,7 +72,7 @@ class AppTextStyles {
   // Data Mono (JetBrains Mono for numbers/SKUs)
   static TextStyle get dataMono => TextStyle(
     fontFamily: 'JetBrainsMono', // Standard fallback or configured font
-    fontSize: 13.sp.clamp(11.0, 15.0),
+    fontSize: 4.sp,
     fontWeight: FontWeight.w400,
     height: 20 / 13,
     color: AppColors.textPrimary,

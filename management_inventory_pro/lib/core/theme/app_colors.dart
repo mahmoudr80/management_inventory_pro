@@ -111,4 +111,14 @@ class AppColors {
 
 // POS Text
   static const posTextMuted = Color(0xFF9CA3AF);
+
+  static const Color tertiary = Color(0xFF4B5053);
+
+  // Functional accents (stock / status indicators only).
+
+  static const Color onSuccessContainer = Color(0xFF15803D);
+  static const Color onWarningContainer = Color(0xFFC2410C);
+
+  static const Color neutralContainer = Color(0xFFF1F5F9);
+  static const Color onNeutralContainer = Color(0xFF64748B);
 }
