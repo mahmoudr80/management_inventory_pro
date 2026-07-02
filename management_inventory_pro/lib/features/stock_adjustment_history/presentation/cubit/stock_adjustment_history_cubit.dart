@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:management_inventory_pro/core/networking/api_result.dart';
 
 import '../../data/models/adjustment_model.dart';
 import '../../data/models/adjustment_reason.dart';
 import '../../data/models/adjustment_status.dart';
 import '../../data/models/date_range_filter.dart';
-import '../../data/repositories/mock_stock_adjustment_history_repository.dart';
+import '../../data/repositories/stock_adjustment_history_repository.dart';
 import 'stock_adjustment_history_state.dart';
 
 class StockAdjustmentHistoryCubit extends Cubit<StockAdjustmentHistoryState> {
@@ -20,13 +21,24 @@ class StockAdjustmentHistoryCubit extends Cubit<StockAdjustmentHistoryState> {
       clearError: true,
     ));
     try {
-      final adjustments = await _repository.getAdjustments();
-      emit(state.copyWith(
-        status: StockAdjustmentHistoryStatus.loaded,
-        adjustments: adjustments,
-        loading: false,
-       //  selectedAdjustment: adjustments.isNotEmpty ? adjustments.first : null,
-      ));
+      final response = await _repository.getAdjustments();
+      switch(response){
+        case Success(data:final adjustments):
+          emit(state.copyWith(
+            status: StockAdjustmentHistoryStatus.loaded,
+            adjustments: adjustments,
+            loading: false,
+            //  selectedAdjustment: adjustments.isNotEmpty ? adjustments.first : null,
+          ));
+          break;
+        case Failure(errorModel:final error):
+          emit(state.copyWith(
+            status: StockAdjustmentHistoryStatus.error,
+            loading: false,
+            error: error.message,
+          ));
+      }
+
     } catch (e) {
       emit(state.copyWith(
         status: StockAdjustmentHistoryStatus.error,
