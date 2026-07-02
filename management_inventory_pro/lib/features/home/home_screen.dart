@@ -22,6 +22,7 @@ import '../product/data/respository/product_repository.dart';
 import '../product/presentation/products/cubit/product_cubit.dart';
 import '../product/presentation/products/screens/product_screen.dart';
 import '../stock_adjustment/presentation/screens/stock_adjustment_page.dart';
+import '../stock_adjustment_history/presentation/screens/stock_adjustment_history.dart';
 import '../stock_receipts/presentation/cubit/stock_entry_cubit.dart';
 import '../unit/presentation/cubit/unit_cubit.dart';
 
@@ -68,7 +69,7 @@ List<Widget>screens = [DashboardScreen(),
     child: SalesHistoryScreen(),
   ),
   StockAdjustmentPage(),
-  Placeholder(),
+  StockAdjustmentHistory(),
   Placeholder(),
 
 ];

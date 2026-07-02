@@ -28,7 +28,7 @@ class SideBarLayout extends StatelessWidget {
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.posIcon),icon: Icons.shopping_bag_outlined, label: 'POS'),
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.saleHistory),icon: Icons.menu_book_outlined, label: 'Sale History'),
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.stockAdjustment),icon: Icons.edit, label: 'Stock Adjustments'),
-      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.reportIcon),icon: Icons.analytics_outlined, label: 'Reports'),
+      _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.saleHistory),icon: Icons.menu_book_outlined, label: 'Adjustment History'),
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.settings),icon: Icons.settings_outlined, label: 'Settings'),
     ];
 
