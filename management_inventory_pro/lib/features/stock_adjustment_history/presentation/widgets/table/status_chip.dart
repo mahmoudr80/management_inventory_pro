@@ -27,7 +27,7 @@ class StatusChip extends StatelessWidget {
         status.label.toUpperCase(),
         style: TextStyle(
           fontFamily: 'Inter',
-          fontSize: dense ? 3.5.sp : 4.5.sp,
+          fontSize: dense ? 3.0.sp : 3.5.sp,
           fontWeight: FontWeight.w700,
           color: status.foreground,
           letterSpacing: 0.02,

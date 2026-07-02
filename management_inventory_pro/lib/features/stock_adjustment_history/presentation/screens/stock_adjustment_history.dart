@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/repositories/mock_stock_adjustment_history_repository.dart';
+import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
+import 'package:management_inventory_pro/features/stock_adjustment_history/data/datasource/stock_adjustment_history_datasource.dart';
+import '../../data/repositories/stock_adjustment_history_repository.dart';
 import '../cubit/stock_adjustment_history_cubit.dart';
 import 'stock_adjustment_history_view.dart';
 
@@ -16,7 +18,7 @@ class StockAdjustmentHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => StockAdjustmentHistoryCubit(
-        StockAdjustmentHistoryRepository(),
+        StockAdjustmentHistoryRepository(getIt<StockAdjustmentHistoryDatasource>()),
       )..loadAdjustments(),
       child: const StockAdjustmentHistoryView(),
     );

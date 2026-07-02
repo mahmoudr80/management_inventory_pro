@@ -36,7 +36,7 @@ class DetailsHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Adjustment Details', style: AppTextStyles.headlineSm),
+              Text(overflow: TextOverflow.ellipsis,'Adjustment Details', style: AppTextStyles.headlineSm),
               IconButton(
                 onPressed: onClose,
                 icon: Icon(Icons.close, size: 28.r, color: AppColors.onSurfaceVariant),
@@ -48,26 +48,30 @@ class DetailsHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    adjustment.id,
-                    style: AppTextStyles.dataMono.copyWith(
-                      fontSize: 5.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      overflow: TextOverflow.ellipsis,
+                      adjustment.id,
+                      style: AppTextStyles.dataMono.copyWith(
+                        fontSize: 5.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    'Created on ${_dateFormat.format(adjustment.dateTime)}',
-                    style: AppTextStyles.bodySm.copyWith(
-                      fontSize: 4.sp,
-                      color: AppColors.onSurfaceVariant,
+                    SizedBox(height: 2.h),
+                    Text(
+                      overflow: TextOverflow.ellipsis,
+                      'Created on ${_dateFormat.format(adjustment.dateTime)}',
+                      style: AppTextStyles.bodySm.copyWith(
+                        fontSize: 4.sp,
+                        color: AppColors.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               StatusChip(status: adjustment.status),
             ],
@@ -126,6 +130,7 @@ class _InfoTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
+            overflow: TextOverflow.ellipsis,
             label.toUpperCase(),
             style: AppTextStyles.labelCaps.copyWith(fontSize: 4.sp),
           ),
