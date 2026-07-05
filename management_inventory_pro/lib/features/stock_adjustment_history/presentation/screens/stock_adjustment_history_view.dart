@@ -47,9 +47,9 @@ class StockAdjustmentHistoryView extends StatelessWidget {
                 flex: 7,
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(
-                    AppSpacing.marginDesktop,
+                    AppSpacing.pagePadding,
                     24.h,
-                    AppSpacing.marginDesktop,
+                    AppSpacing.pagePadding,
                     0,
                   ),
                   child: Column(

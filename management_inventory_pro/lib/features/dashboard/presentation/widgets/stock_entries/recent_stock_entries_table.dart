@@ -59,36 +59,47 @@ class _TableHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SizedBox(
-            width: 100,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('RECEIPT ID', style: s.copyWith(color: c)),
-            ),
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('SUPPLIER', style: s.copyWith(color: c)),
+              child: Tooltip(
+                  message:    'RECEIPT ID', child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  'RECEIPT ID', style: s.copyWith(color: c)),
+                        ),
             ),
-          ),
-          SizedBox(
-            width: 120,
+                    ),
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('TOTAL COST',
+              child: Tooltip(
+                  message: 'SUPPLIER',child: Text(overflow: TextOverflow.ellipsis,
+                  'SUPPLIER', style: s.copyWith(color: c)),
+            ),
+          )),
+          Expanded(
+          //  width: 120,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Tooltip(
+                  message:   'TOTAL COST',child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  'TOTAL COST',
                   textAlign: TextAlign.right, style: s.copyWith(color: c)),
             ),
-          ),
-          SizedBox(
-            width: 110,
+          )),
+          Expanded(
+          //  width: 110,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('STATUS',
+              child: Tooltip(
+                  message: 'STATUS',child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  'STATUS',
                   textAlign: TextAlign.center, style: s.copyWith(color: c)),
             ),
           ),
-        ],
+          )],
       ),
     );
   }

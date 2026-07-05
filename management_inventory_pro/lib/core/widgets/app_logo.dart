@@ -12,7 +12,7 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logoSize = size ?? 64.w;
+    final logoSize = size ?? 120;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -38,7 +38,7 @@ class AppLogo extends StatelessWidget {
           ),
         ),
         if (showText) ...[
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           Text(
             'OmniStock',
             style: AppTextStyles.heading2.copyWith(

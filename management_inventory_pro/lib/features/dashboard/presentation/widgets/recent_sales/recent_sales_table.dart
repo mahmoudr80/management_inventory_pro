@@ -60,40 +60,54 @@ class _TableHeader extends StatelessWidget {
             width: 100,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('SALE ID', style: style.copyWith(color: color)),
+              child: Tooltip(
+                message: 'SALE ID',
+                child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    'SALE ID', style: style.copyWith(color: color)),
+              ),
             ),
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('DATE', style: style.copyWith(color: color)),
-            ),
+              child: Tooltip(
+              message: 'DATE',child:  Text(
+                  overflow: TextOverflow.ellipsis,
+                  'DATE', style: style.copyWith(color: color)),
+          ),)
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('CASHIER', style: style.copyWith(color: color)),
+              child: Tooltip(
+                message: 'CASHIER', child: Text(overflow: TextOverflow.ellipsis,
+                  'CASHIER', style: style.copyWith(color: color)),
             ),
-          ),
+          )),
           SizedBox(
             width: 110,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('AMOUNT',
+              child: Tooltip(
+                message: 'AMOUNT', child: Text(overflow: TextOverflow.ellipsis,
+                  'AMOUNT',
                   textAlign: TextAlign.right,
                   style: style.copyWith(color: color)),
             ),
-          ),
+          )),
           SizedBox(
             width: 60,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text('STATUS',
+              child: Tooltip(
+                  message:  'STATUS',child: Text(overflow: TextOverflow.ellipsis,
+                  'STATUS',
                   textAlign: TextAlign.center,
                   style: style.copyWith(color: color)),
             ),
           ),
-        ],
+          )],
       ),
     );
   }

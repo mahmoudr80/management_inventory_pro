@@ -27,10 +27,12 @@ class RecentStockEntryRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            SizedBox(
-              width: 100,
+            Expanded(
+              //width: 70,
               child: _PaddedCell(
-                child: Text(
+                child: Tooltip(
+                  message:   entry.receiptId, child: Text(
+                  overflow: TextOverflow.ellipsis,
                   entry.receiptId,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontFamily: 'JetBrains Mono',
@@ -38,10 +40,12 @@ class RecentStockEntryRow extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+            )),
             Expanded(
               child: _PaddedCell(
-                child: Text(
+                child: Tooltip(
+                  message:   entry.supplier.name??'', child: Text(
+                  overflow: TextOverflow.ellipsis,
                   entry.supplier.name??'',
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
@@ -49,11 +53,13 @@ class RecentStockEntryRow extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: 120,
+            )),
+            Expanded(
+              //width: 120,
               child: _PaddedCell(
-                child: Text(
+                child: Tooltip(
+              message:  '${egp.format(entry.totalCost)} EGP',child:  Text(
+                  overflow: TextOverflow.ellipsis,
                   '${egp.format(entry.totalCost)} EGP',
                   textAlign: TextAlign.right,
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -62,9 +68,9 @@ class RecentStockEntryRow extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: 110,
+            )),
+            Expanded(
+              //width: 110,
               child: Center(child: _StockEntryStatusChip(status: entry.status)),
             ),
           ],
@@ -109,7 +115,9 @@ class _StockEntryStatusChip extends StatelessWidget {
         color: bg,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text(
+      child: Tooltip(
+        message:  label, child:  Text(
+        overflow: TextOverflow.ellipsis,
         label,
         style: TextStyle(
           color: fg,
@@ -118,6 +126,6 @@ class _StockEntryStatusChip extends StatelessWidget {
           letterSpacing: 0.05,
         ),
       ),
-    );
+    ));
   }
 }
