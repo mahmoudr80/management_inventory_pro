@@ -36,7 +36,7 @@ void main() async {
     print("windowManager.ensureInitialized");
     await windowManager.ensureInitialized();
     await windowManager.setMinimumSize(
-        Size(1000, 650)
+      const Size(1050, 680),
     );
   }
 

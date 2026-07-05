@@ -31,48 +31,56 @@ class RecentSaleRow extends StatelessWidget {
         child: Row(
           children: [
             _Cell(
-              child: Text(
+              width: 100,
+              child: Tooltip(
+                message:  sale.id, child: Text(
+                overflow: TextOverflow.ellipsis,
                 sale.id,
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontFamily: 'JetBrains Mono',
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              width: 100,
-            ),
+            )),
             _Cell(
-              child: Text(
+              flex: 1,
+             child: Tooltip(
+            message: dateFmt.format(sale.date), child: Text(
+                overflow: TextOverflow.ellipsis,
                 dateFmt.format(sale.date),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.outline,
                 ),
               ),
-              flex: 1,
-            ),
+            )),
             _Cell(
-              child: Text(
+              flex: 1,
+              child: Tooltip(
+                message:sale.cashier ,child: Text(
+                overflow: TextOverflow.ellipsis,
                 sale.cashier,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              flex: 1,
-            ),
+            )),
             _Cell(
               align: CrossAxisAlignment.end,
-              child: Text(
+              width: 110,
+              child: Tooltip(
+                message: '${egp.format(sale.totalAmount)} EGP', child: Text(
+                overflow: TextOverflow.ellipsis,
                 '${egp.format(sale.totalAmount)} EGP',
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              width: 110,
-            ),
+            )),
             _Cell(
               align: CrossAxisAlignment.center,
-              child: _SaleStatusDot(status: sale.status),
               width: 60,
+              child: _SaleStatusDot(status: sale.status),
             ),
           ],
         ),
@@ -122,10 +130,11 @@ class _SaleStatusDot extends StatelessWidget {
       SaleStatus.refunded => const Color(0xFFE88B00),
       SaleStatus.cancelled => const Color(0xFFBA1A1A),
     };
-    return Container(
+    return   Tooltip(
+    message:status.name ,child: Container(
       width: 8,
       height: 8,
       decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-    );
+    ));
   }
 }

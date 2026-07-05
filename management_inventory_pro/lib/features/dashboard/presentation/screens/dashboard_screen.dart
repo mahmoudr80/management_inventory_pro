@@ -149,7 +149,7 @@ class _DashboardView extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
+                      Expanded(flex: 3,
                         child: RecentSalesSection(
                           sales: state.recentSales,
                           isLoading: state.isLoading,
@@ -159,7 +159,7 @@ class _DashboardView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 20),
-                      Expanded(
+                      Expanded(flex: 2,
                         child: RecentStockEntriesSection(
                           entries: state.recentStockEntries,
                           isLoading: state.isLoading,
