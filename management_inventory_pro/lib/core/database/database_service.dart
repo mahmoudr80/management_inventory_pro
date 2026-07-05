@@ -158,6 +158,61 @@ CREATE TABLE  IF NOT EXISTS ${DatabaseConstants.saleItemTable} (
 );
    """);
 
+    await db.execute("""
+CREATE TABLE IF NOT EXISTS ${DatabaseConstants.stockAdjustmentsTable} (
+
+    ${DatabaseConstants.idColumn} TEXT NOT NULL PRIMARY KEY,
+
+    ${DatabaseConstants.reasonColumn} TEXT NOT NULL,
+
+    ${DatabaseConstants.noteColumn} TEXT,
+
+    ${DatabaseConstants.totalItemColumn} INTEGER NOT NULL DEFAULT 0,
+
+    ${DatabaseConstants.totalQuantityColumn} REAL NOT NULL DEFAULT 0,
+
+    ${DatabaseConstants.totalInventoryValueChangeColumn} REAL NOT NULL DEFAULT 0,
+
+    ${DatabaseConstants.createdByColumn} TEXT NOT NULL DEFAULT 'Admin',
+
+    ${DatabaseConstants.statusColumn} TEXT NOT NULL DEFAULT 'draft',
+
+    ${DatabaseConstants.createdAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    ${DatabaseConstants.updatedAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+""");
+    await db.execute("""
+CREATE TABLE IF NOT EXISTS ${DatabaseConstants.stockAdjustmentItemsTable} (
+
+    ${DatabaseConstants.idColumn} TEXT NOT NULL PRIMARY KEY,
+
+    ${DatabaseConstants.stockAdjustmentIdColumn} TEXT NOT NULL,
+
+    ${DatabaseConstants.productIdColumn} TEXT NOT NULL,
+
+    ${DatabaseConstants.currentStockColumn} REAL NOT NULL,
+
+    ${DatabaseConstants.adjustmentQuantityColumn} REAL NOT NULL,
+
+    ${DatabaseConstants.newStockColumn} REAL NOT NULL,
+
+    ${DatabaseConstants.costPriceColumn} REAL NOT NULL CHECK(${DatabaseConstants.costPriceColumn} >= 0),
+
+    ${DatabaseConstants.inventoryValueChangeColumn} REAL NOT NULL,
+
+    ${DatabaseConstants.noteColumn} TEXT,
+
+    FOREIGN KEY (${DatabaseConstants.stockAdjustmentIdColumn})
+        REFERENCES ${DatabaseConstants.stockAdjustmentsTable}(${DatabaseConstants.idColumn})
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (${DatabaseConstants.productIdColumn})
+        REFERENCES ${DatabaseConstants.productTable}(${DatabaseConstants.idColumn})
+        ON DELETE RESTRICT
+);
+""");
+
   }
 
 }
