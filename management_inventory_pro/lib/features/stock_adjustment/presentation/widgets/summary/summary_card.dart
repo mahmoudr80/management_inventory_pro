@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 
 class SummaryCard extends StatelessWidget {
   final String label;
@@ -16,30 +18,25 @@ class SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical:16.h,horizontal: 2.w),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.lg,
+        horizontal: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFC3C5D9)),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label.toUpperCase(),
-            style: TextStyle(
-              fontSize: 4.sp,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.05,
-              color: const Color(0xFF434656),
-            ),
-          ),
-          SizedBox(height: 4.h),
+          Text(label.toUpperCase(), style: AppTextStyles.labelCaps),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             value,
-            style: TextStyle(
-              fontFamily: 'JetBrains Mono',
-              fontSize: 4.sp,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.dataMono.copyWith(
               fontWeight: FontWeight.w700,
               color: valueColor,
             ),

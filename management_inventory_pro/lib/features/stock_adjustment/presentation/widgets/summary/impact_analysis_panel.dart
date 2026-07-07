@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../cubit/stock_adjustment_cubit.dart';
 import '../../cubit/stock_adjustment_state.dart';
 import 'inventory_value_summary.dart';
@@ -17,51 +19,63 @@ class ImpactAnalysisPanel extends StatelessWidget {
         if (state is! StockAdjustmentLoaded) return const SizedBox.shrink();
         final adj = state.adjustment;
 
+        // Panel narrows itself on smaller windows instead of using a
+        // single fixed width, so it still fits alongside the table
+        // down to the 900px minimum supported width.
+        final screenWidth = MediaQuery.sizeOf(context).width;
+        final panelWidth = screenWidth < AppBreakpoints.medium ? 280.0 : 340.0;
+
         return Container(
-          width: 90.w,
-          decoration: BoxDecoration(
-            color: const Color(0xFFFAF8FF),
-            border: const Border(left: BorderSide(color: Color(0xFFC3C5D9))),
+          width: panelWidth,
+          decoration: const BoxDecoration(
+            color: AppColors.background,
+            border: Border(left: BorderSide(color: AppColors.outlineVariant)),
           ),
           child: Column(
             children: [
-              _PanelHeader(),
+              const _PanelHeader(),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(vertical:8.w,horizontal: 2.w),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: AppSpacing.lg,
+                    horizontal: AppSpacing.sm,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
+                      Wrap(
+                        spacing: AppSpacing.sm,
+                        runSpacing: AppSpacing.sm,
                         children: [
-                          Expanded(
+                          SizedBox(
+                            width: (panelWidth - AppSpacing.sm * 3) / 2,
                             child: SummaryCard(
                               label: 'Total Increase',
                               value: '+${adj.totalIncrease} units',
-                              valueColor: const Color(0xFF0041C8),
+                              valueColor: AppColors.primary,
                             ),
                           ),
-                          SizedBox(width: 2.w),
-                          Expanded(
+                          SizedBox(
+                            width: (panelWidth - AppSpacing.sm * 3) / 2,
                             child: SummaryCard(
                               label: 'Total Decrease',
                               value: '${adj.totalDecrease} units',
-                              valueColor: const Color(0xFFBA1A1A),
+                              valueColor: AppColors.error,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 12.h),
+                      const SizedBox(height: AppSpacing.md),
                       _NetQtyCard(net: adj.netQtyChange),
-                      SizedBox(height: 12.h),
+                      const SizedBox(height: AppSpacing.md),
                       InventoryValueSummary(adjustment: adj),
-                      SizedBox(height: 20.h),
+                      const SizedBox(height: AppSpacing.xl),
                       MovementPreview(items: adj.items),
                     ],
                   ),
                 ),
               ),
-              _PanelFooter(),
+              const _PanelFooter(),
             ],
           ),
         );
@@ -71,37 +85,42 @@ class ImpactAnalysisPanel extends StatelessWidget {
 }
 
 class _PanelHeader extends StatelessWidget {
+  const _PanelHeader();
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 14.h),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.md,
+      ),
       decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(bottom: BorderSide(color: Color(0xFFC3C5D9))),
+        color: AppColors.surface,
+        border: Border(bottom: BorderSide(color: AppColors.outlineVariant)),
       ),
       child: Row(
-        spacing: 5.w,
         children: [
-          Icon(Icons.analytics_outlined, size: 28.r, color: const Color(0xFF0041C8)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Impact Analysis',
-                style: TextStyle(
-                  fontSize: 5.sp,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF131B2E),
+          const Icon(Icons.analytics_outlined,
+              size: AppIconSize.lg, color: AppColors.primary),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Impact Analysis',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.headlineSm
+                      .copyWith(fontWeight: FontWeight.w700),
                 ),
-              ),
-              Text(
-                'Real-time inventory changes',
-                style: TextStyle(
-                  fontSize: 4.sp,
-                  color: const Color(0xFF434656),
+                Text(
+                  'Real-time inventory changes',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.bodySm,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -118,43 +137,38 @@ class _NetQtyCard extends StatelessWidget {
     final isNeg = net < 0;
     final prefix = net > 0 ? '+' : '';
     return Container(
-      padding: EdgeInsets.symmetric(vertical:  14.h,horizontal: 2.w),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.md,
+        horizontal: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFC3C5D9)),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.outlineVariant),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'NET QUANTITY CHANGE',
-                style: TextStyle(
-                  fontSize: 4.sp,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.05,
-                  color: const Color(0xFF434656),
-                ),
-              ),
-              SizedBox(height: 4.h),
+              Text('NET QUANTITY CHANGE', style: AppTextStyles.labelCaps),
+              const SizedBox(height: AppSpacing.xxs),
               Text(
                 '$prefix$net units',
-                style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
-                  fontSize: 6.sp,
+                style: AppTextStyles.dataMono.copyWith(
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF131B2E),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
           ),
           Icon(
             isNeg ? Icons.trending_down : Icons.trending_up,
-            size: 28.r,
-            color: isNeg ? const Color(0xFFBA1A1A) : const Color(0xFF0041C8),
+            size: AppIconSize.lg,
+            color: isNeg ? AppColors.error : AppColors.primary,
           ),
         ],
       ),
@@ -163,26 +177,32 @@ class _NetQtyCard extends StatelessWidget {
 }
 
 class _PanelFooter extends StatelessWidget {
+  const _PanelFooter();
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical:14.h,horizontal: 2.w),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.md,
+        horizontal: AppSpacing.sm,
+      ),
       decoration: const BoxDecoration(
-        color: Color(0xFFDAE2FD),
-        border: Border(top: BorderSide(color: Color(0xFFC3C5D9))),
+        color: AppColors.surfaceContainerHighest,
+        border: Border(top: BorderSide(color: AppColors.outlineVariant)),
       ),
       child: Row(
         children: [
-          Icon(Icons.info_outline, size: 28.r, color: const Color(0xFF434656)),
-          SizedBox(width: 2.w),
+          const Icon(Icons.info_outline,
+              size: AppIconSize.lg, color: AppColors.textSecondary),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
-            child: Text(
-              'Adjustments affect COGS and P&L statements.',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 4.sp,
-                fontStyle: FontStyle.italic,
-                color: const Color(0xFF434656),
+            child: Tooltip(
+              message: 'Adjustments affect COGS and P&L statements.',
+              child: Text(
+                'Adjustments affect COGS and P&L statements.',
+                overflow: TextOverflow.ellipsis,
+                style:
+                    AppTextStyles.bodySm.copyWith(fontStyle: FontStyle.italic),
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../../../core/theme/app_colors.dart';
 import '../../../data/models/dashboard_summary.dart';
 
 class InventoryValueCard extends StatelessWidget {
@@ -19,7 +20,7 @@ class InventoryValueCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF283044), // inverse-surface
+        color: AppColors.backgroundSideBar, // inverse-surface
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -28,7 +29,7 @@ class InventoryValueCard extends StatelessWidget {
           Text(
             'TOTAL INVENTORY VALUE',
             style: theme.textTheme.labelSmall?.copyWith(
-              color: const Color(0xFFB6C4FF),
+              color: AppColors.primaryFixedDim,
               letterSpacing: 0.08,
               fontWeight: FontWeight.w600,
             ),
@@ -58,13 +59,13 @@ class _TrendBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.trending_up_rounded, size: 16, color: Color(0xFF82E0AA)),
+        const Icon(Icons.trending_up_rounded, size: 16, color: AppColors.statusHealthyDot),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             'Stock turnover increased by ${change.toStringAsFixed(1)}% this month.',
             style: const TextStyle(
-              color: Color(0xFFB6C4FF),
+              color: AppColors.primaryFixedDim,
               fontSize: 12,
               height: 1.4,
             ),

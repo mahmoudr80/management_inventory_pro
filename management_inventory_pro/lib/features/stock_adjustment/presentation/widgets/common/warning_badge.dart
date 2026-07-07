@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 
 enum WarningLevel { low, out, negative }
 
@@ -12,17 +13,17 @@ class WarningBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final (color, icon, text) = switch (level) {
       WarningLevel.negative => (
-      const Color(0xFFBA1A1A),
+      AppColors.error,
       Icons.error_outline,
       'Negative',
       ),
       WarningLevel.out => (
-      const Color(0xFFBA1A1A),
+      AppColors.error,
       Icons.remove_circle_outline,
       'Out of stock',
       ),
       WarningLevel.low => (
-      const Color(0xFFF59E0B),
+      AppColors.warning,
       Icons.warning_amber_rounded,
       'Low stock',
       ),
@@ -33,8 +34,9 @@ class WarningBadge extends StatelessWidget {
       children: [
         Tooltip(
           message: text,
-          child: Icon(size: 20.r,
+          child: Icon(
             icon,
+            size: AppIconSize.md,
             color: color,
           ),
         )

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../data/models/sale_model.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 class PaymentSummaryCard extends StatelessWidget {
   const PaymentSummaryCard({super.key, required this.sale});
@@ -14,25 +16,24 @@ class PaymentSummaryCard extends StatelessWidget {
     final totalQty = sale.totalQuantity;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
       decoration: BoxDecoration(
-        color: const Color(0xFFF9FAFB),
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Payment Summary',
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 3.sp,
-              fontWeight: FontWeight.w700,
-              color: const Color(0xFF111827),
+          Tooltip(
+            message: 'Payment Summary',
+            child: Text(
+              'Payment Summary',
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.headlineSm.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: AppSpacing.md),
           _SummaryRow(
             label: 'Total Items',
             value: sale.totalItems.toString(),
@@ -46,21 +47,18 @@ class PaymentSummaryCard extends StatelessWidget {
             value: '\$${subtotal.toStringAsFixed(2)}',
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.h),
-            child: const Divider(height: 1, color: Color(0xFFE5E7EB)),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+            child: const Divider(height: 1, color: AppColors.border),
           ),
           _SummaryRow(
             label: 'Total',
             value: '\$${subtotal.toStringAsFixed(2)}',
-            labelStyle: TextStyle(
-              fontSize: 4.sp,
+            labelStyle: AppTextStyles.headlineSm.copyWith(
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF111827),
             ),
-            valueStyle: TextStyle(
-              fontSize: 4.sp,
+            valueStyle: AppTextStyles.headlineSm.copyWith(
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF2563EB),
+              color: AppColors.primary,
             ),
           ),
         ],
@@ -85,31 +83,34 @@ class _SummaryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 3.h),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Row(
         children: [
           Expanded(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: labelStyle ??
-                  TextStyle(
-                    fontSize: 3.sp,
-                    color: const Color(0xFF6B7280),
-                  ),
+            child: Tooltip(
+              message: label,
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: labelStyle ??
+                    AppTextStyles.bodyMd.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+              ),
             ),
           ),
-          SizedBox(width: 4.w),
-          Text(
-            value,
-            overflow: TextOverflow.ellipsis,
-            style: valueStyle ??
-                TextStyle(
-                  fontSize: 3.sp,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF111827),
-                ),
+          SizedBox(width: AppSpacing.sm),
+          Tooltip(
+            message: value,
+            child: Text(
+              value,
+              overflow: TextOverflow.ellipsis,
+              style: valueStyle ??
+                  AppTextStyles.bodyMd.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
           ),
         ],
       ),

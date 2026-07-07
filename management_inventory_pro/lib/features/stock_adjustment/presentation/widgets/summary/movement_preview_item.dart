@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 import '../common/warning_badge.dart';
 
@@ -11,57 +13,61 @@ class MovementPreviewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPositive = item.adjustmentQty > 0;
-    final adjColor = isPositive ? const Color(0xFF0041C8) : const Color(0xFFBA1A1A);
+    final adjColor = isPositive ? AppColors.primary : AppColors.error;
     final adjPrefix = isPositive ? '+' : '';
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical:  10.h,horizontal: 2.w),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.sm,
+        horizontal: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
-        color: const Color(0xFFF2F3FF),
-        borderRadius: BorderRadius.circular(6.r),
-        border: Border.all(color: const Color(0xFFC3C5D9).withOpacity(0.5)),
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.standard),
+        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            item.productName,
-            style: TextStyle(
-              fontSize: 4.sp,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF131B2E),
+          Tooltip(
+            message: item.productName,
+            child: Text(
+              item.productName,
+              style: AppTextStyles.bodySm.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
-            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 6.h),
+          const SizedBox(height: AppSpacing.xs),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _StockLabel(label: 'FROM', value: '${item.currentStock}', color: const Color(0xFF131B2E)),
-              //SizedBox(width: 2.w),
-              Icon(Icons.arrow_forward, size: 28.r, color: const Color(0xFF737688)),
-              //SizedBox(width: 2.w),
+              _StockLabel(
+                label: 'FROM',
+                value: '${item.currentStock}',
+                color: AppColors.textPrimary,
+              ),
+              const Icon(Icons.arrow_forward,
+                  size: AppIconSize.lg, color: AppColors.outline),
               _StockLabel(
                 label: 'TO',
                 value: '${item.newStock}',
                 color: item.isNegativeInventory || item.isOutOfStock
-                    ? const Color(0xFFBA1A1A)
+                    ? AppColors.error
                     : isPositive
-                        ? const Color(0xFF0041C8)
-                        : const Color(0xFF131B2E),
+                        ? AppColors.primary
+                        : AppColors.textPrimary,
               ),
-              //const Spacer(),
               Container(
-                width: 1,
-                height: 24.h,
-                color: const Color(0xFFC3C5D9),
+                width: AppBorder.thin,
+                height: 24,
+                color: AppColors.outlineVariant,
               ),
-              //SizedBox(width: 8.w),
               Text(
                 '$adjPrefix${item.adjustmentQty}',
-                style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
-                  fontSize: 4.sp,
+                style: AppTextStyles.dataMono.copyWith(
                   fontWeight: FontWeight.w700,
                   color: adjColor,
                 ),
@@ -69,7 +75,7 @@ class MovementPreviewItem extends StatelessWidget {
             ],
           ),
           if (item.isNegativeInventory || item.isLowStock || item.isOutOfStock) ...[
-            //SizedBox(height: 4.h),
+            const SizedBox(height: AppSpacing.xs),
             WarningBadge(
               level: item.isNegativeInventory
                   ? WarningLevel.negative
@@ -89,21 +95,19 @@ class _StockLabel extends StatelessWidget {
   final String value;
   final Color color;
 
-  const _StockLabel({required this.label, required this.value, required this.color});
+  const _StockLabel(
+      {required this.label, required this.value, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 4.sp, color: const Color(0xFF737688)),
-        ),
+        Text(label,
+            style: AppTextStyles.bodySm.copyWith(color: AppColors.outline)),
         Text(
           value,
-          style: TextStyle(
-            fontFamily: 'JetBrains Mono',
-            fontSize: 4.sp,
+          style: AppTextStyles.dataMono.copyWith(
             fontWeight: FontWeight.w700,
             color: color,
           ),

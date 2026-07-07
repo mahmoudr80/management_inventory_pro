@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_text_styles.dart';
-import '../../../../../core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 /// Generic single-select filter dropdown matching the filter bar styling.
 /// `null` represents the "All" / unset option, labeled via [allLabel].
@@ -26,7 +24,7 @@ class FilterDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         border: Border.all(color: AppColors.outlineVariant),
@@ -38,18 +36,33 @@ class FilterDropdown<T> extends StatelessWidget {
           isDense: true,
           icon: Icon(
             Icons.keyboard_arrow_down,
-            size: 28.r,
+            size: AppIconSize.lg,
             color: AppColors.onSurfaceVariant,
           ),
           style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant),
           dropdownColor: AppColors.surfaceContainerLowest,
           onChanged: onChanged,
           items: [
-            DropdownMenuItem<T?>(value: null, child: Text(allLabel)),
+            DropdownMenuItem<T?>(
+              value: null,
+              child: Tooltip(
+                message: allLabel,
+                child: Text(
+                  allLabel,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
             ...items.map(
               (item) => DropdownMenuItem<T?>(
                 value: item,
-                child: Text(labelBuilder(item)),
+                child: Tooltip(
+                  message: labelBuilder(item),
+                  child: Text(
+                    labelBuilder(item),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
             ),
           ],

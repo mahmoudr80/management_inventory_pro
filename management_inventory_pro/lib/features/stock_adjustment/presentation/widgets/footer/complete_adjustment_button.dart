@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 class CompleteAdjustmentButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -9,41 +11,42 @@ class CompleteAdjustmentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
           decoration: BoxDecoration(
-            color: const Color(0xFF0041C8).withOpacity(0.15),
-            borderRadius: BorderRadius.circular(4.r),
+            color: AppColors.primary.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
           child: Text(
             'Ctrl+↵',
-            style: TextStyle(
-              fontSize: 3.sp,
-              fontWeight: FontWeight.w700,
-              color: Colors.white70,
+            style: AppTextStyles.labelCaps.copyWith(
+              // Was Colors.white70 on a near-white chip background —
+              // effectively invisible. AppColors.primary matches the chip's
+              // tint and is actually readable.
+              color: AppColors.primary,
             ),
           ),
         ),
-        SizedBox(width: 2.w),
+        const SizedBox(width: AppSpacing.sm),
         ElevatedButton.icon(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF0041C8),
-            foregroundColor: Colors.white,
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.onPrimary,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 12.h),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
             elevation: 2,
           ),
-          icon: Icon(Icons.task_alt, size: 28.r),
+          icon: const Icon(Icons.task_alt, size: AppIconSize.lg),
           label: Text(
             'Complete Adjustment',
-            style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w700),
+            style: AppTextStyles.buttonText.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
-
       ],
     );
   }

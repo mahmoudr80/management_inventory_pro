@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_decoration.dart';
@@ -27,25 +27,35 @@ class StatBentoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(//constraints: BoxConstraints(maxHeight: 150.h),
+    return Container(
       padding: const EdgeInsets.all(24),
-      decoration:AppDecorations.card() ,
+      decoration: AppDecorations.card(),
       child: Stack(
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title.toUpperCase(),
-                style: AppTextStyles.labelCaps,
+              Tooltip(
+                message: title,
+                child: Text(
+                  title.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.labelCaps,
+                ),
               ),
               const SizedBox(height: 8),
-              Text(
-                value,
-                style: AppTextStyles.display.copyWith(
+              Tooltip(
+                message: value,
+                child: Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.display.copyWith(
                     color: valueColor ?? AppColors.onBackground,
-                    fontSize: 20.sp.clamp(15, 28)
+                    fontSize: 20,
+                  ),
                 ),
               ),
               if (badge != null) ...[
@@ -54,8 +64,18 @@ class StatBentoCard extends StatelessWidget {
               ],
               if (footer != null) ...[
                 const SizedBox(height: 8),
-                Text(footer!, style: AppTextStyles.bodySm.
-                copyWith(color: AppColors.outline,fontSize: 10.sp.clamp(8,15))),
+                Tooltip(
+                  message: footer!,
+                  child: Text(
+                    footer!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodySm.copyWith(
+                      color: AppColors.outline,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
               ],
               if (customFooter != null) ...[
                 const SizedBox(height: 8),

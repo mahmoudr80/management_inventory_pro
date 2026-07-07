@@ -7,7 +7,7 @@ class SalesActionsRow extends StatelessWidget {
   final VoidCallback? onViewBestSellers;
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Wrap(
       children: [
         Expanded(
           child: SalesActionButton(
@@ -17,8 +17,8 @@ class SalesActionsRow extends StatelessWidget {
             onTap: onViewAnalytics,
           ),
         ),
-        const SizedBox(width: 10),
-        Expanded(
+        const SizedBox(width: 5),
+        Flexible(
           child: SalesActionButton(
             label: 'Best Sellers',
             icon: Icons.star_outline_rounded,

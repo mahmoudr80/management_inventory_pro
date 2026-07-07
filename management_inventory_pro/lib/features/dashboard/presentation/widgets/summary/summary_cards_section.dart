@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import '../../../../../../core/theme/app_colors.dart';
 import '../../../data/models/dashboard_summary.dart';
 import '../common/loading_card.dart';
 import 'summary_card.dart';
@@ -29,16 +29,25 @@ class _SummarySkeletons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(
-        4,
-        (i) => Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(right: i < 3 ? 12 : 0),
-            child: const LoadingCard(height: 132),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth;
+        final int crossAxisCount = width < 650 ? 1 : (width < 1100 ? 2 : 4);
+        const double spacing = 12.0;
+        final double cardWidth = (width - (spacing * (crossAxisCount - 1))) / crossAxisCount;
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: List.generate(
+            4,
+            (i) => SizedBox(
+              width: cardWidth,
+              child: const LoadingCard(height: 132),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -56,60 +65,67 @@ class _SummaryCards extends StatelessWidget {
     final changeLabel =
         '${isPositiveChange ? '+' : ''}${changePercent.toStringAsFixed(0)}%';
 
-    return Row(
-      children: [
-        Expanded(
-          child: SummaryCard(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth;
+        final int crossAxisCount = width < 650 ? 1 : (width < 1100 ? 2 : 4);
+        const double spacing = 12.0;
+        final double cardWidth = (width - (spacing * (crossAxisCount - 1))) / crossAxisCount;
+
+        final cards = [
+          SummaryCard(
             label: "Today's Revenue",
             value: '${egp.format(summary.todayRevenue)} EGP',
             icon: Icons.payments_outlined,
-            iconColor: const Color(0xFF0041C8),
-            iconBackground: const Color(0xFFDCE1FF),
+            iconColor: AppColors.primary,
+            iconBackground: AppColors.primaryFixed,
             subtitle:
                 '${isPositiveChange ? '▲' : '▼'} $changeLabel vs ${egp.format(summary.yesterdayRevenue)} EGP yesterday',
             subtitleColor: isPositiveChange
-                ? const Color(0xFF1B6E3C)
-                : const Color(0xFFBA1A1A),
+                ? AppColors.success
+                : AppColors.error,
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: SummaryCard(
+          SummaryCard(
             label: "Today's Orders",
             value: '${summary.todayOrders} Orders',
             icon: Icons.receipt_long_outlined,
-            iconColor: const Color(0xFF1B6E3C),
-            iconBackground: const Color(0xFFD6F4E3),
+            iconColor: AppColors.success,
+            iconBackground: AppColors.successContainer,
             subtitle:
                 'Avg. order value: ${egp.format(summary.avgOrderValue)} EGP',
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: SummaryCard(
+          SummaryCard(
             label: 'Total Products',
             value: '${egp.format(summary.totalProducts)} Products',
             icon: Icons.inventory_2_outlined,
-            iconColor: const Color(0xFF505F76),
-            iconBackground: const Color(0xFFD0E1FB),
+            iconColor: AppColors.secondary,
+            iconBackground: AppColors.secondaryContainer,
             subtitle:
                 'Active SKUs across ${summary.activeCategories} categories',
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: SummaryCard(
+          SummaryCard(
             label: 'Low Stock Products',
             value: '${summary.lowStockCount} Products',
             icon: Icons.warning_amber_rounded,
-            iconColor: const Color(0xFFBA1A1A),
-            iconBackground: const Color(0xFFFFDAD6),
+            iconColor: AppColors.error,
+            iconBackground: AppColors.errorContainer,
             subtitle: 'Immediate action required',
-            valueColor: const Color(0xFFBA1A1A),
-            subtitleColor: const Color(0xFFBA1A1A),
+            valueColor: AppColors.error,
+            subtitleColor: AppColors.error,
           ),
-        ),
-      ],
+        ];
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: cards
+              .map((card) => SizedBox(
+                    width: cardWidth,
+                    child: card,
+                  ))
+              .toList(),
+        );
+      },
     );
   }
 }

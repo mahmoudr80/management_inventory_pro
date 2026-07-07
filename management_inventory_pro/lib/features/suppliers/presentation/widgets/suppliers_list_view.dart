@@ -18,35 +18,44 @@ class SuppliersListView extends StatelessWidget {
   });
   final List<SupplierModel> suppliers;
   final String? selectedId;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: AppDecorations.card(color: AppColors.surfaceContainerLowest),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          // Table header
-          _TableHeader(),
-          const Divider(height: 1, color: AppColors.outlineVariant),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Hide phone column if available width is narrow (e.g. < 550)
+        final bool showPhone = constraints.maxWidth > 550;
 
-          // Rows
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: suppliers.length,
-            itemBuilder: (context, i) {
-              final s = suppliers[i];
-              return SupplierListTile(
-                supplier: s,
-                isSelected: s.id == selectedId,
-                onTap: () => context.read<SuppliersCubit>().selectSupplier(s),
-                onEdit: () => context.read<SuppliersCubit>().openEditForm(s),
-                onDelete: () => _confirmDelete(context, s),
-              );
-            },
+        return Container(
+          decoration: AppDecorations.card(color: AppColors.surfaceContainerLowest),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              // Table header
+              _TableHeader(showPhone: showPhone),
+              const Divider(height: 1, color: AppColors.outlineVariant),
+
+              // Rows
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: suppliers.length,
+                itemBuilder: (context, i) {
+                  final s = suppliers[i];
+                  return SupplierListTile(
+                    supplier: s,
+                    isSelected: s.id == selectedId,
+                    showPhone: showPhone,
+                    onTap: () => context.read<SuppliersCubit>().selectSupplier(s),
+                    onEdit: () => context.read<SuppliersCubit>().openEditForm(s),
+                    onDelete: () => _confirmDelete(context, s),
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -55,17 +64,19 @@ class SuppliersListView extends StatelessWidget {
       context: context,
       builder: (_) => DeleteConfirmDialog(
         supplierName: s.companyName,
-        onConfirm: (){
+        onConfirm: () {
           context.read<SuppliersCubit>().deleteSupplier(s.id);
-          AppSnackBar.showSuccess(context, message:"Supplier deleted successfully");
+          AppSnackBar.showSuccess(context, message: "Supplier deleted successfully");
         },
       ),
     );
   }
 }
 
-
 class _TableHeader extends StatelessWidget {
+  final bool showPhone;
+  const _TableHeader({required this.showPhone});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -78,10 +89,11 @@ class _TableHeader extends StatelessWidget {
             flex: 3,
             child: Text('SUPPLIER NAME', style: AppTextStyles.labelCaps),
           ),
-          Expanded(
-            flex: 2,
-            child: Text('PHONE', style: AppTextStyles.labelCaps),
-          ),
+          if (showPhone)
+            Expanded(
+              flex: 2,
+              child: Text('PHONE', style: AppTextStyles.labelCaps),
+            ),
           // actions col
           const SizedBox(width: 72),
         ],

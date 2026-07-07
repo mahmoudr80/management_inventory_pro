@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/features/sale_history/presentation/widgets/sale_search_field.dart';
 import '../../../../core/widgets/dropdown_item.dart';
 import '../../../../core/widgets/filter_dropdown.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_decoration.dart';
+import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../data/models/sale_item_model.dart';
 import '../cubit/sales_history_cubit.dart';
 
@@ -44,20 +47,22 @@ class _SalesFiltersBarState extends State<SalesFiltersBar> {
   Widget build(BuildContext context) {
     final cubit = context.read<SalesHistoryCubit>();
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.md),
+      decoration: AppDecorations.card(
+        color: AppColors.surface,
+        borderColor: AppColors.border,
       ),
-      child: Row(
-        spacing: 5.w,
+      child: Wrap(
+        spacing: AppSpacing.md,
+        runSpacing: AppSpacing.md,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           // Search
           SaleSearchField(searchController: _searchController,),
 
           // Date range filter
-          Expanded(flex: 1,
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 250),
             child: _DateRangeDropdown(
               value: widget.filters.dateRangeFilter,
               onChanged: cubit.setDateRangeFilter,
@@ -65,7 +70,8 @@ class _SalesFiltersBarState extends State<SalesFiltersBar> {
           ),
 
           // Payment method filter
-          Expanded(flex: 1,
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 320),
             child: _PaymentMethodDropdown(
               value: widget.filters.paymentMethod,
               onChanged: cubit.setPaymentMethod,
@@ -74,20 +80,17 @@ class _SalesFiltersBarState extends State<SalesFiltersBar> {
 
           // Reset
           if (widget.filters.hasActiveFilters)
-            Container(
-              margin: EdgeInsets.only(top: 22.h),
-              child: TextButton.icon(
-                onPressed: () {
-                  _searchController.clear();
-                  cubit.resetFilters();
-                },
-                icon: Icon(Icons.refresh_rounded, size: 5.sp),
-                label: Text('Reset', style: TextStyle(fontSize: 4.sp)),
-                style: TextButton.styleFrom(
-                  foregroundColor: const Color(0xFF6B7280),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
-                ),
+            TextButton.icon(
+              onPressed: () {
+                _searchController.clear();
+                cubit.resetFilters();
+              },
+              icon: const Icon(Icons.refresh_rounded, size: AppIconSize.md),
+              label: Text('Reset', style: AppTextStyles.bodyMd),
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.textSecondary,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md, vertical: AppSpacing.sm),
               ),
             ),
         ],

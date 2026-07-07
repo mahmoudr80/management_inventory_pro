@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/product_adjustment_model.dart';
 
@@ -18,7 +18,10 @@ class AdjustmentProductRow extends StatelessWidget {
     final changeColor = isNegative ? AppColors.error : AppColors.primary;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.sm,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -27,18 +30,27 @@ class AdjustmentProductRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  product.productName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w600),
+                Tooltip(
+                  message: product.productName,
+                  child: Text(
+                    product.productName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodySm.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-                SizedBox(height: 2.h),
-                Text(
-                  product.sku,
-                  style: AppTextStyles.dataMono.copyWith(
-                    fontSize: 3.sp,
-                    color: AppColors.onSurfaceVariant,
+                const SizedBox(height: AppSpacing.xs),
+                Tooltip(
+                  message: product.sku,
+                  child: Text(
+                    product.sku,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.dataMono.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ],
@@ -49,19 +61,26 @@ class AdjustmentProductRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  '${isNegative ? '' : '+'}${product.adjustmentQty}',
-                  style: AppTextStyles.bodySm.copyWith(
-                    color: changeColor,
-                    fontWeight: FontWeight.w600,
+                Tooltip(
+                  message: '${isNegative ? '' : '+'}${product.adjustmentQty}',
+                  child: Text(
+                    '${isNegative ? '' : '+'}${product.adjustmentQty}',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodySm.copyWith(
+                      color: changeColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                Text(
-                  'Prev: ${product.previousStock}',
-                  style: AppTextStyles.bodySm.copyWith(
-                    fontSize: 3.5.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.onSurfaceVariant,
+                Tooltip(
+                  message: 'Prev: ${product.previousStock}',
+                  child: Text(
+                    'Prev: ${product.previousStock}',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodySm.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ],
@@ -72,17 +91,22 @@ class AdjustmentProductRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  '${product.newStock}',
-                  style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w600),
+                Tooltip(
+                  message: '${product.newStock}',
+                  child: Text(
+                    '${product.newStock}',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w600),
+                  ),
                 ),
-                Text(
-                  product.stockStatus.label,
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 3.sp,
-                    fontWeight: FontWeight.w700,
-                    color: product.stockStatus.color,
+                Tooltip(
+                  message: product.stockStatus.label,
+                  child: Text(
+                    product.stockStatus.label,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.labelCaps.copyWith(
+                      color: product.stockStatus.color,
+                    ),
                   ),
                 ),
               ],

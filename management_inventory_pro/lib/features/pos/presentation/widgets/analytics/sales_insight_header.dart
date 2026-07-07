@@ -21,19 +21,25 @@ class SalesInsightHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Top Selling Products',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+            Tooltip(message:  'Top Selling Products',
+    child: const Text(
+                  overflow: TextOverflow.ellipsis,
+                  'Top Selling Products',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
               ),
-              Text(
-                'Most frequently sold items today',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
-                  fontSize: 11.5,
+              Tooltip(message:  'Most frequently sold items today',
+                child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  'Most frequently sold items today',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.7),
+                    fontSize: 11.5,
+                  ),
                 ),
               ),
             ],

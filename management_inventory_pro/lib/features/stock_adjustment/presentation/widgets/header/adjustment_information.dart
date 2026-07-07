@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_model.dart';
 import 'adjustment_status_chip.dart';
 
@@ -11,17 +13,21 @@ class AdjustmentInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    // Wrap instead of Row so the meta fields fall onto a second line
+    // instead of overflowing on narrower windows.
+    return Wrap(
+      alignment: WrapAlignment.start,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: AppSpacing.lg,
+      runSpacing: AppSpacing.sm,
       children: [
         _MetaField(label: 'ADJ NUMBER', value: adjustment.id),
-        SizedBox(width: 4.w),
         _MetaField(label: 'CREATED BY', value: adjustment.createdBy),
-        SizedBox(width: 4.w),
         _MetaField(
           label: 'DATE/TIME',
-          value: DateFormat('MMM d, yyyy · HH:mm').format(adjustment.createdAt??DateTime.now()),
+          value: DateFormat('MMM d, yyyy · HH:mm')
+              .format(adjustment.createdAt ?? DateTime.now()),
         ),
-        SizedBox(width: 24.w),
         AdjustmentStatusChip(status: adjustment.status),
       ],
     );
@@ -36,28 +42,28 @@ class _MetaField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 4.sp,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.05,
-            color: const Color(0xFF434656),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 160),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label, style: AppTextStyles.labelCaps),
+          const SizedBox(height: AppSpacing.xxs),
+          Tooltip(
+            message: value,
+            child: Text(
+              value,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: AppTextStyles.bodyMd.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+            ),
           ),
-        ),
-        SizedBox(height: 2.h),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 4.sp,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF131B2E),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

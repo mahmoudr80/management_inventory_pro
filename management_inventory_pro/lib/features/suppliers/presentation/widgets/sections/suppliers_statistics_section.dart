@@ -11,20 +11,34 @@ class SuppliersStatisticsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SuppliersCubit, SuppliersState>(
-      buildWhen: (prev, curr) => prev.suppliers != curr.suppliers,
+      buildWhen: (prev, curr) => prev.suppliers != curr.suppliers || prev.filteredSuppliers.length != curr.filteredSuppliers.length,
       builder: (context, state) {
         final total = state.suppliers.length;
 
         return LayoutBuilder(
           builder: (context, constraints) {
-            final crossAxisCount = constraints.maxWidth < 1000 ? 2 : 3;
+            // Determine column count and child aspect ratio based on width
+            final int crossAxisCount;
+            final double childAspectRatio;
+
+            if (constraints.maxWidth < 600) {
+              crossAxisCount = 1;
+              childAspectRatio = 4.2;
+            } else if (constraints.maxWidth < 1000) {
+              crossAxisCount = 3;
+              childAspectRatio = 2.2;
+            } else {
+              crossAxisCount = 3;
+              childAspectRatio = 2.4;
+            }
+
             return GridView.count(
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: crossAxisCount == 1 ? 4.8 : 2.9,
+              childAspectRatio: childAspectRatio,
               children: [
                 SupplierStatisticsCard(
                   label: 'Total Suppliers',
@@ -57,7 +71,7 @@ class SuppliersStatisticsSection extends StatelessWidget {
   String _lastUpdated(SuppliersState state) {
     if (state.suppliers.isEmpty) return '—';
     final latest = state.suppliers
-        .map((s) => s.updatedAt??DateTime.now())
+        .map((s) => s.updatedAt ?? DateTime.now())
         .reduce((a, b) => a.isAfter(b) ? a : b);
     final diff = DateTime.now().difference(latest);
     if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 import 'movement_preview_item.dart';
 
@@ -16,23 +18,13 @@ class MovementPreview extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 8.h),
+          padding: const EdgeInsets.only(bottom: AppSpacing.sm),
           child: Row(
             children: [
-              Text(
-                'MOVEMENT PREVIEW',
-                style: TextStyle(
-                  fontSize: 4.sp,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.05,
-                  color: const Color(0xFF434656),
-                ),
-              ),
+              Text('MOVEMENT PREVIEW', style: AppTextStyles.labelCaps),
+              const SizedBox(width: AppSpacing.sm),
               const Expanded(
-                child: Divider(
-                  indent: 8,
-                  color: Color(0xFFC3C5D9),
-                ),
+                child: Divider(color: AppColors.outlineVariant),
               ),
             ],
           ),
@@ -40,16 +32,15 @@ class MovementPreview extends StatelessWidget {
         if (filtered.isEmpty)
           Text(
             'No adjustments yet',
-            style: TextStyle(
-              fontSize: 4.sp,
-              color: const Color(0xFF737688),
+            style: AppTextStyles.bodySm.copyWith(
+              color: AppColors.outline,
               fontStyle: FontStyle.italic,
             ),
           )
         else
           ...filtered.map(
             (item) => Padding(
-              padding: EdgeInsets.only(bottom: 8.h),
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: MovementPreviewItem(item: item),
             ),
           ),

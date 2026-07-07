@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/components/page_header.dart';
 import '../cubit/sales_history_cubit.dart';
 
@@ -21,29 +23,29 @@ class SalePageHeader extends StatelessWidget {
                   duration: Duration(seconds: 2)),
             );
           },
-          icon: Icon(Icons.file_upload_outlined, size: 5.sp),
-          label: Text('Export', style: TextStyle(fontSize: 5.sp)),
+          icon: const Icon(Icons.file_upload_outlined, size: AppIconSize.md),
+          label: Text('Export', style: AppTextStyles.buttonText.copyWith(color: AppColors.textSecondary)),
           style: OutlinedButton.styleFrom(
-            foregroundColor: const Color(0xFF374151),
-            side: const BorderSide(color: Color(0xFFD1D5DB)),
-            backgroundColor: Colors.white,
+            foregroundColor: AppColors.textSecondary,
+            side: const BorderSide(color: AppColors.border),
+            backgroundColor: AppColors.surface,
             padding:
-            EdgeInsets.symmetric(horizontal: 2.w, vertical: 10.h),
+            const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
           ),
         ),
         FilledButton.icon(
           onPressed: cubit.refresh,
-          icon: Icon(Icons.refresh_rounded, size: 5.sp),
-          label: Text('Refresh', style: TextStyle(fontSize: 5.sp)),
+          icon: const Icon(Icons.refresh_rounded, size: AppIconSize.md),
+          label: Text('Refresh', style: AppTextStyles.buttonText),
           style: FilledButton.styleFrom(
-            backgroundColor: const Color(0xFF2563EB),
+            backgroundColor: AppColors.primary,
             padding:
-            EdgeInsets.symmetric(horizontal: 2.w, vertical: 10.h),
+            const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
           ),
         )

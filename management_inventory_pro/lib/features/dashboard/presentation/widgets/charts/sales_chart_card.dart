@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../../../../../core/theme/app_colors.dart';
 import '../common/dashboard_card.dart';
 import 'chart_header.dart';
 import 'chart_placeholder.dart';
@@ -30,7 +30,7 @@ class SalesChartCard extends StatelessWidget {
                 ? List.filled(7, 0)
                 : weeklyRevenue,
             type: ChartType.bar,
-            accentColor: const Color(0xFF0041C8),
+            accentColor: AppColors.primary,
           ),
         ],
       ),

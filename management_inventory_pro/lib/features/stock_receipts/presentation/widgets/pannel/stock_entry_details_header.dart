@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
@@ -18,10 +17,10 @@ class StockEntryDetailsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 12.h),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.outlineVariant),
       ),
       child: Column(
@@ -31,65 +30,68 @@ class StockEntryDetailsHeader extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(8.r),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.receipt_long_rounded,
-                  size: 28.r,
+                  size: 28,
                   color: AppColors.primary,
                 ),
               ),
-              SizedBox(width: 4.w),
+              const SizedBox(width: 8),
               Expanded(
-                child: Text(
-                  entry.id,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.dataMono.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 13,
+                child: Tooltip(
+                  message: entry.id,
+                  child: Text(
+                    entry.id,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.dataMono.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               ),
-              SizedBox(width: 4.w),
+              const SizedBox(width: 8),
               StatusPill(status: entry.status ?? StockEntryStatus.pending),
             ],
           ),
 
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12),
           const Divider(height: 1, color: AppColors.outlineVariant),
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12),
 
           // ── Info rows ───────────────────────────────────────────────────
           _InfoRow(
             label: 'Supplier',
             value: entry.supplier.name ?? '—',
           ),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8),
           _InfoRow(
             label: 'Receipt Date',
             value: _shortDate.format(entry.receiptDate),
           ),
           if (entry.createdAt != null) ...[
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
             _InfoRow(
               label: 'Created At',
               value: _dateFmt.format(entry.createdAt!),
             ),
           ],
           if (entry.updatedAt != null) ...[
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
             _InfoRow(
               label: 'Last Updated',
               value: _dateFmt.format(entry.updatedAt!),
             ),
           ],
           if (entry.notes != null && entry.notes!.isNotEmpty) ...[
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
             _InfoRow(label: 'Notes', value: entry.notes!),
           ],
         ],
@@ -112,18 +114,20 @@ class _InfoRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyles.bodySm.copyWith(color: AppColors.outline,fontSize: 4.sp),
+          style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
         ),
-        SizedBox(width: 8.w),
+        const SizedBox(width: 8),
         Flexible(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.bodySm.copyWith(
-              fontWeight: FontWeight.w700,
-              color: AppColors.onSurface,
-              fontSize: 4.sp
+          child: Tooltip(
+            message: value,
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.bodySm.copyWith(
+                fontWeight: FontWeight.w700,
+                color: AppColors.onSurface,
+              ),
             ),
           ),
         ),

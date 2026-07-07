@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_dimens.dart';
@@ -25,7 +24,8 @@ class AdjustmentProductsTable extends StatefulWidget {
   final int collapsedCount;
 
   @override
-  State<AdjustmentProductsTable> createState() => _AdjustmentProductsTableState();
+  State<AdjustmentProductsTable> createState() =>
+      _AdjustmentProductsTableState();
 }
 
 class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
@@ -44,12 +44,13 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
       children: [
         Text(
           'ADJUSTED PRODUCTS (${widget.products.length})',
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.labelCaps,
         ),
-        SizedBox(height: 12.h),
+        const SizedBox(height: AppSpacing.md),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: AppColors.outlineVariant),
+            border: Border.all(color: AppColors.outlineVariant, width: AppBorder.thin),
             borderRadius: BorderRadius.circular(AppRadius.lg),
           ),
           clipBehavior: Clip.antiAlias,
@@ -57,23 +58,70 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
             children: [
               Container(
                 color: AppColors.surfaceContainerLow,
-                padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm,
+                  vertical: AppSpacing.sm,
+                ),
                 child: Row(
                   children: [
-                    Expanded(flex: 4, child: Text('Product', style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant))),
-                    Expanded(flex: 2, child: Text('Adjustment', textAlign: TextAlign.right, style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant))),
-                    Expanded(flex: 2, child: Text('New Stock', textAlign: TextAlign.right, style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant))),
+                    Expanded(
+                      flex: 4,
+                      child: Tooltip(
+                        message: 'Product',
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          'Product',
+                          style: AppTextStyles.bodySm.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Tooltip(
+                        message: 'Adjustment',
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          'Adjustment',
+                          textAlign: TextAlign.right,
+                          style: AppTextStyles.bodySm.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Tooltip(
+                        message: 'New Stock',
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          'New Stock',
+                          textAlign: TextAlign.right,
+                          style: AppTextStyles.bodySm.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
               Container(
                 decoration: BoxDecoration(
-                  border: Border(top: BorderSide(color: AppColors.outlineVariant)),
+                  border: Border(
+                    top: BorderSide(color: AppColors.outlineVariant, width: AppBorder.thin),
+                  ),
                 ),
                 child: Column(
                   children: [
                     for (var i = 0; i < visibleProducts.length; i++) ...[
-                      if (i > 0) Divider(height: 1, color: AppColors.outlineVariant),
+                      if (i > 0)
+                        Divider(
+                          height: AppBorder.thin,
+                          color: AppColors.outlineVariant,
+                        ),
                       AdjustmentProductRow(product: visibleProducts[i]),
                     ],
                   ],
@@ -85,14 +133,23 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
                   child: Container(
                     width: double.infinity,
                     color: AppColors.surfaceContainerLow,
-                    padding: EdgeInsets.symmetric(vertical: 8.h),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.sm,
+                    ),
                     alignment: Alignment.center,
-                    child: Text(
-                      _expanded ? 'View less' : 'View $remaining more products',
-                      style: AppTextStyles.bodySm.copyWith(
-                        fontSize: 5.sp,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primary,
+                    child: Tooltip(
+                      message: _expanded
+                          ? 'View less'
+                          : 'View $remaining more products',
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        _expanded
+                            ? 'View less'
+                            : 'View $remaining more products',
+                        style: AppTextStyles.bodySm.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                   ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 
 class AdjustmentQuantityField extends StatefulWidget {
@@ -61,58 +63,61 @@ class _AdjustmentQuantityFieldState extends State<AdjustmentQuantityField> {
   }
 
   Color get _borderColor {
-    if (widget.item.isNegativeInventory) return const Color(0xFFBA1A1A);
-    if (widget.item.isOutOfStock) return const Color(0xFFBA1A1A);
-    return const Color(0xFFC3C5D9);
+    if (widget.item.isNegativeInventory) return AppColors.error;
+    if (widget.item.isOutOfStock) return AppColors.error;
+    return AppColors.outlineVariant;
   }
 
   Color get _textColor {
     final qty = widget.item.adjustmentQty;
-    if (qty > 0) return const Color(0xFF0041C8);
-    if (qty < 0) return const Color(0xFFBA1A1A);
-    return const Color(0xFF131B2E);
+    if (qty > 0) return AppColors.primary;
+    if (qty < 0) return AppColors.error;
+    return AppColors.textPrimary;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 40.w,
-      height: 32.h,
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        textAlign: TextAlign.center,
-        onSubmitted: _onSubmit,
-        onEditingComplete: () => _onSubmit(_controller.text),
-        keyboardType: const TextInputType.numberWithOptions(
-            signed: true, decimal: false),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'^[+\-]?\d*')),
-        ],
-        style: TextStyle(
-          fontFamily: 'JetBrains Mono',
-          fontSize: 5.sp,
-          fontWeight: FontWeight.w700,
-          color: _textColor,
-        ),
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: widget.item.isNegativeInventory
-              ? const Color(0xFFFFDAD6).withOpacity(0.3)
-              : Colors.white,
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 2.w, vertical: 4.h),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6.r),
-            borderSide: BorderSide(color: _borderColor),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6.r),
-            borderSide: BorderSide(color: _borderColor),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6.r),
-            borderSide: BorderSide(color: const Color(0xFF0041C8), width: 1.5),
+    // Narrow numeric field: min/max width keeps it usable without
+    // letting it stretch or shrink unpredictably in its table cell.
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 64, maxWidth: 96),
+      child: SizedBox(
+        height: 36,
+        child: TextField(
+          controller: _controller,
+          focusNode: _focusNode,
+          textAlign: TextAlign.center,
+          onSubmitted: _onSubmit,
+          onEditingComplete: () => _onSubmit(_controller.text),
+          keyboardType: const TextInputType.numberWithOptions(
+              signed: true, decimal: false),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'^[+\-]?\d*')),
+          ],
+          style: AppTextStyles.dataMono
+              .copyWith(fontWeight: FontWeight.w700, color: _textColor),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: widget.item.isNegativeInventory
+                ? AppColors.errorContainer.withOpacity(0.3)
+                : AppColors.surface,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xs,
+              vertical: AppSpacing.xs,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.standard),
+              borderSide: BorderSide(color: _borderColor),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.standard),
+              borderSide: BorderSide(color: _borderColor),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.standard),
+              borderSide: const BorderSide(
+                  color: AppColors.primary, width: AppBorder.medium),
+            ),
           ),
         ),
       ),

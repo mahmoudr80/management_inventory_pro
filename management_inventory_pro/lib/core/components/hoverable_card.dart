@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../theme/app_colors.dart';
+import '../theme/app_dimens.dart';
 
 class HoverableCard extends StatefulWidget {
   final Widget child;
@@ -37,20 +38,18 @@ class _HoverableCardState extends State<HoverableCard> {
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: AppAnimation.fast,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(AppRadius.md.r),
             border: Border.all(
-              color: _isHovered
-                  ? AppColors.primary
-                  : Colors.transparent,
+              color: _isHovered ? AppColors.primary : Colors.transparent,
             ),
             boxShadow: _isHovered
                 ? [
               BoxShadow(
                 blurRadius: 12,
                 offset: const Offset(0, 4),
-                color: Colors.black.withValues(alpha: 0.08),
+                color: AppColors.textPrimary.withOpacity(0.08),
               ),
             ]
                 : null,

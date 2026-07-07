@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_dimens.dart';
 
 class DesktopAuthLayout extends StatelessWidget {
   final Widget child;
@@ -13,10 +14,14 @@ class DesktopAuthLayout extends StatelessWidget {
         Expanded(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 32),
-              child:
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 900),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.screenPadding * 2,
+                vertical: AppSpacing.xxl,
+              ),
+              child: ConstrainedBox(
+                // Intentional content cap for the auth form on wide/ultra-wide
+                // desktop monitors (up to 2560px) — not a spacing value.
+                constraints: const BoxConstraints(maxWidth: AppSize.authMaxWidthDesktop),
                 child: child,
               ),
             ),

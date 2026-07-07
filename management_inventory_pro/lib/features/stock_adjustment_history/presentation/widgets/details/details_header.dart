@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -25,10 +24,10 @@ class DetailsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical:  20.h,horizontal: 2.w),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl, horizontal: AppSpacing.sm),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
-        border: Border(bottom: BorderSide(color: AppColors.outlineVariant)),
+        border: Border(bottom: BorderSide(color: AppColors.outlineVariant, width: AppBorder.thin)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,11 +35,12 @@ class DetailsHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(overflow: TextOverflow.ellipsis,'Adjustment Details', style: AppTextStyles.headlineSm),
+              Flexible(child: Tooltip(message: 'Adjustment Details', child: Text(
+                  'Adjustment Details', overflow: TextOverflow.ellipsis, style: AppTextStyles.headlineSm))),
               IconButton(
                 onPressed: onClose,
-                icon: Icon(Icons.close, size: 28.r, color: AppColors.onSurfaceVariant),
-                splashRadius: 18.r,
+                icon: Icon(Icons.close, size: AppIconSize.lg, color: AppColors.onSurfaceVariant),
+                splashRadius: AppSpacing.xl,
               ),
             ],
           ),
@@ -52,22 +52,26 @@ class DetailsHeader extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      overflow: TextOverflow.ellipsis,
-                      adjustment.id,
-                      style: AppTextStyles.dataMono.copyWith(
-                        fontSize: 5.sp,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primary,
+                    Tooltip(
+                      message: adjustment.id,
+                      child: Text(
+                        adjustment.id,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.dataMono.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      overflow: TextOverflow.ellipsis,
-                      'Created on ${_dateFormat.format(adjustment.dateTime)}',
-                      style: AppTextStyles.bodySm.copyWith(
-                        fontSize: 4.sp,
-                        color: AppColors.onSurfaceVariant,
+                    const SizedBox(height: AppSpacing.xs),
+                    Tooltip(
+                      message: 'Created on ${_dateFormat.format(adjustment.dateTime)}',
+                      child: Text(
+                        'Created on ${_dateFormat.format(adjustment.dateTime)}',
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.bodySm.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
                       ),
                     ),
                   ],
@@ -76,7 +80,7 @@ class DetailsHeader extends StatelessWidget {
               StatusChip(status: adjustment.status),
             ],
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: AppSpacing.lg),
           Row(
             children: [
               Expanded(
@@ -87,7 +91,7 @@ class DetailsHeader extends StatelessWidget {
                   value: adjustment.reason.label,
                 ),
               ),
-              SizedBox(width: 2.w),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: _InfoTile(
                   label: 'Created By',
@@ -120,30 +124,36 @@ class _InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical:  12.h,horizontal: 2.w),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md, horizontal: AppSpacing.sm),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLow,
-        border: Border.all(color: AppColors.outlineVariant),
+        border: Border.all(color: AppColors.outlineVariant, width: AppBorder.thin),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            overflow: TextOverflow.ellipsis,
-            label.toUpperCase(),
-            style: AppTextStyles.labelCaps.copyWith(fontSize: 4.sp),
+          Tooltip(
+            message: label.toUpperCase(),
+            child: Text(
+              label.toUpperCase(),
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.labelCaps,
+            ),
           ),
-          SizedBox(height: 4.h),
+          const SizedBox(height: AppSpacing.xs),
           Row(
             children: [
-              Icon(icon, size: 20.r, color: iconColor),
-              SizedBox(width: 1.w),
+              Icon(icon, size: AppIconSize.md, color: iconColor),
+              const SizedBox(width: AppSpacing.xs),
               Flexible(
-                child: Text(
-                  value,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w600,fontSize: 3.5.sp),
+                child: Tooltip(
+                  message: value,
+                  child: Text(
+                    value,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
             ],

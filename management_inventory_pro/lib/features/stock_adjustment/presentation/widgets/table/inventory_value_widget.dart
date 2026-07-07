@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 
 class InventoryValueWidget extends StatelessWidget {
@@ -15,10 +16,10 @@ class InventoryValueWidget extends StatelessWidget {
     final isZero = impact == 0;
 
     final color = isZero
-        ? const Color(0xFF737688)
+        ? AppColors.outline
         : isPositive
-            ? const Color(0xFF0041C8)
-            : const Color(0xFFBA1A1A);
+            ? AppColors.primary
+            : AppColors.error;
 
     final formatted = NumberFormat.currency(symbol: '\$', decimalDigits: 2)
         .format(impact.abs());
@@ -26,9 +27,8 @@ class InventoryValueWidget extends StatelessWidget {
 
     return Text(
       '$prefix$formatted',
-      style: TextStyle(
-        fontFamily: 'JetBrains Mono',
-        fontSize: 5.sp,
+      overflow: TextOverflow.ellipsis,
+      style: AppTextStyles.dataMono.copyWith(
         fontWeight: FontWeight.w600,
         color: color,
       ),

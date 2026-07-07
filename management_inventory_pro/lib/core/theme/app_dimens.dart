@@ -21,6 +21,11 @@ class AppSpacing {
   static const double xl = 24;
   static const double xxl = 32;
 
+  /// One step beyond `xxl`, used for the generously-padded card panels on
+  /// tablet/desktop auth screens (e.g. TabletAuthLayout) instead of a bare
+  /// `48` literal.
+  static const double xxxl = 48;
+
   static const double screenPadding = 24;
   static const double sectionGap = 24;
   static const double cardPadding = 20;
@@ -84,6 +89,25 @@ class AppSize {
   static const double cardMaxWidth = 420;
 
   static const double tableRowHeight = 44;
+
+  /// Width of a single card in a horizontally-scrolling summary row
+  /// (e.g. SalesSummarySection).
+  static const double summaryCardWidth = 250;
+
+  /// Bounds for the filter bar's search input (FiltersSection). Named here
+  /// instead of inlined as bare 200/300 literals so the constraint reads
+  /// as an intentional design decision rather than a magic number.
+  static const double searchFieldMinWidth = 200;
+  static const double searchFieldMaxWidth = 300;
+
+  /// Content-width caps for the auth screen (login/register) at each
+  /// responsive breakpoint. Centralized here — instead of each of
+  /// MobileAuthLayout / TabletAuthLayout / DesktopAuthLayout inlining its
+  /// own bare literal — so the three stay obviously related and easy to
+  /// tune together.
+  static const double authMaxWidthMobile = 400;
+  static const double authMaxWidthTablet = 550;
+  static const double authMaxWidthDesktop = 900;
 }
 
 /// =======================================================

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/features/pos/presentation/widgets/cart/payment_buttons.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../../sale_history/data/models/sale_item_model.dart';
 import '../../../data/models/cart_item.dart';
 import 'cart_item_row.dart';
@@ -45,39 +47,39 @@ class CartPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 420,
+      width: Responsive.isCompact(context) ? 320 : 420,
       color: AppColors.posCartBg,
       child: Column(
         children: [
           CustomerCard(customerName: customerName, onEdit: onEditCustomer),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.cardPadding, vertical: AppSpacing.md),
             child: Row(
-              children: const [
+              children: [
                 Expanded(
                   flex: 3,
-                  child: Text('ITEM', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.posTextMuted, letterSpacing: 0.5)),
+                  child: Text('ITEM', style: AppTextStyles.labelCaps.copyWith(color: AppColors.posTextMuted)),
                 ),
                 SizedBox(
                   width: 96,
-                  child: Text('QTY', textAlign: TextAlign.center, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.posTextMuted, letterSpacing: 0.5)),
+                  child: Text('QTY', textAlign: TextAlign.center, style: AppTextStyles.labelCaps.copyWith(color: AppColors.posTextMuted)),
                 ),
                 SizedBox(
                   width: 70,
-                  child: Text('PRICE', textAlign: TextAlign.right, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.posTextMuted, letterSpacing: 0.5)),
+                  child: Text('PRICE', textAlign: TextAlign.right, style: AppTextStyles.labelCaps.copyWith(color: AppColors.posTextMuted)),
                 ),
               ],
             ),
           ),
           Expanded(
             child: items.isEmpty
-                ? const Center(
+                ? Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.pagePadding),
                       child: Text(
                         'Cart is empty. Tap a product to add it.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: AppColors.posTextMuted, fontSize: 13),
+                        style: AppTextStyles.bodySm.copyWith(color: AppColors.posTextMuted),
                       ),
                     ),
                   )
@@ -106,7 +108,7 @@ class CartPanel extends StatelessWidget {
           // Primary checkout CTA — directly below the payment method section,
           // the single most prominent action in the cart panel.
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(AppSpacing.cardPadding, 0, AppSpacing.cardPadding, AppSpacing.cardPadding),
             child: CompleteSaleButton(
               totalAmount: total,
               itemCount: itemCount,

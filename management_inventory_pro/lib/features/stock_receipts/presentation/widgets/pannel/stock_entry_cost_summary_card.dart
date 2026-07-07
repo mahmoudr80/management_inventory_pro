@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
@@ -10,24 +9,21 @@ class StockEntryCostSummaryCard extends StatelessWidget {
 
   final StockEntryModel entry;
 
-  static final _currFmt =
-      NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+  static final _currFmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
 
   @override
   Widget build(BuildContext context) {
-    // Prefer denormalized totals when available, fall back to summing lines.
-    final totalItems = entry.totalItems ??
-        entry.lines.length;
+    final totalItems = entry.totalItems ?? entry.lines.length;
     final totalQty = entry.totalQuantity ??
         entry.lines.fold<double>(0, (s, l) => s + l.quantity);
     final totalCost = entry.totalCost ??
         entry.lines.fold<double>(0, (s, l) => s + l.lineTotal);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 12.h),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.outlineVariant),
       ),
       child: Column(
@@ -35,10 +31,9 @@ class StockEntryCostSummaryCard extends StatelessWidget {
         children: [
           Text(
             'Cost Summary',
-            style: AppTextStyles.bodySmall.copyWith(fontSize: 5.sp),
+            style: AppTextStyles.labelCaps,
           ),
-          SizedBox(height: 10.h),
-
+          const SizedBox(height: 10),
           _SummaryRow(label: 'Total Items', value: totalItems.toString()),
           _SummaryRow(
             label: 'Total Quantity',
@@ -46,16 +41,10 @@ class StockEntryCostSummaryCard extends StatelessWidget {
                 ? totalQty.toInt().toString()
                 : totalQty.toStringAsFixed(2),
           ),
-          // _SummaryRow(
-          //   label: 'Subtotal',
-          //   value: _currFmt.format(totalCost),
-          // ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.h),
-            child: const Divider(height: 1, color: AppColors.outlineVariant),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Divider(height: 1, color: AppColors.outlineVariant),
           ),
-
           _SummaryRow(
             label: 'Total Cost',
             value: _currFmt.format(totalCost),
@@ -90,28 +79,35 @@ class _SummaryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 3.h),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           Expanded(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: (labelStyle ??
-                  AppTextStyles.bodySm).copyWith(color: AppColors.outline,fontSize: 4.sp),
+            child: Tooltip(
+              message: label,
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: (labelStyle ?? AppTextStyles.bodySm).copyWith(
+                  color: AppColors.outline,
+                ),
+              ),
             ),
           ),
-          SizedBox(width: 4.w),
-          Text(
-            value,
-            overflow: TextOverflow.ellipsis,
-            style: valueStyle ??
-                AppTextStyles.dataMono.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 4.sp,
-                  color: AppColors.onSurface,
-                ),
+          const SizedBox(width: 8),
+          Tooltip(
+            message: value,
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: valueStyle ??
+                  AppTextStyles.dataMono.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.onSurface,
+                  ),
+            ),
           ),
         ],
       ),

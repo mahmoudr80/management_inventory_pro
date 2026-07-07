@@ -27,9 +27,9 @@ class AdjustmentSummaryCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('ADJUSTMENT SUMMARY', style: AppTextStyles.labelCaps),
-        SizedBox(height: 8.h),
+        SizedBox(height: AppSpacing.sm),
         Container(
-          padding: EdgeInsets.symmetric(vertical:  16.h,horizontal: 2.w),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg, horizontal: AppSpacing.xxs),
           decoration: BoxDecoration(
             color: AppColors.surfaceContainerLow,
             borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -40,26 +40,30 @@ class AdjustmentSummaryCard extends StatelessWidget {
                 label: 'Items Adjusted',
                 value: '${summary.skuCount} SKUs (${summary.totalUnitsMoved} Units)',
               ),
-              SizedBox(height: 10.h),
+              SizedBox(height: AppSpacing.md),
               _SummaryLine(
                 label: 'Total Increase',
                 value: '+${summary.totalIncrease} Units',
                 valueColor: AppColors.primary,
               ),
-              SizedBox(height: 10.h),
+              SizedBox(height: AppSpacing.md),
               _SummaryLine(
                 label: 'Total Decrease',
                 value: '${summary.totalDecrease} Units',
                 valueColor: AppColors.error,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                child: Divider(height: 1, color: AppColors.outlineVariant),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+                // Not `const` — every other Divider in this codebase using
+                // AppColors.* is non-const too, which means that color
+                // isn't a compile-time constant. The `const` here would
+                // fail to build.
+                child: Divider(height: AppBorder.thin, color: AppColors.outlineVariant),
               ),
               _SummaryLine(
                 label: 'Inventory Value Delta',
                 value:
-                    '${isNegativeDelta ? '-' : ''}${_currencyFormat.format(summary.inventoryValueDelta.abs())} EGP',
+                '${isNegativeDelta ? '-' : ''}${_currencyFormat.format(summary.inventoryValueDelta.abs())} EGP',
                 valueColor: deltaColor,
                 bold: true,
               ),
@@ -89,18 +93,31 @@ class _SummaryLine extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: AppTextStyles.bodySm.copyWith(
-            color: bold ? AppColors.onSurface : AppColors.onSurfaceVariant,
-            fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
+        Flexible(
+          child: Tooltip(
+            message: label,
+            child: Text(
+              label,
+              style: AppTextStyles.bodySm.copyWith(
+                color: bold ? AppColors.onSurface : AppColors.onSurfaceVariant,
+                fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
-        Text(
-          value,
-          style: AppTextStyles.bodySm.copyWith(
-            fontWeight: FontWeight.w700,
-            color: valueColor ?? AppColors.onSurface,
+        SizedBox(width: AppSpacing.sm),
+        Flexible(
+          child: Tooltip(
+            message: value,
+            child: Text(
+              value,
+              style: AppTextStyles.bodySm.copyWith(
+                fontWeight: FontWeight.w700,
+                color: valueColor ?? AppColors.onSurface,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
       ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 import '../../cubit/sales_history_cubit.dart';
 
@@ -17,9 +19,8 @@ class SaleTableHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40.h,
-      padding: EdgeInsets.symmetric(horizontal: 2.w),
-      color: const Color(0xFFF9FAFB),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.sm),
+      color: AppColors.surfaceContainerLow,
       child: Row(
         children: [
           _HeaderCell(
@@ -66,10 +67,9 @@ class SaleTableHeader extends StatelessWidget {
             flex: 2,
             child: Text(
               'Payment',
-              style: TextStyle(
-                fontSize: 4.sp,
+              style: AppTextStyles.bodySm.copyWith(
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF6B7280),
+                color: AppColors.textSecondary,
                 letterSpacing: 0.3,
               ),
             ),
@@ -78,10 +78,9 @@ class SaleTableHeader extends StatelessWidget {
             flex: 2,
             child: Text(
               'Cashier',
-              style: TextStyle(
-                fontSize: 4.sp,
+              style: AppTextStyles.bodySm.copyWith(
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF6B7280),
+                color: AppColors.textSecondary,
                 letterSpacing: 0.3,
               ),
             ),
@@ -93,12 +92,8 @@ class SaleTableHeader extends StatelessWidget {
 }
 class _HeaderCell extends StatelessWidget {
   const _HeaderCell({
-    required this.label,
-    required this.flex,
-    required this.column,
-    required this.activeColumn,
-    required this.direction,
-    required this.onSort,
+    required this.label, required this.flex, required this.column,
+    required this.activeColumn, required this.direction, required this.onSort,
   });
 
   final String label;
@@ -115,36 +110,28 @@ class _HeaderCell extends StatelessWidget {
       flex: flex,
       child: InkWell(
         onTap: () => onSort(column),
-        borderRadius: BorderRadius.circular(4.r),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontSize: 4.sp,
-                  fontWeight: FontWeight.w600,
-                  color: isActive
-                      ? const Color(0xFF2563EB)
-                      : const Color(0xFF6B7280),
-                  letterSpacing: 0.3,
-                ),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: AppTextStyles.bodySm.copyWith(
+                overflow: TextOverflow.ellipsis,
+                fontWeight: FontWeight.w600,
+                color: isActive ? AppColors.primary : AppColors.textSecondary,
+                letterSpacing: 0.3,
               ),
-              SizedBox(width: 2.w),
-              Icon(
-                isActive && direction == SortDirection.ascending
-                    ? Icons.arrow_upward_rounded
-                    : Icons.arrow_downward_rounded,
-                size: 5.r,
-                color: isActive
-                    ? const Color(0xFF2563EB)
-                    : const Color(0xFFD1D5DB),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: AppSpacing.xs),
+            Icon(
+              isActive && direction == SortDirection.ascending
+                  ? Icons.arrow_upward_rounded
+                  : Icons.arrow_downward_rounded,
+              size: AppSpacing.md,
+              color: isActive ? AppColors.primary : AppColors.border,
+            ),
+          ],
         ),
       ),
     );

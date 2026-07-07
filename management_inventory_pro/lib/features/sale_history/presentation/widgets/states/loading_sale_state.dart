@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-class SalesLoadingState extends StatefulWidget {
-  const SalesLoadingState({super.key});
-
-  @override
-  State<SalesLoadingState> createState() => _SalesLoadingStateState();
-}
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
 
 class _SalesLoadingStateState extends State<SalesLoadingState>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  final _skeletonScrollController = ScrollController();
 
   @override
   void initState() {
@@ -28,6 +23,7 @@ class _SalesLoadingStateState extends State<SalesLoadingState>
   @override
   void dispose() {
     _controller.dispose();
+    _skeletonScrollController.dispose();
     super.dispose();
   }
 
@@ -40,33 +36,30 @@ class _SalesLoadingStateState extends State<SalesLoadingState>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Summary cards skeleton
-            Row(
-              children: List.generate(
-                5,
-                (i) => Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: i < 4 ? 12.w : 0),
-                    child: _SkeletonCard(height: 96.h),
+            Scrollbar(
+              controller: _skeletonScrollController,
+              child: SingleChildScrollView(
+                controller: _skeletonScrollController,
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(
+                    5,
+                        (i) => Padding(
+                      padding: EdgeInsets.only(right: AppSpacing.sm),
+                      child: const _SkeletonCard(width: 250, height: 50),
+                    ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 16.h),
-
-            // Filters bar skeleton
-            _SkeletonCard(height: 56.h),
-            SizedBox(height: 16.h),
-
-            // Table skeleton
+            const SizedBox(height: AppSpacing.lg),
+            const _SkeletonCard(height: 56),
+            const SizedBox(height: AppSpacing.lg),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    flex: 7,
-                    child: _TableSkeleton(),
-                  ),
+                  Expanded(flex: 7, child: _TableSkeleton()),
                 ],
               ),
             ),
@@ -77,17 +70,27 @@ class _SalesLoadingStateState extends State<SalesLoadingState>
   }
 }
 
+class SalesLoadingState extends StatefulWidget {
+  const SalesLoadingState({super.key});
+
+  @override
+  State<SalesLoadingState> createState() => _SalesLoadingStateState();
+}
+
+
 class _SkeletonCard extends StatelessWidget {
-  const _SkeletonCard({required this.height});
+  const _SkeletonCard({required this.height, this.width});
   final double height;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
+      width: width,
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB),
-        borderRadius: BorderRadius.circular(10.r),
+        color: AppColors.border,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
     );
   }
@@ -102,10 +105,10 @@ class _SkeletonLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height ?? 12.h,
+      height: height ?? AppSpacing.md,
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB),
-        borderRadius: BorderRadius.circular(4.r),
+        color: AppColors.border,
+        borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
     );
   }
@@ -116,55 +119,55 @@ class _TableSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Header placeholder
           Container(
-            height: 40.h,
-            padding: EdgeInsets.symmetric(horizontal: 2.w),
-            color: const Color(0xFFF9FAFB),
+            height: 20,
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+            color: AppColors.surfaceContainerLow,
             child: Row(
-              children: [50.w, 100.w, 10.w, 10.w, 40.w, 20.w, 20.w]
+              children: [50.0, 100.0, 10.0, 10.0, 40.0, 20.0, 20.0]
                   .map((w) => Padding(
-                        padding: EdgeInsets.only(right: 2.w),
-                        child: _SkeletonLine(width: w, height: 10.h),
+                        padding: const EdgeInsets.only(right: AppSpacing.xs),
+                        child: _SkeletonLine(width: w, height: 10),
                       ))
                   .toList(),
             ),
           ),
-          const Divider(height: 1, color: Color(0xFFE5E7EB)),
+          const Divider(height: 1, color: AppColors.border),
           ...List.generate(
             8,
             (i) => Column(
               children: [
                 Container(
-                  height: 48.h,
-                  padding: EdgeInsets.symmetric(horizontal: 2.w),
-                  child: Row(
+                  height: 30,
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+                  child: const Row(
                     children: [
-                      _SkeletonLine(width: 50.w),
-                      SizedBox(width: 4.w),
-                      _SkeletonLine(width: 100.w),
-                      SizedBox(width: 4.w),
-                      _SkeletonLine(width: 10.w),
-                      SizedBox(width: 4.w),
-                      _SkeletonLine(width: 10.w),
-                      SizedBox(width: 4.w),
-                      _SkeletonLine(width: 40.w),
-                      SizedBox(width: 4.w),
-                      _SkeletonLine(width: 20.w, height: 20.h),
-                      SizedBox(width: 4.w),
-                      _SkeletonLine(width: 20.w),
+                      _SkeletonLine(width: 50),
+                      SizedBox(width: AppSpacing.sm),
+                      _SkeletonLine(width: 100),
+                      SizedBox(width: AppSpacing.sm),
+                      _SkeletonLine(width: 10),
+                      SizedBox(width: AppSpacing.sm),
+                      _SkeletonLine(width: 10),
+                      SizedBox(width: AppSpacing.sm),
+                      _SkeletonLine(width: 40),
+                      SizedBox(width: AppSpacing.sm),
+                      _SkeletonLine(width: 20, height: 20),
+                      SizedBox(width: AppSpacing.sm),
+                      _SkeletonLine(width: 20),
                     ],
                   ),
                 ),
                 if (i < 7)
-                  const Divider(height: 1, color: Color(0xFFF3F4F6)),
+                  const Divider(height: 1, color: AppColors.surfaceContainerLow),
               ],
             ),
           ),

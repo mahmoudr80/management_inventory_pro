@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/app_colors.dart';
 import '../../../data/models/low_stock_product.dart';
 
 class LowStockRow extends StatelessWidget {
@@ -19,7 +20,7 @@ class LowStockRow extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isCritical ? const Color(0xFFFFDAD6).withOpacity(0.08) : null,
+        color: isCritical ? AppColors.errorContainer.withOpacity(0.08) : null,
         border: Border(
           bottom: BorderSide(color: theme.colorScheme.outlineVariant),
         ),
@@ -95,9 +96,9 @@ class _StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, bg, fg) = switch (status) {
-      LowStockStatus.critical => ('CRITICAL', const Color(0xFFFFDAD6), const Color(0xFFBA1A1A)),
-      LowStockStatus.outOfStock => ('OUT OF STOCK', const Color(0xFFFFDAD6), const Color(0xFFBA1A1A)),
-      LowStockStatus.warning => ('WARNING', const Color(0xFFFFF3CD), const Color(0xFF8A6200)),
+      LowStockStatus.critical => ('CRITICAL', AppColors.errorContainer, AppColors.error),
+      LowStockStatus.outOfStock => ('OUT OF STOCK', AppColors.errorContainer, AppColors.error),
+      LowStockStatus.warning => ('WARNING', AppColors.warningContainer, AppColors.onWarningContainer),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 class DiscardDraftButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -9,38 +11,35 @@ class DiscardDraftButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
           decoration: BoxDecoration(
-            color: const Color(0xFFEAEDFF),
-            borderRadius: BorderRadius.circular(4.r),
-            border: Border.all(color: const Color(0xFFC3C5D9)),
+            color: AppColors.surfaceContainer,
+            borderRadius: BorderRadius.circular(AppRadius.sm),
+            border: Border.all(color: AppColors.outlineVariant),
           ),
           child: Text(
             'Del',
-            style: TextStyle(
-              fontSize: 3.sp,
-              fontWeight: FontWeight.w700,
-              color: const Color(0xFF434656),
-            ),
+            style: AppTextStyles.labelCaps,
           ),
         ),
-        SizedBox(width: 2.w),
+        const SizedBox(width: AppSpacing.sm),
         OutlinedButton(
           onPressed: onPressed,
           style: OutlinedButton.styleFrom(
-            foregroundColor: const Color(0xFF131B2E),
-            side: const BorderSide(color: Color(0xFF737688)),
+            foregroundColor: AppColors.textPrimary,
+            side: const BorderSide(color: AppColors.outline),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 10.h),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
           ),
           child: Text(
             'Discard Draft',
-            style: TextStyle(
-              fontSize: 4.sp,
+            style: AppTextStyles.buttonText.copyWith(
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),

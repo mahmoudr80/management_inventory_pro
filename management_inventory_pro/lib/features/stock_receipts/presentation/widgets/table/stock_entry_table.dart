@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/table/stock_entry_table_footer.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/table/stock_entry_table_header.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/table/stock_entry_table_row.dart';
@@ -9,12 +8,12 @@ import '../../../data/models/stock_entry_model.dart';
 
 class StockEntryTable extends StatelessWidget {
   final List<StockEntryModel> entries;
-  final StockEntryModel? selectedEntry;   // ← NEW
+  final StockEntryModel? selectedEntry;
   final int totalCount;
   final int currentPage;
   final int pageSize;
   final bool isLoadingMore;
-  final ValueChanged<StockEntryModel> onSelect;  // ← NEW
+  final ValueChanged<StockEntryModel> onSelect;
   final ValueChanged<StockEntryModel> onEdit;
   final ValueChanged<StockEntryModel> onDelete;
   final VoidCallback onLoadMore;
@@ -37,13 +36,8 @@ class StockEntryTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.outlineVariant),
-      ),
-      child: Column(
+    Widget buildTableContent() {
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // ── Table header ──────────────────────────────────────────────
@@ -53,8 +47,7 @@ class StockEntryTable extends StatelessWidget {
           // ── Rows ──────────────────────────────────────────────────────
           Expanded(
             child: ListView.separated(
-              itemCount:
-                  entries.length + (_hasMore || isLoadingMore ? 1 : 0),
+              itemCount: entries.length + (_hasMore || isLoadingMore ? 1 : 0),
               separatorBuilder: (_, _) =>
                   const Divider(height: 1, color: AppColors.outlineVariant),
               itemBuilder: (context, index) {
@@ -78,7 +71,43 @@ class StockEntryTable extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 800) {
+          final ScrollController scrollController = ScrollController();
+          return Scrollbar(
+            controller: scrollController,
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              controller: scrollController,
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                width: 800,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.outlineVariant),
+                  ),
+                  child: buildTableContent(),
+                ),
+              ),
+            ),
+          );
+        }
+
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.outlineVariant),
+          ),
+          child: buildTableContent(),
+        );
+      },
     );
   }
 }

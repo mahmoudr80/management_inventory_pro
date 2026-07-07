@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/app_colors.dart';
 import '../../../data/models/business_insight.dart';
 
 class InsightTile extends StatelessWidget {
@@ -9,20 +10,20 @@ class InsightTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final (icon, iconColor, iconBg) = switch (insight.severity) {
       InsightSeverity.info => (
-      Icons.info_outline,
-      Color(0xFF0041C8),
-      Color(0xFFDCE1FF),
-      ),
+          Icons.info_outline,
+          AppColors.primary,
+          AppColors.primaryFixed,
+        ),
       InsightSeverity.warning => (
-      Icons.warning_amber_rounded,
-      Color(0xFF8A6200),
-      Color(0xFFFFF3CD),
-      ),
+          Icons.warning_amber_rounded,
+          AppColors.onWarningContainer,
+          AppColors.warningContainer,
+        ),
       InsightSeverity.alert => (
-      Icons.error_outline_rounded,
-      Color(0xFFBA1A1A),
-      Color(0xFFFFDAD6),
-      ),
+          Icons.error_outline_rounded,
+          AppColors.error,
+          AppColors.errorContainer,
+        ),
     };
     final theme = Theme.of(context);
 

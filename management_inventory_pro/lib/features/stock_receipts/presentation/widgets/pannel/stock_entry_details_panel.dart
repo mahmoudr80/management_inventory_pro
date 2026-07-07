@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/dialogs/dialog_utils.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
@@ -22,7 +21,7 @@ class StockEntryDetailsPanel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.outlineVariant),
         boxShadow: [
           BoxShadow(
@@ -36,26 +35,24 @@ class StockEntryDetailsPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _PanelTopBar(onClose: cubit.clearSelection),
-
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   StockEntryDetailsHeader(entry: entry),
-                  SizedBox(height: 12.h),
-                  _SectionLabel(label: 'Lines'),
-                  SizedBox(height: 8.h),
+                  const SizedBox(height: 12),
+                  const _SectionLabel(label: 'Lines'),
+                  const SizedBox(height: 8),
                   StockEntryLinesTable(lines: entry.lines),
-                  SizedBox(height: 16.h),
+                  const SizedBox(height: 16),
                   StockEntryCostSummaryCard(entry: entry),
-                  SizedBox(height: 16.h),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
           ),
-
           _PanelActions(entry: entry),
         ],
       ),
@@ -72,9 +69,9 @@ class _PanelTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48.h,
-      padding: EdgeInsets.symmetric(horizontal: 2.w),
-      decoration: BoxDecoration(
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.outlineVariant),
         ),
@@ -89,13 +86,12 @@ class _PanelTopBar extends StatelessWidget {
           const Spacer(),
           IconButton(
             onPressed: onClose,
-            icon: Icon(
+            icon: const Icon(
               Icons.close_rounded,
-              size: 28.r,
+              size: 20,
               color: AppColors.outline,
             ),
-            //padding: EdgeInsets.zero,
-            constraints: BoxConstraints(minWidth: 4.w, minHeight: 28.h),
+            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             tooltip: 'Close panel',
           ),
         ],
@@ -110,10 +106,13 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      label,
-      overflow: TextOverflow.ellipsis,
-      style: AppTextStyles.bodySmall,
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 4),
+      child: Text(
+        label.toUpperCase(),
+        overflow: TextOverflow.ellipsis,
+        style: AppTextStyles.labelCaps,
+      ),
     );
   }
 }
@@ -125,8 +124,8 @@ class _PanelActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: const BoxDecoration(
         border: Border(top: BorderSide(color: AppColors.outlineVariant)),
       ),
       child: Row(
@@ -145,17 +144,16 @@ class _PanelActions extends StatelessWidget {
               label: const Text('Print'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.onSurface,
-                side: BorderSide(color: AppColors.outlineVariant),
-                padding: EdgeInsets.symmetric(vertical: 10.h),
+                side: const BorderSide(color: AppColors.outlineVariant),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                textStyle: AppTextStyles.bodySm
-                    .copyWith(fontWeight: FontWeight.w600),
+                textStyle: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
           ),
-          SizedBox(width: 8.w),
+          const SizedBox(width: 8),
           Expanded(
             child: OutlinedButton.icon(
               onPressed: () => _confirmDelete(context),
@@ -163,14 +161,13 @@ class _PanelActions extends StatelessWidget {
               label: const Text('Delete'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.error,
-                side: const BorderSide(color: Color(0xFFFECACA)),
-                backgroundColor: const Color(0xFFFFF5F5),
-                padding: EdgeInsets.symmetric(vertical: 10.h),
+                side: const BorderSide(color: AppColors.errorContainer),
+                backgroundColor: AppColors.errorContainer.withOpacity(0.3),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                textStyle: AppTextStyles.bodySm
-                    .copyWith(fontWeight: FontWeight.w600),
+                textStyle: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
           ),

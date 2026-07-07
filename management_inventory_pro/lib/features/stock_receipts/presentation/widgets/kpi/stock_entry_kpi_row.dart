@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/kpi/statistics_bento_card.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -25,57 +24,70 @@ class StockEntryKpiRow extends StatelessWidget {
         ? summary.pendingReceipts / summary.totalReceipts
         : 0;
 
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // ── Card 1: Total Receipts ────────────────────────────────────────
-          Expanded(
-            child: StatBentoCard(
-              title: 'Total Receipts',
-              value: _formatCount(summary.totalReceipts),
-              footer: 'All stock receipts',
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool isNarrow = constraints.maxWidth < 800;
+        const double spacing = 16.0;
+        final double itemWidth = isNarrow
+            ? (constraints.maxWidth < 550
+                ? double.infinity
+                : (constraints.maxWidth - spacing) / 2)
+            : (constraints.maxWidth - (spacing * 2)) / 3;
+
+        final card1 = SizedBox(
+          width: itemWidth,
+          child: StatBentoCard(
+            title: 'Total Receipts',
+            value: _formatCount(summary.totalReceipts),
+            footer: 'All stock receipts',
+          ),
+        );
+
+        final card2 = SizedBox(
+          width: itemWidth,
+          child: StatBentoCard(
+            title: 'Pending Receipts',
+            value: _formatCount(summary.pendingReceipts),
+            valueColor: AppColors.error,
+            customFooter: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MiniProgressBar(
+                  fraction: pendingFraction.toDouble(),
+                  color: AppColors.error,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Receipts awaiting verification',
+                  style: AppTextStyles.bodySm.copyWith(
+                    color: AppColors.outline,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(width: 20),
+        );
 
-          // ── Card 2: Pending Verification ──────────────────────────────────
-          Expanded(
-            child: StatBentoCard(
-              title: 'Pending Receipts',
-              value: _formatCount(summary.pendingReceipts),
-              valueColor: AppColors.error,
-              customFooter: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MiniProgressBar(
-                    fraction: pendingFraction.toDouble(),
-                    color: AppColors.error,
-                  ),
-                  SizedBox(height: 6.h),
-                  Text(
-                    'Receipts awaiting verification',
-                    style: AppTextStyles.bodySm.copyWith(
-                      color: AppColors.outline,
-                    ),
-                  ),
-                ],
-              ),
-            )
+        final card3 = SizedBox(
+          width: isNarrow && constraints.maxWidth >= 550 ? double.infinity : itemWidth,
+          child: StatBentoCard(
+            title: 'Inventory Value',
+            value: _formatValue(summary.totalValue),
+            footer: 'Total value of received inventory',
+            decorativeIcon: Icons.local_shipping_outlined,
           ),
-          SizedBox(width: 20),
+        );
 
-          // ── Card 3: Logistics Throughput ──────────────────────────────────
-          Expanded(
-            child: StatBentoCard(
-              title: 'Inventory Value',
-              value: _formatValue(summary.totalValue),
-              footer: ' Total value of received inventory',
-              decorativeIcon: Icons.local_shipping_outlined,
-            ),
-          ),
-        ],
-      ),
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: [
+            card1,
+            card2,
+            card3,
+          ],
+        );
+      },
     );
   }
 
@@ -102,34 +114,49 @@ class StockEntryKpiRow extends StatelessWidget {
 class _KpiRowSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(3, (i) {
-        final isLast = i == 2;
-        return Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(right: isLast ? 0 : 16.w),
-            child: Container(
-              height: 128.h,
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(color: AppColors.outlineVariant),
-              ),
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _Bone(width: 120.w, height: 10.h),
-                  SizedBox(height: 12.h),
-                  _Bone(width: 72.w, height: 28.h),
-                  SizedBox(height: 16.h),
-                  _Bone(width: 100.w, height: 10.h),
-                ],
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool isNarrow = constraints.maxWidth < 800;
+        const double spacing = 16.0;
+        final double itemWidth = isNarrow
+            ? (constraints.maxWidth < 550
+                ? double.infinity
+                : (constraints.maxWidth - spacing) / 2)
+            : (constraints.maxWidth - (spacing * 2)) / 3;
+
+        final skeletonCard = Container(
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.outlineVariant),
+          ),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const _Bone(width: 120, height: 10),
+              const SizedBox(height: 12),
+              const _Bone(width: 72, height: 28),
+              const SizedBox(height: 16),
+              const _Bone(width: 100, height: 10),
+            ],
           ),
         );
-      }),
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: [
+            SizedBox(width: itemWidth, child: skeletonCard),
+            SizedBox(width: itemWidth, child: skeletonCard),
+            SizedBox(
+              width: isNarrow && constraints.maxWidth >= 550 ? double.infinity : itemWidth,
+              child: skeletonCard,
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -147,7 +174,7 @@ class _Bone extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: BorderRadius.circular(4),
       ),
     );
   }

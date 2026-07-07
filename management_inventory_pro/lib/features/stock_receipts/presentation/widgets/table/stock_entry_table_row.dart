@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/models/stock_entry_status.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/table/status_pill.dart';
 
@@ -10,8 +9,8 @@ import '../../../data/models/stock_entry_model.dart';
 
 class EntryRow extends StatefulWidget {
   final StockEntryModel entry;
-  final bool isSelected;       // ← NEW
-  final VoidCallback onTap;    // ← NEW
+  final bool isSelected;
+  final VoidCallback onTap;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
@@ -31,8 +30,7 @@ class EntryRow extends StatefulWidget {
 class _EntryRowState extends State<EntryRow> {
   bool _hovering = false;
 
-  static final _currencyFmt =
-      NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+  static final _currencyFmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
   static final _dateFmt = DateFormat('yyyy-MM-dd HH:mm');
 
   @override
@@ -55,7 +53,7 @@ class _EntryRowState extends State<EntryRow> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 100),
-          height: 40.h,
+          height: 40,
           color: bg,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
@@ -63,23 +61,29 @@ class _EntryRowState extends State<EntryRow> {
               // Receipt ID
               Expanded(
                 flex: 3,
-                child: Text(
-                  e.id,
-                  style: AppTextStyles.dataMono.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
+                child: Tooltip(
+                  message: e.id,
+                  child: Text(
+                    e.id,
+                    style: AppTextStyles.dataMono.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
               // Supplier
               Expanded(
                 flex: 4,
-                child: Text(
-                  e.supplier.name ?? '—',
-                  style: AppTextStyles.bodyMd,
-                  overflow: TextOverflow.ellipsis,
+                child: Tooltip(
+                  message: e.supplier.name ?? '—',
+                  child: Text(
+                    e.supplier.name ?? '—',
+                    style: AppTextStyles.bodyMd,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
 
@@ -106,11 +110,13 @@ class _EntryRowState extends State<EntryRow> {
               // Date
               Expanded(
                 flex: 3,
-                child: Text(
-                  _dateFmt.format(e.receiptDate),
-                  style: AppTextStyles.bodySm
-                      .copyWith(color: AppColors.outline),
-                  overflow: TextOverflow.ellipsis,
+                child: Tooltip(
+                  message: _dateFmt.format(e.receiptDate),
+                  child: Text(
+                    _dateFmt.format(e.receiptDate),
+                    style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
 
@@ -126,8 +132,18 @@ class _EntryRowState extends State<EntryRow> {
               ),
 
               // Actions
+              const SizedBox(
+                width: 72,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // Remove individual handlers if they are simple callbacks
+                  ],
+                ),
+              ),
               SizedBox(
-                width: 72.w.clamp(50, 100),
+                width: 72,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -173,9 +189,9 @@ class _RowAction extends StatelessWidget {
       message: tooltip,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: BorderRadius.circular(4),
         child: Padding(
-          padding: EdgeInsets.all(4.w),
+          padding: const EdgeInsets.all(4),
           child: Icon(icon, size: 16, color: color),
         ),
       ),

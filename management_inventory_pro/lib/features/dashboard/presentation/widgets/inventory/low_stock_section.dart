@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../../../../../core/theme/app_colors.dart';
 import '../../../data/models/low_stock_product.dart';
 import '../common/dashboard_card.dart';
 import '../common/loading_card.dart';
@@ -22,7 +22,6 @@ class LowStockSection extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isLoading) return const LoadingCard(height: 200);
 
-    final theme = Theme.of(context);
     return DashboardCard(
       padding: EdgeInsets.zero,
       child: Column(
@@ -33,20 +32,20 @@ class LowStockSection extends StatelessWidget {
             child: SectionHeader(
               title: 'Low Stock Alerts',
               leadingIcon: Icons.notifications_active_outlined,
-              leadingIconColor: const Color(0xFFBA1A1A),
+              leadingIconColor: AppColors.error,
               trailing: products.isEmpty
                   ? null
                   : Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFDAD6),
+                        color: AppColors.errorContainer,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         '${products.length} ACTION ITEMS',
                         style: const TextStyle(
-                          color: Color(0xFFBA1A1A),
+                          color: AppColors.error,
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.08,

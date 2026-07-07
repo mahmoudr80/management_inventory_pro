@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 import 'package:management_inventory_pro/features/product/presentation/products/cubit/product_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimens.dart';
 import '../../../sale_history/data/models/sale_item_model.dart';
 import '../../data/models/cart_item.dart';
 import '../../data/models/pos_product.dart';
@@ -22,6 +23,9 @@ class PosScreen extends StatefulWidget {
 class _PosScreenState extends State<PosScreen> {
   String? _lastTappedId;
   PaymentMethod? _payment = PaymentMethod.cash;
+  bool _isCartVisible = true;
+  bool _isAnalyticsVisible = true;
+  ScrollController controller = ScrollController();
 
   Future<void> _addToCart(PosProduct product) async {
     if (product.outOfStock) return;
@@ -92,44 +96,72 @@ class _PosScreenState extends State<PosScreen> {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.pagePadding,horizontal:AppSpacing.sm ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  PosSearchBar(onChanged: (query) =>
-                      context.read<PosCubit>().searchProducts(query)),
-                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: PosSearchBar(onChanged: (query) =>
+                            context.read<PosCubit>().searchProducts(query)),
+                      ),
+                      IconButton(
+                        onPressed: () => setState(() {
+                          _isAnalyticsVisible = !_isAnalyticsVisible;
+                          if (_isAnalyticsVisible) _isCartVisible = false;
+                        }),
+                        icon: Icon(_isAnalyticsVisible ? Icons.insights : Icons.insights_outlined),
+                        tooltip: 'Toggle Analytics',
+                        color: AppColors.posPrimary,
+                      ),
+                      IconButton(
+                        onPressed: () => setState(() {
+                          _isCartVisible = !_isCartVisible;
+                          if (_isCartVisible) _isAnalyticsVisible = false;
+                        }),
+                        icon: Icon(_isCartVisible ? Icons.shopping_cart : Icons.shopping_cart_outlined),
+                        tooltip: 'Toggle Cart',
+                        color: AppColors.posPrimary,
+                      ),
+                    ],
+                  ),
                   Expanded(
                     child: ProductGrid(
                         selectedId: _lastTappedId,
+                        showAnalytics: _isAnalyticsVisible,
+                        showCart: _isCartVisible,
                         onProductTap: (product) async =>
                         await _addToCart(product),
                         onViewAnalytics: _viewAnalytics,
                         onViewBestSellers: _viewBestSellers,
+                      controller: controller,
                       ),
                     ),
                 ],
               ),
             ),
           ),
-          Container(width: 1, color: AppColors.posBorder),
-          BlocBuilder<PosCubit, PosState>(
-            builder: (context, state) {
-              return CartPanel(
-                items: state.cart?.items ?? [],
-                selectedPayment: _payment,
-                onSelectPayment: (m) =>
-                    setState(() => _payment = m as PaymentMethod),
-                onIncrement: (item) async => await _increment(item),
-                onDecrement: (item) async => await _decrement(item),
-                onRemove: (item) async => await _remove(item),
-                onEditCustomer: () {},
-                onSplitPay: () {},
-                onPrint: () {},
-                onCompleteSale: _completeSale,
-              );
-            },
-          ),
+          if (_isCartVisible) ...[
+            Container(width: 1, color: AppColors.posBorder),
+            BlocBuilder<PosCubit, PosState>(
+              builder: (context, state) {
+                return CartPanel(
+                  items: state.cart?.items ?? [],
+                  selectedPayment: _payment,
+                  onSelectPayment: (m) =>
+                      setState(() => _payment = m as PaymentMethod),
+                  onIncrement: (item) async => await _increment(item),
+                  onDecrement: (item) async => await _decrement(item),
+                  onRemove: (item) async => await _remove(item),
+                  onEditCustomer: () {},
+                  onSplitPay: () {},
+                  onPrint: () {},
+                  onCompleteSale: _completeSale,
+                );
+              },
+            ),
+          ],
         ],
       ),
     );

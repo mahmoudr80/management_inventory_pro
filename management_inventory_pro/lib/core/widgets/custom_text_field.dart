@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../theme/app_colors.dart';
+import '../theme/app_decoration.dart';
+import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 
+/// Labeled text field used across forms.
+///
+/// Refactor notes (responsive_rules.md):
+/// - Removed `flutter_screenutil` (.h/.w/.r) in favor of `AppSpacing` /
+///   `AppRadius` so the field renders consistently from 900px up to
+///   ultrawide, instead of scaling relative to a mobile design frame.
+/// - Default decoration now goes through `AppDecorations.inputField()` so
+///   borders/radius/colors stay centralized in `core/theme`.
+/// - Label wrapped in a `Tooltip` + ellipsis: long field labels (e.g. from
+///   dynamic form configs) truncate cleanly instead of wrapping/overflowing.
 class CustomTextField extends StatelessWidget {
   final String label;
   final String? hint;
@@ -19,6 +30,7 @@ class CustomTextField extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final void Function(String)? onChanged;
   final TextStyle? hintStyle;
+
   const CustomTextField({
     super.key,
     required this.label,
@@ -28,7 +40,13 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.validator,
     this.prefixIcon,
-    this.suffixIcon, this.maxLines, this.helperText, this.prefixText, this.inputDecoration, this.onChanged, this.hintStyle,
+    this.suffixIcon,
+    this.maxLines,
+    this.helperText,
+    this.prefixText,
+    this.inputDecoration,
+    this.onChanged,
+    this.hintStyle,
   });
 
   @override
@@ -36,52 +54,47 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyles.body.copyWith(
-            fontWeight: FontWeight.w500,
-            color: AppColors.textPrimary,
+        Tooltip(
+          message: label,
+          waitDuration: const Duration(milliseconds: 500),
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.bodyMd.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.textPrimary,
+            ),
           ),
         ),
-        SizedBox(height: 8.h),
-        TextFormField(maxLines:maxLines ,
+        SizedBox(height: AppSpacing.sm),
+        TextFormField(
+          maxLines: maxLines,
           controller: controller,
           onChanged: onChanged,
           obscureText: obscureText,
           keyboardType: keyboardType,
           validator: validator,
-          style: AppTextStyles.body,
-          decoration:inputDecoration?? InputDecoration(prefixText: prefixText,
-            helperText: helperText,
-            hintText: hint,
-            hintStyle: hintStyle??AppTextStyles.body.copyWith(
-              color: AppColors.textSecondary,
-            ),
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
-            filled: true,
-            fillColor: AppColors.surface,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: 16.w,
-              vertical: 14.h,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
-              borderSide: BorderSide(color: AppColors.border),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
-              borderSide: BorderSide(color: AppColors.border),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
-              borderSide: BorderSide(color: AppColors.primary, width: 2),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
-              borderSide: BorderSide(color: AppColors.error),
-            ),
-          ),
+          style: AppTextStyles.bodyMd,
+          decoration: inputDecoration ??
+              AppDecorations.inputField(
+                hint: hint,
+                prefixIcon: prefixIcon,
+                suffixIcon: suffixIcon,
+              ).copyWith(
+                prefixText: prefixText,
+                helperText: helperText,
+                hintStyle: hintStyle ??
+                    AppTextStyles.bodyMd.copyWith(color: AppColors.textSecondary),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.standard),
+                  borderSide: const BorderSide(color: AppColors.error),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.standard),
+                  borderSide: const BorderSide(color: AppColors.primary, width: AppBorder.thick),
+                ),
+              ),
         ),
       ],
     );

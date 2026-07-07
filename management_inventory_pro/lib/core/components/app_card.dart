@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_decoration.dart';
+import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 
 class AppCard extends StatefulWidget {
@@ -26,69 +27,78 @@ class AppCard extends StatefulWidget {
 }
 
 class _AppCardState extends State<AppCard> {
-   bool isHovered =false;
+  bool isHovered = false;
+
   @override
   Widget build(BuildContext context) {
-    return  MouseRegion(
-        onEnter: (_) {
-          setState(() {
-            isHovered = true;
-          });
-        },
-        onExit: (_) {
-          setState(() {
-            isHovered = false;
-          });
-        },child:  AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.r),
-          color: Colors.white,
-          border: Border.all(
-
-            color: isHovered
-                ? Colors.blue
-                :  AppColors.surface,
-          ),
-        ),
-        child: Container(
-      decoration: BoxDecoration(
-        color: widget.backgroundColor ??  AppColors.surface,
-        borderRadius: BorderRadius.circular(8.r), // 8px corner radius (lg in design spec)
-        border: widget.border ?? Border.all(color: AppColors.border, width: 1.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.title != null || widget.titleSuffix != null) ...[
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 8.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (widget.title != null)
-                    Text(
-                      widget.title!,
-                      style: AppTextStyles.headlineSm.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                      ),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                  ?widget.titleSuffix,
-                ],
+    // NOTE: the original implementation nested an AnimatedContainer and an
+    // inner Container that both painted a border/background on top of one
+    // another (the inner one always won, so the hover border never showed).
+    // Collapsed into a single decorated AnimatedContainer.
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: AppAnimation.fast,
+        decoration: widget.border != null
+            ? BoxDecoration(
+                color: widget.backgroundColor ?? AppColors.surface,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: widget.border,
+              )
+            : AppDecorations.card(
+                color: widget.backgroundColor ?? AppColors.surface,
+                radius: AppRadius.md,
+                borderColor: isHovered ? AppColors.primary : AppColors.border,
               ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.title != null || widget.titleSuffix != null) ...[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.xs,
+                  AppSpacing.md,
+                  AppSpacing.xs,
+                  AppSpacing.sm,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (widget.title != null)
+                      Expanded(
+                        child: Tooltip(
+                          message: widget.title!,
+                          child: Text(
+                            widget.title!,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.headlineSm.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      const SizedBox.shrink(),
+                    if (widget.titleSuffix != null) widget.titleSuffix!,
+                  ],
+                ),
+              ),
+              const Divider(color: AppColors.border, height: 1.0),
+            ],
+            Padding(
+              padding: widget.padding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xs,
+                    vertical: AppSpacing.lg,
+                  ),
+              child: widget.child,
             ),
-            const Divider(color: AppColors.border, height: 1.0),
           ],
-          Padding(
-            padding: widget.padding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-            child: widget.child,
-          ),
-        ],
+        ),
       ),
-        )) );
+    );
   }
 }
