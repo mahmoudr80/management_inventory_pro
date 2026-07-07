@@ -20,24 +20,40 @@ import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 import 'core/dependency_injection/service_locator.dart';
 import 'core/theme/app_colors.dart';
+import 'core/storage/storage_service.dart';
 import 'core/utils/app_constants.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/category/data/datasource/category_datasource.dart';
+import 'features/landing page/landing_page.dart';
 import 'features/unit/data/datasource/unit_datasource.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+
   if (!kIsWeb &&
       (Platform.isWindows ||
           Platform.isLinux ||
           Platform.isMacOS)) {
     print("windowManager.ensureInitialized");
+
     await windowManager.ensureInitialized();
-    await windowManager.setMinimumSize(
-      const Size(1050, 680),
+
+    WindowOptions options = const WindowOptions(
+      size: Size(1280, 720),
+      center: true,
     );
+
+    windowManager.waitUntilReadyToShow(options, () async {
+      await windowManager.setMinimumSize(
+        const Size(1050, 680),
+      );
+
+      await windowManager.show();
+      await windowManager.focus();
+    });
   }
 
   if (!kIsWeb && Platform.isWindows) {
@@ -49,6 +65,8 @@ void main() async {
 
   // Initialize Dependency Injection & database init
   await setupServiceLocator();
+  // Sets up Hive inside the "personal" folder next to the .exe.
+  final startOnLandingPage = !getIt<StorageService>().hasAnyUser();
 
   await Supabase.initialize(
     url: 'https://vulfkiimpxlhgtusbchw.supabase.co',
@@ -59,15 +77,15 @@ void main() async {
       supportedLocales: AppConstants.supportedLocales,
       path: AppConstants.translationsPath,
       fallbackLocale: AppConstants.englishLocale,
-      child: const MyApp(),
+      child:  MyApp(startOnLandingPage: startOnLandingPage,),
     ),
   );
   }
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({super.key, required this.startOnLandingPage});
+  final bool startOnLandingPage;
   @override
   Widget build(BuildContext context) {
     // ScreenUtil init for responsive UI
@@ -97,6 +115,7 @@ class MyApp extends StatelessWidget {
             ),
             home:
             !kIsWeb && defaultTargetPlatform == TargetPlatform.windows ?
+            startOnLandingPage ? const LandingPage() :
             BlocProvider(
               create: (context) => HomeCubit(),
               child: HomeScreen(),

@@ -1,12 +1,12 @@
-class UserModel {
+class AuthUserModel {
   final String id;
   final String email;
   final String? name;
 
-  UserModel({required this.id, required this.email, this.name});
+  AuthUserModel({required this.id, required this.email, this.name});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
+  factory AuthUserModel.fromJson(Map<String, dynamic> json) {
+    return AuthUserModel(
       id: json['id'] as String,
       email: json['email'] as String,
       name: json['name'] as String?,

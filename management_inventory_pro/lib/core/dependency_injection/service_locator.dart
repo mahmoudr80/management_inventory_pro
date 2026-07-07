@@ -26,6 +26,7 @@ import '../../features/stock_adjustment/data/repository/stock_adjustment_reposit
 import '../../features/stock_adjustment_history/data/repositories/stock_adjustment_history_repository.dart';
 import '../../features/suppliers/data/repository/supplier_repository.dart';
 import '../../features/unit/data/respository/unit_repository.dart';
+import '../storage/storage_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -97,7 +98,14 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<StockAdjustmentHistoryDatasource>(() =>
         StockAdjustmentHistoryDatasource(getIt<DatabaseService>().db),);
     getIt.registerLazySingleton(() => StockAdjustmentHistoryRepository(getIt<StockAdjustmentHistoryDatasource>()),);
+
+
+    final storageService = StorageService();
+    await storageService.init();
+
+    getIt.registerSingleton<StorageService>(storageService);
   }
 
 
 }
+

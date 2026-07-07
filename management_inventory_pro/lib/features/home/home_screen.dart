@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/components/side_bar_layout.dart';
+import 'package:management_inventory_pro/core/storage/storage_service.dart';
 import 'package:management_inventory_pro/features/category/data/respository/category_repository.dart';
 import 'package:management_inventory_pro/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
+import 'package:management_inventory_pro/features/landing%20page/landing_page.dart';
 import 'package:management_inventory_pro/features/pos/data/repository/pos_repository.dart';
 import 'package:management_inventory_pro/features/sale_history/data/repository/sale_history_repository.dart';
 import 'package:management_inventory_pro/features/sale_history/presentation/cubit/sales_history_cubit.dart';
@@ -88,8 +90,10 @@ class HomeScreen extends StatelessWidget {
               SideBarLayout(selectedIndex:
               state.currentIndex, onItemSelected: (value) {
                 context.read<HomeCubit>().navigate(value);
-              }, onLogout: () {
-
+              }, onLogout: () async {
+                await getIt<StorageService>().clearUsers();
+                Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) =>
+                  LandingPage(),),(route) => false,);
               },),
               Expanded(child: screens[state.currentIndex])
             ],
