@@ -1,5 +1,6 @@
 part of 'product_cubit.dart';
 
+
 @immutable
 sealed class ProductState {}
 
@@ -11,12 +12,16 @@ final class ProductSuccess extends ProductState {
   final List<ProductModel> allProducts; // original full list
   final String? selectedCategory;
   final String? selectedUnit;
+  final String? searchQuery;
+  final ProductViewType viewType;
 
   ProductSuccess(
       this.products, {
         List<ProductModel>? allProducts,
         this.selectedCategory,
         this.selectedUnit,
+        this.searchQuery,
+        this.viewType = ProductViewType.list,
       }) : allProducts = allProducts ?? products;
 
   ProductSuccess copyWith({
@@ -24,14 +29,19 @@ final class ProductSuccess extends ProductState {
     List<ProductModel>? allProducts,
     String? selectedCategory,
     String? selectedUnit,
+    String? searchQuery,
+    ProductViewType? viewType,
     bool clearCategory = false,
     bool clearUnit = false,
+    bool clearSearch = false,
   }) {
     return ProductSuccess(
       products ?? this.products,
       allProducts: allProducts ?? this.allProducts,
       selectedCategory: clearCategory ? null : (selectedCategory ?? this.selectedCategory),
       selectedUnit: clearUnit ? null : (selectedUnit ?? this.selectedUnit),
+      searchQuery: clearSearch ? null : (searchQuery ?? this.searchQuery),
+      viewType: viewType ?? this.viewType,
     );
   }
 }

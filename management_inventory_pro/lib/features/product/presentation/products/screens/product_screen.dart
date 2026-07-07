@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/components/page_header.dart';
 import 'package:management_inventory_pro/core/widgets/primary_button.dart';
 import 'package:management_inventory_pro/features/product/data/models/product_model.dart';
-import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
-
-import '../../../../../core/dependency_injection/service_locator.dart';
 import '../../../../category/presentation/cubit/category_cubit.dart';
 import '../../../../home/cubit/home_cubit.dart';
 import '../../../../unit/presentation/cubit/unit_cubit.dart';
@@ -32,38 +28,46 @@ class _ProductScreenState extends State<ProductScreen> {
 
     if (homeState.action == PageAction.createProduct) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.push(context,MaterialPageRoute(builder: (context) => AddProductScreen(),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const AddProductScreen()));
         context.read<HomeCubit>().clearAction();
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    ProductModel ? product;
-    //ScrollController _controller = ScrollController();
+    ProductModel? product;
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 10.w,vertical: 8.h),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       child: Column(
         children: [
-          PageHeader(title: "Product Catalog",
-          actions: [
-            PrimaryButton(text: "Add Product",
-                onPressed:() async {
-            final data=  await Navigator.push(context,MaterialPageRoute(builder: (context) => AddProductScreen(),));
-              print('============================');
-              print(data);
-              product = data;
-              context.read<ProductCubit>().updateProducts(product);
-            },)
-          ],),
-          SizedBox(height: 8.h),
+          PageHeader(
+            title: "Product Catalog",
+            actions: [
+              PrimaryButton(
+                text: "Add Product",
+                onPressed: () async {
+                  final data = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddProductScreen()),
+                  );
+                  print('============================');
+                  print(data);
+                  product = data;
+                  if (context.mounted && product != null) {
+                    context.read<ProductCubit>().updateProducts(product);
+                  }
+                },
+              )
+            ],
+          ),
+          const SizedBox(height: 8),
           ProductFilterBar(
             categoryCubit: context.read<CategoryCubit>()..getCategories(),
             unitCubit: context.read<UnitCubit>()..getUnits(),
           ),
-          SizedBox(height: 4.h),
-          ProductList(),
-
+          const SizedBox(height: 4),
+          const ProductList(),
         ],
       ),
     );

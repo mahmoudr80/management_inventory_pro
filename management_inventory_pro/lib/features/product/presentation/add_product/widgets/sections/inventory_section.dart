@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/widgets/custom_text_field.dart';
 import '../product_section_card.dart';
 
 class InventorySection extends StatelessWidget {
-  const InventorySection({super.key, required this.initialStockController,
-    required this.minStockController}) ;
-final TextEditingController initialStockController;
-final TextEditingController minStockController;
+  const InventorySection({
+    super.key,
+    required this.initialStockController,
+    required this.minStockController,
+  });
+
+  final TextEditingController initialStockController;
+  final TextEditingController minStockController;
+
   @override
   Widget build(BuildContext context) {
-    return  ProductSectionCard(
+    return ProductSectionCard(
       icon: Icons.inventory_2_outlined,
       title: 'Inventory',
       children: [
@@ -26,7 +30,7 @@ final TextEditingController minStockController;
                 helperText: 'Current quantity on hand',
               ),
             ),
-            SizedBox(width: 12.w),
+            const SizedBox(width: 12),
             Expanded(
               child: CustomTextField(
                 label: 'Minimum stock',
