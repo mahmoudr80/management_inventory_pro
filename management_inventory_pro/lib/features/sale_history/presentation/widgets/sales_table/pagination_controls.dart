@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 class PaginationControls extends StatelessWidget {
   const PaginationControls({
@@ -27,10 +29,10 @@ class PaginationControls extends StatelessWidget {
         ...pages.map((p) {
           if (p == -1) {
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 2.w),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
               child: Text(
                 '...',
-                style: TextStyle(fontSize: 4.sp, color: const Color(0xFF6B7280)),
+                style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary),
               ),
             );
           }
@@ -75,17 +77,17 @@ class _PageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(6.r),
+      borderRadius: BorderRadius.circular(AppRadius.sm),
       child: Container(
-        width: 24.r,
-        height: 24.r,
+        width: AppSpacing.xl,
+        height: AppSpacing.xl,
         alignment: Alignment.center,
         child: Icon(
           icon,
-          size: 28.r,
+          size: AppSpacing.lg,
           color: onTap != null
-              ? const Color(0xFF374151)
-              : const Color(0xFFD1D5DB),
+              ? AppColors.textPrimary
+              : AppColors.border,
         ),
       ),
     );
@@ -106,22 +108,21 @@ class _PageNumberButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: isActive ? null : onTap,
-      borderRadius: BorderRadius.circular(6.r),
+      borderRadius: BorderRadius.circular(AppRadius.sm),
       child: Container(
-        width: 22.r,
-        height: 22.r,
-        margin: EdgeInsets.symmetric(horizontal: 2.w),
+        width: AppSpacing.xl,
+        height: AppSpacing.xl,
+        margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF2563EB) : Colors.transparent,
-          borderRadius: BorderRadius.circular(6.r),
+          color: isActive ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.sm),
         ),
         child: Text(
           page.toString(),
-          style: TextStyle(
-            fontSize: 4.sp,
+          style: AppTextStyles.bodySm.copyWith(
             fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-            color: isActive ? Colors.white : const Color(0xFF374151),
+            color: isActive ? AppColors.surface : AppColors.textPrimary,
           ),
         ),
       ),

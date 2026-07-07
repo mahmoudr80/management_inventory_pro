@@ -71,7 +71,7 @@ class StockEntryCubit extends Cubit<StockEntryState> {
   }
 
   void clearSelection() {
-    emit(state.copyWith(clearSelectedEntry: true));
+    emit(state.copyWith(clearSelectedEntry: true,selectedEntry: null));
   }
 
   Future<void> applyFilter({

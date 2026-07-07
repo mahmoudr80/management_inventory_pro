@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/cubit/stock_entry_cubit.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/filter/status_toggle_group.dart';
 
@@ -20,7 +19,6 @@ class StockEntryFilterBar extends StatefulWidget {
   final ValueChanged<DateTimeRange?> onFilterDateRange;
   final VoidCallback onClearFilters;
   final SupplierRef? selectedSupplier;
-
   final StockEntryFilter? activeFilter;
 
   const StockEntryFilterBar({
@@ -31,7 +29,8 @@ class StockEntryFilterBar extends StatefulWidget {
     required this.onFilterSupplier,
     required this.onFilterDateRange,
     required this.onClearFilters,
-    this.activeFilter, this.selectedSupplier,
+    this.activeFilter,
+    this.selectedSupplier,
   });
 
   @override
@@ -50,24 +49,21 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
       firstDate: DateTime(2020),
       lastDate: now.add(const Duration(days: 365)),
       initialDateRange: _selectedDateRange,
-      builder: (context, child) =>
-          Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: AppColors.primary,
-                onPrimary: AppColors.onPrimary,
-                surface: AppColors.surfaceContainerLowest,
-              ),
-            ),
-            child: child!,
+      builder: (context, child) => Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: AppColors.primary,
+            onPrimary: AppColors.onPrimary,
+            surface: AppColors.surfaceContainerLowest,
           ),
+        ),
+        child: child!,
+      ),
     );
 
     if (picked != null) {
       setState(() => _selectedDateRange = picked);
       widget.onFilterDateRange(picked);
-    } else if (_selectedDateRange != null && picked == null) {
-      // User cancelled — do nothing; keep existing selection.
     }
   }
 
@@ -85,84 +81,112 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
   }
 
   String _formatDateRange(DateTimeRange dr) {
-    String _d(DateTime d) =>
-        '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(
-            2, '0')}/${d.year}';
-    return '${_d(dr.start)} – ${_d(dr.end)}';
+    String d(DateTime d) =>
+        '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
+    return '${d(dr.start)} – ${d(dr.end)}';
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.outlineVariant),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        spacing: 12.w,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // ── Search ─────────────────────────────────────────────────────────
-          Expanded(
-              child: BlocBuilder<StockEntryCubit, StockEntryState>(
-                builder: (context, state) {
-                  print(
-                    'Builder selected supplier = ${state.selectedSupplier?.name}',
-                  );
-                  return SupplierDropdown(onChanged: (SupplierRef? supplier)
-                  {
-                    print('SELECTED On Change: ${supplier?.name}');
-                    context.read<StockEntryCubit>()..selectSupplier(supplier)
-                      ..search(supplier?.id ?? '');
-                  }
-                  ,
-                    selected:state.selectedSupplier,
-                    clear: state.filter.isEmpty,
-                    );
-                },
-              )),
-          // ── Date Range ─────────────────────────────────────────────────────
-          Expanded(
-            child: DateRangeButton(
-              selectedRange: _selectedDateRange,
-              onTap: _pickDateRange,
-              onClear: _selectedDateRange != null ? _clearDate : null,
-              formatDateRange: _formatDateRange,
-            ),
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool isNarrow = constraints.maxWidth < 750;
+        final double? width = isNarrow
+            ? (constraints.maxWidth < 500
+                ? double.infinity
+                : (constraints.maxWidth - 44) / 2)
+            : null;
 
-          // ── Status toggles ─────────────────────────────────────────────────
-          Expanded(
-            child: StatusToggleGroup(
-              activeStatus: widget.activeFilter?.status,
-              onChanged: widget.onFilterStatus,
-            ),
-          ),
-
-          // ── Clear all filters ──────────────────────────────────────────────
-          if (_hasActiveFilters)
-            TextButton.icon(
-              onPressed: () {
-                widget.searchController.clear();
-                setState(() => _selectedDateRange = null);
-                widget.onClearFilters();
+        final supplierDropdownWidget = BlocBuilder<StockEntryCubit, StockEntryState>(
+          builder: (context, state) {
+            return SupplierDropdown(
+              onChanged: (SupplierRef? supplier) {
+                context.read<StockEntryCubit>()
+                  ..selectSupplier(supplier)
+                  ..search(supplier?.id ?? '');
               },
-              icon: const Icon(Icons.filter_list_off, size: 15),
-              label: Text('Clear', style: AppTextStyles.bodySm),
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.outline,
-                padding:
-                EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                visualDensity: VisualDensity.compact,
-              ),
+              selected: state.selectedSupplier,
+              clear: state.filter.isEmpty,
+            );
+          },
+        );
+
+        final dateRangeWidget = DateRangeButton(
+          selectedRange: _selectedDateRange,
+          onTap: _pickDateRange,
+          onClear: _selectedDateRange != null ? _clearDate : null,
+          formatDateRange: _formatDateRange,
+        );
+
+        final statusToggleWidget = StatusToggleGroup(
+          activeStatus: widget.activeFilter?.status,
+          onChanged: widget.onFilterStatus,
+        );
+
+        final clearWidget = _hasActiveFilters
+            ? TextButton.icon(
+                onPressed: () {
+                  widget.searchController.clear();
+                  setState(() => _selectedDateRange = null);
+                  widget.onClearFilters();
+                },
+                icon: const Icon(Icons.filter_list_off, size: 15),
+                label: Text('Clear', style: AppTextStyles.bodySm),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.outline,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  visualDensity: VisualDensity.compact,
+                ),
+              )
+            : null;
+
+        if (isNarrow) {
+          return Container(
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainerLowest,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.outlineVariant),
             ),
-        ],
-      ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                SizedBox(width: width, child: supplierDropdownWidget),
+                SizedBox(width: width, child: dateRangeWidget),
+                SizedBox(width: double.infinity, child: statusToggleWidget),
+                if (clearWidget != null) clearWidget,
+              ],
+            ),
+          );
+        }
+
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.outlineVariant),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: supplierDropdownWidget),
+              const SizedBox(width: 12),
+              Expanded(child: dateRangeWidget),
+              const SizedBox(width: 12),
+              Expanded(child: statusToggleWidget),
+              if (clearWidget != null) ...[
+                const SizedBox(width: 12),
+                clearWidget,
+              ],
+            ],
+          ),
+        );
+      },
     );
   }
 }
-

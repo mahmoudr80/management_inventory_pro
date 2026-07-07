@@ -34,28 +34,26 @@ class SupplierStatisticsCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    label.toUpperCase(),
-                    style: AppTextStyles.labelCaps,
-                  ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  label.toUpperCase(),
+                  style: AppTextStyles.labelCaps,
                 ),
-                Container(
-                  width: 36,
-                  height: 33,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
+              ),
+              Container(
+                width: 36,
+                height: 33,
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              ],
-            ),
+                child: Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
+              ),
+            ],
           ),
           const SizedBox(height: 10),
           Row(
@@ -80,7 +78,10 @@ class SupplierStatisticsCard extends StatelessWidget {
           ),
           if (subtitle != null) ...[
             const SizedBox(height: 4),
-            Expanded(child: Text(subtitle!, style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant))),
+            Text(
+              subtitle!,
+              style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant),
+            ),
           ],
         ],
       ),

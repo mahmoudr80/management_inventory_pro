@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/adjustment_reason.dart';
 
@@ -13,12 +13,25 @@ class ReasonTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    // Was a `Wrap` — Wrap never gives its children a bounded width, so the
+    // `overflow: ellipsis` on the label text never actually had anything to
+    // truncate against and long reason labels could overflow the table
+    // cell. `Row` + `Flexible` gives the text a real width constraint.
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(reason.icon, size: 20.r, color: reason.color),
-        SizedBox(width: 1.w),
-        Text(          overflow: TextOverflow.ellipsis,
-            reason.label, style: AppTextStyles.bodySm),
+        Icon(reason.icon, size: AppIconSize.md, color: reason.color),
+        const SizedBox(width: AppSpacing.xxs),
+        Flexible(
+          child: Tooltip(
+            message: reason.label,
+            child: Text(
+              reason.label,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.bodySm,
+            ),
+          ),
+        ),
       ],
     );
   }

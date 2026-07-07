@@ -51,7 +51,7 @@ class StockEntryState extends Equatable {
     int? currentPage,
     int? totalCount,
     Object? selectedSupplier = _unset,
-    StockEntryModel? selectedEntry ,
+    Object? selectedEntry = _unset,
     int? pageSize,
     StockEntryActionStatus? actionStatus,
     String? actionError,
@@ -62,7 +62,8 @@ class StockEntryState extends Equatable {
 
   }) =>
       StockEntryState(
-        selectedEntry: selectedEntry??this.selectedEntry,
+        selectedEntry:selectedEntry==_unset?
+        this.selectedEntry:selectedEntry as StockEntryModel?,
         clearSelectedEntry: clearSelectedEntry,
         loadStatus: loadStatus ?? this.loadStatus,
         entries: entries ?? this.entries,
@@ -92,6 +93,7 @@ class StockEntryState extends Equatable {
         actionError,
         loadError,
         selectedSupplier,
+        selectedEntry,
         selectedEntry,
         clearSelectedEntry
       ];

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 class EmptyState extends StatelessWidget {
   final IconData icon;
@@ -16,28 +18,38 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 48.r, color: const Color(0xFF737688)),
-          SizedBox(height: 12.h),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 6.sp,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF131B2E),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: AppIconSize.xl, color: AppColors.outline),
+            const SizedBox(height: AppSpacing.md),
+            Tooltip(
+              message: title,
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.headlineSm.copyWith(
+                  color: AppColors.textPrimary,
+                ),
+              ),
             ),
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 5.sp,
-              color: const Color(0xFF434656),
+            const SizedBox(height: AppSpacing.xs),
+            Tooltip(
+              message: subtitle,
+              child: Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.bodySm.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

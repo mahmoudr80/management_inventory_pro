@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 class CompleteAdjustmentDialog extends StatelessWidget {
   final VoidCallback onCancel;
@@ -14,100 +16,104 @@ class CompleteAdjustmentDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
       elevation: 4,
-      child: SizedBox(
-        width: 200.w,
+      child: ConstrainedBox(
+        // Was a fixed SizedBox(width: 200) — far too narrow for the icon +
+        // title row, the warning paragraph, and two full-size buttons; that
+        // combination would overflow horizontally on any real window.
+        // A ConstrainedBox with min/max lets it size to content between a
+        // sensible floor and ceiling instead.
+        constraints: const BoxConstraints(minWidth: 380, maxWidth: AppSize.cardMaxWidth),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 2.w,vertical:  12.h),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
           child: Column(
-            spacing: 8.h,
+            spacing: AppSpacing.sm,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                spacing: 2.w,
+                spacing: AppSpacing.sm,
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(vertical:  8.h,horizontal: 2.w),
+                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.sm),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEAEDFF),
-                      borderRadius: BorderRadius.circular(8.r),
+                      color: AppColors.surfaceContainer,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.task_alt,
-                      size: 40.r,
-                      color: const Color(0xFF0041C8),
+                      size: AppIconSize.xl,
+                      color: AppColors.primary,
                     ),
                   ),
-                  Text(
-                    'Complete Stock Adjustment',
-                    style: TextStyle(
-                      fontSize: 8.sp,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF131B2E),
+                  Expanded(
+                    child: Text(
+                      'Complete Stock Adjustment',
+                      style: AppTextStyles.headlineSm.copyWith(
+                        color: AppColors.textPrimary,
+                      ),
                     ),
                   ),
                 ],
               ),
               Container(
-                padding:EdgeInsets.symmetric(vertical:  8.h,horizontal: 2.w),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFEF3C7),
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: const Color(0xFFF59E0B).withOpacity(0.4)),
+                  color: AppColors.warningContainer,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  border: Border.all(color: AppColors.warning.withOpacity(0.4)),
                 ),
                 child: Row(
-                  spacing: 2.w,
+                  spacing: AppSpacing.sm,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.warning_amber_rounded,
-                        size: 30.r, color: const Color(0xFFF59E0B)),
+                    const Icon(Icons.warning_amber_rounded,
+                        size: AppIconSize.lg, color: AppColors.warning),
                     Expanded(
                       child: Text(
+                        'This operation will immediately update inventory quantities. Completed adjustments cannot be edited.',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        'This operation will immediately update inventory quantities. Completed adjustments cannot be edited.',
-                        style: TextStyle(
-                          fontSize: 5.sp,
-                          color: const Color(0xFF92400E),
+                        style: AppTextStyles.bodySm.copyWith(
+                          color: AppColors.onWarningContainer,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              Wrap(
+                alignment: WrapAlignment.end,
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
                 children: [
                   OutlinedButton(
                     onPressed: onCancel,
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF131B2E),
-                      side: const BorderSide(color: Color(0xFFC3C5D9)),
+                      foregroundColor: AppColors.textPrimary,
+                      side: const BorderSide(color: AppColors.outlineVariant),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
-                      padding: EdgeInsets.symmetric(vertical:  8.h,horizontal: 6.w),
+                      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.lg),
                     ),
-                    child: Text('Cancel', style: TextStyle(fontSize: 5.sp)),
+                    child: Text('Cancel', style: AppTextStyles.bodySm),
                   ),
-                  const Spacer(),
                   ElevatedButton.icon(
                     onPressed: onConfirm,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0041C8),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.onPrimary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
-                      padding: EdgeInsets.symmetric(vertical:  8.h,horizontal: 6.w),
+                      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.lg),
                     ),
-                    icon: Icon(Icons.task_alt, size: 40.r),
+                    icon: const Icon(Icons.task_alt, size: AppIconSize.lg),
                     label: Text(
                       'Complete Adjustment',
-                      style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w700),
+                      style: AppTextStyles.buttonText.copyWith(fontWeight: FontWeight.w700),
                     ),
                   ),
                 ],

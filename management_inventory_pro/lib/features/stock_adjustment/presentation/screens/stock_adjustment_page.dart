@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
 import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 import 'package:management_inventory_pro/features/stock_adjustment/data/repository/stock_adjustment_repository.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimens.dart';
 import '../../../product/data/respository/product_repository.dart';
 import '../../../product/presentation/products/cubit/product_cubit.dart';
 import '../cubit/stock_adjustment_cubit.dart';
@@ -42,8 +43,7 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
 
-    final isCtrl =
-        HardwareKeyboard.instance.isControlPressed ||
+    final isCtrl = HardwareKeyboard.instance.isControlPressed ||
         HardwareKeyboard.instance.isMetaPressed;
 
     if (isCtrl && event.logicalKey == LogicalKeyboardKey.keyS) {
@@ -73,7 +73,6 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
       value: _cubit,
       child: BlocConsumer<StockAdjustmentCubit, StockAdjustmentState>(
         listener: (context, state) {
-
           if (state is! StockAdjustmentLoaded) return;
 
           if (state.showCompleteDialog) {
@@ -89,24 +88,17 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
 
           if (state.successMessage != null) {
             Navigator.of(context).pop(); // Close the dialog
-
-            AppSnackBar.showSuccess(
-              context,
-              message: state.successMessage!,
-            );
-
+            AppSnackBar.showSuccess(context, message: state.successMessage!);
             _cubit.clearSuccessMessage();
           }
-
 
           if (state.errorMessage != null) {
             Navigator.of(context).pop(); // Close the dialog
             AppSnackBar.showError(
               context,
               message: state.errorMessage!,
-              duration: 2000
+              duration: 2000,
             );
-
             _cubit.clearErrorMessage();
           }
         },
@@ -118,12 +110,13 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
               children: [
                 if (state is StockAdjustmentLoaded)
                   AdjustmentHeader(adjustment: state.adjustment),
-                const Divider(height: 1, color: Color(0xFFC3C5D9)),
+                const Divider(height: 1, color: AppColors.outlineVariant),
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      //left panel
+                      // Left panel: search + table. The table area
+                      // scrolls independently of the fixed search bar.
                       Expanded(
                         child: Column(
                           children: [
@@ -133,21 +126,23 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
                                     ..getProducts(),
                               child: const ProductSearchSection(),
                             ),
-                            Expanded(
+                            const Expanded(
                               child: SingleChildScrollView(
-                                padding: EdgeInsets.only(bottom: 16.h),
-                                child: const AdjustmentTable(),
+                                padding:
+                                    EdgeInsets.only(bottom: AppSpacing.lg),
+                                child: AdjustmentTable(),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      //right panel
+                      // Right panel: analysis summary, self-sizing based
+                      // on available width (see ImpactAnalysisPanel).
                       const ImpactAnalysisPanel(),
                     ],
                   ),
                 ),
-                const Divider(height: 1, color: Color(0xFFC3C5D9)),
+                const Divider(height: 1, color: AppColors.outlineVariant),
                 const FooterActions(),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import '../../../data/models/recent_sale.dart';
 import '../common/empty_state.dart';
@@ -24,13 +25,31 @@ class RecentSalesTable extends StatelessWidget {
     }
 
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        _TableHeader(theme: theme),
-        ...sales.take(8).map(
-              (s) => RecentSaleRow(sale: s, onTap: () => onSelectSale(s)),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double minTableWidth = 550.0;
+        return Scrollbar(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth,
+              ),
+              child: SizedBox(
+                width: math.max(minTableWidth, constraints.maxWidth),
+                child: Column(
+                  children: [
+                    _TableHeader(theme: theme),
+                    ...sales.take(8).map(
+                          (s) => RecentSaleRow(sale: s, onTap: () => onSelectSale(s)),
+                        ),
+                  ],
+                ),
+              ),
             ),
-      ],
+          ),
+        );
+      },
     );
   }
 }
@@ -72,16 +91,20 @@ class _TableHeader extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Tooltip(
-              message: 'DATE',child:  Text(
-                  overflow: TextOverflow.ellipsis,
-                  'DATE', style: style.copyWith(color: color)),
-          ),)
+                message: 'DATE',
+                child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    'DATE', style: style.copyWith(color: color)),
+              ),
+            ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Tooltip(
-                message: 'CASHIER', child: Text(overflow: TextOverflow.ellipsis,
+              child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Tooltip(
+              message: 'CASHIER',
+              child: Text(
+                  overflow: TextOverflow.ellipsis,
                   'CASHIER', style: style.copyWith(color: color)),
             ),
           )),
@@ -90,24 +113,30 @@ class _TableHeader extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Tooltip(
-                message: 'AMOUNT', child: Text(overflow: TextOverflow.ellipsis,
-                  'AMOUNT',
-                  textAlign: TextAlign.right,
-                  style: style.copyWith(color: color)),
+                message: 'AMOUNT',
+                child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    'AMOUNT',
+                    textAlign: TextAlign.right,
+                    style: style.copyWith(color: color)),
+              ),
             ),
-          )),
+          ),
           SizedBox(
             width: 60,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Tooltip(
-                  message:  'STATUS',child: Text(overflow: TextOverflow.ellipsis,
-                  'STATUS',
-                  textAlign: TextAlign.center,
-                  style: style.copyWith(color: color)),
+                message: 'STATUS',
+                child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    'STATUS',
+                    textAlign: TextAlign.center,
+                    style: style.copyWith(color: color)),
+              ),
             ),
           ),
-          )],
+        ],
       ),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -23,83 +22,109 @@ class EntrySummaryFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.surfaceContainerLowest,
-        border: const Border(
+        border: Border(
           top: BorderSide(color: AppColors.outlineVariant),
         ),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-      child: Row(
-        children: [
-          // ── Items count ────────────────────────────────────────────────
-          _SummaryChip(
-            label: 'ITEMS',
-            value: totalItems.toString(),
-          ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final bool isNarrow = constraints.maxWidth < 600;
 
-          SizedBox(width: 16.w),
+          final chips = [
+            _SummaryChip(
+              label: 'ITEMS',
+              value: totalItems.toString(),
+            ),
+            _SummaryChip(
+              label: 'SUBTOTAL',
+              value: '\$${subtotal.toStringAsFixed(2)}',
+              valueMono: true,
+            ),
+          ];
 
-          // ── Subtotal ───────────────────────────────────────────────────
-          _SummaryChip(
-            label: 'SUBTOTAL',
-            value: '\$${subtotal.toStringAsFixed(2)}',
-            valueMono: true,
-          ),
-
-          const Spacer(),
-
-          // ── Cancel ────────────────────────────────────────────────────
-          OutlinedButton(
-            onPressed: isLoading ? null : onCancel,
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.onSurfaceVariant,
-              side: const BorderSide(color: AppColors.outlineVariant),
-              padding:
-                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
+          final buttons = [
+            OutlinedButton(
+              onPressed: isLoading ? null : onCancel,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.onSurfaceVariant,
+                side: const BorderSide(color: AppColors.outlineVariant),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text('Cancel', style: AppTextStyles.bodyMd),
+            ),
+            ElevatedButton.icon(
+              onPressed: isLoading ? null : onSave,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.onPrimary,
+                disabledBackgroundColor: AppColors.primary.withOpacity(0.5),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+              ),
+              icon: isLoading
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.onPrimary,
+                      ),
+                    )
+                  : const Icon(Icons.save_outlined, size: 18),
+              label: Text(
+                isLoading ? 'Saving…' : 'Save & Update Stock',
+                style: AppTextStyles.bodyMd.copyWith(
+                  color: AppColors.onPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-            child: Text('Cancel', style: AppTextStyles.bodyMd),
-          ),
+          ];
 
-          SizedBox(width: 12.w),
+          if (isNarrow) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: chips[0]),
+                    const SizedBox(width: 12),
+                    Expanded(child: chips[1]),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(child: buttons[0]),
+                    const SizedBox(width: 12),
+                    Expanded(child: buttons[1]),
+                  ],
+                ),
+              ],
+            );
+          }
 
-          // ── Save ──────────────────────────────────────────────────────
-          ElevatedButton.icon(
-            onPressed: isLoading ? null : onSave,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.onPrimary,
-              disabledBackgroundColor:
-                  AppColors.primary.withOpacity(0.5),
-              padding:
-                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              elevation: 0,
-            ),
-            icon: isLoading
-                ? SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.onPrimary,
-                    ),
-                  )
-                : const Icon(Icons.save_outlined, size: 18),
-            label: Text(
-              isLoading ? 'Saving…' : 'Save & Update Stock',
-              style: AppTextStyles.bodyMd.copyWith(
-                color: AppColors.onPrimary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
+          return Row(
+            children: [
+              chips[0],
+              const SizedBox(width: 16),
+              chips[1],
+              const Spacer(),
+              buttons[0],
+              const SizedBox(width: 12),
+              buttons[1],
+            ],
+          );
+        },
       ),
     );
   }
@@ -121,10 +146,10 @@ class _SummaryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(6.r),
+        borderRadius: BorderRadius.circular(6),
         border: Border.all(color: AppColors.outlineVariant),
       ),
       child: Column(
@@ -132,7 +157,7 @@ class _SummaryChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(label, style: AppTextStyles.labelCaps),
-          SizedBox(height: 2.h),
+          const SizedBox(height: 2),
           Text(
             value,
             style: valueMono

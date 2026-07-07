@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
-import 'package:management_inventory_pro/core/theme/app_dimens.dart';
-import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
+
+import 'app_colors.dart';
+import 'app_dimens.dart';
+import 'app_text_styles.dart';
+
 
 class AppDecorations {
   AppDecorations._();
@@ -9,11 +11,34 @@ class AppDecorations {
   static BoxDecoration card({
     Color? color,
     double? radius,
+    Color? borderColor,
+    List<BoxShadow>? boxShadow,
   }) =>
       BoxDecoration(
         color: color ?? AppColors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(radius ?? AppRadius.lg),
-        border: Border.all(color: AppColors.outlineVariant, width: 1),
+        border: Border.all(color: borderColor ?? AppColors.outlineVariant, width: AppBorder.thin),
+        boxShadow: boxShadow,
+      );
+
+  /// Card with the subtle elevation shadow used on floating panels
+  /// (summary cards, tables, the details panel).
+  static BoxDecoration elevatedCard({
+    Color? color,
+    double? radius,
+    Color? borderColor,
+  }) =>
+      card(
+        color: color,
+        radius: radius,
+        borderColor: borderColor,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.textPrimary.withOpacity(0.04),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
       );
 
   static InputDecoration searchField({

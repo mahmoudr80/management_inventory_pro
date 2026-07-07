@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
@@ -9,7 +8,8 @@ class StatusToggleGroup extends StatelessWidget {
   final StockEntryStatus? activeStatus;
   final ValueChanged<StockEntryStatus?> onChanged;
 
-  const StatusToggleGroup({super.key,
+  const StatusToggleGroup({
+    super.key,
     required this.activeStatus,
     required this.onChanged,
   });
@@ -17,7 +17,6 @@ class StatusToggleGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      //mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
           child: _StatusChip(
@@ -26,7 +25,7 @@ class StatusToggleGroup extends StatelessWidget {
             onTap: () => onChanged(null),
           ),
         ),
-        SizedBox(width: 6),
+        const SizedBox(width: 6),
         Expanded(
           child: _StatusChip(
             label: 'Pending',
@@ -34,7 +33,7 @@ class StatusToggleGroup extends StatelessWidget {
             onTap: () => onChanged(StockEntryStatus.pending),
           ),
         ),
-        SizedBox(width: 6),
+        const SizedBox(width: 6),
         Expanded(
           child: _StatusChip(
             label: 'Verified',
@@ -42,7 +41,7 @@ class StatusToggleGroup extends StatelessWidget {
             onTap: () => onChanged(StockEntryStatus.verified),
           ),
         ),
-        SizedBox(width: 6),
+        const SizedBox(width: 6),
         Expanded(
           child: _StatusChip(
             label: 'Cancelled',
@@ -72,22 +71,26 @@ class _StatusChip extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        height: 36.h,
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        height: 36,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           color: isActive ? AppColors.primary : AppColors.surface,
-          borderRadius: BorderRadius.circular(4.r),
+          borderRadius: BorderRadius.circular(4),
           border: Border.all(
             color: isActive ? AppColors.primary : AppColors.outlineVariant,
           ),
         ),
         alignment: Alignment.center,
-        child: Text(
-          label,
-          style: AppTextStyles.bodySm.copyWith(
-            color: isActive ? AppColors.onPrimary : AppColors.onSurfaceVariant,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-            fontSize: 4.sp.clamp(2, 15),overflow: TextOverflow.ellipsis
+        child: Tooltip(
+          message: label,
+          child: Text(
+            label,
+            style: AppTextStyles.bodySm.copyWith(
+              color: isActive ? AppColors.onPrimary : AppColors.onSurfaceVariant,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
         ),
       ),

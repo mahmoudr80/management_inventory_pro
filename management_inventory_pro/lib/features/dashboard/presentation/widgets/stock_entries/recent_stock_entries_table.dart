@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import '../../../data/models/recent_stock_entry.dart';
 import '../common/empty_state.dart';
@@ -24,16 +25,34 @@ class RecentStockEntriesTable extends StatelessWidget {
     }
 
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        _TableHeader(theme: theme),
-        ...entries.take(8).map(
-              (e) => RecentStockEntryRow(
-                entry: e,
-                onTap: () => onSelectEntry(e),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double minTableWidth = 500.0;
+        return Scrollbar(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth,
+              ),
+              child: SizedBox(
+                width: math.max(minTableWidth, constraints.maxWidth),
+                child: Column(
+                  children: [
+                    _TableHeader(theme: theme),
+                    ...entries.take(8).map(
+                          (e) => RecentStockEntryRow(
+                            entry: e,
+                            onTap: () => onSelectEntry(e),
+                          ),
+                        ),
+                  ],
+                ),
               ),
             ),
-      ],
+          ),
+        );
+      },
     );
   }
 }
@@ -63,43 +82,47 @@ class _TableHeader extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Tooltip(
-                  message:    'RECEIPT ID', child: Text(
-                  overflow: TextOverflow.ellipsis,
-                  'RECEIPT ID', style: s.copyWith(color: c)),
-                        ),
+                message: 'RECEIPT ID',
+                child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    'RECEIPT ID', style: s.copyWith(color: c)),
+              ),
             ),
-                    ),
+          ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Tooltip(
-                  message: 'SUPPLIER',child: Text(overflow: TextOverflow.ellipsis,
+              child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Tooltip(
+              message: 'SUPPLIER',
+              child: Text(
+                  overflow: TextOverflow.ellipsis,
                   'SUPPLIER', style: s.copyWith(color: c)),
             ),
           )),
           Expanded(
-          //  width: 120,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Tooltip(
-                  message:   'TOTAL COST',child: Text(
+              child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Tooltip(
+              message: 'TOTAL COST',
+              child: Text(
                   overflow: TextOverflow.ellipsis,
                   'TOTAL COST',
                   textAlign: TextAlign.right, style: s.copyWith(color: c)),
             ),
           )),
           Expanded(
-          //  width: 110,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Tooltip(
-                  message: 'STATUS',child: Text(
-                  overflow: TextOverflow.ellipsis,
-                  'STATUS',
-                  textAlign: TextAlign.center, style: s.copyWith(color: c)),
+                message: 'STATUS',
+                child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    'STATUS',
+                    textAlign: TextAlign.center, style: s.copyWith(color: c)),
+              ),
             ),
           ),
-          )],
+        ],
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 import 'adjustment_quantity_field.dart';
 import 'current_stock_widget.dart';
@@ -27,37 +29,46 @@ class AdjustmentRow extends StatelessWidget {
   });
 
   Color get _rowBg {
-    if (item.isNegativeInventory) return const Color(0xFFFFDAD6).withOpacity(0.2);
-    if (isSelected) return const Color(0xFFEAEDFF);
+    if (item.isNegativeInventory) {
+      return AppColors.errorContainer.withOpacity(0.2);
+    }
+    if (isSelected) return AppColors.surfaceContainer;
     return Colors.transparent;
   }
 
   @override
   Widget build(BuildContext context) {
+    // Row height is fixed to keep the table scannable — there's no
+    // design-system token for this taller, multi-column row, so it's
+    // kept as an explicit constant here rather than a magic number
+    // scattered through the layout.
+    const double rowHeight = 56;
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 120),
-        height: 56.h,
+        duration: AppAnimation.fast,
+        height: rowHeight,
         decoration: BoxDecoration(
           color: _rowBg,
           border: Border(
-            bottom: BorderSide(color: const Color(0xFFC3C5D9).withOpacity(0.5)),
+            bottom:
+                BorderSide(color: AppColors.outlineVariant.withOpacity(0.5)),
             left: isSelected
-                ? const BorderSide(color: Color(0xFF0041C8), width: 2)
+                ? const BorderSide(
+                    color: AppColors.primary, width: AppBorder.thick)
                 : BorderSide.none,
           ),
         ),
         child: Row(
           children: [
-            SizedBox(width: 5.w),
+            const SizedBox(width: AppSpacing.sm),
             SizedBox(
-              width: 8.w,
+              width: 24,
               child: Text(
                 '${index + 1}',
-                style: TextStyle(
-                  fontSize: 5.sp,
-                  color: const Color(0xFF737688),
+                style: AppTextStyles.bodySm.copyWith(
+                  color: AppColors.outline,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -67,10 +78,10 @@ class AdjustmentRow extends StatelessWidget {
               flex: 1,
               child: Align(
                 child: Padding(
-                  padding: EdgeInsets.only(right: 2.w),
+                  padding: const EdgeInsets.only(right: AppSpacing.sm),
                   child: CurrentStockWidget(
                     currentStock: item.currentStock,
-                    unit: item.unit??'',
+                    unit: item.unit ?? '',
                   ),
                 ),
               ),
@@ -87,19 +98,19 @@ class AdjustmentRow extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Padding(
-                padding: EdgeInsets.only(right: 2.w),
+                padding: const EdgeInsets.only(right: AppSpacing.sm),
                 child: NewStockWidget(item: item),
               ),
             ),
             Expanded(
               flex: 1,
               child: Padding(
-                padding: EdgeInsets.only(right: 2.w),
+                padding: const EdgeInsets.only(right: AppSpacing.sm),
                 child: InventoryValueWidget(item: item),
               ),
             ),
             SizedBox(
-              width: 15.w,
+              width: 48,
               child: Center(child: RowActions(onDelete: onDelete)),
             ),
           ],

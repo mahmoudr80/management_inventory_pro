@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_dimens.dart';
@@ -28,10 +27,13 @@ class DetailFooterActions extends StatelessWidget {
     final isDraft = status == AdjustmentStatus.draft;
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical:  20.h,horizontal: 2.w),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.xl,
+        horizontal: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
-        border: Border(top: BorderSide(color: AppColors.outlineVariant)),
+        border: Border(top: BorderSide(color: AppColors.outlineVariant, width: AppBorder.thin)),
       ),
       child: Column(
         children: [
@@ -44,7 +46,7 @@ class DetailFooterActions extends StatelessWidget {
                   onPressed: onPrint,
                 ),
               ),
-              SizedBox(width: 2.w),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: _OutlinedFooterButton(
                   icon: Icons.picture_as_pdf_outlined,
@@ -55,7 +57,7 @@ class DetailFooterActions extends StatelessWidget {
             ],
           ),
           if (isDraft) ...[
-            SizedBox(height: 8.h),
+            const SizedBox(height: AppSpacing.sm),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -64,15 +66,18 @@ class DetailFooterActions extends StatelessWidget {
                   backgroundColor: AppColors.primaryContainer,
                   foregroundColor: AppColors.onPrimaryContainer,
                   elevation: 0,
-                  side: BorderSide(color: AppColors.primary),
-                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  side: BorderSide(color: AppColors.primary, width: AppBorder.thin),
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
                 ),
                 child: Text(
+                  overflow: TextOverflow.ellipsis,
                   'Continue Editing',
-                  style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w700),
+                  style: AppTextStyles.bodySm.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),
@@ -98,12 +103,16 @@ class _OutlinedFooterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: onPressed,
-      icon: Icon(icon, size: 28.r),
-      label: Text(label, style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w700)),
+      icon: Icon(icon, size: AppIconSize.sm),
+      label: Text(
+        overflow: TextOverflow.ellipsis,
+        label,
+        style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w700),
+      ),
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.onSurface,
-        side: BorderSide(color: AppColors.outline),
-        padding: EdgeInsets.symmetric(vertical: 12.h),
+        side: BorderSide(color: AppColors.outline, width: AppBorder.thin),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),
         ),

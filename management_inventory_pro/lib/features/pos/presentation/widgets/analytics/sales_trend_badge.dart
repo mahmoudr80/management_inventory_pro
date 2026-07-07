@@ -36,6 +36,7 @@ class SalesTrendBadge extends StatelessWidget {
           ),
           const SizedBox(width: 3),
           Text(
+            overflow: TextOverflow.ellipsis,
             '${isUp ? '+' : ''}${percent.toStringAsFixed(0)}%',
             style: TextStyle(
               color: fg,

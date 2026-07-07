@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/components/page_header.dart';
 import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/models/product_ref.dart';
@@ -47,24 +46,23 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
     if (homeState.action == PageAction.createStockEntry) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _openNewEntry();
-        // Navigator.push(context,MaterialPageRoute(builder: (context) => NewStockEntryScreen(),));
         context.read<HomeCubit>().clearAction();
       });
-    }
-    else if (homeState.action == PageAction.restock) {
+    } else if (homeState.action == PageAction.restock) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _openNewEntry(mode: StockEntryMode.restock,product: homeState.restock);
-        // Navigator.push(context,MaterialPageRoute(builder: (context) => NewStockEntryScreen(),));
+        _openNewEntry(mode: StockEntryMode.restock, product: homeState.restock);
         context.read<HomeCubit>().clearAction();
       });
-    }
-    else if (homeState.action == PageAction.selectStockEntry) {
+    } else if (homeState.action == PageAction.selectStockEntry) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        homeState.selectEntry!=null?context.read<StockEntryCubit>().selectEntry(homeState.selectEntry!):null;
+        if (homeState.selectEntry != null) {
+          context.read<StockEntryCubit>().selectEntry(homeState.selectEntry!);
+        }
         context.read<HomeCubit>().clearAction();
       });
     }
   }
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -73,13 +71,20 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
 
   // ── Navigation ─────────────────────────────────────────────────────────────
 
-  Future<StockEntryModel?> _openNewEntry({ProductRef?product,StockEntryMode ?mode,SupplierRef ?initialSupplier}) async {
+  Future<StockEntryModel?> _openNewEntry({
+    ProductRef? product,
+    StockEntryMode? mode,
+    SupplierRef? initialSupplier,
+  }) async {
     return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => BlocProvider(
           create: (context) => StockEntryCubit(getIt<StockEntryRepository>()),
-          child: NewStockEntryScreen(mode: mode??StockEntryMode.create,
-            initialProduct: product,initialSupplier: initialSupplier,),
+          child: NewStockEntryScreen(
+            mode: mode ?? StockEntryMode.create,
+            initialProduct: product,
+            initialSupplier: initialSupplier,
+          ),
         ),
       ),
     );
@@ -90,7 +95,10 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
       MaterialPageRoute(
         builder: (_) => BlocProvider.value(
           value: context.read<StockEntryCubit>(),
-          child: NewStockEntryScreen(existingEntry: entry,mode: StockEntryMode.edit,),
+          child: NewStockEntryScreen(
+            existingEntry: entry,
+            mode: StockEntryMode.edit,
+          ),
         ),
       ),
     );
@@ -105,7 +113,6 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
       itemName: entry.id,
       onConfirm: () {
         context.read<StockEntryCubit>().deleteEntry(entry.id);
-        // If the deleted entry is selected, close the panel.
         context.read<StockEntryCubit>().clearSelection();
       },
     );
@@ -122,33 +129,37 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
           AppSnackBar.showSuccess(context, message: 'Done');
           context.read<StockEntryCubit>().resetActionStatus();
         } else if (state.actionStatus == StockEntryActionStatus.failure) {
-          AppSnackBar.showError(
-              context, message: state.actionError ?? 'Error');
+          AppSnackBar.showError(context, message: state.actionError ?? 'Error');
           context.read<StockEntryCubit>().resetActionStatus();
         }
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(),
-              SizedBox(height: 24.h),
+              const SizedBox(height: 24),
 
               // ── KPI row ─────────────────────────────────────────────────
-              BlocBuilder<StockEntryCubit, StockEntryState>(
-                buildWhen: (p, c) =>
-                    p.summary != c.summary ||
-                    p.loadStatus != c.loadStatus,
-                builder: (_, state) => StockEntryKpiRow(
-                  summary: state.summary,
-                  isLoading:
-                      state.loadStatus == StockEntryLoadStatus.loading,
+            LayoutBuilder(
+                builder: (context, constraints) {
+                  final bool isNarrow = constraints.maxWidth > 1000;
+               if(isNarrow){
+                 return   BlocBuilder<StockEntryCubit, StockEntryState>(
+                   buildWhen: (p, c) =>
+                   p.summary != c.summary || p.loadStatus != c.loadStatus,
+                   builder: (_, state) => StockEntryKpiRow(
+                     summary: state.summary,
+                     isLoading: state.loadStatus == StockEntryLoadStatus.loading,
+                   ),
+                 );
+               }
+               return SizedBox.shrink();
+                }
                 ),
-              ),
-              SizedBox(height: 20.h),
 
               // ── Filter bar ──────────────────────────────────────────────
               BlocBuilder<StockEntryCubit, StockEntryState>(
@@ -160,8 +171,7 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
                     selectedSupplier: state.selectedSupplier,
                     searchController: _searchController,
                     activeFilter: state.filter,
-                    onSearch: (q) =>
-                        context.read<StockEntryCubit>().search(q),
+                    onSearch: (q) => context.read<StockEntryCubit>().search(q),
                     onFilterStatus: (s) async => await context
                         .read<StockEntryCubit>()
                         .applyFilter(status: s, clearStatus: s == null),
@@ -180,20 +190,17 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
                   );
                 },
               ),
-              SizedBox(height: 8.h),
+              const SizedBox(height: 8),
 
               // ── Table + optional details panel ──────────────────────────
               Expanded(
                 child: BlocBuilder<StockEntryCubit, StockEntryState>(
                   builder: (_, state) {
-                    // Loading (first load)
                     if (state.loadStatus == StockEntryLoadStatus.loading &&
                         state.entries.isEmpty) {
-                      return const Center(
-                          child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
-                    // Error
                     if (state.loadStatus == StockEntryLoadStatus.failure) {
                       return Center(
                         child: Text(
@@ -204,50 +211,69 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
                       );
                     }
 
-                    // Empty
                     if (state.entries.isEmpty) {
                       return StockEntryEmptyState(onAddEntry: _openNewEntry);
                     }
 
-                    // ── Loaded: table (flex 7) + panel (flex 3) ──────────
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // Left – table
-                        Expanded(
-                          flex: 7,
-                          child: StockEntryTable(
-                            entries: state.entries,
-                            selectedEntry: state.selectedEntry,
-                            totalCount: state.totalCount,
-                            currentPage: state.currentPage,
-                            pageSize: state.pageSize,
-                            isLoadingMore:
-                                state.loadStatus ==
-                                        StockEntryLoadStatus.loading &&
-                                    state.entries.isNotEmpty,
-                            onSelect: (entry) => context
-                                .read<StockEntryCubit>()
-                                .selectEntry(entry),
-                            onEdit: _openEditEntry,
-                            onDelete: _confirmDelete,
-                            onLoadMore: () => context
-                                .read<StockEntryCubit>()
-                                .loadMoreEntries(),
-                          ),
-                        ),
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        final bool isNarrow = constraints.maxWidth < 1000;
 
-                        // Right – details panel (only when selected)
-                        if (state.selectedEntry != null) ...[
-                          SizedBox(width: 2.w),
-                          Expanded(
-                            flex: 3,
-                            child: StockEntryDetailsPanel(
-                              entry: state.selectedEntry!,
+                        final Widget tableWidget = StockEntryTable(
+                          entries: state.entries,
+                          selectedEntry: state.selectedEntry,
+                          totalCount: state.totalCount,
+                          currentPage: state.currentPage,
+                          pageSize: state.pageSize,
+                          isLoadingMore: state.loadStatus ==
+                                  StockEntryLoadStatus.loading &&
+                              state.entries.isNotEmpty,
+                          onSelect: (entry) => context
+                              .read<StockEntryCubit>()
+                              .selectEntry(entry),
+                          onEdit: _openEditEntry,
+                          onDelete: _confirmDelete,
+                          onLoadMore: () =>
+                              context.read<StockEntryCubit>().loadMoreEntries(),
+                        );
+
+                        if (isNarrow) {
+                          return Stack(
+                            children: [
+                              tableWidget,
+                              if (state.selectedEntry != null)
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: MediaQuery.of(context).size.height * 0.45,
+                                  child: StockEntryDetailsPanel(
+                                    entry: state.selectedEntry!,
+                                  ),
+                                ),
+                            ],
+                          );
+                        }
+
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: tableWidget,
                             ),
-                          ),
-                        ],
-                      ],
+                            if (state.selectedEntry != null) ...[
+                              const SizedBox(width: 8),
+                              Expanded(
+                                flex: 3,
+                                child: StockEntryDetailsPanel(
+                                  entry: state.selectedEntry!,
+                                ),
+                              ),
+                            ],
+                          ],
+                        );
+                      },
                     );
                   },
                 ),
@@ -262,7 +288,7 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
   Widget _buildHeader() {
     return PageHeader(
       title: 'Stock Receipts Ledger',
-      subtitle: 'Stock Receipts Ledger',
+      subtitle: 'Manage and monitor all inbound warehouse stock shipments.',
       actions: [
         ElevatedButton.icon(
           onPressed: () async {
@@ -274,10 +300,9 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             foregroundColor: AppColors.onPrimary,
-            padding:
-                EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(8),
             ),
             elevation: 0,
           ),

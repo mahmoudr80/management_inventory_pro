@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/sale_item_model.dart';
 import '../../../data/models/sale_model.dart';
@@ -28,9 +30,9 @@ class _SaleRowState extends State<SaleRow> {
     final sale = widget.sale;
     Color bgColor = Colors.transparent;
     if (widget.isSelected) {
-      bgColor = const Color(0xFFEFF6FF);
+      bgColor = AppColors.surfaceContainer;
     } else if (_isHovered) {
-      bgColor = const Color(0xFFF9FAFB);
+      bgColor = AppColors.surfaceContainerLow;
     }
 
     return MouseRegion(
@@ -38,39 +40,41 @@ class _SaleRowState extends State<SaleRow> {
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 0),
-          height: 40.h,
-          padding: EdgeInsets.symmetric(horizontal: 2.w),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md, horizontal: AppSpacing.xs),
           color: bgColor,
           child: Row(
             children: [
               // Sale ID
               Expanded(
                 flex: 2,
-                child: Text(
-                  sale.id,
-                  style: TextStyle(
-                    fontSize: 4.sp,
-                    fontWeight: FontWeight.w600,
-                    color: widget.isSelected
-                        ? const Color(0xFF2563EB)
-                        : const Color(0xFF111827),
+                child: Tooltip(
+                  message: sale.id,
+                  child: Text(
+                    sale.id,
+                    style: AppTextStyles.bodySm.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: widget.isSelected
+                          ? AppColors.primary
+                          : AppColors.textPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
               // Date & Time
               Expanded(
                 flex: 3,
-                child: Text(
-                  DateFormat('MMM d, yyyy hh:mm a').format(sale.createdAt),
-                  style: TextStyle(
-                    fontSize: 4.sp,
-                    color: const Color(0xFF6B7280),
+                child: Tooltip(
+                  message: DateFormat('MMM d, yyyy hh:mm a').format(sale.createdAt),
+                  child: Text(
+                    DateFormat('MMM d, yyyy hh:mm a').format(sale.createdAt),
+                    style: AppTextStyles.bodySm.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
@@ -79,9 +83,8 @@ class _SaleRowState extends State<SaleRow> {
                 flex: 1,
                 child: Text(
                   sale.totalItems.toString(),
-                  style: TextStyle(
-                    fontSize: 4.sp,
-                    color: const Color(0xFF374151),
+                  style: AppTextStyles.bodySm.copyWith(
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -91,9 +94,8 @@ class _SaleRowState extends State<SaleRow> {
                 flex: 1,
                 child: Text(
                   sale.totalQuantity.toString(),
-                  style: TextStyle(
-                    fontSize: 4.sp,
-                    color: const Color(0xFF374151),
+                  style: AppTextStyles.bodySm.copyWith(
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -101,43 +103,50 @@ class _SaleRowState extends State<SaleRow> {
               // Total Amount
               Expanded(
                 flex: 2,
-                child: Text(
-                  '\$${sale.totalAmount.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    fontSize: 4.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF111827),
+                child: Tooltip(
+                  message: '\$${sale.totalAmount.toStringAsFixed(2)}',
+                  child: Text(
+                    '\$${sale.totalAmount.toStringAsFixed(2)}',
+                    style: AppTextStyles.bodySm.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
               // Payment Method Badge
               Expanded(
                 flex: 2,
-                child: _PaymentBadge(method: sale.paymentMethod),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _PaymentBadge(method: sale.paymentMethod),
+                ),
               ),
 
               // Cashier
               Expanded(
                 flex: 2,
-                child: Text(
-                  sale.cashierName,
-                  style: TextStyle(
-                    fontSize: 4.sp,
-                    color: const Color(0xFF6B7280),
+                child: Tooltip(
+                  message: sale.cashierName,
+                  child: Text(
+                    sale.cashierName,
+                    style: AppTextStyles.bodySm.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
               // Chevron
               Icon(
                 Icons.chevron_right_rounded,
-                size: 5.r,
+                size: AppSpacing.lg,
                 color: widget.isSelected
-                    ? const Color(0xFF2563EB)
-                    : const Color(0xFFD1D5DB),
+                    ? AppColors.primary
+                    : AppColors.border,
               ),
             ],
           ),
@@ -154,21 +163,20 @@ class _PaymentBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, bg, fg) = switch (method) {
-      PaymentMethod.cash => ('Cash', const Color(0xFFDCFCE7), const Color(0xFF16A34A)),
-      PaymentMethod.card => ('Card', const Color(0xFFDBEAFE), const Color(0xFF2563EB)),
-      PaymentMethod.mixed => ('Mixed', const Color(0xFFFEF3C7), const Color(0xFFD97706)),
+      PaymentMethod.cash => ('Cash', AppColors.statusHealthyBg, AppColors.statusHealthyFg),
+      PaymentMethod.card => ('Card', AppColors.infoContainer, AppColors.info),
+      PaymentMethod.mixed => ('Mixed', AppColors.statusPendingBg, AppColors.statusPendingFg),
     };
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 3.h),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(AppRadius.full),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: 4.sp,
+        style: AppTextStyles.bodySm.copyWith(
           fontWeight: FontWeight.w600,
           color: fg,
         ),

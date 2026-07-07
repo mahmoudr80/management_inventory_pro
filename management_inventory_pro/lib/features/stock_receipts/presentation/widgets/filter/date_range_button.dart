@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
@@ -11,7 +9,8 @@ class DateRangeButton extends StatelessWidget {
   final VoidCallback? onClear;
   final String Function(DateTimeRange) formatDateRange;
 
-  const DateRangeButton({super.key,
+  const DateRangeButton({
+    super.key,
     required this.selectedRange,
     required this.onTap,
     required this.onClear,
@@ -25,11 +24,11 @@ class DateRangeButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 36.h,
-        padding: EdgeInsets.symmetric(horizontal:16),
+        height: 36,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: isActive ? AppColors.primaryFixed : AppColors.surface,
-          borderRadius: BorderRadius.circular(4.r),
+          borderRadius: BorderRadius.circular(4),
           border: Border.all(
             color: isActive ? AppColors.primary : AppColors.outline,
             width: isActive ? 1.5 : 1,
@@ -45,20 +44,17 @@ class DateRangeButton extends StatelessWidget {
                   ? AppColors.onPrimaryFixedVariant
                   : AppColors.outline,
             ),
-            SizedBox(width: 8),
-            Text(
-              isActive
-                  ? formatDateRange(selectedRange!)
-                  : 'Date range',
+            const SizedBox(width: 2),
+            Text(overflow: TextOverflow.ellipsis,
+              isActive ? formatDateRange(selectedRange!) : 'Date range',
               style: AppTextStyles.bodySm.copyWith(
                 color: isActive
                     ? AppColors.onPrimaryFixedVariant
                     : AppColors.onSurfaceVariant,
-                fontSize: 4.sp.clamp(2,15)
               ),
             ),
             if (isActive && onClear != null) ...[
-              SizedBox(width: 8),
+              const SizedBox(width: 2),
               GestureDetector(
                 onTap: onClear,
                 behavior: HitTestBehavior.opaque,

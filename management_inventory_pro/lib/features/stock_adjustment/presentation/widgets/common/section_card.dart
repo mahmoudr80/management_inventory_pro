@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_decoration.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 
 class SectionCard extends StatelessWidget {
   final Widget child;
@@ -16,12 +17,14 @@ class SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      // Keep Theme.of(context) as the default surface so this still tracks
+      // light/dark theme changes; AppColors.outlineVariant (via the shared
+      // card() decoration) replaces the old hardcoded border color.
+      decoration: AppDecorations.card(
         color: color ?? Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFC3C5D9)),
+        radius: AppRadius.md,
       ),
-      padding: padding ?? EdgeInsets.all(16.w),
+      padding: padding ?? const EdgeInsets.all(AppSpacing.lg),
       child: child,
     );
   }

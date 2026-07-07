@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 import '../common/warning_badge.dart';
 
@@ -10,31 +12,33 @@ class NewStockWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color stockColor = const Color(0xFF131B2E);
-    if (item.isNegativeInventory) stockColor = const Color(0xFFBA1A1A);
-    else if (item.isOutOfStock) stockColor = const Color(0xFFBA1A1A);
-    else if (item.isLowStock) stockColor = const Color(0xFFF59E0B);
+    Color stockColor = AppColors.textPrimary;
+    if (item.isNegativeInventory) {
+      stockColor = AppColors.error;
+    } else if (item.isOutOfStock) {
+      stockColor = AppColors.error;
+    } else if (item.isLowStock) {
+      stockColor = AppColors.warning;
+    }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: AppSpacing.xs,
       children: [
         Text(
           '${item.newStock}',
-          style: TextStyle(
-            fontFamily: 'JetBrains Mono',
-            fontSize: 5.sp,
+          style: AppTextStyles.dataMono.copyWith(
             fontWeight: FontWeight.w700,
             color: stockColor,
           ),
         ),
-        SizedBox(width: 2.w,),
         if (item.isNegativeInventory)
           const WarningBadge(level: WarningLevel.negative)
         else if (item.isOutOfStock)
           const WarningBadge(level: WarningLevel.out)
         else if (item.isLowStock)
           const WarningBadge(level: WarningLevel.low),
-
       ],
     );
   }

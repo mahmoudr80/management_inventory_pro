@@ -14,7 +14,7 @@ final double totalSalesToday;
             value: '$totalUnitsSoldToday',
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 6),
         Expanded(
           child: _StatBlock(
             label: 'Sales Today',
@@ -43,21 +43,27 @@ class _StatBlock extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-              fontSize: 17,
+          Tooltip(message:  value,
+            child:Text(
+              overflow: TextOverflow.ellipsis,
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 17,
+              ),
             ),
           ),
           const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
-              fontSize: 10.5,
-              fontWeight: FontWeight.w600,
+          Tooltip(message:  label,
+            child: Text(
+              overflow: TextOverflow.ellipsis,
+              label,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.7),
+                fontSize: 10.5,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

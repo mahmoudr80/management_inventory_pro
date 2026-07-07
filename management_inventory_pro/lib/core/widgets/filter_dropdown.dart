@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../theme/app_colors.dart';
+import '../theme/app_dimens.dart';
+import '../theme/app_text_styles.dart';
 import 'dropdown_item.dart';
 
+/// Compact filter chip/trigger that opens a popup menu of [DropdownItem]s.
+///
+/// Refactor notes (responsive_rules.md):
+/// - Removed `flutter_screenutil`; all sizing now comes from `AppSpacing` /
+///   `AppRadius` / `AppIconSize` constants.
+/// - Swapped ad-hoc `theme.colorScheme` / `theme.textTheme` lookups for the
+///   shared `AppColors` / `AppTextStyles` design tokens so this matches the
+///   rest of the design system instead of drifting from Material defaults.
+/// - The trigger label is now capped with `ConstrainedBox` + wrapped in a
+///   `Tooltip`, so a long selected-item name truncates with ellipsis
+///   instead of pushing the trigger wider than the layout can afford.
 class FilterDropdown<T> extends StatelessWidget {
   const FilterDropdown({
     super.key,
@@ -14,6 +27,7 @@ class FilterDropdown<T> extends StatelessWidget {
     this.onAdd,
     this.onDelete,
     this.addLabel,
+    this.maxTriggerWidth = 220,
   });
 
   final IconData icon;
@@ -29,34 +43,34 @@ class FilterDropdown<T> extends StatelessWidget {
 
   final String? addLabel;
 
+  /// Caps how wide the trigger chip can grow before its label ellipsizes.
+  final double maxTriggerWidth;
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final active = selectedItem != null;
 
     return PopupMenuButton<_MenuAction<T>>(
       tooltip: '',
-      offset: Offset(0, 40.h),
+      offset: Offset(0, AppSpacing.xl + AppSpacing.lg),
       elevation: 4,
-      color: theme.colorScheme.surface,
-      constraints: BoxConstraints(minWidth: 180.w.clamp(150, 220)),
+      color: AppColors.surface,
+      constraints: BoxConstraints(
+        minWidth: 180,
+        maxWidth: 320,
+      ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
-        side: BorderSide(
-          color: theme.colorScheme.outlineVariant.withAlpha(120),
-        ),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        side: BorderSide(color: AppColors.outlineVariant.withOpacity(0.5)),
       ),
       onSelected: (action) {
         switch (action.type) {
           case _MenuActionType.clear:
             onChanged(null);
-
           case _MenuActionType.select:
             onChanged(action.item);
-
           case _MenuActionType.add:
             onAdd?.call();
-
           case _MenuActionType.delete:
             if (action.item != null) {
               onDelete?.call(action.item!);
@@ -67,20 +81,15 @@ class FilterDropdown<T> extends StatelessWidget {
         return [
           _menuItem(
             context,
-            theme: theme,
             text: 'All $label',
             icon: Icons.apps_rounded,
             selected: !active,
             action: const _MenuAction.clear(),
           ),
-
-          if (items.isNotEmpty)
-            const PopupMenuDivider(height: 1),
-
+          if (items.isNotEmpty) const PopupMenuDivider(height: 1),
           ...items.map(
-                (item) => _menuItem(
+            (item) => _menuItem(
               context,
-              theme: theme,
               text: item.label,
               icon: icon,
               selected: selectedItem == item,
@@ -88,12 +97,10 @@ class FilterDropdown<T> extends StatelessWidget {
               action: _MenuAction.select(item),
             ),
           ),
-
           if (onAdd != null) ...[
             const PopupMenuDivider(height: 1),
             _menuItem(
               context,
-              theme: theme,
               text: addLabel ?? 'Add',
               icon: Icons.add_circle_outline_rounded,
               isAdd: true,
@@ -107,87 +114,78 @@ class FilterDropdown<T> extends StatelessWidget {
         label: label,
         selected: selectedItem?.label,
         active: active,
+        maxWidth: maxTriggerWidth,
       ),
     );
   }
 
   PopupMenuItem<_MenuAction<T>> _menuItem(
-      BuildContext context, {
-        required ThemeData theme,
-        required String text,
-        required IconData icon,
-        required _MenuAction<T> action,
-        bool selected = false,
-        bool isAdd = false,
-        bool deletable = false,
-      }) {
+    BuildContext context, {
+    required String text,
+    required IconData icon,
+    required _MenuAction<T> action,
+    bool selected = false,
+    bool isAdd = false,
+    bool deletable = false,
+  }) {
     final color = isAdd
-        ? theme.colorScheme.secondary
+        ? AppColors.secondary
         : selected
-        ? theme.colorScheme.primary
-        : theme.colorScheme.onSurface;
+            ? AppColors.primary
+            : AppColors.onSurface;
 
     return PopupMenuItem<_MenuAction<T>>(
       value: action,
-      height: 40.h.clamp(36, 48),
-      padding: EdgeInsets.symmetric(horizontal: 14.w),
+      height: 40,
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg - AppSpacing.xxs),
       child: Row(
         children: [
           Container(
-            width: 28.r,
-            height: 28.r,
+            width: AppIconSize.xl,
+            height: AppIconSize.xl,
             decoration: BoxDecoration(
               color: selected
-                  ? theme.colorScheme.primaryContainer
+                  ? AppColors.primaryContainer.withOpacity(0.15)
                   : isAdd
-                  ? theme.colorScheme.secondaryContainer.withAlpha(120)
-                  : theme.colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(6.r),
+                      ? AppColors.secondaryContainer.withOpacity(0.5)
+                      : AppColors.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(AppRadius.standard),
             ),
-            child: Icon(icon, size: 14.r, color: color),
+            child: Icon(icon, size: AppIconSize.xs, color: color),
           ),
-
-          SizedBox(width: 10.w),
-
+          SizedBox(width: AppSpacing.sm + AppSpacing.xxs),
           Expanded(
-            child: Text(
-              text,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: color,
-                fontWeight:
-                selected || isAdd ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-          ),
-
-          if (selected)
-            Icon(
-              Icons.check_rounded,
-              size: 14.r,
-              color: theme.colorScheme.primary,
-            ),
-
-          if (deletable && action.item != null) ...[
-            SizedBox(width: 12.w),
-            InkWell(
-              borderRadius: BorderRadius.circular(6.r),
-              onTap: () {
-                Navigator.pop(
-                  context,
-                  _MenuAction.delete(action.item!),
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.all(2.r),
-                child: const Icon(
-                  Icons.delete_outline_rounded,
-                  color: Colors.red,
-                  size: 14,
+            child: Tooltip(
+              message: text,
+              waitDuration: const Duration(milliseconds: 500),
+              child: Text(
+                text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.bodySm.copyWith(
+                  color: color,
+                  fontWeight: selected || isAdd ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
             ),
-          ]
+          ),
+          if (selected)
+            Icon(Icons.check_rounded, size: AppIconSize.xs, color: AppColors.primary),
+          if (deletable && action.item != null) ...[
+            SizedBox(width: AppSpacing.md),
+            InkWell(
+              borderRadius: BorderRadius.circular(AppRadius.standard),
+              onTap: () => Navigator.pop(context, _MenuAction.delete(action.item!)),
+              child: Padding(
+                padding: const EdgeInsets.all(2),
+                child: Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppColors.error,
+                  size: AppIconSize.xs,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -200,69 +198,68 @@ class _DropdownTrigger extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.active,
+    required this.maxWidth,
   });
 
   final IconData icon;
   final String label;
   final String? selected;
   final bool active;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final displayText = selected ?? label;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 180),
-      height: 36.h.clamp(32, 42),
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
-      decoration: BoxDecoration(
-        color: active
-            ? theme.colorScheme.primaryContainer.withAlpha(180)
-            : theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      child: AnimatedContainer(
+        duration: AppAnimation.fast,
+        height: 36,
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+        decoration: BoxDecoration(
           color: active
-              ? theme.colorScheme.primary
-              : theme.colorScheme.outlineVariant,
+              ? AppColors.primaryContainer.withOpacity(0.15)
+              : AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadius.md + AppRadius.xs),
+          border: Border.all(
+            color: active ? AppColors.primary : AppColors.outlineVariant,
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 14.r,
-            color: active
-                ? theme.colorScheme.primary
-                : theme.colorScheme.onSurfaceVariant,
-          ),
-          SizedBox(width: 8.w),
-          Text(
-            selected ?? label,
-            style: theme.textTheme.bodySmall?.copyWith(
-              fontWeight: active ? FontWeight.w600 : FontWeight.w500,
-              color: active
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurfaceVariant,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: AppIconSize.xs,
+              color: active ? AppColors.primary : AppColors.onSurfaceVariant,
             ),
-          ),
-          SizedBox(width: 6.w),
-          Icon(
-            Icons.keyboard_arrow_down_rounded,
-            size: 16.r,
-          ),
-        ],
+            SizedBox(width: AppSpacing.sm),
+            Flexible(
+              child: Tooltip(
+                message: displayText,
+                waitDuration: const Duration(milliseconds: 500),
+                child: Text(
+                  displayText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.bodySm.copyWith(
+                    fontWeight: active ? FontWeight.w600 : FontWeight.w500,
+                    color: active ? AppColors.primary : AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: AppSpacing.xs + AppSpacing.xxs),
+            Icon(Icons.keyboard_arrow_down_rounded, size: AppIconSize.sm),
+          ],
+        ),
       ),
     );
   }
 }
 
-enum _MenuActionType {
-  clear,
-  select,
-  add,
-  delete,
-}
+enum _MenuActionType { clear, select, add, delete }
 
 class _MenuAction<T> {
   final _MenuActionType type;
@@ -274,9 +271,7 @@ class _MenuAction<T> {
 
   const _MenuAction.add() : this._(_MenuActionType.add, null);
 
-  const _MenuAction.select(DropdownItem<T> item)
-      : this._(_MenuActionType.select, item);
+  const _MenuAction.select(DropdownItem<T> item) : this._(_MenuActionType.select, item);
 
-  const _MenuAction.delete(DropdownItem<T> item)
-      : this._(_MenuActionType.delete, item);
+  const _MenuAction.delete(DropdownItem<T> item) : this._(_MenuActionType.delete, item);
 }

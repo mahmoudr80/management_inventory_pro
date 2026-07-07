@@ -30,7 +30,7 @@ class _QuickActionButtonState extends State<SalesActionButton> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
             color: widget.filled
                 ? Colors.white.withOpacity(_hovered ? 0.95 : 0.85)
@@ -40,7 +40,7 @@ class _QuickActionButtonState extends State<SalesActionButton> {
                 ? null
                 : Border.all(color: Colors.white.withOpacity(0.4)),
           ),
-          child: Row(
+          child: Row(mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
@@ -48,13 +48,16 @@ class _QuickActionButtonState extends State<SalesActionButton> {
                 size: 15,
                 color: widget.filled ? const Color(0xFF0041C8) : Colors.white,
               ),
-              const SizedBox(width: 6),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  color: widget.filled ? const Color(0xFF0041C8) : Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12.5,
+              const SizedBox(width: 3),
+              Tooltip(message:  widget.label,
+                child:  Text(
+                  overflow: TextOverflow.ellipsis,
+                  widget.label,
+                  style: TextStyle(
+                    color: widget.filled ? const Color(0xFF0041C8) : Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12.5,
+                  ),
                 ),
               ),
             ],

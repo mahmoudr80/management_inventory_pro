@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import 'pagination_controls.dart';
 
 class SaleTableFooter extends StatelessWidget {
@@ -23,20 +25,20 @@ class SaleTableFooter extends StatelessWidget {
     final end = (currentPage * pageSize).clamp(0, filteredTotal);
 
     return Container(
-      height: 44.h,
-      padding: EdgeInsets.symmetric(horizontal: 2.w),
-      color: const Color(0xFFF9FAFB),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+      color: AppColors.surfaceContainerLow,
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        runSpacing: AppSpacing.md,
         children: [
           Text(
             'Showing $start to $end of $filteredTotal results',
-            style: TextStyle(
-              fontSize: 4.sp,
-              color: const Color(0xFF6B7280),
+            style: AppTextStyles.bodySm.copyWith(
+              color: AppColors.textSecondary,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const Spacer(),
           PaginationControls(
             currentPage: currentPage,
             totalPages: totalPages,

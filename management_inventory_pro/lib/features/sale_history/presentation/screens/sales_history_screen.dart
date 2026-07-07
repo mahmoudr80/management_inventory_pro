@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/features/sale_history/data/repository/sale_history_repository.dart';
 import 'package:management_inventory_pro/features/sale_history/presentation/widgets/states/empty_sale_state.dart';
 import '../../../home/cubit/home_cubit.dart';
@@ -18,13 +18,13 @@ class SalesHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(24.r),
+      padding: const EdgeInsets.all(AppSpacing.screenPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── Page Header ─────────────────────────────────────────────
-          SalePageHeader(),
-          SizedBox(height: 20.h),
+          const SalePageHeader(),
+          const SizedBox(height: AppSpacing.lg),
 
           // ── Content ─────────────────────────────────────────────────
           Expanded(

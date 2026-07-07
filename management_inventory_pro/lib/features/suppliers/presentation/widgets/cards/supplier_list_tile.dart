@@ -6,6 +6,7 @@ import '../../../data/models/supplier_model.dart';
 class SupplierListTile extends StatelessWidget {
   final SupplierModel supplier;
   final bool isSelected;
+  final bool showPhone;
   final VoidCallback onTap;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -14,6 +15,7 @@ class SupplierListTile extends StatelessWidget {
     super.key,
     required this.supplier,
     required this.isSelected,
+    this.showPhone = true,
     required this.onTap,
     required this.onEdit,
     required this.onDelete,
@@ -69,15 +71,17 @@ class SupplierListTile extends StatelessWidget {
               const SizedBox(width: 8),
 
               // Phone — hidden on small screens
-              Expanded(
-                flex: 2,
-                child: Text(
-                  supplier.phone,
-                  style: AppTextStyles.dataMono.copyWith(fontSize: 12),
-                  overflow: TextOverflow.ellipsis,
+              if (showPhone) ...[
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    supplier.phone,
+                    style: AppTextStyles.dataMono.copyWith(fontSize: 12),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
+                const SizedBox(width: 8),
+              ],
 
               // Actions
               _TileActions(onEdit: onEdit, onDelete: onDelete),

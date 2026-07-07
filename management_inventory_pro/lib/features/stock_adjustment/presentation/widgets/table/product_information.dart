@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 
 class ProductInformation extends StatelessWidget {
@@ -12,60 +13,45 @@ class ProductInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
+        const Icon(
           Icons.inventory_2_outlined,
           color: AppColors.primary,
-          size: 40.r,
+          size: AppIconSize.xl,
         ),
-        SizedBox(width: 2.w),
+        const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                item.productName,
-                style: TextStyle(
-                  fontSize: 5.sp,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF131B2E),
+              Tooltip(
+                message: item.productName,
+                child: Text(
+                  item.productName,
+                  style: AppTextStyles.bodySm.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: 0.5.h),
-              Text(
-                overflow: TextOverflow.ellipsis,
-                'SKU: ${item.sku} · ${item.barcode}',
-                style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
-                  fontSize: 4.sp,
-                  color: const Color(0xFF737688),
+              const SizedBox(height: AppSpacing.xxs),
+              Tooltip(
+                message: 'SKU: ${item.sku} · ${item.barcode}',
+                child: Text(
+                  'SKU: ${item.sku} · ${item.barcode}',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.dataMono.copyWith(
+                    fontSize: 11,
+                    color: AppColors.outline,
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ],
-    );
-  }
-}
-
-class _ProductImage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 20.w,
-      height: 20.w,
-      decoration: BoxDecoration(
-        color: const Color(0xFFEAEDFF),
-        borderRadius: BorderRadius.circular(4.r),
-        border: Border.all(color: const Color(0xFFC3C5D9)),
-      ),
-      child: Icon(
-        Icons.image_outlined,
-        size: 28.r,
-        color: const Color(0xFF737688),
-      ),
     );
   }
 }

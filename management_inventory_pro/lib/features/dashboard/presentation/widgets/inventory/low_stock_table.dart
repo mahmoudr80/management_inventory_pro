@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import '../../../data/models/low_stock_product.dart';
 import '../common/empty_state.dart';
@@ -24,13 +25,31 @@ class LowStockTable extends StatelessWidget {
     }
 
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        _TableHeader(theme: theme),
-        ...products.map(
-          (p) => LowStockRow(product: p, onRestock: () => onRestock(p)),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double minTableWidth = 650.0;
+        return Scrollbar(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth,
+              ),
+              child: SizedBox(
+                width: math.max(minTableWidth, constraints.maxWidth),
+                child: Column(
+                  children: [
+                    _TableHeader(theme: theme),
+                    ...products.map(
+                      (p) => LowStockRow(product: p, onRestock: () => onRestock(p)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

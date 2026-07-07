@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/pos_product.dart';
 
 class ProductCard extends StatefulWidget {
@@ -63,27 +64,29 @@ class _ProductCardState extends State<ProductCard> {
           child: Opacity(
             opacity: disabled ? 0.5 : 1,
             child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.all(12),
+              child:Column(
+                //direction: Axis.vertical,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Stack(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child:product.imageUrl==null?  Icon(
-                            Icons.inventory_2_outlined,
-                            color: AppColors.primary,
-                            size: 40.r,
-                          ):
-                          Image.file(
-                            File(product.imageUrl!),
-                            fit: BoxFit.scaleDown,
-                            errorBuilder: (_, __, ___) => Container(
-                              color: AppColors.posSurface,
-                              child: const Icon(Icons.image_not_supported_outlined, color: AppColors.posTextMuted),
+                      SizedBox(
+                        height: 120,
+                        child: Center(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: product.imageUrl==null?  Icon(
+                              Icons.inventory_2_outlined,
+                              color: AppColors.primary,
+                              size: 70,
+                            ):
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.file(
+                                File(product.imageUrl!),
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
                         ),
@@ -102,6 +105,7 @@ class _ProductCardState extends State<ProductCard> {
                             child: const Center(
                               child: Text(
                                 'OUT OF STOCK',
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -114,7 +118,7 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 4),
                   Text(
                     product.name,
                     maxLines: 1,
@@ -125,31 +129,28 @@ class _ProductCardState extends State<ProductCard> {
                       color: AppColors.posTextPrimary,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Text(
                     '\$${product.price.toStringAsFixed(2)}',
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       color: AppColors.posPrimary,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         '${product.sku}',
-                        style:  TextStyle(
-                          fontSize: 3.sp,
-                          color: AppColors.textSecondary,
-                        ),
+                        overflow: TextOverflow.ellipsis,
+                        style:   AppTextStyles.bodySm,
                       ),
                       Text(
                         '${product.currentStock}',
-                        style:  TextStyle(
-                          fontSize: 3.sp,
-                          color: AppColors.textSecondary,
-                        ),
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.bodySm,
                       ),
                     ],
                   ),

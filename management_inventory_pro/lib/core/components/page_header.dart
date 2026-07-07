@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
-import '../utils/responsive.dart';
 
 class PageHeader extends StatelessWidget {
   final String title;
@@ -20,42 +19,48 @@ class PageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isMobile = Responsive.isMobile(context);
+    final bool isCompact = Responsive.isCompact(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (breadcrumb != null) ...[
-          breadcrumb!,
-          SizedBox(height: 6.h),
-        ],
-        if (isMobile)
+        if (breadcrumb != null) ...[breadcrumb!, const SizedBox(height: AppSpacing.sm)],
+        if (isCompact)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                title,
-                style: AppTextStyles.headlineMd.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+              Tooltip(
+                message: title,
+                child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  title,
+                  style: AppTextStyles.headlineMd.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
               if (subtitle != null) ...[
-                SizedBox(height: 2.h),
-                Text(
-                  subtitle!,
-                  style: AppTextStyles.bodySm.copyWith(
-                    color: AppColors.textSecondary,
+                const SizedBox(height: AppSpacing.xxs),
+                Tooltip(
+                  message: subtitle!,
+                  child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    subtitle!,
+                    maxLines: 2,
+                    style: AppTextStyles.bodySm.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 ),
               ],
               if (actions != null && actions!.isNotEmpty) ...[
-                SizedBox(height: 12.h),
+                const SizedBox(height: AppSpacing.md),
                 Wrap(
-                  spacing: 8.w,
-                  runSpacing: 8.h,
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
                   children: actions!,
                 ),
               ],
@@ -69,19 +74,28 @@ class PageHeader extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: AppTextStyles.headlineMd.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
+                    Tooltip(
+                      message: title,
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        title,
+                        style: AppTextStyles.headlineMd.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                     ),
                     if (subtitle != null) ...[
-                      SizedBox(height: 2.h),
-                      Text(
-                        subtitle!,
-                        style: AppTextStyles.bodySm.copyWith(
-                          color: AppColors.textSecondary,
+                      const SizedBox(height: AppSpacing.xxs),
+                      Tooltip(
+                        message: subtitle!,
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          subtitle!,
+                          maxLines: 2,
+                          style: AppTextStyles.bodySm.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
                         ),
                       ),
                     ],
@@ -89,16 +103,19 @@ class PageHeader extends StatelessWidget {
                 ),
               ),
               if (actions != null && actions!.isNotEmpty) ...[
-                SizedBox(width: 16.w),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 8.w,
+                const SizedBox(width: AppSpacing.lg),
+                // Wrap (not Row) so extra actions fold onto a new line
+                // instead of overflowing on narrower desktop widths.
+                Wrap(
+                  alignment: WrapAlignment.end,
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
                   children: actions!,
                 ),
               ],
             ],
           ),
-        SizedBox(height: 16.h),
+        const SizedBox(height: AppSpacing.lg),
       ],
     );
   }

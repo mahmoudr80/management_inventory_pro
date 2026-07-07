@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
 import 'package:management_inventory_pro/features/product/data/respository/product_repository.dart';
 import 'package:management_inventory_pro/features/product/presentation/products/cubit/product_cubit.dart';
-import 'package:management_inventory_pro/features/stock_receipts/presentation/cubit/stock_entry_cubit.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/product_dropdown.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -42,12 +40,9 @@ class _EntryLineRowState extends State<EntryLineRow> {
   void initState() {
     super.initState();
 
-    // Seed the dropdown's selection from the existing line, if any.
-    // Note: this only has a name/sku to go on (no product id), since
-    // StockEntryLineModel doesn't carry one yet — see note below.
     _selectedProduct = widget.line.product.name.isNotEmpty
         ? ProductRef(
-            id:  widget.line.product.id,
+            id: widget.line.product.id,
             name: widget.line.product.name,
             sku: widget.line.product.sku,
           )
@@ -82,7 +77,6 @@ class _EntryLineRowState extends State<EntryLineRow> {
           sku: _selectedProduct?.sku,
           id: _selectedProduct?.id,
         ),
-
         quantity: qty,
         unitCost: cost,
       ),
@@ -107,13 +101,13 @@ class _EntryLineRowState extends State<EntryLineRow> {
         color: _hovering
             ? AppColors.surfaceContainerLow
             : AppColors.surfaceContainerLowest,
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // ── # ─────────────────────────────────────────────────────────
             SizedBox(
-              width: 32.w,
+              width: 32,
               child: Text(
                 '${widget.index + 1}',
                 style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
@@ -139,14 +133,19 @@ class _EntryLineRowState extends State<EntryLineRow> {
                     ),
                   ),
                   if (_selectedProduct?.sku != null) ...[
-                    SizedBox(height: 4.h),
+                    const SizedBox(height: 4),
                     Padding(
-                      padding: EdgeInsets.only(left: 14.w),
-                      child: Text(
-                        _selectedProduct!.sku!,
-                        style: AppTextStyles.dataMono.copyWith(
-                          fontSize: 11,
-                          color: AppColors.outline,
+                      padding: const EdgeInsets.only(left: 14),
+                      child: Tooltip(
+                        message: _selectedProduct!.sku!,
+                        child: Text(
+                          _selectedProduct!.sku!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.dataMono.copyWith(
+                            fontSize: 11,
+                            color: AppColors.outline,
+                          ),
                         ),
                       ),
                     ),
@@ -155,7 +154,7 @@ class _EntryLineRowState extends State<EntryLineRow> {
               ),
             ),
 
-            SizedBox(width: 12.w),
+            const SizedBox(width: 12),
 
             // ── Qty ────────────────────────────────────────────────────────
             Expanded(
@@ -170,7 +169,7 @@ class _EntryLineRowState extends State<EntryLineRow> {
               ),
             ),
 
-            SizedBox(width: 12.w),
+            const SizedBox(width: 12),
 
             // ── Cost Price ─────────────────────────────────────────────────
             Expanded(
@@ -186,7 +185,7 @@ class _EntryLineRowState extends State<EntryLineRow> {
               ),
             ),
 
-            SizedBox(width: 12.w),
+            const SizedBox(width: 12),
 
             // ── Line Total (read-only) ─────────────────────────────────────
             Expanded(
@@ -208,16 +207,15 @@ class _EntryLineRowState extends State<EntryLineRow> {
 
             // ── Remove ────────────────────────────────────────────────────
             SizedBox(
-              width: 40.w,
+              width: 40,
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Tooltip(
                   message: 'Remove line',
                   child: InkWell(
                     onTap: widget.onRemove,
-                    borderRadius: BorderRadius.circular(4.r),
-                    child: Padding(
-                      padding: EdgeInsets.all(4.w),
+                    child: const Padding(
+                      padding: EdgeInsets.all(4),
                       child: Icon(
                         Icons.remove_circle_outline,
                         size: 16,
@@ -274,8 +272,8 @@ class _NumericField extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
         border: InputBorder.none,
         enabledBorder: InputBorder.none,
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.primary, width: 1),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.primary, width: 1),
         ),
       ),
     );

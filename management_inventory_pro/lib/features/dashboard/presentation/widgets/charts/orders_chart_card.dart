@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../../../../../core/theme/app_colors.dart';
 import '../common/dashboard_card.dart';
 import 'chart_header.dart';
 import 'chart_placeholder.dart';
@@ -30,7 +30,7 @@ class OrdersChartCard extends StatelessWidget {
                 ? List.filled(7, 0)
                 : weeklyOrders,
             type: ChartType.line,
-            accentColor: const Color(0xFF505F76),
+            accentColor: AppColors.secondary,
           ),
         ],
       ),
@@ -44,17 +44,23 @@ class _Legend extends StatelessWidget {
     final theme = Theme.of(context);
     return Row(
       children: [
-        _LegendDot(color: const Color(0xFF505F76)),
+        const _LegendDot(color: AppColors.secondary),
         const SizedBox(width: 4),
-        Text('Standard',
-            style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant)),
+        Text(
+          'Standard',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
         const SizedBox(width: 10),
-        _LegendDot(color: const Color(0xFF0041C8)),
+        const _LegendDot(color: AppColors.primary),
         const SizedBox(width: 4),
-        Text('Priority',
-            style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant)),
+        Text(
+          'Priority',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
       ],
     );
   }

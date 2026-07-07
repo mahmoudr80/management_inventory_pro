@@ -1,64 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../data/models/sale_model.dart';
 import '../../cubit/sales_history_cubit.dart';
 import 'sale_details_header.dart';
 import 'sale_items_table.dart';
 import 'payment_summary_card.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_decoration.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
-class SaleDetailsPanel extends StatelessWidget {
+
+class SaleDetailsPanel extends StatefulWidget {
   const SaleDetailsPanel({super.key, required this.sale});
-
   final SaleModel sale;
+
+  @override
+  State<SaleDetailsPanel> createState() => _SaleDetailsPanelState();
+}
+
+class _SaleDetailsPanelState extends State<SaleDetailsPanel> {
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SalesHistoryCubit>();
+    final sale = widget.sale;
 
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+      decoration: AppDecorations.elevatedCard(
+        color: AppColors.surface,
+        borderColor: AppColors.border,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _PanelTopBar(onClose: cubit.clearSelection),
-
           Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 2.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SaleDetailsHeader(sale: sale),
-                  SizedBox(height: 8.h),
-                  _SectionLabel(label: 'Items'),
-                  SizedBox(height: 8.h),
-                  SaleItemsTable(items: sale.items),
-                  SizedBox(height: 16.h),
-                  PaymentSummaryCard(sale: sale),
-                  SizedBox(height: 16.h),
-                ],
+            child: Scrollbar(
+              controller: _scrollController,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SaleDetailsHeader(sale: sale),
+                    SizedBox(height: AppSpacing.md),
+                    _SectionLabel(label: 'Items'),
+                    SizedBox(height: AppSpacing.sm),
+                    SaleItemsTable(items: sale.items),
+                    SizedBox(height: AppSpacing.md),
+                    PaymentSummaryCard(sale: sale),
+                    SizedBox(height: AppSpacing.md),
+                  ],
+                ),
               ),
             ),
           ),
-
           _PanelActions(),
         ],
       ),
     );
   }
 }
+
 
 // ---------------------------------------------------------------------------
 
@@ -69,29 +81,29 @@ class _PanelTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48.h,
-      padding: EdgeInsets.symmetric(horizontal: 2.w),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
+        border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: Row(
         children: [
           Text(
             'Sale Details',
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 4.sp,
+            style: AppTextStyles.headlineMd.copyWith(
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF111827),
             ),
           ),
           const Spacer(),
           IconButton(
             onPressed: onClose,
             icon: Icon(Icons.close_rounded,
-                size: 5.r, color: const Color(0xFF6B7280)),
+                size: AppIconSize.md, color: AppColors.textSecondary),
             padding: EdgeInsets.zero,
-            constraints: BoxConstraints(minWidth: 28.w, minHeight: 28.h),
+            constraints: const BoxConstraints(
+              minWidth: AppIconSize.lg + AppSpacing.xs,
+              minHeight: AppIconSize.lg + AppSpacing.xs,
+            ),
             tooltip: 'Close panel',
           ),
         ],
@@ -106,13 +118,14 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      label,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontSize: 4.sp,
-        fontWeight: FontWeight.w700,
-        color: const Color(0xFF111827),
+    return Tooltip(
+      message: label,
+      child: Text(
+        label,
+        overflow: TextOverflow.ellipsis,
+        style: AppTextStyles.headlineSm.copyWith(
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
@@ -122,60 +135,62 @@ class _PanelActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.r, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
       decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Color(0xFFE5E7EB))),
+        border: Border(top: BorderSide(color: AppColors.border)),
       ),
-      child: Row(
+      child: Wrap(
+        spacing: AppSpacing.md,
+        runSpacing: AppSpacing.md,
         children: [
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Print receipt – coming soon',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 4.sp),
-                    ),
-                    duration: const Duration(seconds: 2),
+          OutlinedButton.icon(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Print receipt – coming soon',
+                    style: AppTextStyles.bodyMd,
                   ),
-                );
-              },
-              icon: Icon(Icons.print_rounded, size: 5.r),
-              label: Text(
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            },
+            icon: Icon(Icons.print_rounded, size: AppIconSize.md),
+            label: Tooltip(
+              message: 'Print Receipt',
+              child: Text(
                 'Print Receipt',
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 4.sp),
+                style: AppTextStyles.buttonText.copyWith(color: AppColors.textPrimary),
               ),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF374151),
-                side: const BorderSide(color: Color(0xFFD1D5DB)),
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
+            ),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.textPrimary,
+              side: const BorderSide(color: AppColors.border),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.md, horizontal: AppSpacing.md),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
             ),
           ),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () => _showDeleteConfirmation(context),
-              icon: Icon(Icons.delete_outline_rounded, size: 5.r),
-              label: Text(
+          OutlinedButton.icon(
+            onPressed: () => _showDeleteConfirmation(context),
+            icon: Icon(Icons.delete_outline_rounded, size: AppIconSize.md),
+            label: Tooltip(
+              message: 'Delete Sale',
+              child: Text(
                 'Delete Sale',
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 4.sp),
+                style: AppTextStyles.buttonText.copyWith(color: AppColors.error),
               ),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFFDC2626),
-                side: const BorderSide(color: Color(0xFFFECACA)),
-                backgroundColor: const Color(0xFFFFF5F5),
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
+            ),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.error,
+              side: const BorderSide(color: AppColors.errorContainer),
+              backgroundColor: AppColors.errorContainer.withOpacity(0.3),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.md, horizontal: AppSpacing.md),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
             ),
           ),
@@ -190,21 +205,18 @@ class _PanelActions extends StatelessWidget {
       builder: (_) => AlertDialog(
         title: Text(
           'Delete Sale',
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 4.sp),
+          style: AppTextStyles.headlineSm,
         ),
         content: Text(
           'Are you sure you want to delete this sale? This action cannot be undone.',
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 4.sp),
+          style: AppTextStyles.bodyMd,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               'Cancel',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 4.sp),
+              style: AppTextStyles.buttonText.copyWith(color: AppColors.textPrimary),
             ),
           ),
           TextButton(
@@ -214,19 +226,17 @@ class _PanelActions extends StatelessWidget {
                 SnackBar(
                   content: Text(
                     'Delete sale – coming soon',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 4.sp),
+                    style: AppTextStyles.bodyMd,
                   ),
                   duration: const Duration(seconds: 2),
                 ),
               );
             },
             style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFFDC2626)),
+                foregroundColor: AppColors.error),
             child: Text(
               'Delete',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 4.sp),
+              style: AppTextStyles.buttonText.copyWith(color: AppColors.error),
             ),
           ),
         ],

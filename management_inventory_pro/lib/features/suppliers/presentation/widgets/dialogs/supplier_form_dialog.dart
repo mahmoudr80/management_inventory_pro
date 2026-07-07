@@ -81,7 +81,7 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
       );
       cubit.addSupplier(newSupplier);
     }
-    if(mounted){
+    if (mounted) {
       AppSnackBar.showSuccess(context, message: "supplier saved successfully");
       Navigator.pop(context);
     }
@@ -131,7 +131,7 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                     IconButton(
                       onPressed: () {
                         context.read<SuppliersCubit>().closeForm();
-                        if(mounted){
+                        if (mounted) {
                           Navigator.pop(context);
                         }
                       },
@@ -142,90 +142,94 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                 ),
                 const SizedBox(height: 24),
 
-                // Fields
-                CustomTextField(
-                  inputDecoration:
-                      AppDecorations.searchField(
-                        hint: 'e.g. Global Agri-Co',
-                      ).copyWith(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 11,
+                // Fields area wrapped in scrollable Flexible to prevent overflows
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextField(
+                          inputDecoration: AppDecorations.searchField(
+                            hint: 'e.g. Global Agri-Co',
+                          ).copyWith(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 11,
+                            ),
+                          ),
+                          label: 'Supplier Name *',
+                          controller: _nameCtrl,
+                          validator: _required,
                         ),
-                      ),
-                  label: 'Supplier Name *',
-                  controller: _nameCtrl,
-                  validator: _required,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        inputDecoration:
-                            AppDecorations.searchField(
-                              hint: '+1 (555) 000-0000',
-                            ).copyWith(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 11,
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                inputDecoration: AppDecorations.searchField(
+                                  hint: '+1 (555) 000-0000',
+                                ).copyWith(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 11,
+                                  ),
+                                ),
+                                label: 'Phone *',
+                                controller: _phoneCtrl,
+                                keyboardType: TextInputType.phone,
+                                validator: _required,
                               ),
                             ),
-                        label: 'Phone *',
-                        controller: _phoneCtrl,
-                        keyboardType: TextInputType.phone,
-                        validator: _required,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: CustomTextField(
-                        inputDecoration:
-                            AppDecorations.searchField(
-                              hint: 'contact@supplier.com',
-                            ).copyWith(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 11,
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: CustomTextField(
+                                inputDecoration: AppDecorations.searchField(
+                                  hint: 'contact@supplier.com',
+                                ).copyWith(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 11,
+                                  ),
+                                ),
+                                label: 'Email *',
+                                controller: _emailCtrl,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: _email,
                               ),
                             ),
-                        label: 'Email *',
-                        controller: _emailCtrl,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: _email,
-                      ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextField(
+                          label: 'Address *',
+                          inputDecoration: AppDecorations.searchField(
+                            hint: '123 Warehouse Blvd, City, State',
+                          ).copyWith(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 11,
+                            ),
+                          ),
+                          controller: _addressCtrl,
+                          validator: _required,
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextField(
+                          inputDecoration: AppDecorations.searchField(
+                            hint: 'Optional internal notes…',
+                          ).copyWith(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 11,
+                            ),
+                          ),
+                          label: 'Notes',
+                          controller: _notesCtrl,
+                          maxLines: 3,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  label: 'Address *',
-                  inputDecoration:
-                      AppDecorations.searchField(
-                        hint: '123 Warehouse Blvd, City, State',
-                      ).copyWith(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 11,
-                        ),
-                      ),
-                  controller: _addressCtrl,
-                  validator: _required,
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  inputDecoration:
-                      AppDecorations.searchField(
-                        hint: 'Optional internal notes…',
-                      ).copyWith(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 11,
-                        ),
-                      ),
-                  label: 'Notes',
-                  controller: _notesCtrl,
-                  maxLines: 3,
+                  ),
                 ),
                 const SizedBox(height: 28),
 
@@ -233,14 +237,12 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    _CancelButton(
-                      onPressed: () {
-                        context.read<SuppliersCubit>().closeForm();
-                        if(mounted){
-                          Navigator.pop(context);
-                        }
+                    _CancelButton(onPressed: () {
+                      context.read<SuppliersCubit>().closeForm();
+                      if (mounted) {
+                        Navigator.pop(context);
                       }
-                    ),
+                    }),
                     const SizedBox(width: 12),
                     _SubmitButton(
                       label: _isEdit ? 'Save Changes' : 'Add Supplier',

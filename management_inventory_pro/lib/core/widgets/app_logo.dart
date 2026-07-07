@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../theme/app_colors.dart';
+import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 
+/// Brand logo used on auth screens and empty states.
+///
+/// Refactor notes (responsive_rules.md):
+/// - Dropped `flutter_screenutil` (unused on this widget) in favor of the
+///   `core/theme` constants so sizing stays consistent across the desktop
+///   breakpoints instead of scaling arbitrarily.
+/// - The brand label is capped with `ConstrainedBox` + ellipsis so a
+///   long/localized product name never overflows in a narrow sidebar.
 class AppLogo extends StatelessWidget {
   final double? size;
   final bool showText;
@@ -12,7 +20,7 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logoSize = size ?? 120;
+    final logoSize = size ?? AppIconSize.xl * 3.75; // 120 -> derived from scale
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -38,12 +46,18 @@ class AppLogo extends StatelessWidget {
           ),
         ),
         if (showText) ...[
-          SizedBox(height: 16),
-          Text(
-            'OmniStock',
-            style: AppTextStyles.heading2.copyWith(
-              color: AppColors.primaryDark,
-              letterSpacing: 1.2,
+          SizedBox(height: AppSpacing.lg),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: logoSize * 2.5),
+            child: Text(
+              'OmniStock',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.heading2.copyWith(
+                color: AppColors.primaryDark,
+                letterSpacing: 1.2,
+              ),
             ),
           ),
         ],

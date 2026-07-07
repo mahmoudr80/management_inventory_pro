@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 
 class AdjustmentTableHeader extends StatelessWidget {
   const AdjustmentTableHeader({super.key});
@@ -7,21 +9,22 @@ class AdjustmentTableHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 36.h,
+      height: 36,
       decoration: const BoxDecoration(
-        color: Color(0xFFEAEDFF),
-        border: Border(bottom: BorderSide(color: Color(0xFFC3C5D9))),
+        color: AppColors.surfaceContainer,
+        border: Border(bottom: BorderSide(color: AppColors.outlineVariant)),
       ),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: 5.w),
-          _HeaderCell('#', flex: 0, width: 10.w),
-          _HeaderCell('Product Details', flex: 2),
-          _HeaderCell('Current', flex: 1, ),
-          _HeaderCell('Adjustment', flex: 1,),
-          _HeaderCell('New Level', flex: 1, ),
-          _HeaderCell('Value Impact', flex: 1,),
-          SizedBox(width: 15.w),
+          const SizedBox(width: AppSpacing.sm),
+          const _HeaderCell('#', flex: 0, width: 24),
+          const _HeaderCell('Product Details', flex: 2),
+          const _HeaderCell('Current', flex: 1),
+          const _HeaderCell('Adjustment', flex: 1),
+          const _HeaderCell('New Level', flex: 1),
+          const _HeaderCell('Value Impact', flex: 1),
+          const SizedBox(width: 48),
         ],
       ),
     );
@@ -47,22 +50,23 @@ class _HeaderCell extends StatelessWidget {
       label,
       textAlign: textAlign,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontSize: 4.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.05,
-        color: const Color(0xFF434656),
-      ),
+      style: AppTextStyles.labelCaps,
     );
 
     if (width != null) {
-      return SizedBox(width: width, child: Padding(padding: EdgeInsets.symmetric(horizontal: 2.w), child: text));
+      return SizedBox(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+          child: text,
+        ),
+      );
     }
 
     return Expanded(
       flex: flex,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 2.w),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
         child: text,
       ),
     );

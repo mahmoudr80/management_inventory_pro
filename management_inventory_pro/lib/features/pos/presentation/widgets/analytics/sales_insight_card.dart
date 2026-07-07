@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/features/pos/presentation/widgets/analytics/sales_actions_row.dart';
 import 'package:management_inventory_pro/features/pos/presentation/widgets/analytics/sales_insight_header.dart';
 import 'package:management_inventory_pro/features/pos/presentation/widgets/analytics/sales_stat_block.dart';
+import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/top_selling_product.dart';
 import 'sales_trend_badge.dart';
 import 'top_selling_product_tile.dart';
@@ -40,7 +42,7 @@ class _SalesInsightCardState extends State<SalesInsightCard> {
         : widget.topProducts.map((p) => p.soldUnits).reduce((a, b) => a > b ? a : b);
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppRadius.xl),
       child: Stack(
         children: [
           Container(
@@ -62,29 +64,28 @@ class _SalesInsightCardState extends State<SalesInsightCard> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.cardPadding,horizontal:
+            AppSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
                 SalesInsightHeader(),
-                const SizedBox(height: 18),
+                const SizedBox(height: AppSpacing.md),
                 // Stats row
                 SalesStatBlock(totalUnitsSoldToday: widget.totalUnitsSoldToday,
                   totalSalesToday: widget.totalSalesToday,),
-                const SizedBox(height: 10),
+                const SizedBox(height: AppSpacing.md),
                 SalesTrendBadge(percent: widget.trendPercent, light: true),
-                const SizedBox(height: 18),
-                const Text(
-                  'TOP 3 PRODUCTS',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.6,
+                const SizedBox(height: AppSpacing.md),
+                Tooltip(message:  'TOP 3 PRODUCTS',
+                  child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    'TOP 3 PRODUCTS',
+                    style: AppTextStyles.labelCaps.copyWith(color: Colors.white70),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: AppSpacing.md),
                 Column(
                   children: [
                     for (int i = 0; i < widget.topProducts.length; i++) ...[
@@ -93,11 +94,11 @@ class _SalesInsightCardState extends State<SalesInsightCard> {
                         rank: i + 1,
                         maxUnits: maxUnits,
                       ),
-                      if (i != widget.topProducts.length - 1) const SizedBox(height: 8),
+                      if (i != widget.topProducts.length - 1) const SizedBox(height: AppSpacing.sm),
                     ],
                   ],
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: AppSpacing.md),
                 SalesActionsRow(onViewAnalytics: widget.onViewAnalytics,onViewBestSellers: widget.onViewBestSellers,)
 
               ],

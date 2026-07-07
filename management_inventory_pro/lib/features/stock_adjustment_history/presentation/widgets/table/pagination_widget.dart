@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_text_styles.dart';
 import '../../../../../core/theme/app_dimens.dart';
+import '../../../../../core/theme/app_text_styles.dart';
 
 /// Static (mock) pagination footer. Per spec, real pagination wiring is
 /// out of scope for this audit screen.
@@ -25,7 +23,7 @@ class PaginationWidget extends StatelessWidget {
     final end = (currentPage * pageSize).clamp(0, totalCount);
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 12.h),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -33,15 +31,14 @@ class PaginationWidget extends StatelessWidget {
             'Showing $start-$end of $totalCount results',
             style: AppTextStyles.bodySm.copyWith(
               color: AppColors.onSurfaceVariant,
-
             ),
           ),
           Row(
             children: [
               _PageButton(icon: Icons.chevron_left, onTap: () {}),
-              SizedBox(width: 2.w),
+              SizedBox(width: AppSpacing.xxs),
               _PageNumber(label: '$currentPage', isActive: true),
-              SizedBox(width: 2.w),
+              SizedBox(width: AppSpacing.xxs),
               _PageButton(icon: Icons.chevron_right, onTap: () {}),
             ],
           ),
@@ -63,13 +60,12 @@ class _PageButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppRadius.standard),
       child: Container(
-        width: 32.r,
-        height: 32.r,
+        padding: const EdgeInsets.all(AppSpacing.xs),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.outlineVariant),
           borderRadius: BorderRadius.circular(AppRadius.standard),
         ),
-        child: Icon(icon, size: 28.r, color: AppColors.onSurfaceVariant),
+        child: Icon(icon, size: AppIconSize.sm, color: AppColors.onSurfaceVariant),
       ),
     );
   }
@@ -84,8 +80,7 @@ class _PageNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 62.r,
-      height: 32.r,
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: isActive ? AppColors.primary : Colors.transparent,

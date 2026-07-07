@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/sale_item_model.dart';
 import '../../../data/models/sale_model.dart';
+import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
 class SaleDetailsHeader extends StatelessWidget {
   const SaleDetailsHeader({super.key, required this.sale});
@@ -12,11 +14,11 @@ class SaleDetailsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
       decoration: BoxDecoration(
-        color: const Color(0xFFF9FAFB),
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
@@ -24,48 +26,47 @@ class SaleDetailsHeader extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 2.r, vertical: 8.h),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFDBEAFE),
-                  borderRadius: BorderRadius.circular(8.r),
+                  color: AppColors.infoContainer,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
                 ),
                 child: Icon(
                   Icons.receipt_rounded,
-                  size: 28.r,
-                  color: const Color(0xFF2563EB),
+                  size: AppIconSize.xl,
+                  color: AppColors.primary,
                 ),
               ),
-              SizedBox(width: 4.w),
+              SizedBox(width: AppSpacing.sm),
               Expanded(
-                child: Text(
-                  sale.id,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 4.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF111827),
+                child: Tooltip(
+                  message: sale.id,
+                  child: Text(
+                    sale.id,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.headlineSm,
                   ),
                 ),
               ),
               _StatusBadge(status: sale.status),
             ],
           ),
-          SizedBox(height: 12.h),
-          const Divider(height: 1, color: Color(0xFFE5E7EB)),
-          SizedBox(height: 12.h),
+          SizedBox(height: AppSpacing.md),
+          const Divider(height: 1, color: AppColors.border),
+          SizedBox(height: AppSpacing.md),
 
           // Info grid
           _InfoRow(
             label: 'Date & Time',
             value: DateFormat('MMM d, yyyy hh:mm a').format(sale.createdAt),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: AppSpacing.sm),
           _InfoRow(
             label: 'Cashier',
             value: sale.cashierName,
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: AppSpacing.sm),
           _InfoRow(
             label: 'Payment Method',
             value: switch (sale.paymentMethod) {
@@ -75,7 +76,7 @@ class SaleDetailsHeader extends StatelessWidget {
             },
           ),
           if (sale.notes != null && sale.notes!.isNotEmpty) ...[
-            SizedBox(height: 8.h),
+            SizedBox(height: AppSpacing.sm),
             _InfoRow(
               label: 'Notes',
               value: sale.notes!,
@@ -94,25 +95,21 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, bg, fg) = switch (status) {
-      SaleStatus.completed => ('Completed', const Color(0xFFDCFCE7), const Color(0xFF16A34A)),
-      SaleStatus.refunded  => ('Refunded',  const Color(0xFFFEF3C7), const Color(0xFFD97706)),
-      SaleStatus.cancelled => ('Cancelled', const Color(0xFFFEE2E2), const Color(0xFFDC2626)),
+      SaleStatus.completed => ('Completed', AppColors.successContainer, AppColors.success),
+      SaleStatus.refunded  => ('Refunded',  AppColors.warningContainer, AppColors.warning),
+      SaleStatus.cancelled => ('Cancelled', AppColors.errorContainer, AppColors.error),
     };
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
       ),
       child: Text(
         label,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 3.sp,
-          fontWeight: FontWeight.w600,
-          color: fg,
-        ),
+        style: AppTextStyles.labelCaps.copyWith(color: fg),
       ),
     );
   }
@@ -130,24 +127,27 @@ class _InfoRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 3.sp,
-            color: const Color(0xFF6B7280),
+        Tooltip(
+          message: label,
+          child: Text(
+            label,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.bodyMd.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
         ),
-        SizedBox(width: 8.w),
+        SizedBox(width: AppSpacing.md),
         Flexible(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 3.sp,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xFF111827),
+          child: Tooltip(
+            message: value,
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.bodyMd.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),

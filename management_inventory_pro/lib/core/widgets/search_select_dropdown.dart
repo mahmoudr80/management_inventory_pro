@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-/// A generic searchable single-select dropdown, styled to match the
-/// ProductSearchSection look (white panel, EAEDFF header/hover, C3C5D9
-/// borders, 0041C8 accent).
+import '../theme/app_colors.dart';
+import '../theme/app_dimens.dart';
+import '../theme/app_text_styles.dart';
+
+/// A generic searchable single-select dropdown, styled to match the design
+/// system's default surface/outline/primary palette.
 ///
-/// Unlike the old version, this widget has a SINGLE control: the trigger
+/// Unlike a plain dropdown, this widget has a SINGLE control: the trigger
 /// field itself becomes the search input when opened (readOnly toggles
-/// off, autofocus kicks in), the same pattern used by
-/// SupplierSearchDropdown. A 160ms blur delay avoids the tap-before-blur
+/// off, autofocus kicks in). A 160ms blur delay avoids the tap-before-blur
 /// race condition when picking an item.
 ///
 /// The widget knows nothing about what [T] is — callers supply
@@ -16,6 +17,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// [searchTextBuilder] (what to match search text against, defaults to
 /// [labelBuilder]). Pass [subtitleBuilder] / [trailingBuilder] for a
 /// richer two-line row like the product search results.
+///
+/// Refactor notes (responsive_rules.md):
+/// - Removed `flutter_screenutil` (.h/.w/.r/.sp) and raw hex colors in
+///   favor of `core/theme` tokens (`AppColors`, `AppTextStyles`,
+///   `AppSpacing`, `AppRadius`) so this dropdown matches every other themed
+///   component instead of hand-rolled styling.
+/// - Result panel keeps a max-height + `Flexible`/`ListView` so long result
+///   sets scroll instead of pushing the layout past the 600px minimum
+///   window height.
+/// - Every row label/subtitle/trailing value is capped at one line with
+///   `TextOverflow.ellipsis`, and the primary label is wrapped in a
+///   `Tooltip` so a truncated name can still be read on hover.
 ///
 /// Example:
 /// ```dart
@@ -80,8 +93,7 @@ class SearchSelectDropdown<T> extends StatefulWidget {
   });
 
   @override
-  State<SearchSelectDropdown<T>> createState() =>
-      _SearchSelectDropdownState<T>();
+  State<SearchSelectDropdown<T>> createState() => _SearchSelectDropdownState<T>();
 }
 
 class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
@@ -98,15 +110,15 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
   String _query = '';
   double _triggerWidth = 0;
 
-  String Function(T) get _searchText =>
-      widget.searchTextBuilder ?? widget.labelBuilder;
+  static const double _fieldHeight = AppSize.textFieldHeight + 2;
+  static const double _overlayGap = AppSpacing.xs;
+
+  String Function(T) get _searchText => widget.searchTextBuilder ?? widget.labelBuilder;
 
   List<T> get _filtered {
     final q = _query.trim().toLowerCase();
     if (q.isEmpty) return widget.items;
-    return widget.items
-        .where((item) => _searchText(item).toLowerCase().contains(q))
-        .toList();
+    return widget.items.where((item) => _searchText(item).toLowerCase().contains(q)).toList();
   }
 
   // ── Overlay ────────────────────────────────────────────────────────────
@@ -137,7 +149,7 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
       builder: (_) => CompositedTransformFollower(
         link: _layerLink,
         showWhenUnlinked: false,
-        offset: Offset(0, 46.h + 4),
+        offset: const Offset(0, _fieldHeight + _overlayGap),
         child: TapRegion(
           groupId: _groupId,
           child: Material(
@@ -177,8 +189,7 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
     _collapseOverlay();
     if (!mounted) return;
     setState(() {
-      _controller.text =
-          widget.selected != null ? widget.labelBuilder(widget.selected as T) : '';
+      _controller.text = widget.selected != null ? widget.labelBuilder(widget.selected as T) : '';
     });
   }
 
@@ -223,49 +234,48 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
           if (_open) _closeDropdown();
         },
         child: SizedBox(
-          height: 46.h,
+          height: _fieldHeight,
           child: TextField(
             controller: _controller,
             focusNode: _focusNode,
             readOnly: !_open,
             onTap: _open ? null : _openDropdown,
             onChanged: _onChanged,
-            style: TextStyle(fontSize: 5.sp, color: const Color(0xFF131B2E)),
+            maxLines: 1,
+            style: AppTextStyles.bodyMd.copyWith(color: AppColors.textPrimary),
             decoration: InputDecoration(
               hintText: widget.placeholder,
-              hintStyle: TextStyle(fontSize: 5.sp, color: const Color(0xFF737688)),
+              hintStyle: AppTextStyles.bodyMd.copyWith(color: AppColors.outline),
               prefixIcon: Icon(
                 _open ? Icons.search : widget.itemIcon,
-                size: 28.r,
-                color: const Color(0xFF737688),
+                size: AppIconSize.md,
+                color: AppColors.outline,
               ),
               suffixIcon: selected != null && widget.clearable && !_open
                   ? IconButton(
-                      icon: Icon(Icons.close, size: 28.r),
-                      color: const Color(0xFF737688),
+                      icon: Icon(Icons.close, size: AppIconSize.md),
+                      color: AppColors.outline,
                       onPressed: () => _select(null),
                     )
                   : Icon(
-                      _open
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      size: 28.r,
-                      color: const Color(0xFF737688),
+                      _open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                      size: AppIconSize.md,
+                      color: AppColors.outline,
                     ),
               filled: true,
-              fillColor: Colors.white,
-              contentPadding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0),
+              fillColor: AppColors.surface,
+              contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.r),
-                borderSide: const BorderSide(color: Color(0xFFC3C5D9)),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.r),
-                borderSide: const BorderSide(color: Color(0xFFC3C5D9)),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.r),
-                borderSide: const BorderSide(color: Color(0xFF0041C8), width: 1.5),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                borderSide: const BorderSide(color: AppColors.primary, width: AppBorder.medium),
               ),
             ),
           ),
@@ -301,15 +311,15 @@ class _DropdownPanel<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxHeight: maxHeight.h),
+      constraints: BoxConstraints(maxHeight: maxHeight),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFC3C5D9)),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.outlineVariant),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: AppColors.textPrimary.withOpacity(0.08),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -320,25 +330,32 @@ class _DropdownPanel<T> extends StatelessWidget {
         children: [
           if (filtered.isEmpty)
             Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(AppSpacing.lg),
               child: Text(
                 emptyText,
-                style: TextStyle(fontSize: 5.sp, color: const Color(0xFF737688)),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.bodySm,
               ),
             )
           else
+            // Flexible + shrinkWrap keeps the list bounded by maxHeight and
+            // lets it scroll internally instead of overflowing the overlay
+            // when there are many results (per responsive_rules.md).
             Flexible(
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: filtered.length,
-                separatorBuilder: (_, __) =>
-                    const Divider(height: 1, color: Color(0xFFC3C5D9)),
-                itemBuilder: (_, i) => _DropdownOption<T>(
-                  label: labelBuilder(filtered[i]),
-                  subtitle: subtitleBuilder?.call(filtered[i]),
-                  trailing: trailingBuilder?.call(filtered[i]),
-                  icon: itemIcon,
-                  onTap: () => onSelect(filtered[i]),
+              child: Scrollbar(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: filtered.length,
+                  separatorBuilder: (_, __) =>
+                      const Divider(height: 1, color: AppColors.outlineVariant),
+                  itemBuilder: (_, i) => _DropdownOption<T>(
+                    label: labelBuilder(filtered[i]),
+                    subtitle: subtitleBuilder?.call(filtered[i]),
+                    trailing: trailingBuilder?.call(filtered[i]),
+                    icon: itemIcon,
+                    onTap: () => onSelect(filtered[i]),
+                  ),
                 ),
               ),
             ),
@@ -368,25 +385,29 @@ class _DropdownOption<T> extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       canRequestFocus: false,
-      hoverColor: const Color(0xFFEAEDFF),
+      hoverColor: AppColors.surfaceContainer,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm + 2),
         child: Row(
           children: [
-            Icon(icon, size: 28.r, color: const Color(0xFF0041C8)),
-            SizedBox(width: 2.w),
+            Icon(icon, size: AppIconSize.md, color: AppColors.primary),
+            SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 5.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF131B2E),
+                  Tooltip(
+                    message: label,
+                    waitDuration: const Duration(milliseconds: 500),
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.bodySm.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
                   ),
                   if (subtitle != null && subtitle!.isNotEmpty)
@@ -394,28 +415,24 @@ class _DropdownOption<T> extends StatelessWidget {
                       subtitle!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 5.sp,
-                        color: const Color(0xFF737688),
-                      ),
+                      style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
                     ),
                 ],
               ),
             ),
             if (trailing != null && trailing!.isNotEmpty) ...[
-              SizedBox(width: 2.w),
+              SizedBox(width: AppSpacing.sm),
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 70.w),
-                child: Text(
-                  trailing!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
-                    fontSize: 5.sp,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF131B2E),
+                constraints: const BoxConstraints(maxWidth: 90),
+                child: Tooltip(
+                  message: trailing!,
+                  waitDuration: const Duration(milliseconds: 500),
+                  child: Text(
+                    trailing!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.right,
+                    style: AppTextStyles.dataMono.copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
               ),

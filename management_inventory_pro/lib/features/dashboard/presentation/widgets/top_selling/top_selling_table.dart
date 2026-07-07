@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import '../../../data/models/top_selling_product.dart';
 import '../common/empty_state.dart';
@@ -22,13 +23,31 @@ class TopSellingTable extends StatelessWidget {
     }
 
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        _TableHeader(theme: theme),
-        ...products.take(5).toList().asMap().entries.map(
-              (e) => TopSellingRow(product: e.value, rank: e.key + 1),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double minTableWidth = 550.0;
+        return Scrollbar(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth,
+              ),
+              child: SizedBox(
+                width: math.max(minTableWidth, constraints.maxWidth),
+                child: Column(
+                  children: [
+                    _TableHeader(theme: theme),
+                    ...products.take(5).toList().asMap().entries.map(
+                          (e) => TopSellingRow(product: e.value, rank: e.key + 1),
+                        ),
+                  ],
+                ),
+              ),
             ),
-      ],
+          ),
+        );
+      },
     );
   }
 }

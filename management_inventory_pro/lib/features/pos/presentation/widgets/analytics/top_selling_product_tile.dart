@@ -33,16 +33,20 @@ class TopSellingProductTile extends StatelessWidget {
               color: Colors.white.withAlpha(36),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(
-              '#$rank',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 11,
+            child: Tooltip(
+              message: '#$rank',
+              child: Text(
+                overflow: TextOverflow.ellipsis,
+                '#$rank',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 11,
+                ),
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 5),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,36 +55,45 @@ class TopSellingProductTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text(
-                        product.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                      child: Tooltip(
+                        message: product.name,
+                        child: Text(
+                          product.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '${product.soldUnits} units',
-                      style: TextStyle(
-                        color: Colors.white.withAlpha(217),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
+                    const SizedBox(width: 4),
+                    Tooltip(
+                      message: '${product.soldUnits} units',
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        '${product.soldUnits} units',
+                        style: TextStyle(
+                          color: Colors.white.withAlpha(217),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 3),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
                     value: ratio.clamp(0.0, 1.0),
                     minHeight: 5,
                     backgroundColor: Colors.white.withAlpha(38),
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.white,
+                    ),
                   ),
                 ),
               ],
