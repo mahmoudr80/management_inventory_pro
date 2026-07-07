@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../../data/models/user_model.dart';
+import '../../data/models/auth_user_model.dart';
 
 @immutable
 abstract class AuthState {}
@@ -9,7 +9,7 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthSuccess extends AuthState {
-  final UserModel user;
+  final AuthUserModel user;
 
   AuthSuccess({required this.user});
 }

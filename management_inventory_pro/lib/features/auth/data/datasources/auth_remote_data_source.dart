@@ -2,7 +2,7 @@ import 'package:management_inventory_pro/core/networking/api_error_model.dart';
 import 'package:management_inventory_pro/core/networking/api_result.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../models/user_model.dart';
+import '../models/auth_user_model.dart';
 
 
 class AuthRemoteDataSource{
@@ -17,7 +17,7 @@ class AuthRemoteDataSource{
         return ApiResult.failure(ApiErrorModel(message: "email or password invalid!"));
       }
       if(session!=null){
-        return ApiResult.success(UserModel(email: user.email??'',id: user.id));
+        return ApiResult.success(AuthUserModel(email: user.email??'',id: user.id));
       }
       else{
         return ApiResult.failure(ApiErrorModel(message: "email or password invalid!"));
@@ -59,14 +59,14 @@ class AuthRemoteDataSource{
     throw UnimplementedError();
   }
 
-  Stream<ApiResult<UserModel>> authStateChanges()  {
+  Stream<ApiResult<AuthUserModel>> authStateChanges()  {
     return  Supabase.instance.client.auth.onAuthStateChange.map(
             (data) {
 
           User ?user = data.session?.user;
           if (user != null) {
             return ApiResult.success(
-                UserModel(email: user.email ?? '', id: user.id));
+                AuthUserModel(email: user.email ?? '', id: user.id));
           }
           return ApiResult.failure(
               ApiErrorModel(message: 'user is not authenticated!'));
