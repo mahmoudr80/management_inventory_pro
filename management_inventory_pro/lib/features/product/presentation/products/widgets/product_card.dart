@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_text_styles.dart';
 import '../../../../../../core/components/app_card.dart';
@@ -20,28 +19,27 @@ class ProductCard extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            // padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
               color: AppColors.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(4.r),
+              borderRadius: BorderRadius.circular(4),
             ),
             child: product.imageUrl != null && product.imageUrl!.isNotEmpty
                 ? ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.file(
-                File(product.imageUrl!),
-                width: 40.r,
-                height: 40.r,
-                fit: BoxFit.scaleDown,
-              ),
-            )
-                :  Icon(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      File(product.imageUrl!),
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.scaleDown,
+                    ),
+                  )
+                : const Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.primary,
-              size: 40.r,
+                    size: 40,
                   ),
           ),
-          SizedBox(width: 16.w),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -49,33 +47,49 @@ class ProductCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      product.name,
-                      style: AppTextStyles.headlineSm.copyWith(
-                        fontSize: 14.sp.clamp(10, 18),
-                        fontWeight: FontWeight.bold,
+                    Flexible(
+                      child: Tooltip(
+                        message: product.name,
+                        child: Text(
+                          product.name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: AppTextStyles.headlineSm.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-
-                    SizedBox(width: 8.w),
+                    const SizedBox(width: 8),
                     StatusChip(
-                      label: product.statusText ?? 'in active',
+                      label: product.statusText ?? 'inactive',
                       type: product.status ?? StatusType.inStock,
                     ),
                   ],
                 ),
-                SizedBox(height: 4.h),
-                Text(
-                  product.sku,
-                  style: AppTextStyles.dataMono.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                const SizedBox(height: 4),
+                Tooltip(
+                  message: product.sku,
+                  child: Text(
+                    product.sku,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: AppTextStyles.dataMono.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
-                Text(
-                  'Category: ${product.category}',
-                  style: AppTextStyles.bodySm.copyWith(
-                    fontSize: 10.sp.clamp(8, 14),
+                Tooltip(
+                  message: 'Category: ${product.category}',
+                  child: Text(
+                    'Category: ${product.category}',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: AppTextStyles.bodySm.copyWith(
+                      fontSize: 10,
+                    ),
                   ),
                 ),
               ],
@@ -88,10 +102,10 @@ class ProductCard extends StatelessWidget {
                 '${product.currentStock} units',
                 style: AppTextStyles.dataMono.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: 14.sp.clamp(8, 18),
+                  fontSize: 14,
                 ),
               ),
-              SizedBox(height: 8.h),
+              const SizedBox(height: 8),
               IconButton(
                 icon: const Icon(
                   Icons.delete_outline_rounded,

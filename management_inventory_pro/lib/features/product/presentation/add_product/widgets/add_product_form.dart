@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 import 'package:management_inventory_pro/features/product/presentation/add_product/cubit/add_product_cubit.dart';
 import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/product_section_card.dart';
@@ -127,125 +126,105 @@ class _AddProductFormState extends State<AddProductForm> {
     context.read<AddProductCubit>().addProduct(product);
 
     setState(() => _isSaving = false);
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddProductCubit,AddProductState>(
-  listener: (context, state) {
-    if(state.product!=null&&!state.isSaving){
-      AppSnackBar.showSuccess(context, message:"${state.product?.id} added successfully");
-      if (context.mounted) {
-        Navigator.of(context).pop(state.product);
-      }
-    }
+    return BlocListener<AddProductCubit, AddProductState>(
+      listener: (context, state) {
+        if (state.product != null && !state.isSaving) {
+          AppSnackBar.showSuccess(context,
+              message: "${state.product?.id} added successfully");
+          if (context.mounted) {
+            Navigator.of(context).pop(state.product);
+          }
+        }
+      },
+      child: Form(
+        key: _formKey,
+        onChanged: () => setState(() {}), // keeps preview + checklist live
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final bool isNarrow = constraints.maxWidth < 750;
 
-  },
-  child: Form(
-      key: _formKey,
-      onChanged: () => setState(() {}), // keeps preview + checklist live
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ── Left: form sections ────────────────────────────────────────
-          Expanded(
-            flex: 3,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // ── Basic information ──────────────────────────────────
-                  BasicInformationSection(
-                    onCategoryChanged: (value) {
-                      setState(() {
-                        _selectedCategoryId = value;
-                      });
-                    },
-                    nameController: _nameController,
-                    skuController: _skuController,
-                    barcodeController: _barcodeController,
-                    onUnitChanged: (value) {
-                      setState(() {
-                        _selectedUnitId = value;
-                      });
-                    },
-                    onGenerateSku: () => _genSku(),
+            final Widget formSections = Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                BasicInformationSection(
+                  onCategoryChanged: (value) {
+                    setState(() {
+                      _selectedCategoryId = value;
+                    });
+                  },
+                  nameController: _nameController,
+                  skuController: _skuController,
+                  barcodeController: _barcodeController,
+                  onUnitChanged: (value) {
+                    setState(() {
+                      _selectedUnitId = value;
+                    });
+                  },
+                  onGenerateSku: _genSku,
+                ),
+                PricingSection(
+                  costPriceController: _costPriceController,
+                  sellingPriceController: _sellingPriceController,
+                  marginCard: MarginCard(
+                    sell: _sell,
+                    cost: _cost,
+                    marginPercent: _marginPercent,
                   ),
-                  // // ── Pricing ────────────────────────────────────────────
-                  PricingSection(
-                    costPriceController: _costPriceController,
-                    sellingPriceController: _sellingPriceController,
-                    marginCard: MarginCard(
-                      sell: _sell,
-                      cost: _cost,
-                      marginPercent: _marginPercent,
+                ),
+                InventorySection(
+                  initialStockController: _initialStockController,
+                  minStockController: _minStockController,
+                ),
+                ProductSectionCard(
+                  icon: Icons.photo_outlined,
+                  title: 'Product image',
+                  children: [
+                    ImagePickerWidget(
+                      onImagePicked: (url) => setState(() => _imageUrl = url),
                     ),
-                  ),
+                  ],
+                ),
+                NotesSection(noteController: _noteController),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Discard'),
+                    ),
+                    const SizedBox(width: 12),
+                    BlocBuilder<AddProductCubit, AddProductState>(
+                      builder: (context, state) {
+                        return FilledButton.icon(
+                          onPressed: () {
+                            _isSaving ? null : _submit(context);
+                          },
+                          icon: _isSaving
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Icon(Icons.save_rounded, size: 18),
+                          label: Text(_isSaving ? 'Saving…' : 'Save product'),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+              ],
+            );
 
-                  // ── Inventory ──────────────────────────────────────────
-                  InventorySection(
-                    initialStockController: _initialStockController,
-                    minStockController: _minStockController,
-                  ),
-
-                  // ── Product image ──────────────────────────────────────
-                  ProductSectionCard(
-                    icon: Icons.photo_outlined,
-                    title: 'Product image',
-                    children: [
-                      ImagePickerWidget(
-                        onImagePicked: (url) => setState(() => _imageUrl = url),
-                      ),
-                    ],
-                  ),
-
-                  // ── Notes ─────────────────────────────────────────────
-                  NotesSection(noteController: _noteController),
-                  // ── Action row ─────────────────────────────────────────
-                  SizedBox(height: 8.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Discard'),
-                      ),
-                      SizedBox(width: 12.w),
-                      BlocBuilder<AddProductCubit, AddProductState>(
-                        builder: (context, state) {
-                          return FilledButton.icon(
-                            onPressed: () {
-                              _isSaving ? null : _submit(context);
-                            },
-                            icon: _isSaving
-                                ? SizedBox(
-                                    width: 16.r,
-                                    height: 16.r,
-                                    child: const CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : const Icon(Icons.save_rounded, size: 18),
-                            label: Text(_isSaving ? 'Saving…' : 'Save product'),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 24.h),
-                ],
-              ),
-            ),
-          ),
-
-          // ── Right: live preview sidebar ────────────────────────────────
-          SizedBox(width: 10.w.clamp(6, 15)),
-          SizedBox(
-            width: 300,
-            child: ProductSummaryPanel(
+            final Widget previewPanel = ProductSummaryPanel(
               sell: _sell,
               selectedCategoryId: _selectedCategoryId,
               nameController: _nameController,
@@ -253,11 +232,40 @@ class _AddProductFormState extends State<AddProductForm> {
               stock: _stock,
               previewStatusText: _previewStatusText,
               previewStatus: _previewStatus,
-            ),
-          ),
-        ],
+            );
+
+            if (isNarrow) {
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    formSections,
+                    const SizedBox(height: 16),
+                    previewPanel,
+                  ],
+                ),
+              );
+            }
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: SingleChildScrollView(
+                    child: formSections,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 300,
+                  child: previewPanel,
+                ),
+              ],
+            );
+          },
+        ),
       ),
-    ),
-);
+    );
   }
 }

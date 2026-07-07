@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/widgets/custom_text_field.dart';
 import '../category_dropdown.dart';
@@ -16,11 +15,10 @@ class BasicInformationSection extends StatelessWidget {
     required this.onUnitChanged,
     this.onGenerateSku,
   });
+
   final ValueChanged<int?> onCategoryChanged;
   final ValueChanged<int?> onUnitChanged;
-
   final VoidCallback? onGenerateSku;
-
   final TextEditingController nameController;
   final TextEditingController skuController;
   final TextEditingController barcodeController;
@@ -36,7 +34,7 @@ class BasicInformationSection extends StatelessWidget {
           controller: nameController,
           validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
         ),
-        SizedBox(height: 12.h),
+        const SizedBox(height: 12),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -45,26 +43,26 @@ class BasicInformationSection extends StatelessWidget {
                 label: 'SKU *',
                 controller: skuController,
                 validator: (v) =>
-                v == null || v.trim().isEmpty ? 'Required' : null,
+                    v == null || v.trim().isEmpty ? 'Required' : null,
               ),
             ),
-            SizedBox(width: 8.w),
+            const SizedBox(width: 8),
             OutlinedButton.icon(
               onPressed: onGenerateSku,
-              icon: Icon(Icons.auto_fix_high, size: 16.r.clamp(10, 20)),
-              label: Text(
+              icon: const Icon(Icons.auto_fix_high, size: 16),
+              label: const Text(
                 'Auto-gen',
-                style: TextStyle(fontSize: 8.sp.clamp(6, 10)),
+                style: TextStyle(fontSize: 10),
               ),
             ),
           ],
         ),
-        SizedBox(height: 12.h),
+        const SizedBox(height: 12),
         CustomTextField(
           label: 'Barcode (EAN / UPC)',
           controller: barcodeController,
         ),
-        SizedBox(height: 12.h),
+        const SizedBox(height: 12),
         Row(
           children: [
             Expanded(
@@ -74,7 +72,7 @@ class BasicInformationSection extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(width: 12.w),
+            const SizedBox(width: 12),
             Expanded(
               child: UnitDropdownWidget(
                 onChanged: (id) {

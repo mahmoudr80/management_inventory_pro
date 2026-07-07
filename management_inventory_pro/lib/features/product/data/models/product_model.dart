@@ -1,4 +1,5 @@
 import 'package:management_inventory_pro/core/database/database_constants.dart';
+import 'package:management_inventory_pro/features/pos/data/models/pos_product.dart';
 
 import '../../../../../core/components/status_chip.dart';
 
@@ -74,6 +75,15 @@ class ProductModel {
       updatedAt: json[DatabaseConstants.updatedAtColumn],
       currentStock: json[DatabaseConstants.currentStockColumn],
     );
+  }
+
+  factory ProductModel.fromPosProduct(PosProduct product){
+    return ProductModel(sku: product.sku??'',
+        name: product.name, id: product.id, categoryId: product.categoryId??-1,
+        unitId: -1, costPrice: product.price, sellingPrice: product.price,
+        minStock: 0, currentStock: product.currentStock?.toDouble()??0,category: product.category
+    ,imageUrl: product.imageUrl,status: product.outOfStock?StatusType.outOfStock:StatusType.inStock
+    ,barcode: product.barcode,unit: product.unit);
   }
 
   Map<String, dynamic> toJson() {
