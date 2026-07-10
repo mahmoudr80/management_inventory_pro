@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -26,14 +26,14 @@ class AboutSection extends StatelessWidget {
     }
   }
 
-  Color get _licenseColor {
+  Color _licenseColor(BuildContext context) {
     switch (about.licenseStatus) {
       case LicenseStatus.active:
-        return AppColors.success;
+        return context.colors.success;
       case LicenseStatus.trial:
-        return AppColors.warning;
+        return context.colors.warning;
       case LicenseStatus.expired:
-        return AppColors.error;
+        return context.colors.error;
     }
   }
 
@@ -66,23 +66,23 @@ class AboutSection extends StatelessWidget {
               _infoItem('Version', about.version),
               _infoItem('Database Version', about.databaseVersion),
               _infoItem('Subscription', '$_planLabel Plan'),
-              _statusItem('License Status', _licenseLabel, _licenseColor),
+              _statusItem('License Status', _licenseLabel, _licenseColor(context)),
               _infoItem('Support', about.supportEmail),
             ],
           ),
           SizedBox(height: AppSpacing.lg),
-          Divider(height: 1, color: AppColors.outlineVariant),
+          Divider(height: 1, color: context.colors.outlineVariant),
           SizedBox(height: AppSpacing.md),
           InkWell(
             onTap: onOpenPrivacyPolicy,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.privacy_tip_outlined, size: AppIconSize.sm, color: AppColors.primary),
+                Icon(Icons.privacy_tip_outlined, size: AppIconSize.sm, color: context.colors.primary),
                 SizedBox(width: AppSpacing.xs),
                 Text(
                   'Privacy Policy',
-                  style: AppTextStyles.bodySm.copyWith(color: AppColors.primary, fontWeight: FontWeight.w600),
+                  style: AppTextStyles.bodySm.copyWith(color: context.colors.primary, fontWeight: FontWeight.w600),
                 ),
               ],
             ),

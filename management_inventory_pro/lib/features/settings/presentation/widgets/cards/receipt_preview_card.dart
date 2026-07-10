@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -23,12 +23,12 @@ class ReceiptPreviewCard extends StatelessWidget {
         width: previewWidth,
         padding: EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(AppRadius.sm),
-          border: Border.all(color: AppColors.outlineVariant),
+          border: Border.all(color: context.colors.outlineVariant),
           boxShadow: [
             BoxShadow(
-              color: AppColors.textPrimary.withOpacity(0.06),
+              color: context.colors.textPrimary.withOpacity(0.06),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -38,7 +38,7 @@ class ReceiptPreviewCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (receipt.showLogo) ...[
-              Icon(Icons.inventory_2_rounded, color: AppColors.primary, size: AppIconSize.lg),
+              Icon(Icons.inventory_2_rounded, color: context.colors.primary, size: AppIconSize.lg),
               SizedBox(height: AppSpacing.xs),
             ],
             Text(
@@ -51,19 +51,19 @@ class ReceiptPreviewCard extends StatelessWidget {
             SizedBox(height: AppSpacing.sm),
             _dashedDivider(),
             SizedBox(height: AppSpacing.sm),
-            _receiptLine('2x Wireless Mouse', '540.00'),
-            _receiptLine('1x USB-C Cable', '120.00'),
+            _receiptLine(context, '2x Wireless Mouse', '540.00'),
+            _receiptLine(context, '1x USB-C Cable', '120.00'),
             SizedBox(height: AppSpacing.xs),
             _dashedDivider(),
             SizedBox(height: AppSpacing.xs),
-            _receiptLine('Subtotal', '660.00'),
-            if (receipt.showTax) _receiptLine('Tax', '92.40'),
-            _receiptLine('Total', '752.40', emphasize: true),
+            _receiptLine(context, 'Subtotal', '660.00'),
+            if (receipt.showTax) _receiptLine(context, 'Tax', '92.40'),
+            _receiptLine(context, 'Total', '752.40', emphasize: true),
             if (receipt.showCashier) ...[
               SizedBox(height: AppSpacing.sm),
               Text(
                 'Cashier: Mahmoud S.',
-                style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+                style: AppTextStyles.bodySm.copyWith(color: context.colors.outline),
               ),
             ],
             SizedBox(height: AppSpacing.sm),
@@ -74,7 +74,7 @@ class ReceiptPreviewCard extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+              style: AppTextStyles.bodySm.copyWith(color: context.colors.outline),
             ),
           ],
         ),
@@ -92,7 +92,7 @@ class ReceiptPreviewCard extends StatelessWidget {
             children: List.generate(
               dashCount,
               (_) => Expanded(
-                child: Container(height: 1, color: AppColors.outlineVariant),
+                child: Container(height: 1, color: context.colors.outlineVariant),
               ),
             ).expand((w) => [w, SizedBox(width: 2)]).toList(),
           );
@@ -101,10 +101,10 @@ class ReceiptPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _receiptLine(String label, String amount, {bool emphasize = false}) {
+  Widget _receiptLine(BuildContext context, String label, String amount, {bool emphasize = false}) {
     final style = AppTextStyles.dataMono.copyWith(
       fontWeight: emphasize ? FontWeight.w700 : FontWeight.w400,
-      color: AppColors.textPrimary,
+      color: context.colors.textPrimary,
     );
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 1),

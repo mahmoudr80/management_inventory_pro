@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
+import '../../theme/settings_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -33,11 +34,11 @@ class LogoUploadCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(
-            color: AppColors.outlineVariant,
+            color: context.colors.outlineVariant,
             width: AppBorder.medium,
             style: BorderStyle.solid,
           ),
-          color: AppColors.surfaceContainerLow,
+          color: context.settingsColors.surfaceContainerLow,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -46,12 +47,12 @@ class LogoUploadCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: context.colors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(AppRadius.md),
               ),
               child: Icon(
                 logoPath == null ? Icons.upload_file_rounded : Icons.image_rounded,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: AppIconSize.lg,
               ),
             ),

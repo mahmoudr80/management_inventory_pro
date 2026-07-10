@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -146,7 +146,7 @@ class _TaxEnginePreview extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: context.colors.primary,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(
@@ -154,32 +154,32 @@ class _TaxEnginePreview extends StatelessWidget {
         children: [
           Text(
             'TAX ENGINE PREVIEW',
-            style: AppTextStyles.labelCaps.copyWith(color: AppColors.onPrimary.withOpacity(0.75)),
+            style: AppTextStyles.labelCaps.copyWith(color: context.colors.onPrimary.withOpacity(0.75)),
           ),
           SizedBox(height: AppSpacing.md),
-          _row('Base Price', '$currencySymbol ${_fmt(basePrice)}'),
-          _row('Sales Tax (${taxPercent.toStringAsFixed(2)}%)', '$currencySymbol ${_fmt(taxAmount)}'),
+          _row(context, 'Base Price', '$currencySymbol ${_fmt(basePrice)}'),
+          _row(context, 'Sales Tax (${taxPercent.toStringAsFixed(2)}%)', '$currencySymbol ${_fmt(taxAmount)}'),
           Padding(
             padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            child: Divider(height: 1, color: AppColors.onPrimary.withOpacity(0.2)),
+            child: Divider(height: 1, color: context.colors.onPrimary.withOpacity(0.2)),
           ),
-          _row('Grand Total', '$currencySymbol ${_fmt(total)}', emphasize: true),
+          _row(context, 'Grand Total', '$currencySymbol ${_fmt(total)}', emphasize: true),
           SizedBox(height: AppSpacing.md),
           Container(
             padding: EdgeInsets.all(AppSpacing.sm),
             decoration: BoxDecoration(
-              color: AppColors.onPrimary.withOpacity(0.12),
+              color: context.colors.onPrimary.withOpacity(0.12),
               borderRadius: BorderRadius.circular(AppRadius.sm),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.info_outline_rounded, size: AppIconSize.sm, color: AppColors.onPrimary),
+                Icon(Icons.info_outline_rounded, size: AppIconSize.sm, color: context.colors.onPrimary),
                 SizedBox(width: AppSpacing.xs),
                 Expanded(
                   child: Text(
                     'These calculations use the regional rounding rule: Standard Nearest-Neighbor (Half Up).',
-                    style: AppTextStyles.bodySm.copyWith(color: AppColors.onPrimary.withOpacity(0.9)),
+                    style: AppTextStyles.bodySm.copyWith(color: context.colors.onPrimary.withOpacity(0.9)),
                   ),
                 ),
               ],
@@ -190,7 +190,7 @@ class _TaxEnginePreview extends StatelessWidget {
     );
   }
 
-  Widget _row(String label, String value, {bool emphasize = false}) {
+  Widget _row(BuildContext context, String label, String value, {bool emphasize = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -199,14 +199,14 @@ class _TaxEnginePreview extends StatelessWidget {
           Text(
             label,
             style: (emphasize ? AppTextStyles.bodyMd : AppTextStyles.bodySm).copyWith(
-              color: AppColors.onPrimary.withOpacity(emphasize ? 1 : 0.85),
+              color: context.colors.onPrimary.withOpacity(emphasize ? 1 : 0.85),
               fontWeight: emphasize ? FontWeight.w700 : FontWeight.w400,
             ),
           ),
           Text(
             value,
             style: (emphasize ? AppTextStyles.headlineSm : AppTextStyles.dataMono).copyWith(
-              color: AppColors.onPrimary,
+              color: context.colors.onPrimary,
               fontWeight: FontWeight.w700,
             ),
           ),

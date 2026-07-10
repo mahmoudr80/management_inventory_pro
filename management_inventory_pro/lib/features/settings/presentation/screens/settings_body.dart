@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
+import 'package:management_inventory_pro/core/theme/theme_preference_service.dart';
+import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 
+import '../../../../core/dependency_injection/service_locator.dart';
+import '../theme/settings_theme_extension.dart';
 import '../cubit/settings_cubit.dart';
 import '../cubit/settings_state.dart';
 import '../widgets/buttons/reset_button.dart';
@@ -29,9 +33,22 @@ class SettingsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SettingsCubit(),
-      child: const _SettingsView(),
+    // Layer SettingsThemeColors on top of the app's active theme
+    // (light/dark/system) without core ever knowing this feature exists.
+    final baseTheme = Theme.of(context);
+    final themeWithSettingsColors = baseTheme.copyWith(
+      extensions: {
+        ...baseTheme.extensions.values,
+        settingsColorsFor(baseTheme.brightness),
+      },
+    );
+
+    return Theme(
+      data: themeWithSettingsColors,
+      child: BlocProvider(
+        create: (_) => SettingsCubit(themePreferenceService: getIt<ThemePreferenceService>()),
+        child: const _SettingsView(),
+      ),
     );
   }
 }
@@ -48,15 +65,10 @@ class _SettingsView extends StatelessWidget {
       listener: (context, state) {
         final message = state.successMessage ?? state.errorMessage;
         if (message == null) return;
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Text(message),
-              backgroundColor: state.errorMessage != null ? AppColors.error : AppColors.success,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
+        state.errorMessage != null ?
+        AppSnackBar.showError(context, message: message):
+        AppSnackBar.showSuccess(context, message: message);
+
         context.read<SettingsCubit>().dismissMessages();
       },
       child: BlocBuilder<SettingsCubit, SettingsState>(
@@ -65,7 +77,7 @@ class _SettingsView extends StatelessWidget {
           final settings = state.settings;
 
           return Container(
-            color: AppColors.background,
+            color: context.colors.background,
             child: SingleChildScrollView(
               padding: EdgeInsets.all(AppSpacing.pagePadding),
               child: ConstrainedBox(

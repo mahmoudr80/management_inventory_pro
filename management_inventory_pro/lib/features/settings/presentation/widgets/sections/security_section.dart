@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
+import '../../theme/settings_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import 'package:management_inventory_pro/core/widgets/secondary_button.dart';
@@ -34,17 +35,17 @@ class SecuritySection extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: context.settingsColors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             child: Row(
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: context.colors.primary,
                   child: Text(
                     security.currentUser.isNotEmpty ? security.currentUser[0] : '?',
-                    style: AppTextStyles.bodyLg.copyWith(color: AppColors.onPrimary, fontWeight: FontWeight.w700),
+                    style: AppTextStyles.bodyLg.copyWith(color: context.colors.onPrimary, fontWeight: FontWeight.w700),
                   ),
                 ),
                 SizedBox(width: AppSpacing.md),

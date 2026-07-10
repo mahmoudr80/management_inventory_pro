@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -36,33 +36,33 @@ class SettingsDropdown<T> extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.bodyMd.copyWith(
             fontWeight: FontWeight.w500,
-            color: AppColors.textPrimary,
+            color: context.colors.textPrimary,
           ),
         ),
         SizedBox(height: AppSpacing.sm),
         DropdownButtonFormField<T>(
           value: value,
-          icon: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.outline),
-          style: AppTextStyles.bodyMd.copyWith(color: AppColors.textPrimary),
-          dropdownColor: AppColors.surface,
+          icon: Icon(Icons.keyboard_arrow_down_rounded, color: context.colors.outline),
+          style: AppTextStyles.bodyMd.copyWith(color: context.colors.textPrimary),
+          dropdownColor: context.colors.surface,
           decoration: InputDecoration(
             filled: true,
-            fillColor: AppColors.surface,
+            fillColor: context.colors.surface,
             contentPadding: EdgeInsets.symmetric(
               horizontal: AppSpacing.md,
               vertical: AppSpacing.sm + AppSpacing.xxs,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.md),
-              borderSide: const BorderSide(color: AppColors.outlineVariant),
+              borderSide: BorderSide(color: context.colors.outlineVariant),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.md),
-              borderSide: const BorderSide(color: AppColors.outlineVariant),
+              borderSide: BorderSide(color: context.colors.outlineVariant),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.md),
-              borderSide: const BorderSide(color: AppColors.primary, width: AppBorder.medium),
+              borderSide: BorderSide(color: context.colors.primary, width: AppBorder.medium),
             ),
           ),
           items: options
