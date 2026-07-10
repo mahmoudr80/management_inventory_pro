@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_decoration.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
@@ -36,10 +36,10 @@ class InformationCard extends StatelessWidget {
             width: AppIconSize.xl,
             height: AppIconSize.xl,
             decoration: BoxDecoration(
-              color: (iconColor ?? AppColors.primary).withOpacity(0.1),
+              color: (iconColor ?? context.colors.primary).withOpacity(0.1),
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
-            child: Icon(icon, size: AppIconSize.md, color: iconColor ?? AppColors.primary),
+            child: Icon(icon, size: AppIconSize.md, color: iconColor ?? context.colors.primary),
           ),
           SizedBox(height: AppSpacing.md),
           Text(label, style: AppTextStyles.labelCaps),

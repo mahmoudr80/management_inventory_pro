@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -31,7 +31,7 @@ class BackupInformationCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: context.colors.primary,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(
@@ -39,41 +39,41 @@ class BackupInformationCard extends StatelessWidget {
         children: [
           Text(
             'DATABASE HEALTH',
-            style: AppTextStyles.labelCaps.copyWith(color: AppColors.onPrimary.withOpacity(0.75)),
+            style: AppTextStyles.labelCaps.copyWith(color: context.colors.onPrimary.withOpacity(0.75)),
           ),
           SizedBox(height: AppSpacing.md),
-          _row('Database Size', '${databaseSizeMb.toStringAsFixed(1)} MB'),
-          _row('Last Backup', _lastBackupLabel),
+          _row(context, 'Database Size', '${databaseSizeMb.toStringAsFixed(1)} MB'),
+          _row(context, 'Last Backup', _lastBackupLabel),
           SizedBox(height: AppSpacing.md),
           ClipRRect(
             borderRadius: BorderRadius.circular(AppRadius.full),
             child: LinearProgressIndicator(
               value: (storageUsagePercent / 100).clamp(0, 1),
               minHeight: 6,
-              backgroundColor: AppColors.onPrimary.withOpacity(0.2),
-              valueColor: AlwaysStoppedAnimation(AppColors.onPrimary),
+              backgroundColor: context.colors.onPrimary.withOpacity(0.2),
+              valueColor: AlwaysStoppedAnimation(context.colors.onPrimary),
             ),
           ),
           SizedBox(height: AppSpacing.xs),
           Text(
             'Storage usage: ${storageUsagePercent.toStringAsFixed(0)}%',
-            style: AppTextStyles.bodySm.copyWith(color: AppColors.onPrimary.withOpacity(0.85)),
+            style: AppTextStyles.bodySm.copyWith(color: context.colors.onPrimary.withOpacity(0.85)),
           ),
         ],
       ),
     );
   }
 
-  Widget _row(String label, String value) {
+  Widget _row(BuildContext context, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: AppTextStyles.bodyMd.copyWith(color: AppColors.onPrimary.withOpacity(0.85))),
+          Text(label, style: AppTextStyles.bodyMd.copyWith(color: context.colors.onPrimary.withOpacity(0.85))),
           Text(
             value,
-            style: AppTextStyles.bodyMd.copyWith(color: AppColors.onPrimary, fontWeight: FontWeight.w700),
+            style: AppTextStyles.bodyMd.copyWith(color: context.colors.onPrimary, fontWeight: FontWeight.w700),
           ),
         ],
       ),

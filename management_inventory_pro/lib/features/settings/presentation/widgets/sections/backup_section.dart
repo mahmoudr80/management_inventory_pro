@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/widgets/secondary_button.dart';
 import '../../../models/settings_model.dart';
@@ -32,7 +32,7 @@ class BackupSection extends StatelessWidget {
     return SettingsCard(
       title: 'Backup & Restore',
       description: 'Data redundancy',
-      accentColor: AppColors.error,
+      accentColor: context.colors.error,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isNarrow = constraints.maxWidth < 720;

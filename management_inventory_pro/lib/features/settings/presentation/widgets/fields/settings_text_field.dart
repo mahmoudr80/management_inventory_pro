@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_decoration.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
@@ -56,9 +56,7 @@ class _SettingsTextFieldState extends State<SettingsTextField> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.bodyMd.copyWith(
-            fontWeight: FontWeight.w500,
-            color: AppColors.textPrimary,
-          ),
+            fontWeight: FontWeight.w500,),
         ),
         SizedBox(height: AppSpacing.sm),
         TextField(

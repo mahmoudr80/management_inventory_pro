@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
+import '../../theme/settings_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import '../../../models/settings_model.dart';
 import '../cards/settings_card.dart';
@@ -31,9 +32,9 @@ class InventorySettingsSection extends StatelessWidget {
           final thresholds = Container(
             padding: EdgeInsets.all(AppSpacing.lg),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLowest,
+              color: context.settingsColors.surfaceContainerLowest,
               borderRadius: BorderRadius.circular(AppRadius.md),
-              border: Border.all(color: AppColors.outlineVariant),
+              border: Border.all(color: context.colors.outlineVariant),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +52,7 @@ class InventorySettingsSection extends StatelessWidget {
                   max: 100,
                   divisions: 100,
                   suffix: 'Units',
-                  badgeColor: AppColors.primary,
+                  badgeColor: context.colors.primary,
                   onChanged: (v) => onChanged(inventory.copyWith(lowStockThreshold: v.round())),
                 ),
                 SizedBox(height: AppSpacing.lg),
@@ -63,8 +64,8 @@ class InventorySettingsSection extends StatelessWidget {
                   max: 50,
                   divisions: 50,
                   suffix: 'Units',
-                  badgeColor: AppColors.error,
-                  badgeBackground: AppColors.errorContainer,
+                  badgeColor: context.colors.error,
+                  badgeBackground: context.settingsColors.errorContainer,
                   onChanged: (v) => onChanged(inventory.copyWith(criticalStockThreshold: v.round())),
                 ),
               ],

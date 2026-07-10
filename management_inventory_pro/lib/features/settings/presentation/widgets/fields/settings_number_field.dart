@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
+import '../../theme/settings_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_decoration.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
@@ -58,8 +59,8 @@ class _SettingsNumberFieldState extends State<SettingsNumberField> {
   @override
   Widget build(BuildContext context) {
     if (widget.asSlider) {
-      final badgeBg = widget.badgeBackground ?? AppColors.primaryContainer.withOpacity(0.12);
-      final badgeFg = widget.badgeColor ?? AppColors.primary;
+      final badgeBg = widget.badgeBackground ?? context.settingsColors.primaryContainer.withOpacity(0.12);
+      final badgeFg = widget.badgeColor ?? context.colors.primary;
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +74,7 @@ class _SettingsNumberFieldState extends State<SettingsNumberField> {
                   data: SliderTheme.of(context).copyWith(
                     activeTrackColor: badgeFg,
                     thumbColor: badgeFg,
-                    inactiveTrackColor: AppColors.outlineVariant,
+                    inactiveTrackColor: context.colors.outlineVariant,
                     overlayColor: badgeFg.withOpacity(0.12),
                   ),
                   child: Slider(
@@ -110,7 +111,7 @@ class _SettingsNumberFieldState extends State<SettingsNumberField> {
           widget.label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.bodyMd.copyWith(fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+          style: AppTextStyles.bodyMd.copyWith(fontWeight: FontWeight.w500, color: context.colors.textPrimary),
         ),
         SizedBox(height: AppSpacing.sm),
         TextField(
@@ -123,7 +124,7 @@ class _SettingsNumberFieldState extends State<SettingsNumberField> {
           },
           decoration: AppDecorations.inputField().copyWith(
             suffixText: widget.suffix,
-            suffixStyle: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+            suffixStyle: AppTextStyles.bodySm.copyWith(color: context.colors.outline),
           ),
         ),
       ],

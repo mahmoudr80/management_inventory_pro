@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/theme_preference_service.dart';
 import '../../mock/mock_settings.dart';
 import '../../models/settings_model.dart';
 import 'settings_state.dart';
@@ -12,16 +15,45 @@ import 'settings_state.dart';
 /// keeps the file from growing into a god-class as new fields get added
 /// to a section.
 ///
-/// Persistence is intentionally out of scope: [save] simulates a write
-/// and swaps `_lastSaved` to the current draft. A repository can later be
-/// injected and called from [save] / the constructor without touching any
-/// UI code.
+/// Persistence is intentionally out of scope for most sections: [save]
+/// simulates a write and swaps `_lastSaved` to the current draft. A
+/// repository can later be injected and called from [save] / the
+/// constructor without touching any UI code.
+///
+/// The one exception is [AppearanceSettings.themeMode]: it's persisted
+/// immediately via [ThemePreferenceService] on every change (not gated
+/// behind [save]) so the app can switch light/dark/system live and the
+/// choice survives a restart even if the rest of the draft is discarded.
+/// If that immediate-persist behavior isn't what you want (e.g. you'd
+/// rather theme mode only stick after hitting Save like everything
+/// else), flag it and this can move into [save] instead.
 class SettingsCubit extends Cubit<SettingsState> {
-  SettingsCubit() : super(SettingsState(settings: MockSettings.build())) {
+  SettingsCubit({required ThemePreferenceService themePreferenceService})
+      : _themePreferenceService = themePreferenceService,
+        super(SettingsState(settings: MockSettings.build())) {
     _lastSaved = state.settings;
+    _loadPersistedThemeMode();
   }
 
+  final ThemePreferenceService _themePreferenceService;
+
   late SettingsModel _lastSaved;
+
+  /// Restores the previously-saved theme mode (if any) on startup.
+  /// This is a restore, not a user edit, so it does NOT set
+  /// `hasUnsavedChanges` and updates `_lastSaved` too, otherwise the app
+  /// would open with a spurious "unsaved changes" flag and a stray
+  /// Discard would revert the mode the user already chose last session.
+  Future<void> _loadPersistedThemeMode() async {
+    final persistedMode = await _themePreferenceService.getThemeMode();
+    final updatedAppearance =
+    state.settings.appearance.copyWith(themeMode: persistedMode);
+    final updatedSettings =
+    state.settings.copyWith(appearance: updatedAppearance);
+
+    emit(state.copyWith(settings: updatedSettings));
+    _lastSaved = updatedSettings;
+  }
 
   void _apply(SettingsModel updated) {
     emit(
@@ -59,8 +91,10 @@ class SettingsCubit extends Cubit<SettingsState> {
   void updateNotifications(NotificationSettings notifications) =>
       _apply(state.settings.copyWith(notifications: notifications));
 
-  void updateAppearance(AppearanceSettings appearance) =>
-      _apply(state.settings.copyWith(appearance: appearance));
+  void updateAppearance(AppearanceSettings appearance) {
+    _apply(state.settings.copyWith(appearance: appearance));
+    unawaited(_themePreferenceService.saveThemeMode(appearance.themeMode));
+  }
 
   // ── Lifecycle actions ────────────────────────────────────────────────
 
@@ -110,6 +144,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         clearMessages: true,
       ),
     );
+    // Note: since theme mode is persisted immediately on every change
+    // (see updateAppearance), a Discard after switching modes will
+    // revert the in-memory draft here but NOT re-persist the old mode
+    // to disk. If you want Discard to also roll back a persisted theme
+    // change, say so and I'll adjust this to re-save
+    // _lastSaved.appearance.themeMode here too.
   }
 
   void dismissMessages() => emit(state.copyWith(clearMessages: true));

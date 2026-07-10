@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
+import '../../theme/settings_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import '../../../models/settings_model.dart';
@@ -100,19 +101,21 @@ class _ThemeSwatch extends StatelessWidget {
         width: 100,
         padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primaryContainer.withOpacity(0.12) : AppColors.surfaceContainerLowest,
+          color: selected
+              ? context.settingsColors.primaryContainer.withOpacity(0.12)
+              : context.settingsColors.surfaceContainerLowest,
           borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: selected ? AppColors.primary : AppColors.outlineVariant),
+          border: Border.all(color: selected ? context.colors.primary : context.colors.outlineVariant),
         ),
         child: Column(
           children: [
-            Icon(_icon, color: selected ? AppColors.primary : AppColors.onSurfaceVariant),
+            Icon(_icon, color: selected ? context.colors.primary : context.settingsColors.onSurfaceVariant),
             SizedBox(height: AppSpacing.xs),
             Text(
               _label,
               style: AppTextStyles.bodySm.copyWith(
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                color: selected ? AppColors.primary : AppColors.onSurfaceVariant,
+                color: selected ? context.colors.primary : context.settingsColors.onSurfaceVariant,
               ),
             ),
           ],
