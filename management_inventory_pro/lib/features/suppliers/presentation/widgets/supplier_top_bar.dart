@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
 class SupplierTopBar extends StatelessWidget {
@@ -10,7 +10,7 @@ class SupplierTopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      color: AppColors.surfaceContainerHighest,
+      color: context.colors.surfaceContainerHighest,
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         children: [
@@ -18,7 +18,7 @@ class SupplierTopBar extends StatelessWidget {
           Text(
             'RetailFlow',
             style: AppTextStyles.headlineSm.copyWith(
-              color: AppColors.primary,
+              color: context.colors.primary,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -26,17 +26,17 @@ class SupplierTopBar extends StatelessWidget {
           Text(
             '/ Suppliers',
             style: AppTextStyles.headlineSm.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: context.colors.onSurfaceVariant,
               fontWeight: FontWeight.w400,
             ),
           ),
           const Spacer(),
           // Search icon
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.search,
               size: 20,
-              color: AppColors.onSurfaceVariant,
+              color: context.colors.onSurfaceVariant,
             ),
             onPressed: () {},
           ),
@@ -45,10 +45,10 @@ class SupplierTopBar extends StatelessWidget {
           Stack(
             children: [
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.notifications_outlined,
                   size: 20,
-                  color: AppColors.onSurfaceVariant,
+                  color: context.colors.onSurfaceVariant,
                 ),
                 onPressed: () {},
               ),
@@ -58,8 +58,8 @@ class SupplierTopBar extends StatelessWidget {
                 child: Container(
                   width: 8,
                   height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.error,
+                  decoration: BoxDecoration(
+                    color: context.colors.error,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -70,11 +70,11 @@ class SupplierTopBar extends StatelessWidget {
           // Avatar
           CircleAvatar(
             radius: 17,
-            backgroundColor: AppColors.primaryFixedDim,
+            backgroundColor: context.colors.primaryFixedDim,
             child: Text(
               'A',
               style: AppTextStyles.labelCaps.copyWith(
-                color: AppColors.primary,
+                color: context.colors.primary,
                 fontSize: 12,
               ),
             ),

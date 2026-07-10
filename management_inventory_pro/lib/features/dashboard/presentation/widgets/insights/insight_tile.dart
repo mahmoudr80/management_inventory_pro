@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme_extension.dart';
+import '../../theme/dashboard_theme_extension.dart';
 import '../../../data/models/business_insight.dart';
 
 class InsightTile extends StatelessWidget {
@@ -8,22 +9,24 @@ class InsightTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final coreColors = context.colors;
+    final dashColors = context.dashboardColors;
     final (icon, iconColor, iconBg) = switch (insight.severity) {
       InsightSeverity.info => (
-          Icons.info_outline,
-          AppColors.primary,
-          AppColors.primaryFixed,
-        ),
+      Icons.info_outline,
+      coreColors.primary,
+      dashColors.primaryContainer,
+      ),
       InsightSeverity.warning => (
-          Icons.warning_amber_rounded,
-          AppColors.onWarningContainer,
-          AppColors.warningContainer,
-        ),
+      Icons.warning_amber_rounded,
+      dashColors.onWarningContainer,
+      dashColors.warningContainer,
+      ),
       InsightSeverity.alert => (
-          Icons.error_outline_rounded,
-          AppColors.error,
-          AppColors.errorContainer,
-        ),
+      Icons.error_outline_rounded,
+      coreColors.error,
+      dashColors.errorContainer,
+      ),
     };
     final theme = Theme.of(context);
 

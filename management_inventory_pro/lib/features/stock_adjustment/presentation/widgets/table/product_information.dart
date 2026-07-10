@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
@@ -13,9 +13,9 @@ class ProductInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(
+        Icon(
           Icons.inventory_2_outlined,
-          color: AppColors.primary,
+          color: context.colors.primary,
           size: AppIconSize.xl,
         ),
         const SizedBox(width: AppSpacing.sm),
@@ -31,7 +31,7 @@ class ProductInformation extends StatelessWidget {
                   item.productName,
                   style: AppTextStyles.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: context.colors.textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -44,7 +44,7 @@ class ProductInformation extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.dataMono.copyWith(
                     fontSize: 11,
-                    color: AppColors.outline,
+                    color: context.colors.outline,
                   ),
                 ),
               ),

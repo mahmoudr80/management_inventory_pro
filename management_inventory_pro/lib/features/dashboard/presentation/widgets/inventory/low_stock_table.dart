@@ -5,7 +5,7 @@ import '../../../data/models/low_stock_product.dart';
 import '../common/empty_state.dart';
 import 'low_stock_row.dart';
 
-class LowStockTable extends StatelessWidget {
+class LowStockTable extends StatefulWidget {
   const LowStockTable({
     super.key,
     required this.products,
@@ -16,8 +16,21 @@ class LowStockTable extends StatelessWidget {
   final void Function(LowStockProductRef) onRestock;
 
   @override
+  State<LowStockTable> createState() => _LowStockTableState();
+}
+
+class _LowStockTableState extends State<LowStockTable> {
+  final ScrollController _horizontalController = ScrollController();
+
+  @override
+  void dispose() {
+    _horizontalController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (products.isEmpty) {
+    if (widget.products.isEmpty) {
       return const EmptyState(
         message: 'No low stock products. Great job!',
         icon: Icons.check_circle_outline_rounded,
@@ -28,22 +41,28 @@ class LowStockTable extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double minTableWidth = 650.0;
-        return Scrollbar(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: constraints.maxWidth,
-              ),
-              child: SizedBox(
-                width: math.max(minTableWidth, constraints.maxWidth),
-                child: Column(
-                  children: [
-                    _TableHeader(theme: theme),
-                    ...products.map(
-                      (p) => LowStockRow(product: p, onRestock: () => onRestock(p)),
-                    ),
-                  ],
+        return ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: Scrollbar(
+            controller: _horizontalController,
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              controller: _horizontalController,
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: constraints.maxWidth,
+                ),
+                child: SizedBox(
+                  width: math.max(minTableWidth, constraints.maxWidth),
+                  child: Column(
+                    children: [
+                      _TableHeader(theme: theme),
+                      ...widget.products.map(
+                        (p) => LowStockRow(product: p, onRestock: () => widget.onRestock(p)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

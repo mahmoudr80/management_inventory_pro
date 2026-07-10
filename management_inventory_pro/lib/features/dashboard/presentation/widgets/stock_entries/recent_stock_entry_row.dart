@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme_extension.dart';
+import '../../theme/dashboard_theme_extension.dart';
 import '../../../data/models/recent_stock_entry.dart';
 
 class RecentStockEntryRow extends StatelessWidget {
@@ -30,18 +31,18 @@ class RecentStockEntryRow extends StatelessWidget {
           children: [
             Expanded(
                 child: _PaddedCell(
-              child: Tooltip(
-                message: entry.receiptId,
-                child: Text(
-                  overflow: TextOverflow.ellipsis,
-                  entry.receiptId,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontFamily: 'JetBrains Mono',
-                    color: theme.colorScheme.onSurface,
+                  child: Tooltip(
+                    message: entry.receiptId,
+                    child: Text(
+                      overflow: TextOverflow.ellipsis,
+                      entry.receiptId,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontFamily: 'JetBrains Mono',
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )),
+                )),
             Expanded(
               child: _PaddedCell(
                 child: Tooltip(
@@ -59,19 +60,19 @@ class RecentStockEntryRow extends StatelessWidget {
             ),
             Expanded(
                 child: _PaddedCell(
-              child: Tooltip(
-                message: '${egp.format(entry.totalCost)} EGP',
-                child: Text(
-                  overflow: TextOverflow.ellipsis,
-                  '${egp.format(entry.totalCost)} EGP',
-                  textAlign: TextAlign.right,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurface,
+                  child: Tooltip(
+                    message: '${egp.format(entry.totalCost)} EGP',
+                    child: Text(
+                      overflow: TextOverflow.ellipsis,
+                      '${egp.format(entry.totalCost)} EGP',
+                      textAlign: TextAlign.right,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )),
+                )),
             Expanded(
               child: Center(child: _StockEntryStatusChip(status: entry.status)),
             ),
@@ -101,15 +102,17 @@ class _StockEntryStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final coreColors = context.colors;
+    final dashColors = context.dashboardColors;
     final (label, bg, fg) = switch (status) {
       StockEntryStatus.received =>
-        ('RECEIVED', AppColors.successContainer, AppColors.success),
+      ('RECEIVED', dashColors.successContainer, coreColors.success),
       StockEntryStatus.inTransit =>
-        ('IN TRANSIT', AppColors.secondaryContainer, AppColors.primary),
+      ('IN TRANSIT', dashColors.secondaryContainer, coreColors.primary),
       StockEntryStatus.pending =>
-        ('PENDING', AppColors.warningContainer, AppColors.onWarningContainer),
+      ('PENDING', dashColors.warningContainer, dashColors.onWarningContainer),
       StockEntryStatus.cancelled =>
-        ('CANCELLED', AppColors.errorContainer, AppColors.error),
+      ('CANCELLED', dashColors.errorContainer, coreColors.error),
     };
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),

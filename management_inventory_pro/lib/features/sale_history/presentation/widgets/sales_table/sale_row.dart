@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import 'package:intl/intl.dart';
@@ -30,9 +30,9 @@ class _SaleRowState extends State<SaleRow> {
     final sale = widget.sale;
     Color bgColor = Colors.transparent;
     if (widget.isSelected) {
-      bgColor = AppColors.surfaceContainer;
+      bgColor = context.colors.surfaceContainer;
     } else if (_isHovered) {
-      bgColor = AppColors.surfaceContainerLow;
+      bgColor = context.colors.surfaceContainerLow;
     }
 
     return MouseRegion(
@@ -45,7 +45,6 @@ class _SaleRowState extends State<SaleRow> {
           color: bgColor,
           child: Row(
             children: [
-              // Sale ID
               Expanded(
                 flex: 2,
                 child: Tooltip(
@@ -55,15 +54,14 @@ class _SaleRowState extends State<SaleRow> {
                     style: AppTextStyles.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: widget.isSelected
-                          ? AppColors.primary
-                          : AppColors.textPrimary,
+                          ? context.colors.primary
+                          : context.colors.textPrimary,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
 
-              // Date & Time
               Expanded(
                 flex: 3,
                 child: Tooltip(
@@ -71,36 +69,33 @@ class _SaleRowState extends State<SaleRow> {
                   child: Text(
                     DateFormat('MMM d, yyyy hh:mm a').format(sale.createdAt),
                     style: AppTextStyles.bodySm.copyWith(
-                      color: AppColors.textSecondary,
+                      color: context.colors.textSecondary,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
 
-              // Items Count
               Expanded(
                 flex: 1,
                 child: Text(
                   sale.totalItems.toString(),
                   style: AppTextStyles.bodySm.copyWith(
-                    color: AppColors.textPrimary,
+                    color: context.colors.textPrimary,
                   ),
                 ),
               ),
 
-              // Quantity
               Expanded(
                 flex: 1,
                 child: Text(
                   sale.totalQuantity.toString(),
                   style: AppTextStyles.bodySm.copyWith(
-                    color: AppColors.textPrimary,
+                    color: context.colors.textPrimary,
                   ),
                 ),
               ),
 
-              // Total Amount
               Expanded(
                 flex: 2,
                 child: Tooltip(
@@ -109,14 +104,13 @@ class _SaleRowState extends State<SaleRow> {
                     '\$${sale.totalAmount.toStringAsFixed(2)}',
                     style: AppTextStyles.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: context.colors.textPrimary,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
 
-              // Payment Method Badge
               Expanded(
                 flex: 2,
                 child: Align(
@@ -125,7 +119,6 @@ class _SaleRowState extends State<SaleRow> {
                 ),
               ),
 
-              // Cashier
               Expanded(
                 flex: 2,
                 child: Tooltip(
@@ -133,20 +126,19 @@ class _SaleRowState extends State<SaleRow> {
                   child: Text(
                     sale.cashierName,
                     style: AppTextStyles.bodySm.copyWith(
-                      color: AppColors.textSecondary,
+                      color: context.colors.textSecondary,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
 
-              // Chevron
               Icon(
                 Icons.chevron_right_rounded,
                 size: AppSpacing.lg,
                 color: widget.isSelected
-                    ? AppColors.primary
-                    : AppColors.border,
+                    ? context.colors.primary
+                    : context.colors.border,
               ),
             ],
           ),
@@ -163,9 +155,9 @@ class _PaymentBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, bg, fg) = switch (method) {
-      PaymentMethod.cash => ('Cash', AppColors.statusHealthyBg, AppColors.statusHealthyFg),
-      PaymentMethod.card => ('Card', AppColors.infoContainer, AppColors.info),
-      PaymentMethod.mixed => ('Mixed', AppColors.statusPendingBg, AppColors.statusPendingFg),
+      PaymentMethod.cash => ('Cash', context.colors.statusHealthyBg, context.colors.statusHealthyFg),
+      PaymentMethod.card => ('Card', context.colors.infoContainer, context.colors.info),
+      PaymentMethod.mixed => ('Mixed', context.colors.statusPendingBg, context.colors.statusPendingFg),
     };
 
     return Container(

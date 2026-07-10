@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'status_chip.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/adjustment_model.dart';
 import 'reason_tag.dart';
 
-/// A single row of the adjustment history table. Stateless — selection
-/// state is driven entirely by [isSelected] from the parent via cubit
-/// state, avoiding any local UI state.
 class AdjustmentRow extends StatelessWidget {
   const AdjustmentRow({
     super.key,
@@ -32,19 +29,15 @@ class AdjustmentRow extends StatelessWidget {
     final isQtyNegative = qtyChange < 0;
     final isQtyZero = qtyChange == 0;
     final qtyColor = isQtyZero
-        ? AppColors.onSurfaceVariant
-        : (isQtyNegative ? AppColors.error : AppColors.primary);
+        ? context.colors.onSurfaceVariant
+        : (isQtyNegative ? context.colors.error : context.colors.primary);
 
-    // Value's sign follows valueImpact itself, not qtyChange — the two can
-    // diverge (e.g. a write-off with a positive qty but negative value),
-    // so deriving one sign from the other field was showing the wrong
-    // +/- on the Value column.
     final valueImpact = adjustment.valueImpact;
     final isValueNegative = valueImpact < 0;
     final isValueZero = valueImpact == 0;
     final valueColor = isValueZero
-        ? AppColors.onSurfaceVariant
-        : (isValueNegative ? AppColors.error : AppColors.primary);
+        ? context.colors.onSurfaceVariant
+        : (isValueNegative ? context.colors.error : context.colors.primary);
     final valueSign = isValueNegative ? '-' : (isValueZero ? '' : '+');
 
     return InkWell(
@@ -52,12 +45,12 @@ class AdjustmentRow extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primaryContainer.withOpacity(0.08)
+              ? context.colors.primaryContainer.withOpacity(0.08)
               : Colors.transparent,
           border: Border(
-            bottom: BorderSide(color: AppColors.outlineVariant, width: AppBorder.thin),
+            bottom: BorderSide(color: context.colors.outlineVariant, width: AppBorder.thin),
             left: BorderSide(
-              color: isSelected ? AppColors.primary : Colors.transparent,
+              color: isSelected ? context.colors.primary : Colors.transparent,
               width: AppBorder.thin,
             ),
           ),
@@ -73,7 +66,7 @@ class AdjustmentRow extends StatelessWidget {
                   adjustment.id,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.dataMono.copyWith(
-                    color: isSelected ? AppColors.primary : AppColors.onSurface,
+                    color: isSelected ? context.colors.primary : context.colors.onSurface,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -87,7 +80,7 @@ class AdjustmentRow extends StatelessWidget {
                   _dateFormat.format(adjustment.dateTime),
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.bodySm.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: context.colors.onSurfaceVariant,
                   ),
                 ),
               ),

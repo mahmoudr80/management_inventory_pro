@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import 'package:management_inventory_pro/core/widgets/custom_text_field.dart';
@@ -15,16 +15,6 @@ import 'filter_dropdown.dart';
 
 typedef _EmployeeFilterViewModel = ({String? employee, List<AdjustmentModel> all});
 
-/// Search input plus Date Range / Reason / Status / Created By dropdowns,
-/// and a Reset action. Filtering is fully wired (search + the four
-/// dropdowns) against the in-memory mock dataset.
-///
-/// The search field owns a [TextEditingController] so its value and the
-/// cubit's `searchText` stay in sync in both directions: typing pushes to
-/// the cubit via `onChanged`, and external changes (e.g. Reset) push back
-/// into the field via a `BlocListener`. Previously the field's live value
-/// was fed into its `label` slot instead of its actual text, so the typed
-/// text floated as a label and Reset didn't visibly clear the box.
 class FiltersSection extends StatefulWidget {
   const FiltersSection({super.key});
 
@@ -55,11 +45,8 @@ class _FiltersSectionState extends State<FiltersSection> {
 
     return BlocListener<StockAdjustmentHistoryCubit, StockAdjustmentHistoryState>(
       listenWhen: (previous, current) =>
-          previous.searchText != current.searchText,
+      previous.searchText != current.searchText,
       listener: (context, state) {
-        // Only overwrite when the change didn't originate from this field's
-        // own onChanged (i.e. Reset or any other external state change), so
-        // we never fight the user's cursor while they're typing.
         if (_searchController.text != state.searchText) {
           _searchController.value = _searchController.value.copyWith(
             text: state.searchText,
@@ -75,8 +62,8 @@ class _FiltersSectionState extends State<FiltersSection> {
           bottom: AppSpacing.xs,
         ),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
-          border: Border.all(color: AppColors.outlineVariant),
+          color: context.colors.surfaceContainerLow,
+          border: Border.all(color: context.colors.outlineVariant),
           borderRadius: BorderRadius.circular(AppRadius.xl),
         ),
         child: Wrap(
@@ -95,7 +82,7 @@ class _FiltersSectionState extends State<FiltersSection> {
                 hint: 'Search by ID, Product, or SKU...',
                 onChanged: cubit.updateSearchText,
                 hintStyle: AppTextStyles.bodySm.copyWith(
-                  color: AppColors.onSurfaceVariant,
+                  color: context.colors.onSurfaceVariant,
                 ),
                 prefixIcon: const Icon(Icons.search_outlined, size: AppIconSize.lg),
               ),
@@ -139,7 +126,7 @@ class _FiltersSectionState extends State<FiltersSection> {
             BlocSelector<StockAdjustmentHistoryCubit, StockAdjustmentHistoryState,
                 _EmployeeFilterViewModel>(
               selector: (state) =>
-                  (employee: state.selectedEmployee, all: state.adjustments),
+              (employee: state.selectedEmployee, all: state.adjustments),
               builder: (context, data) {
                 final employees = data.all.map((a) => a.createdBy).toSet().toList()
                   ..sort();
@@ -159,7 +146,7 @@ class _FiltersSectionState extends State<FiltersSection> {
                 child: Text(
                   'Reset',
                   style: AppTextStyles.bodySm.copyWith(
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

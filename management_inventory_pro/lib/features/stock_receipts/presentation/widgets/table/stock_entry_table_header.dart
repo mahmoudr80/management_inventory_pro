@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
 class TableHeader extends StatelessWidget {
@@ -10,7 +10,7 @@ class TableHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      color: AppColors.surfaceContainerLow,
+      color: context.colors.surfaceContainerLow,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
@@ -34,11 +34,11 @@ class _Th extends StatelessWidget {
   final bool mono;
 
   const _Th(
-    this.label, {
-    this.flex = 1,
-    this.align = TextAlign.left,
-    this.mono = false,
-  });
+      this.label, {
+        this.flex = 1,
+        this.align = TextAlign.left,
+        this.mono = false,
+      });
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/features/sale_history/presentation/widgets/sales_filters_bar.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_decoration.dart';
 import '../../../../../core/theme/app_dimens.dart';
 
@@ -22,20 +22,12 @@ class SaleEmptyBody extends StatelessWidget {
           children: [
             SalesFiltersBar(filters: filters),
             SizedBox(height: AppSpacing.lg),
-            // NOTE: this was `Expanded(...)`. Expanded needs a bounded height
-            // from an ancestor, but SingleChildScrollView gives unbounded
-            // height along its scroll axis — that combination threw a
-            // RenderFlex "unbounded height constraints" assertion the instant
-            // filteredSales became empty (i.e. the moment a filter matched
-            // nothing), which is what looked like the app "stopping".
-            // A plain Container sized by its child fixes it; ConstrainedBox
-            // keeps the empty-state card from looking cramped on tall windows.
             ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 320),
               child: Container(
                 decoration: AppDecorations.card(
-                  color: AppColors.surface,
-                  borderColor: AppColors.border,
+                  color: context.colors.surface,
+                  borderColor: context.colors.border,
                 ),
                 child: _EmptySalesState(hasFilters: filters.hasActiveFilters),
               ),
@@ -65,8 +57,8 @@ class _EmptySalesState extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.all(AppSpacing.lg),
-                decoration: const BoxDecoration(
-                  color: AppColors.surfaceContainerLow,
+                decoration: BoxDecoration(
+                  color: context.colors.surfaceContainerLow,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -74,7 +66,7 @@ class _EmptySalesState extends StatelessWidget {
                       ? Icons.search_off_rounded
                       : Icons.receipt_long_outlined,
                   size: AppIconSize.xl * 1.5,
-                  color: AppColors.textSecondary,
+                  color: context.colors.textSecondary,
                 ),
               ),
               SizedBox(height: AppSpacing.lg),
@@ -83,7 +75,7 @@ class _EmptySalesState extends StatelessWidget {
                 child: Text(
                   hasFilters ? 'No sales match your filters' : 'No sales found',
                   style: AppTextStyles.headlineSm.copyWith(
-                    color: AppColors.textPrimary,
+                    color: context.colors.textPrimary,
                   ),
                 ),
               ),
@@ -97,7 +89,7 @@ class _EmptySalesState extends StatelessWidget {
                       ? 'Try adjusting your search or filter criteria.'
                       : 'Completed sales will appear here once recorded.',
                   style: AppTextStyles.bodyMd.copyWith(
-                    color: AppColors.textSecondary,
+                    color: context.colors.textSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -115,8 +107,8 @@ class _EmptySalesState extends StatelessWidget {
                       label:
                       Text('Clear Filters', style: AppTextStyles.bodyMd),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.textPrimary,
-                        side: const BorderSide(color: AppColors.border),
+                        foregroundColor: context.colors.textPrimary,
+                        side: BorderSide(color: context.colors.border),
                         padding: EdgeInsets.symmetric(
                             horizontal: AppSpacing.lg, vertical: AppSpacing.md),
                         shape: RoundedRectangleBorder(
@@ -127,9 +119,9 @@ class _EmptySalesState extends StatelessWidget {
                   FilledButton.icon(
                     onPressed: cubit.refresh,
                     icon: Icon(Icons.refresh_rounded, size: AppIconSize.lg),
-                    label: Text('Refresh', style: AppTextStyles.bodyMd.copyWith(color: AppColors.onPrimary)),
+                    label: Text('Refresh', style: AppTextStyles.bodyMd.copyWith(color: context.colors.onPrimary)),
                     style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: context.colors.primary,
                       padding:
                       EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
                       shape: RoundedRectangleBorder(

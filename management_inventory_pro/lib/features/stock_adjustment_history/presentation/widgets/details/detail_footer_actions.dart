@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/adjustment_status.dart';
 
-/// Footer action row in the right detail panel: Print + Export PDF are
-/// always shown; "Continue Editing" only appears for Draft adjustments —
-/// this is an explicit business rule, not a styling choice.
 class DetailFooterActions extends StatelessWidget {
   const DetailFooterActions({
     super.key,
@@ -32,8 +29,8 @@ class DetailFooterActions extends StatelessWidget {
         horizontal: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        border: Border(top: BorderSide(color: AppColors.outlineVariant, width: AppBorder.thin)),
+        color: context.colors.surfaceContainerLowest,
+        border: Border(top: BorderSide(color: context.colors.outlineVariant, width: AppBorder.thin)),
       ),
       child: Column(
         children: [
@@ -63,10 +60,10 @@ class DetailFooterActions extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onContinueEditing,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryContainer,
-                  foregroundColor: AppColors.onPrimaryContainer,
+                  backgroundColor: context.colors.primaryContainer,
+                  foregroundColor: context.colors.onPrimaryContainer,
                   elevation: 0,
-                  side: BorderSide(color: AppColors.primary, width: AppBorder.thin),
+                  side: BorderSide(color: context.colors.primary, width: AppBorder.thin),
                   padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -110,8 +107,8 @@ class _OutlinedFooterButton extends StatelessWidget {
         style: AppTextStyles.bodySm.copyWith(fontWeight: FontWeight.w700),
       ),
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.onSurface,
-        side: BorderSide(color: AppColors.outline, width: AppBorder.thin),
+        foregroundColor: context.colors.onSurface,
+        side: BorderSide(color: context.colors.outline, width: AppBorder.thin),
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../theme/dashboard_theme_extension.dart';
 import '../../../data/models/dashboard_summary.dart';
 
 class InventoryValueCard extends StatelessWidget {
@@ -14,13 +14,14 @@ class InventoryValueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final dashColors = context.dashboardColors;
     final egp = NumberFormat('#,###', 'en_US');
     final change = summary.inventoryTurnoverChange;
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.backgroundSideBar, // inverse-surface
+        color: dashColors.inverseSurface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -29,7 +30,7 @@ class InventoryValueCard extends StatelessWidget {
           Text(
             'TOTAL INVENTORY VALUE',
             style: theme.textTheme.labelSmall?.copyWith(
-              color: AppColors.primaryFixedDim,
+              color: dashColors.onInverseSurface,
               letterSpacing: 0.08,
               fontWeight: FontWeight.w600,
             ),
@@ -57,15 +58,16 @@ class _TrendBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dashColors = context.dashboardColors;
     return Row(
       children: [
-        const Icon(Icons.trending_up_rounded, size: 16, color: AppColors.statusHealthyDot),
+        Icon(Icons.trending_up_rounded, size: 16, color: dashColors.trendPositive),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             'Stock turnover increased by ${change.toStringAsFixed(1)}% this month.',
-            style: const TextStyle(
-              color: AppColors.primaryFixedDim,
+            style: TextStyle(
+              color: dashColors.onInverseSurface,
               fontSize: 12,
               height: 1.4,
             ),

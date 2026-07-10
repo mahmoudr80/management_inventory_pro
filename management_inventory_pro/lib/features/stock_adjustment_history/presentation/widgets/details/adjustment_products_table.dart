@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/product_adjustment_model.dart';
 import 'adjustment_product_row.dart';
 
-/// Scrollable-by-content table of products affected by the selected
-/// adjustment. Shows the first [collapsedCount] rows with a "View N more
-/// products" toggle, matching the reference design.
-///
-/// Local expand/collapse state only — no business logic — so it stays a
-/// `StatefulWidget`. Give this widget a `ValueKey(adjustment.id)` from the
-/// parent so the expand state resets when the selected adjustment changes.
 class AdjustmentProductsTable extends StatefulWidget {
   const AdjustmentProductsTable({
     super.key,
@@ -50,14 +43,14 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
         const SizedBox(height: AppSpacing.md),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: AppColors.outlineVariant, width: AppBorder.thin),
+            border: Border.all(color: context.colors.outlineVariant, width: AppBorder.thin),
             borderRadius: BorderRadius.circular(AppRadius.lg),
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
               Container(
-                color: AppColors.surfaceContainerLow,
+                color: context.colors.surfaceContainerLow,
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.sm,
                   vertical: AppSpacing.sm,
@@ -72,7 +65,7 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
                           overflow: TextOverflow.ellipsis,
                           'Product',
                           style: AppTextStyles.bodySm.copyWith(
-                            color: AppColors.onSurfaceVariant,
+                            color: context.colors.onSurfaceVariant,
                           ),
                         ),
                       ),
@@ -86,7 +79,7 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
                           'Adjustment',
                           textAlign: TextAlign.right,
                           style: AppTextStyles.bodySm.copyWith(
-                            color: AppColors.onSurfaceVariant,
+                            color: context.colors.onSurfaceVariant,
                           ),
                         ),
                       ),
@@ -100,7 +93,7 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
                           'New Stock',
                           textAlign: TextAlign.right,
                           style: AppTextStyles.bodySm.copyWith(
-                            color: AppColors.onSurfaceVariant,
+                            color: context.colors.onSurfaceVariant,
                           ),
                         ),
                       ),
@@ -111,7 +104,7 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
               Container(
                 decoration: BoxDecoration(
                   border: Border(
-                    top: BorderSide(color: AppColors.outlineVariant, width: AppBorder.thin),
+                    top: BorderSide(color: context.colors.outlineVariant, width: AppBorder.thin),
                   ),
                 ),
                 child: Column(
@@ -120,7 +113,7 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
                       if (i > 0)
                         Divider(
                           height: AppBorder.thin,
-                          color: AppColors.outlineVariant,
+                          color: context.colors.outlineVariant,
                         ),
                       AdjustmentProductRow(product: visibleProducts[i]),
                     ],
@@ -132,7 +125,7 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
                   onTap: () => setState(() => _expanded = !_expanded),
                   child: Container(
                     width: double.infinity,
-                    color: AppColors.surfaceContainerLow,
+                    color: context.colors.surfaceContainerLow,
                     padding: const EdgeInsets.symmetric(
                       vertical: AppSpacing.sm,
                     ),
@@ -148,7 +141,7 @@ class _AdjustmentProductsTableState extends State<AdjustmentProductsTable> {
                             : 'View $remaining more products',
                         style: AppTextStyles.bodySm.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                          color: context.colors.primary,
                         ),
                       ),
                     ),

@@ -8,7 +8,7 @@ import 'package:management_inventory_pro/features/suppliers/data/repository/supp
 import 'package:management_inventory_pro/features/suppliers/presentation/cubit/suppliers_cubit.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/dependency_injection/service_locator.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/utils/app_snackBar.dart';
 import '../../data/models/product_ref.dart';
 import '../../data/models/stock_entry_line_model.dart';
@@ -178,7 +178,7 @@ class _NewStockEntryScreenState extends State<NewStockEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.colors.background,
       body: Form(
         key: _formKey,
         child: Column(
@@ -196,8 +196,8 @@ class _NewStockEntryScreenState extends State<NewStockEntryScreen> {
                     const SizedBox(height: 24),
                     BlocProvider(
                       create: (context) =>
-                          SuppliersCubit(getIt<SupplierRepository>())
-                            ..loadSuppliers(),
+                      SuppliersCubit(getIt<SupplierRepository>())
+                        ..loadSuppliers(),
                       child: StockEntryInfoSection(
                         receiptDate: _receiptDate,
                         selectedSupplier: _selectedSupplier,

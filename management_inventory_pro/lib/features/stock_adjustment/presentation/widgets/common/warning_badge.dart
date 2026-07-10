@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 
 enum WarningLevel { low, out, negative }
@@ -13,17 +13,17 @@ class WarningBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final (color, icon, text) = switch (level) {
       WarningLevel.negative => (
-      AppColors.error,
+      context.colors.error,
       Icons.error_outline,
       'Negative',
       ),
       WarningLevel.out => (
-      AppColors.error,
+      context.colors.error,
       Icons.remove_circle_outline,
       'Out of stock',
       ),
       WarningLevel.low => (
-      AppColors.warning,
+      context.colors.warning,
       Icons.warning_amber_rounded,
       'Low stock',
       ),

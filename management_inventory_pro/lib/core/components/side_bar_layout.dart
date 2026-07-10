@@ -6,7 +6,7 @@ import 'package:management_inventory_pro/core/storage/storage_service.dart';
 
 import '../../generated/assets.gen.dart';
 import '../dependency_injection/service_locator.dart';
-import '../theme/app_colors.dart';
+import '../theme/app_theme_extension.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 
@@ -38,17 +38,13 @@ class SideBarLayout extends StatelessWidget {
       _SidebarItem(assetIcon: SvgPicture.asset(Assets.icons.settings), icon: Icons.settings_outlined, label: 'Settings'),
     ];
 
-    // Below the compact breakpoint there isn't room for a full labeled
-    // sidebar without squeezing the content area, so it collapses to an
-    // icon-only rail. Labels move into Tooltips so destinations stay
-    // discoverable even without room for text.
     final bool collapsed = Responsive.isCompact(context);
     final double railWidth = collapsed ? AppSize.navigationRailWidth : AppSize.sidebarWidth;
 
     return AnimatedContainer(
       duration: AppAnimation.normal,
       width: railWidth,
-      color: AppColors.backgroundSideBar,
+      color: context.colors.backgroundSideBar,
       padding: EdgeInsets.symmetric(
         vertical: AppSpacing.md,
         horizontal: collapsed ? AppSpacing.xs : AppSpacing.sm,
@@ -56,19 +52,18 @@ class SideBarLayout extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header / Logo area
           Row(
             mainAxisAlignment: collapsed ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(AppSpacing.xs),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryContainer,
+                  color: context.colors.primaryContainer,
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.inventory_2,
-                  color: AppColors.onPrimary,
+                  color: context.colors.onPrimary,
                   size: AppIconSize.lg,
                 ),
               ),
@@ -85,7 +80,7 @@ class SideBarLayout extends StatelessWidget {
                           'OmniStock',
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.headlineSm.copyWith(
-                            color: AppColors.sideBarItemsActive,
+                            color: context.colors.sideBarItemsActive,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -96,7 +91,7 @@ class SideBarLayout extends StatelessWidget {
                           'Global Operations',
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.labelCaps.copyWith(
-                            color: AppColors.sideBarItems.withAlpha(125),
+                            color: context.colors.sideBarItems.withAlpha(125),
                           ),
                         ),
                       ),
@@ -108,7 +103,6 @@ class SideBarLayout extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xxl),
 
-          // Navigation Items
           Expanded(
             child: ListView.separated(
               primary: false,
@@ -124,7 +118,7 @@ class SideBarLayout extends StatelessWidget {
                   child: item.assetIcon ??
                       Icon(
                         item.icon,
-                        color: isActive ? AppColors.sideBarItemsActive : AppColors.sideBarItems,
+                        color: isActive ? context.colors.sideBarItemsActive : context.colors.sideBarItems,
                         size: AppIconSize.lg,
                       ),
                 );
@@ -140,49 +134,43 @@ class SideBarLayout extends StatelessWidget {
                       vertical: AppSpacing.sm,
                     ),
                     decoration: BoxDecoration(
-                      color: isActive ? AppColors.sideBarBackgroundActive : Colors.transparent,
+                      color: isActive ? context.colors.sideBarBackgroundActive : Colors.transparent,
                       borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                     child: collapsed
                         ? Center(child: icon)
                         : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              icon,
-                              const SizedBox(width: AppSpacing.sm),
-                              Flexible(
-                                child: Text(
-                                  item.label,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.bodySm.copyWith(
-                                    color: isActive ? AppColors.sideBarItemsActive : AppColors.sideBarItems,
-                                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        icon,
+                        const SizedBox(width: AppSpacing.sm),
+                        Flexible(
+                          child: Text(
+                            item.label,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.bodySm.copyWith(
+                              color: isActive ? context.colors.sideBarItemsActive : context.colors.sideBarItems,
+                              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                            ),
                           ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
 
-                // The rail is icon-only when collapsed, so a Tooltip carries
-                // the label; when expanded the label is already on-screen.
                 return collapsed ? Tooltip(message: item.label, child: navItem) : navItem;
               },
             ),
           ),
 
-          // Divider
           Container(
             height: AppBorder.thin,
             width: double.infinity,
             margin: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-            color: AppColors.sideBarBackgroundActive.withAlpha(125),
+            color: context.colors.sideBarBackgroundActive.withAlpha(125),
           ),
 
-          // Profile section at bottom. Row when there's room for the name
-          // and role, Column (avatar stacked over the logout icon) when
-          // collapsed to the icon-only rail.
           if (collapsed)
             Column(
               children: [
@@ -190,7 +178,7 @@ class SideBarLayout extends StatelessWidget {
                   message: user.name,
                   child:  CircleAvatar(
                     radius: AppIconSize.lg,
-                    backgroundColor: AppColors.primaryContainer,
+                    backgroundColor: context.colors.primaryContainer,
                     backgroundImage:  FileImage(
                       File(user.imagePath),
                     ),
@@ -200,7 +188,7 @@ class SideBarLayout extends StatelessWidget {
                 IconButton(
                   icon: Icon(
                     Icons.logout_rounded,
-                    color: AppColors.sideBarItems,
+                    color: context.colors.sideBarItems,
                     size: AppIconSize.md,
                   ),
                   onPressed: onLogout,
@@ -215,12 +203,12 @@ class SideBarLayout extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: AppIconSize.lg,
-                  backgroundColor: AppColors.primaryContainer,
+                  backgroundColor: context.colors.primaryContainer,
                   backgroundImage:  FileImage(
                     File(user.imagePath),
                   ),
                 ),
-                 SizedBox(width: AppSpacing.sm),
+                SizedBox(width: AppSpacing.sm),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -228,7 +216,7 @@ class SideBarLayout extends StatelessWidget {
                     Text(
                       user.name,
                       style: AppTextStyles.bodySm.copyWith(
-                        color: AppColors.sideBarItemsActive,
+                        color: context.colors.sideBarItemsActive,
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
@@ -241,7 +229,7 @@ class SideBarLayout extends StatelessWidget {
                 IconButton(
                   icon: Icon(
                     Icons.logout_rounded,
-                    color: AppColors.sideBarItems,
+                    color: context.colors.sideBarItems,
                     size: AppIconSize.md,
                   ),
                   onPressed: onLogout,

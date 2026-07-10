@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/adjustment_reason.dart';
@@ -24,10 +24,10 @@ class ReasonDropdown extends StatelessWidget {
       height: AppSize.textFieldHeight,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(
-            color: AppColors.outlineVariant,
+            color: context.colors.outlineVariant,
           ),
         ),
         child: Padding(
@@ -41,17 +41,17 @@ class ReasonDropdown extends StatelessWidget {
               icon: Icon(
                 Icons.keyboard_arrow_down,
                 size: AppIconSize.lg,
-                color: AppColors.outline,
+                color: context.colors.outline,
               ),
               hint: Text(
                 'Reason: Select...',
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.bodySm.copyWith(
-                  color: AppColors.outline,
+                  color: context.colors.outline,
                 ),
               ),
               style: AppTextStyles.bodySm.copyWith(
-                color: AppColors.textPrimary,
+                color: context.colors.textPrimary,
               ),
               items: [
                 DropdownMenuItem(
@@ -60,7 +60,7 @@ class ReasonDropdown extends StatelessWidget {
                     'No reason',
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.bodySm.copyWith(
-                      color: AppColors.outline,
+                      color: context.colors.outline,
                     ),
                   ),
                 ),
@@ -73,7 +73,7 @@ class ReasonDropdown extends StatelessWidget {
                       style: AppTextStyles.labelCaps.copyWith(
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0,
-                        color: AppColors.textPrimary,
+                        color: context.colors.textPrimary,
                       ),
                     ),
                   ),

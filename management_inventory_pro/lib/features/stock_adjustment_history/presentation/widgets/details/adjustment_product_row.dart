@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/product_adjustment_model.dart';
 
-/// One row of the "Adjusted Products" table: product/SKU, signed
-/// adjustment + previous stock, and new stock + health status.
 class AdjustmentProductRow extends StatelessWidget {
   const AdjustmentProductRow({super.key, required this.product});
 
@@ -15,7 +13,7 @@ class AdjustmentProductRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isNegative = product.adjustmentQty < 0;
-    final changeColor = isNegative ? AppColors.error : AppColors.primary;
+    final changeColor = isNegative ? context.colors.error : context.colors.primary;
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -49,7 +47,7 @@ class AdjustmentProductRow extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.dataMono.copyWith(
-                      color: AppColors.onSurfaceVariant,
+                      color: context.colors.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -79,7 +77,7 @@ class AdjustmentProductRow extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.onSurfaceVariant,
+                      color: context.colors.onSurfaceVariant,
                     ),
                   ),
                 ),

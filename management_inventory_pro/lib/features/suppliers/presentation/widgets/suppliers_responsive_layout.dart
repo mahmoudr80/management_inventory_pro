@@ -17,7 +17,7 @@ class SuppliersResponsiveLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return  LayoutBuilder(
       builder: (context, constraints) {
-        final isWide = constraints.maxWidth >= 1024;
+        final isWide = constraints.maxWidth >= 1124;
         return isWide
             ? _WideLayout(constraints: constraints)
             : _NarrowLayout();

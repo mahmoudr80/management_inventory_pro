@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -20,7 +20,7 @@ class SaleTableHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.sm),
-      color: AppColors.surfaceContainerLow,
+      color: context.colors.surfaceContainerLow,
       child: Row(
         children: [
           _HeaderCell(
@@ -69,7 +69,7 @@ class SaleTableHeader extends StatelessWidget {
               'Payment',
               style: AppTextStyles.bodySm.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppColors.textSecondary,
+                color: context.colors.textSecondary,
                 letterSpacing: 0.3,
               ),
             ),
@@ -80,7 +80,7 @@ class SaleTableHeader extends StatelessWidget {
               'Cashier',
               style: AppTextStyles.bodySm.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppColors.textSecondary,
+                color: context.colors.textSecondary,
                 letterSpacing: 0.3,
               ),
             ),
@@ -119,7 +119,7 @@ class _HeaderCell extends StatelessWidget {
               style: AppTextStyles.bodySm.copyWith(
                 overflow: TextOverflow.ellipsis,
                 fontWeight: FontWeight.w600,
-                color: isActive ? AppColors.primary : AppColors.textSecondary,
+                color: isActive ? context.colors.primary : context.colors.textSecondary,
                 letterSpacing: 0.3,
               ),
             ),
@@ -129,7 +129,7 @@ class _HeaderCell extends StatelessWidget {
                   ? Icons.arrow_upward_rounded
                   : Icons.arrow_downward_rounded,
               size: AppSpacing.md,
-              color: isActive ? AppColors.primary : AppColors.border,
+              color: isActive ? context.colors.primary : context.colors.border,
             ),
           ],
         ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/models/stock_entry_status.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/table/status_pill.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_model.dart';
 
@@ -39,11 +39,11 @@ class _EntryRowState extends State<EntryRow> {
 
     Color bg;
     if (widget.isSelected) {
-      bg = AppColors.primary.withOpacity(0.08);
+      bg = context.colors.primary.withOpacity(0.08);
     } else if (_hovering) {
-      bg = AppColors.surfaceContainerLow;
+      bg = context.colors.surfaceContainerLow;
     } else {
-      bg = AppColors.surfaceContainerLowest;
+      bg = context.colors.surfaceContainerLowest;
     }
 
     return MouseRegion(
@@ -66,7 +66,7 @@ class _EntryRowState extends State<EntryRow> {
                   child: Text(
                     e.id,
                     style: AppTextStyles.dataMono.copyWith(
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       fontWeight: FontWeight.w600,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -114,7 +114,7 @@ class _EntryRowState extends State<EntryRow> {
                   message: _dateFmt.format(e.receiptDate),
                   child: Text(
                     _dateFmt.format(e.receiptDate),
-                    style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+                    style: AppTextStyles.bodySm.copyWith(color: context.colors.outline),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -156,7 +156,7 @@ class _EntryRowState extends State<EntryRow> {
                     _RowAction(
                       icon: Icons.delete_outline,
                       tooltip: 'Delete',
-                      color: AppColors.error,
+                      color: context.colors.error,
                       onTap: widget.onDelete,
                     ),
                   ],
@@ -174,17 +174,18 @@ class _RowAction extends StatelessWidget {
   final IconData icon;
   final String tooltip;
   final VoidCallback onTap;
-  final Color color;
+  final Color? color;
 
   const _RowAction({
     required this.icon,
     required this.tooltip,
     required this.onTap,
-    this.color = AppColors.outline,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
+    final resolvedColor = color ?? context.colors.outline;
     return Tooltip(
       message: tooltip,
       child: InkWell(
@@ -192,7 +193,7 @@ class _RowAction extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child: Icon(icon, size: 16, color: color),
+          child: Icon(icon, size: 16, color: resolvedColor),
         ),
       ),
     );

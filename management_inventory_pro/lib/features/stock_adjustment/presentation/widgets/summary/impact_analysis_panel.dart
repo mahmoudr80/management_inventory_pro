@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../cubit/stock_adjustment_cubit.dart';
@@ -27,9 +27,9 @@ class ImpactAnalysisPanel extends StatelessWidget {
 
         return Container(
           width: panelWidth,
-          decoration: const BoxDecoration(
-            color: AppColors.background,
-            border: Border(left: BorderSide(color: AppColors.outlineVariant)),
+          decoration: BoxDecoration(
+            color: context.colors.background,
+            border: Border(left: BorderSide(color: context.colors.outlineVariant)),
           ),
           child: Column(
             children: [
@@ -52,7 +52,7 @@ class ImpactAnalysisPanel extends StatelessWidget {
                             child: SummaryCard(
                               label: 'Total Increase',
                               value: '+${adj.totalIncrease} units',
-                              valueColor: AppColors.primary,
+                              valueColor: context.colors.primary,
                             ),
                           ),
                           SizedBox(
@@ -60,7 +60,7 @@ class ImpactAnalysisPanel extends StatelessWidget {
                             child: SummaryCard(
                               label: 'Total Decrease',
                               value: '${adj.totalDecrease} units',
-                              valueColor: AppColors.error,
+                              valueColor: context.colors.error,
                             ),
                           ),
                         ],
@@ -94,14 +94,14 @@ class _PanelHeader extends StatelessWidget {
         horizontal: AppSpacing.sm,
         vertical: AppSpacing.md,
       ),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        border: Border(bottom: BorderSide(color: AppColors.outlineVariant)),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border(bottom: BorderSide(color: context.colors.outlineVariant)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.analytics_outlined,
-              size: AppIconSize.lg, color: AppColors.primary),
+          Icon(Icons.analytics_outlined,
+              size: AppIconSize.lg, color: context.colors.primary),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
@@ -142,9 +142,9 @@ class _NetQtyCard extends StatelessWidget {
         horizontal: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.outlineVariant),
+        border: Border.all(color: context.colors.outlineVariant),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +160,7 @@ class _NetQtyCard extends StatelessWidget {
                 style: AppTextStyles.dataMono.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+                  color: context.colors.textPrimary,
                 ),
               ),
             ],
@@ -168,7 +168,7 @@ class _NetQtyCard extends StatelessWidget {
           Icon(
             isNeg ? Icons.trending_down : Icons.trending_up,
             size: AppIconSize.lg,
-            color: isNeg ? AppColors.error : AppColors.primary,
+            color: isNeg ? context.colors.error : context.colors.primary,
           ),
         ],
       ),
@@ -186,14 +186,14 @@ class _PanelFooter extends StatelessWidget {
         vertical: AppSpacing.md,
         horizontal: AppSpacing.sm,
       ),
-      decoration: const BoxDecoration(
-        color: AppColors.surfaceContainerHighest,
-        border: Border(top: BorderSide(color: AppColors.outlineVariant)),
+      decoration: BoxDecoration(
+        color: context.colors.surfaceContainerHighest,
+        border: Border(top: BorderSide(color: context.colors.outlineVariant)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.info_outline,
-              size: AppIconSize.lg, color: AppColors.textSecondary),
+          Icon(Icons.info_outline,
+              size: AppIconSize.lg, color: context.colors.textSecondary),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Tooltip(
@@ -202,7 +202,7 @@ class _PanelFooter extends StatelessWidget {
                 'Adjustments affect COGS and P&L statements.',
                 overflow: TextOverflow.ellipsis,
                 style:
-                    AppTextStyles.bodySm.copyWith(fontStyle: FontStyle.italic),
+                AppTextStyles.bodySm.copyWith(fontStyle: FontStyle.italic),
               ),
             ),
           ),

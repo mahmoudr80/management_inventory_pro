@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
@@ -28,11 +28,11 @@ class AdjustmentRow extends StatelessWidget {
     required this.onDelete,
   });
 
-  Color get _rowBg {
+  Color _rowBg(BuildContext context) {
     if (item.isNegativeInventory) {
-      return AppColors.errorContainer.withOpacity(0.2);
+      return context.colors.errorContainer.withOpacity(0.2);
     }
-    if (isSelected) return AppColors.surfaceContainer;
+    if (isSelected) return context.colors.surfaceContainer;
     return Colors.transparent;
   }
 
@@ -50,13 +50,13 @@ class AdjustmentRow extends StatelessWidget {
         duration: AppAnimation.fast,
         height: rowHeight,
         decoration: BoxDecoration(
-          color: _rowBg,
+          color: _rowBg(context),
           border: Border(
             bottom:
-                BorderSide(color: AppColors.outlineVariant.withOpacity(0.5)),
+            BorderSide(color: context.colors.outlineVariant.withOpacity(0.5)),
             left: isSelected
-                ? const BorderSide(
-                    color: AppColors.primary, width: AppBorder.thick)
+                ? BorderSide(
+                color: context.colors.primary, width: AppBorder.thick)
                 : BorderSide.none,
           ),
         ),
@@ -68,7 +68,7 @@ class AdjustmentRow extends StatelessWidget {
               child: Text(
                 '${index + 1}',
                 style: AppTextStyles.bodySm.copyWith(
-                  color: AppColors.outline,
+                  color: context.colors.outline,
                   fontWeight: FontWeight.w600,
                 ),
               ),

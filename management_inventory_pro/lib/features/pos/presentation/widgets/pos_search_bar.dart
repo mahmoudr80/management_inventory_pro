@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../theme/pos_theme_extension.dart';
 
 class PosSearchBar extends StatelessWidget {
   final ValueChanged<String>? onChanged;
@@ -15,9 +15,9 @@ class PosSearchBar extends StatelessWidget {
             height: 52,
             padding: const EdgeInsets.symmetric(horizontal: 18),
             decoration: BoxDecoration(
-              color: AppColors.posCardBg,
+              color: context.posColors.cardBg,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.posBorder),
+              border: Border.all(color: context.posColors.border),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.03),
@@ -28,17 +28,17 @@ class PosSearchBar extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const Icon(Icons.qr_code_scanner_rounded, color: AppColors.posTextMuted, size: 22),
+                Icon(Icons.qr_code_scanner_rounded, color: context.posColors.textMuted, size: 22),
                 const SizedBox(width: 12),
                 Expanded(
                   child: TextField(
                     onChanged: onChanged,
-                    style: const TextStyle(fontSize: 14, color: AppColors.posTextPrimary),
-                    decoration: const InputDecoration(
+                    style: TextStyle(fontSize: 14, color: context.posColors.textPrimary),
+                    decoration: InputDecoration(
                       border: InputBorder.none,
                       isDense: true,
                       hintText: 'Search Items or Scan Barcode (Ctrl+F)',
-                      hintStyle: TextStyle(color: AppColors.posTextMuted, fontSize: 14),
+                      hintStyle: TextStyle(color: context.posColors.textMuted, fontSize: 14),
                     ),
                   ),
                 ),
@@ -51,20 +51,20 @@ class PosSearchBar extends StatelessWidget {
           height: 52,
           padding: const EdgeInsets.symmetric(horizontal: 18),
           decoration: BoxDecoration(
-            color: AppColors.posSummaryBg,
+            color: context.posColors.summaryBg,
             borderRadius: BorderRadius.circular(14),
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.tune_rounded, size: 19, color: AppColors.posPrimary),
-              SizedBox(width: 8),
+              Icon(Icons.tune_rounded, size: 19, color: context.posColors.primary),
+              const SizedBox(width: 8),
               Text(
                 'Categories',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
-                  color: AppColors.posPrimary,
+                  color: context.posColors.primary,
                 ),
               ),
             ],

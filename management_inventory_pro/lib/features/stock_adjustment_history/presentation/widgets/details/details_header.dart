@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/adjustment_model.dart';
 import '../table/status_chip.dart';
 
-/// Top section of the right detail panel: adjustment id, status, created
-/// date, and the reason / created-by info chips.
 class DetailsHeader extends StatelessWidget {
   const DetailsHeader({
     super.key,
@@ -26,8 +24,8 @@ class DetailsHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl, horizontal: AppSpacing.sm),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        border: Border(bottom: BorderSide(color: AppColors.outlineVariant, width: AppBorder.thin)),
+        color: context.colors.surfaceContainerLowest,
+        border: Border(bottom: BorderSide(color: context.colors.outlineVariant, width: AppBorder.thin)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +37,7 @@ class DetailsHeader extends StatelessWidget {
                   'Adjustment Details', overflow: TextOverflow.ellipsis, style: AppTextStyles.headlineSm))),
               IconButton(
                 onPressed: onClose,
-                icon: Icon(Icons.close, size: AppIconSize.lg, color: AppColors.onSurfaceVariant),
+                icon: Icon(Icons.close, size: AppIconSize.lg, color: context.colors.onSurfaceVariant),
                 splashRadius: AppSpacing.xl,
               ),
             ],
@@ -59,7 +57,7 @@ class DetailsHeader extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.dataMono.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                          color: context.colors.primary,
                         ),
                       ),
                     ),
@@ -70,7 +68,7 @@ class DetailsHeader extends StatelessWidget {
                         'Created on ${_dateFormat.format(adjustment.dateTime)}',
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.bodySm.copyWith(
-                          color: AppColors.onSurfaceVariant,
+                          color: context.colors.onSurfaceVariant,
                         ),
                       ),
                     ),
@@ -96,7 +94,7 @@ class DetailsHeader extends StatelessWidget {
                 child: _InfoTile(
                   label: 'Created By',
                   icon: Icons.person_outline,
-                  iconColor: AppColors.onSurfaceVariant,
+                  iconColor: context.colors.onSurfaceVariant,
                   value: adjustment.createdBy,
                 ),
               ),
@@ -126,8 +124,8 @@ class _InfoTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.md, horizontal: AppSpacing.sm),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
-        border: Border.all(color: AppColors.outlineVariant, width: AppBorder.thin),
+        color: context.colors.surfaceContainerLow,
+        border: Border.all(color: context.colors.outlineVariant, width: AppBorder.thin),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(

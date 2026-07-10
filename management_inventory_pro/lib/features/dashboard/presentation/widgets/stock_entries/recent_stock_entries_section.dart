@@ -19,7 +19,7 @@ class RecentStockEntriesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) return const LoadingCard(height: 300);
+    if (isLoading && entries.isEmpty) return const LoadingCard(height: 300);
 
     return DashboardCard(
       padding: EdgeInsets.zero,

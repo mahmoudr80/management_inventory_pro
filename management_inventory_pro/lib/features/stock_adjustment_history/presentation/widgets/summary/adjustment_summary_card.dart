@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/adjustment_summary_model.dart';
 
-/// "Adjustment Summary" card in the right panel: items adjusted, total
-/// increase/decrease, and the net inventory value delta.
 class AdjustmentSummaryCard extends StatelessWidget {
   const AdjustmentSummaryCard({super.key, required this.summary});
 
@@ -20,8 +18,8 @@ class AdjustmentSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isNegativeDelta = summary.inventoryValueDelta < 0;
     final deltaColor = summary.inventoryValueDelta == 0
-        ? AppColors.onSurface
-        : (isNegativeDelta ? AppColors.error : AppColors.primary);
+        ? context.colors.onSurface
+        : (isNegativeDelta ? context.colors.error : context.colors.primary);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +29,7 @@ class AdjustmentSummaryCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg, horizontal: AppSpacing.xxs),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLow,
+            color: context.colors.surfaceContainerLow,
             borderRadius: BorderRadius.circular(AppRadius.xl),
           ),
           child: Column(
@@ -44,21 +42,17 @@ class AdjustmentSummaryCard extends StatelessWidget {
               _SummaryLine(
                 label: 'Total Increase',
                 value: '+${summary.totalIncrease} Units',
-                valueColor: AppColors.primary,
+                valueColor: context.colors.primary,
               ),
               SizedBox(height: AppSpacing.md),
               _SummaryLine(
                 label: 'Total Decrease',
                 value: '${summary.totalDecrease} Units',
-                valueColor: AppColors.error,
+                valueColor: context.colors.error,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-                // Not `const` — every other Divider in this codebase using
-                // AppColors.* is non-const too, which means that color
-                // isn't a compile-time constant. The `const` here would
-                // fail to build.
-                child: Divider(height: AppBorder.thin, color: AppColors.outlineVariant),
+                child: Divider(height: AppBorder.thin, color: context.colors.outlineVariant),
               ),
               _SummaryLine(
                 label: 'Inventory Value Delta',
@@ -99,7 +93,7 @@ class _SummaryLine extends StatelessWidget {
             child: Text(
               label,
               style: AppTextStyles.bodySm.copyWith(
-                color: bold ? AppColors.onSurface : AppColors.onSurfaceVariant,
+                color: bold ? context.colors.onSurface : context.colors.onSurfaceVariant,
                 fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
               ),
               overflow: TextOverflow.ellipsis,
@@ -114,7 +108,7 @@ class _SummaryLine extends StatelessWidget {
               value,
               style: AppTextStyles.bodySm.copyWith(
                 fontWeight: FontWeight.w700,
-                color: valueColor ?? AppColors.onSurface,
+                color: valueColor ?? context.colors.onSurface,
               ),
               overflow: TextOverflow.ellipsis,
             ),

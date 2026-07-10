@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../cubit/stock_adjustment_cubit.dart';
 import '../../cubit/stock_adjustment_state.dart';
@@ -70,15 +70,15 @@ class _AdjustmentTableState extends State<AdjustmentTable> {
                   );
                 },
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: AppSpacing.sm),
+                const SizedBox(height: AppSpacing.sm),
               ),
           ],
         );
 
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.surface,
-            border: Border.all(color: AppColors.outlineVariant),
+            color: context.colors.surface,
+            border: Border.all(color: context.colors.outlineVariant),
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),

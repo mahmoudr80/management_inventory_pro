@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 
 class StockEntryLoadingSkeleton extends StatefulWidget {
   final int rowCount;
@@ -62,15 +62,15 @@ class _SkeletonRow extends StatelessWidget {
       opacity: opacity,
       child: Container(
         height: 40,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: AppColors.outlineVariant),
+            bottom: BorderSide(color: context.colors.outlineVariant),
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Row(
           children: [
-            _Bone(width: 120, color: AppColors.primaryFixed),
+            _Bone(width: 120, color: context.colors.primaryFixed),
             const SizedBox(width: 24),
             _Bone(width: 180),
             const Spacer(),
@@ -90,20 +90,21 @@ class _SkeletonRow extends StatelessWidget {
 
 class _Bone extends StatelessWidget {
   final double width;
-  final Color color;
+  final Color? color;
 
   const _Bone({
     required this.width,
-    this.color = AppColors.surfaceContainerHigh,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
+    final resolvedColor = color ?? context.colors.surfaceContainerHigh;
     return Container(
       width: width,
       height: 12,
       decoration: BoxDecoration(
-        color: color,
+        color: resolvedColor,
         borderRadius: BorderRadius.circular(4),
       ),
     );

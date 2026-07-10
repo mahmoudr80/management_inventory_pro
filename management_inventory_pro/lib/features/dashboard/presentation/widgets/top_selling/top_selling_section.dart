@@ -20,7 +20,7 @@ class TopSellingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    if (isLoading && products.isEmpty) {
       return const LoadingCard(height: 260);
     }
 

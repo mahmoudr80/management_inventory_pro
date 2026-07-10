@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_decoration.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../generated/assets.gen.dart';
@@ -13,16 +13,15 @@ class SuppliersLoadingState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: AppDecorations.card(color: AppColors.surfaceContainerLowest),
+      decoration: AppDecorations.card(color: context.colors.surfaceContainerLowest),
       padding: const EdgeInsets.all(48),
       child: Column(
         children: [
-           SizedBox(width:100.r,height:100.r,child: Lottie.asset(Assets.lottie.loading)),
+          SizedBox(width:100.r,height:100.r,child: Lottie.asset(Assets.lottie.loading)),
           const SizedBox(height: 16),
-          Text('Loading suppliers…', style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant)),
+          Text('Loading suppliers…', style: AppTextStyles.bodyMd.copyWith(color: context.colors.onSurfaceVariant)),
         ],
       ),
     );
   }
 }
-

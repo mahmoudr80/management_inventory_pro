@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -16,7 +16,7 @@ class CompleteAdjustmentButton extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.15),
+            color: context.colors.primary.withOpacity(0.15),
             borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
           child: Text(
@@ -25,7 +25,7 @@ class CompleteAdjustmentButton extends StatelessWidget {
               // Was Colors.white70 on a near-white chip background —
               // effectively invisible. AppColors.primary matches the chip's
               // tint and is actually readable.
-              color: AppColors.primary,
+              color: context.colors.primary,
             ),
           ),
         ),
@@ -33,8 +33,8 @@ class CompleteAdjustmentButton extends StatelessWidget {
         ElevatedButton.icon(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.onPrimary,
+            backgroundColor: context.colors.primary,
+            foregroundColor: context.colors.onPrimary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),

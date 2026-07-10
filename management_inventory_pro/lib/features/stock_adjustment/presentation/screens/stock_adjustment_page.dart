@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/dependency_injection/service_locator.dart';
 import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 import 'package:management_inventory_pro/features/stock_adjustment/data/repository/stock_adjustment_repository.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../product/data/respository/product_repository.dart';
 import '../../../product/presentation/products/cubit/product_cubit.dart';
@@ -110,7 +110,7 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
               children: [
                 if (state is StockAdjustmentLoaded)
                   AdjustmentHeader(adjustment: state.adjustment),
-                const Divider(height: 1, color: AppColors.outlineVariant),
+                Divider(height: 1, color: context.colors.outlineVariant),
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -122,14 +122,14 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
                           children: [
                             BlocProvider(
                               create: (context) =>
-                                  ProductCubit(getIt<ProductRepository>())
-                                    ..getProducts(),
+                              ProductCubit(getIt<ProductRepository>())
+                                ..getProducts(),
                               child: const ProductSearchSection(),
                             ),
                             const Expanded(
                               child: SingleChildScrollView(
                                 padding:
-                                    EdgeInsets.only(bottom: AppSpacing.lg),
+                                EdgeInsets.only(bottom: AppSpacing.lg),
                                 child: AdjustmentTable(),
                               ),
                             ),
@@ -142,7 +142,7 @@ class _StockAdjustmentPageState extends State<StockAdjustmentPage> {
                     ],
                   ),
                 ),
-                const Divider(height: 1, color: AppColors.outlineVariant),
+                Divider(height: 1, color: context.colors.outlineVariant),
                 const FooterActions(),
               ],
             ),

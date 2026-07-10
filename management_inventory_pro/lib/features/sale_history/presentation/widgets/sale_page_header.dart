@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/components/page_header.dart';
@@ -24,11 +24,11 @@ class SalePageHeader extends StatelessWidget {
             );
           },
           icon: const Icon(Icons.file_upload_outlined, size: AppIconSize.md),
-          label: Text('Export', style: AppTextStyles.buttonText.copyWith(color: AppColors.textSecondary)),
+          label: Text('Export', style: AppTextStyles.buttonText.copyWith(color: context.colors.textSecondary)),
           style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.textSecondary,
-            side: const BorderSide(color: AppColors.border),
-            backgroundColor: AppColors.surface,
+            foregroundColor: context.colors.textSecondary,
+            side: BorderSide(color: context.colors.border),
+            backgroundColor: context.colors.surface,
             padding:
             const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
             shape: RoundedRectangleBorder(
@@ -41,7 +41,7 @@ class SalePageHeader extends StatelessWidget {
           icon: const Icon(Icons.refresh_rounded, size: AppIconSize.md),
           label: Text('Refresh', style: AppTextStyles.buttonText),
           style: FilledButton.styleFrom(
-            backgroundColor: AppColors.primary,
+            backgroundColor: context.colors.primary,
             padding:
             const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
             shape: RoundedRectangleBorder(

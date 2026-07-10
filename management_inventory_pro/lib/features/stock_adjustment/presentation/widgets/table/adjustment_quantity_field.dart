@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
@@ -63,16 +63,16 @@ class _AdjustmentQuantityFieldState extends State<AdjustmentQuantityField> {
   }
 
   Color get _borderColor {
-    if (widget.item.isNegativeInventory) return AppColors.error;
-    if (widget.item.isOutOfStock) return AppColors.error;
-    return AppColors.outlineVariant;
+    if (widget.item.isNegativeInventory) return context.colors.error;
+    if (widget.item.isOutOfStock) return context.colors.error;
+    return context.colors.outlineVariant;
   }
 
   Color get _textColor {
     final qty = widget.item.adjustmentQty;
-    if (qty > 0) return AppColors.primary;
-    if (qty < 0) return AppColors.error;
-    return AppColors.textPrimary;
+    if (qty > 0) return context.colors.primary;
+    if (qty < 0) return context.colors.error;
+    return context.colors.textPrimary;
   }
 
   @override
@@ -99,8 +99,8 @@ class _AdjustmentQuantityFieldState extends State<AdjustmentQuantityField> {
           decoration: InputDecoration(
             filled: true,
             fillColor: widget.item.isNegativeInventory
-                ? AppColors.errorContainer.withOpacity(0.3)
-                : AppColors.surface,
+                ? context.colors.errorContainer.withOpacity(0.3)
+                : context.colors.surface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.xs,
               vertical: AppSpacing.xs,
@@ -115,8 +115,8 @@ class _AdjustmentQuantityFieldState extends State<AdjustmentQuantityField> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.standard),
-              borderSide: const BorderSide(
-                  color: AppColors.primary, width: AppBorder.medium),
+              borderSide: BorderSide(
+                  color: context.colors.primary, width: AppBorder.medium),
             ),
           ),
         ),

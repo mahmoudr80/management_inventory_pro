@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_line_model.dart';
 
@@ -18,12 +18,12 @@ class StockEntryLinesTable extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 24),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.outlineVariant),
+          border: Border.all(color: context.colors.outlineVariant),
         ),
         child: Center(
           child: Text(
             'No line items',
-            style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+            style: AppTextStyles.bodySm.copyWith(color: context.colors.outline),
           ),
         ),
       );
@@ -36,7 +36,7 @@ class StockEntryLinesTable extends StatelessWidget {
           height: 32,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLow,
+            color: context.colors.surfaceContainerLow,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
           ),
           child: const Row(
@@ -49,7 +49,7 @@ class StockEntryLinesTable extends StatelessWidget {
             ],
           ),
         ),
-        const Divider(height: 1, color: AppColors.outlineVariant),
+        Divider(height: 1, color: context.colors.outlineVariant),
 
         // ── Rows ───────────────────────────────────────────────────────
         ...lines.asMap().entries.map((e) {
@@ -57,7 +57,7 @@ class StockEntryLinesTable extends StatelessWidget {
             children: [
               _LineRow(line: e.value, currFmt: _currFmt),
               if (e.key < lines.length - 1)
-                const Divider(height: 1, color: AppColors.outlineVariant),
+                Divider(height: 1, color: context.colors.outlineVariant),
             ],
           );
         }),
@@ -79,7 +79,7 @@ class StockEntryLinesTable extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.outlineVariant),
+                    border: Border.all(color: context.colors.outlineVariant),
                   ),
                   child: tableContent,
                 ),
@@ -90,7 +90,7 @@ class StockEntryLinesTable extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.outlineVariant),
+            border: Border.all(color: context.colors.outlineVariant),
           ),
           child: tableContent,
         );
@@ -148,7 +148,7 @@ class _LineRow extends StatelessWidget {
                     child: Text(
                       line.product.sku!,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+                      style: AppTextStyles.bodySm.copyWith(color: context.colors.outline),
                     ),
                   ),
               ],
@@ -162,7 +162,7 @@ class _LineRow extends StatelessWidget {
               child: Text(
                 currFmt.format(line.unitCost),
                 overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.dataMono.copyWith(color: AppColors.outline),
+                style: AppTextStyles.dataMono.copyWith(color: context.colors.outline),
               ),
             ),
           ),
@@ -174,7 +174,7 @@ class _LineRow extends StatelessWidget {
               child: Text(
                 line.unitSymbol ?? '—',
                 overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+                style: AppTextStyles.bodySm.copyWith(color: context.colors.outline),
               ),
             ),
           ),
@@ -199,7 +199,7 @@ class _LineRow extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.dataMono.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.onSurface,
+                  color: context.colors.onSurface,
                 ),
               ),
             ),

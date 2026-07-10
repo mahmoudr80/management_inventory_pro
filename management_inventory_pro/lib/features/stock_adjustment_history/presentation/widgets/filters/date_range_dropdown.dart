@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import '../../../data/models/date_range_filter.dart';
 
-/// Date-range select for the filter bar. Always has a value, so it doesn't
-/// need an "All" sentinel item — [DateRangeFilter.allTime] covers that case.
 class DateRangeDropdown extends StatelessWidget {
   const DateRangeDropdown({
     super.key,
@@ -24,8 +22,8 @@ class DateRangeDropdown extends StatelessWidget {
         vertical: AppSpacing.lg,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        border: Border.all(color: AppColors.outlineVariant),
+        color: context.colors.surfaceContainerLowest,
+        border: Border.all(color: context.colors.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: DropdownButtonHideUnderline(
@@ -35,24 +33,24 @@ class DateRangeDropdown extends StatelessWidget {
           icon: Icon(
             Icons.keyboard_arrow_down,
             size: AppIconSize.lg,
-            color: AppColors.onSurfaceVariant,
+            color: context.colors.onSurfaceVariant,
           ),
-          style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant),
-          dropdownColor: AppColors.surfaceContainerLowest,
+          style: AppTextStyles.bodySm.copyWith(color: context.colors.onSurfaceVariant),
+          dropdownColor: context.colors.surfaceContainerLowest,
           onChanged: (range) => onChanged(range ?? value),
           items: DateRangeFilter.values
               .map(
                 (range) => DropdownMenuItem(
-                  value: range,
-                  child: Tooltip(
-                    message: range.label,
-                    child: Text(
-                      range.label,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
+              value: range,
+              child: Tooltip(
+                message: range.label,
+                child: Text(
+                  range.label,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              )
+              ),
+            ),
+          )
               .toList(),
         ),
       ),

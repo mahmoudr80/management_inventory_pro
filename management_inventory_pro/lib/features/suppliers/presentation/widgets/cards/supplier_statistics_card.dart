@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_decoration.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
@@ -28,11 +28,10 @@ class SupplierStatisticsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: AppDecorations.card(color: AppColors.surfaceContainerLowest),
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      decoration: AppDecorations.card(color: context.colors.surfaceContainerLowest),
+      padding: const EdgeInsets.all(5),
+      child: Wrap(
+        spacing: 4,
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -48,14 +47,13 @@ class SupplierStatisticsCard extends StatelessWidget {
                 width: 36,
                 height: 33,
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerHigh,
+                  color: context.colors.surfaceContainerHigh,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
+                child: Icon(icon, size: 18, color: context.colors.onSurfaceVariant),
               ),
             ],
           ),
-          const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -63,24 +61,24 @@ class SupplierStatisticsCard extends StatelessWidget {
                 value,
                 style: AppTextStyles.display.copyWith(
                   fontSize: 28,
-                  color: valueColor ?? AppColors.onSurface,
+                  color: valueColor ?? context.colors.onSurface,
                 ),
               ),
               if (badge != null) ...[
                 const SizedBox(width: 8),
                 _Badge(
                   text: badge!,
-                  color: badgeColor ?? AppColors.surfaceContainerHigh,
-                  textColor: badgeTextColor ?? AppColors.onSurfaceVariant,
+                  color: badgeColor ?? context.colors.surfaceContainerHigh,
+                  textColor: badgeTextColor ?? context.colors.onSurfaceVariant,
                 ),
               ],
             ],
           ),
+          
           if (subtitle != null) ...[
-            const SizedBox(height: 4),
             Text(
               subtitle!,
-              style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant),
+              style: AppTextStyles.bodySm.copyWith(color: context.colors.onSurfaceVariant),
             ),
           ],
         ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../theme/pos_theme_extension.dart';
 import '../../../data/models/cart_item.dart';
 
 class CartItemRow extends StatefulWidget {
@@ -32,7 +32,7 @@ class _CartItemRowState extends State<CartItemRow> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         decoration: BoxDecoration(
-          color: _hovered ? AppColors.posSurface : Colors.transparent,
+          color: _hovered ? context.posColors.surface : Colors.transparent,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,36 +44,19 @@ class _CartItemRowState extends State<CartItemRow> {
                 children: [
                   Text(
                     item.product.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
-                      color: AppColors.posTextPrimary,
+                      color: context.posColors.textPrimary,
                     ),
                   ),
                   if (item.variant.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
                       item.variant,
-                      style: const TextStyle(fontSize: 12, color: AppColors.posTextMuted),
+                      style: TextStyle(fontSize: 12, color: context.posColors.textMuted),
                     ),
                   ],
-                  // if (_hovered) ...[
-                  //   const SizedBox(height: 6),
-                  //   GestureDetector(
-                  //     onTap: widget.onRemove,
-                  //     child: const Row(
-                  //       mainAxisSize: MainAxisSize.min,
-                  //       children: [
-                  //         Icon(Icons.delete_outline_rounded, size: 14, color: AppColors.error),
-                  //         SizedBox(width: 4),
-                  //         Text(
-                  //           'Remove',
-                  //           style: TextStyle(fontSize: 12, color: AppColors.error, fontWeight: FontWeight.w600),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ],
                   const SizedBox(height: 6),
 
                   AnimatedOpacity(
@@ -83,20 +66,20 @@ class _CartItemRowState extends State<CartItemRow> {
                       ignoring: !_hovered,
                       child: GestureDetector(
                         onTap: widget.onRemove,
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
                               Icons.delete_outline_rounded,
                               size: 14,
-                              color: AppColors.posError,
+                              color: context.posColors.error,
                             ),
-                            SizedBox(width: 4),
+                            const SizedBox(width: 4),
                             Text(
                               'Remove',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: AppColors.posError,
+                                color: context.posColors.error,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -131,7 +114,7 @@ class _CartItemRowState extends State<CartItemRow> {
               child: Text(
                 '\$${item.lineTotal.toStringAsFixed(2)}',
                 textAlign: TextAlign.right,
-                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: AppColors.posTextPrimary),
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: context.posColors.textPrimary),
               ),
             ),
           ],
@@ -156,10 +139,10 @@ class _QtyButton extends StatelessWidget {
         width: 26,
         height: 26,
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.posBorder),
+          border: Border.all(color: context.posColors.border),
           borderRadius: BorderRadius.circular(6),
         ),
-        child: Icon(icon, size: 14, color: AppColors.posTextPrimary),
+        child: Icon(icon, size: 14, color: context.posColors.textPrimary),
       ),
     );
   }

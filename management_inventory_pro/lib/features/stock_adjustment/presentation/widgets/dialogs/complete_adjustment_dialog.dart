@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -38,20 +38,20 @@ class CompleteAdjustmentDialog extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.sm),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceContainer,
+                      color: context.colors.surfaceContainer,
                       borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.task_alt,
                       size: AppIconSize.xl,
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                     ),
                   ),
                   Expanded(
                     child: Text(
                       'Complete Stock Adjustment',
                       style: AppTextStyles.headlineSm.copyWith(
-                        color: AppColors.textPrimary,
+                        color: context.colors.textPrimary,
                       ),
                     ),
                   ),
@@ -60,23 +60,23 @@ class CompleteAdjustmentDialog extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: AppColors.warningContainer,
+                  color: context.colors.warningContainer,
                   borderRadius: BorderRadius.circular(AppRadius.md),
-                  border: Border.all(color: AppColors.warning.withOpacity(0.4)),
+                  border: Border.all(color: context.colors.warning.withOpacity(0.4)),
                 ),
                 child: Row(
                   spacing: AppSpacing.sm,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.warning_amber_rounded,
-                        size: AppIconSize.lg, color: AppColors.warning),
+                    Icon(Icons.warning_amber_rounded,
+                        size: AppIconSize.lg, color: context.colors.warning),
                     Expanded(
                       child: Text(
                         'This operation will immediately update inventory quantities. Completed adjustments cannot be edited.',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: AppTextStyles.bodySm.copyWith(
-                          color: AppColors.onWarningContainer,
+                          color: context.colors.onWarningContainer,
                         ),
                       ),
                     ),
@@ -91,8 +91,8 @@ class CompleteAdjustmentDialog extends StatelessWidget {
                   OutlinedButton(
                     onPressed: onCancel,
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.textPrimary,
-                      side: const BorderSide(color: AppColors.outlineVariant),
+                      foregroundColor: context.colors.textPrimary,
+                      side: BorderSide(color: context.colors.outlineVariant),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
@@ -103,8 +103,8 @@ class CompleteAdjustmentDialog extends StatelessWidget {
                   ElevatedButton.icon(
                     onPressed: onConfirm,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.onPrimary,
+                      backgroundColor: context.colors.primary,
+                      foregroundColor: context.colors.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppRadius.md),
                       ),

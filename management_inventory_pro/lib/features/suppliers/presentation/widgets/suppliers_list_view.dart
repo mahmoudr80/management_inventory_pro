@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_decoration.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../data/models/supplier_model.dart';
@@ -27,13 +27,13 @@ class SuppliersListView extends StatelessWidget {
         final bool showPhone = constraints.maxWidth > 550;
 
         return Container(
-          decoration: AppDecorations.card(color: AppColors.surfaceContainerLowest),
+          decoration: AppDecorations.card(color: context.colors.surfaceContainerLowest),
           clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
               // Table header
               _TableHeader(showPhone: showPhone),
-              const Divider(height: 1, color: AppColors.outlineVariant),
+              Divider(height: 1, color: context.colors.outlineVariant),
 
               // Rows
               ListView.builder(
@@ -80,7 +80,7 @@ class _TableHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.surfaceContainerLow,
+      color: context.colors.surfaceContainerLow,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [

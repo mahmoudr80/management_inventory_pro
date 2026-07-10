@@ -3,7 +3,7 @@ import 'package:management_inventory_pro/features/stock_receipts/presentation/wi
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/table/stock_entry_table_header.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/table/stock_entry_table_row.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../data/models/stock_entry_model.dart';
 
 class StockEntryTable extends StatelessWidget {
@@ -42,14 +42,14 @@ class StockEntryTable extends StatelessWidget {
         children: [
           // ── Table header ──────────────────────────────────────────────
           const TableHeader(),
-          const Divider(height: 1, color: AppColors.outlineVariant),
+          Divider(height: 1, color: context.colors.outlineVariant),
 
           // ── Rows ──────────────────────────────────────────────────────
           Expanded(
             child: ListView.separated(
               itemCount: entries.length + (_hasMore || isLoadingMore ? 1 : 0),
               separatorBuilder: (_, _) =>
-                  const Divider(height: 1, color: AppColors.outlineVariant),
+                  Divider(height: 1, color: context.colors.outlineVariant),
               itemBuilder: (context, index) {
                 if (index == entries.length) {
                   return FooterRow(
@@ -88,9 +88,9 @@ class StockEntryTable extends StatelessWidget {
                 width: 800,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLowest,
+                    color: context.colors.surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.outlineVariant),
+                    border: Border.all(color: context.colors.outlineVariant),
                   ),
                   child: buildTableContent(),
                 ),
@@ -101,9 +101,9 @@ class StockEntryTable extends StatelessWidget {
 
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: context.colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.outlineVariant),
+            border: Border.all(color: context.colors.outlineVariant),
           ),
           child: buildTableContent(),
         );

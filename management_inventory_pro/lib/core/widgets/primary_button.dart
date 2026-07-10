@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_theme_extension.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 
-/// Filled action button (solid/icon variants).
-///
-/// Refactor notes (responsive_rules.md):
-/// - Removed `flutter_screenutil`; height/padding/icon size now come from
-///   `AppSize` / `AppSpacing` / `AppIconSize` so the button doesn't stretch
-///   or shrink oddly across the supported desktop resolutions.
-/// - Label is wrapped in `Flexible` + ellipsis so long button text (e.g.
-///   localized strings) never overflows the button bounds.
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -34,8 +26,8 @@ class PrimaryButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.surface,
+            backgroundColor: context.colors.primary,
+            foregroundColor: context.colors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
@@ -43,19 +35,19 @@ class PrimaryButton extends StatelessWidget {
           ),
           child: isLoading
               ? SizedBox(
-                  height: AppIconSize.lg,
-                  width: AppIconSize.lg,
-                  child: const CircularProgressIndicator(
-                    color: AppColors.surface,
-                    strokeWidth: 2.5,
-                  ),
-                )
+            height: AppIconSize.lg,
+            width: AppIconSize.lg,
+            child: CircularProgressIndicator(
+              color: context.colors.surface,
+              strokeWidth: 2.5,
+            ),
+          )
               : Text(
-                  text,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.buttonText,
-                ),
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.buttonText,
+          ),
         ),
       );
     }
@@ -64,28 +56,26 @@ class PrimaryButton extends StatelessWidget {
       onPressed: isLoading ? null : onPressed,
       icon: isLoading
           ? SizedBox(
-              height: AppIconSize.sm,
-              width: AppIconSize.sm,
-              child: const CircularProgressIndicator(
-                color: AppColors.onPrimary,
-                strokeWidth: 2,
-              ),
-            )
+        height: AppIconSize.sm,
+        width: AppIconSize.sm,
+        child: CircularProgressIndicator(
+          color: context.colors.onPrimary,
+          strokeWidth: 2,
+        ),
+      )
           : Icon(icon, size: AppIconSize.sm),
-      label: Flexible(
-        child: Text(
-          text,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.bodySm.copyWith(
-            fontWeight: FontWeight.w600,
-            color: AppColors.onPrimary,
-          ),
+      label: Text(
+        text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: AppTextStyles.bodySm.copyWith(
+          fontWeight: FontWeight.w600,
+          color: context.colors.onPrimary,
         ),
       ),
       style: ElevatedButton.styleFrom(
-        foregroundColor: AppColors.onPrimary,
-        backgroundColor: AppColors.primary,
+        foregroundColor: context.colors.onPrimary,
+        backgroundColor: context.colors.primary,
         elevation: 1,
         padding: EdgeInsets.symmetric(
           horizontal: AppSpacing.md,

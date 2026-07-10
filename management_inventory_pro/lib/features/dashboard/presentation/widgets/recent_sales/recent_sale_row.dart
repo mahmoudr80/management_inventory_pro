@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme_extension.dart';
 import '../../../../sale_history/data/models/sale_item_model.dart';
 import '../../../data/models/recent_sale.dart';
 
@@ -113,10 +113,10 @@ class _Cell extends StatelessWidget {
       child: align == CrossAxisAlignment.start
           ? child
           : Column(
-              crossAxisAlignment: align,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [child],
-            ),
+        crossAxisAlignment: align,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [child],
+      ),
     );
     if (width != null) return SizedBox(width: width, child: inner);
     return Expanded(flex: flex ?? 1, child: inner);
@@ -129,10 +129,11 @@ class _SaleStatusDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final coreColors = context.colors;
     final color = switch (status) {
-      SaleStatus.completed => AppColors.success,
-      SaleStatus.refunded => AppColors.warning,
-      SaleStatus.cancelled => AppColors.error,
+      SaleStatus.completed => coreColors.success,
+      SaleStatus.refunded => coreColors.warning,
+      SaleStatus.cancelled => coreColors.error,
     };
     return Tooltip(
         message: status.name,

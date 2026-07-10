@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/features/pos/presentation/widgets/cart/payment_buttons.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../theme/pos_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../../sale_history/data/models/sale_item_model.dart';
@@ -48,7 +48,7 @@ class CartPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: Responsive.isCompact(context) ? 320 : 420,
-      color: AppColors.posCartBg,
+      color: context.posColors.cartBg,
       child: Column(
         children: [
           CustomerCard(customerName: customerName, onEdit: onEditCustomer),
@@ -58,15 +58,15 @@ class CartPanel extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 3,
-                  child: Text('ITEM', style: AppTextStyles.labelCaps.copyWith(color: AppColors.posTextMuted)),
+                  child: Text('ITEM', style: AppTextStyles.labelCaps.copyWith(color: context.posColors.textMuted)),
                 ),
                 SizedBox(
                   width: 96,
-                  child: Text('QTY', textAlign: TextAlign.center, style: AppTextStyles.labelCaps.copyWith(color: AppColors.posTextMuted)),
+                  child: Text('QTY', textAlign: TextAlign.center, style: AppTextStyles.labelCaps.copyWith(color: context.posColors.textMuted)),
                 ),
                 SizedBox(
                   width: 70,
-                  child: Text('PRICE', textAlign: TextAlign.right, style: AppTextStyles.labelCaps.copyWith(color: AppColors.posTextMuted)),
+                  child: Text('PRICE', textAlign: TextAlign.right, style: AppTextStyles.labelCaps.copyWith(color: context.posColors.textMuted)),
                 ),
               ],
             ),
@@ -74,29 +74,29 @@ class CartPanel extends StatelessWidget {
           Expanded(
             child: items.isEmpty
                 ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.pagePadding),
-                      child: Text(
-                        'Cart is empty. Tap a product to add it.',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.bodySm.copyWith(color: AppColors.posTextMuted),
-                      ),
-                    ),
-                  )
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.pagePadding),
+                child: Text(
+                  'Cart is empty. Tap a product to add it.',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.bodySm.copyWith(color: context.posColors.textMuted),
+                ),
+              ),
+            )
                 : ListView.separated(
-                    padding: EdgeInsets.zero,
-                    itemCount: items.length,
-                    separatorBuilder: (_, _) => const Divider(height: 1, color: AppColors.posBorder),
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      return CartItemRow(
-                        item: item,
-                        onIncrement: () => onIncrement(item),
-                        onDecrement: () => onDecrement(item),
-                        onRemove: () => onRemove(item),
-                      );
-                    },
-                  ),
+              padding: EdgeInsets.zero,
+              itemCount: items.length,
+              separatorBuilder: (_, _) => Divider(height: 1, color: context.posColors.border),
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return CartItemRow(
+                  item: item,
+                  onIncrement: () => onIncrement(item),
+                  onDecrement: () => onDecrement(item),
+                  onRemove: () => onRemove(item),
+                );
+              },
+            ),
           ),
           OrderSummary(subtotal: subtotal),
           PaymentButtons(
@@ -105,8 +105,6 @@ class CartPanel extends StatelessWidget {
             onSplitPay: onSplitPay,
             onPrint: onPrint,
           ),
-          // Primary checkout CTA — directly below the payment method section,
-          // the single most prominent action in the cart panel.
           Padding(
             padding: const EdgeInsets.fromLTRB(AppSpacing.cardPadding, 0, AppSpacing.cardPadding, AppSpacing.cardPadding),
             child: CompleteSaleButton(

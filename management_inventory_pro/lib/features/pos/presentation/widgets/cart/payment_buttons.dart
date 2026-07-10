@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../theme/pos_theme_extension.dart';
 import '../../../../sale_history/data/models/sale_item_model.dart';
 
 
@@ -52,10 +52,10 @@ class PaymentButtons extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: onSplitPay,
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.posBorder),
+                    side: BorderSide(color: context.posColors.border),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    foregroundColor: AppColors.posTextPrimary,
+                    foregroundColor: context.posColors.textPrimary,
                   ),
                   icon: const Icon(Icons.call_split_rounded, size: 18),
                   label: const Text('Split Pay', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
@@ -65,10 +65,10 @@ class PaymentButtons extends StatelessWidget {
               OutlinedButton(
                 onPressed: onPrint,
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.posBorder),
+                  side: BorderSide(color: context.posColors.border),
                   padding: const EdgeInsets.all(14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  foregroundColor: AppColors.posTextPrimary,
+                  foregroundColor: context.posColors.textPrimary,
                 ),
                 child: const Icon(Icons.print_outlined, size: 19),
               ),
@@ -104,21 +104,21 @@ class _PaymentButton extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: isActiveStyle ? AppColors.posPrimary : Colors.white,
+          color: isActiveStyle ? context.posColors.primary : Colors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isActiveStyle ? AppColors.posPrimary : AppColors.posBorder,
+            color: isActiveStyle ? context.posColors.primary : context.posColors.border,
             width: isActiveStyle ? 0 : 1.5,
           ),
         ),
         child: Column(
           children: [
-            Icon(icon, color: isActiveStyle ? Colors.white : AppColors.posPrimary, size: 22),
+            Icon(icon, color: isActiveStyle ? Colors.white : context.posColors.primary, size: 22),
             const SizedBox(height: 6),
             Text(
               label,
               style: TextStyle(
-                color: isActiveStyle ? Colors.white : AppColors.posPrimary,
+                color: isActiveStyle ? Colors.white : context.posColors.primary,
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),

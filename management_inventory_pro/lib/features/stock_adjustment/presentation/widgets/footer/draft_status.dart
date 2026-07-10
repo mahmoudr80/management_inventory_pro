@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -16,9 +16,9 @@ class DraftStatus extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainer,
+            color: context.colors.surfaceContainer,
             borderRadius: BorderRadius.circular(AppRadius.sm),
-            border: Border.all(color: AppColors.outlineVariant),
+            border: Border.all(color: context.colors.outlineVariant),
           ),
           child: Text(
             'Ctrl+S',
@@ -33,7 +33,7 @@ class DraftStatus extends StatelessWidget {
               isSaved ? 'Draft Saved' : 'Unsaved changes',
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.bodySm.copyWith(
-                color: isSaved ? AppColors.success : AppColors.outline,
+                color: isSaved ? context.colors.success : context.colors.outline,
                 fontWeight: FontWeight.w500,
               ),
             ),

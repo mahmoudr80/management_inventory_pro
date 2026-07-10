@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../../core/theme/app_text_styles.dart';
 import '../../../../../../core/components/app_card.dart';
 import '../../../../../../core/components/status_chip.dart';
 import '../../../data/models/product_model.dart';
 
-/// Grid-card presentation of a [ProductModel].
 class ProductGridCard extends StatelessWidget {
   final ProductModel product;
   final VoidCallback onDelete;
@@ -29,25 +28,25 @@ class ProductGridCard extends StatelessWidget {
             width: double.infinity,
             height: 90,
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: context.colors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(8),
             ),
             alignment: Alignment.center,
             child: product.imageUrl != null && product.imageUrl!.isNotEmpty
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      File(product.imageUrl!),
-                      width: double.infinity,
-                      height: 90,
-                      fit: BoxFit.scaleDown,
-                    ),
-                  )
-                : const Icon(
-                    Icons.inventory_2_outlined,
-                    color: AppColors.primary,
-                    size: 36,
-                  ),
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(
+                File(product.imageUrl!),
+                width: double.infinity,
+                height: 90,
+                fit: BoxFit.scaleDown,
+              ),
+            )
+                : Icon(
+              Icons.inventory_2_outlined,
+              color: context.colors.primary,
+              size: 36,
+            ),
           ),
           const SizedBox(height: 10),
           Row(
@@ -70,10 +69,10 @@ class ProductGridCard extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
                 tooltip: 'Delete product',
-                icon: const Icon(
+                icon: Icon(
                   Icons.delete_outline_rounded,
                   size: 16,
-                  color: AppColors.error,
+                  color: context.colors.error,
                 ),
                 onPressed: onDelete,
               ),
@@ -87,7 +86,7 @@ class ProductGridCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.dataMono.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 fontSize: 11,
               ),
             ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 import 'package:management_inventory_pro/core/widgets/custom_text_field.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_decoration.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/supplier_model.dart';
@@ -90,7 +90,7 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: AppColors.surfaceContainerLowest,
+      backgroundColor: context.colors.surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
       child: ConstrainedBox(
@@ -110,7 +110,7 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceContainerHigh,
+                        color: context.colors.surfaceContainerHigh,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -118,7 +118,7 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                             ? Icons.edit_outlined
                             : Icons.add_business_outlined,
                         size: 18,
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -136,7 +136,7 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                         }
                       },
                       icon: const Icon(Icons.close, size: 20),
-                      color: AppColors.outline,
+                      color: context.colors.outline,
                     ),
                   ],
                 ),
@@ -277,8 +277,8 @@ class _CancelButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: AppColors.outlineVariant),
-        foregroundColor: AppColors.onSurfaceVariant,
+        side: BorderSide(color: context.colors.outlineVariant),
+        foregroundColor: context.colors.onSurfaceVariant,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
@@ -297,8 +297,8 @@ class _SubmitButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.onPrimary,
+        backgroundColor: context.colors.primary,
+        foregroundColor: context.colors.onPrimary,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 0,
@@ -306,7 +306,7 @@ class _SubmitButton extends StatelessWidget {
       child: Text(
         label,
         style: AppTextStyles.bodyMd.copyWith(
-          color: AppColors.onPrimary,
+          color: context.colors.onPrimary,
           fontWeight: FontWeight.w600,
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme_extension.dart';
+import '../../theme/dashboard_theme_extension.dart';
 import '../../../data/models/low_stock_product.dart';
 
 class LowStockRow extends StatelessWidget {
@@ -15,12 +16,13 @@ class LowStockRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final dashColors = context.dashboardColors;
     final isCritical = product.status == LowStockStatus.critical ||
         product.status == LowStockStatus.outOfStock;
 
     return Container(
       decoration: BoxDecoration(
-        color: isCritical ? AppColors.errorContainer.withOpacity(0.08) : null,
+        color: isCritical ? dashColors.errorContainer.withOpacity(0.08) : null,
         border: Border(
           bottom: BorderSide(color: theme.colorScheme.outlineVariant),
         ),
@@ -80,9 +82,9 @@ class _NumCell extends StatelessWidget {
           value,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontFamily: 'JetBrains Mono',
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+            fontFamily: 'JetBrains Mono',
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
       ),
     );
@@ -95,10 +97,12 @@ class _StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final coreColors = context.colors;
+    final dashColors = context.dashboardColors;
     final (label, bg, fg) = switch (status) {
-      LowStockStatus.critical => ('CRITICAL', AppColors.errorContainer, AppColors.error),
-      LowStockStatus.outOfStock => ('OUT OF STOCK', AppColors.errorContainer, AppColors.error),
-      LowStockStatus.warning => ('WARNING', AppColors.warningContainer, AppColors.onWarningContainer),
+      LowStockStatus.critical => ('CRITICAL', dashColors.errorContainer, coreColors.error),
+      LowStockStatus.outOfStock => ('OUT OF STOCK', dashColors.errorContainer, coreColors.error),
+      LowStockStatus.warning => ('WARNING', dashColors.warningContainer, dashColors.onWarningContainer),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),

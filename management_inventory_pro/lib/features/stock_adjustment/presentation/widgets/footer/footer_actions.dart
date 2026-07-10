@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import '../../cubit/stock_adjustment_cubit.dart';
 import '../../cubit/stock_adjustment_state.dart';
@@ -24,9 +24,9 @@ class FooterActions extends StatelessWidget {
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.sm,
           ),
-          decoration: const BoxDecoration(
-            color: AppColors.surface,
-            border: Border(top: BorderSide(color: AppColors.outlineVariant)),
+          decoration: BoxDecoration(
+            color: context.colors.surface,
+            border: Border(top: BorderSide(color: context.colors.outlineVariant)),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,9 +41,9 @@ class FooterActions extends StatelessWidget {
                   runSpacing: AppSpacing.sm,
                   children: [
                     DraftStatus(isSaved: state.isDraftSaved),
-                    const SizedBox(
+                    SizedBox(
                       height: 20,
-                      child: VerticalDivider(color: AppColors.outlineVariant, width: 1),
+                      child: VerticalDivider(color: context.colors.outlineVariant, width: 1),
                     ),
                     DiscardDraftButton(onPressed: cubit.discardDraft),
                   ],

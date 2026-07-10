@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/supplier_ref.dart';
 import '../supplier_dropdown.dart';
@@ -48,8 +48,8 @@ class StockEntryInfoSection extends StatelessWidget {
                 height: 46,
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  border: Border.all(color: AppColors.border),
+                  color: context.colors.surface,
+                  border: Border.all(color: context.colors.border),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -57,15 +57,15 @@ class StockEntryInfoSection extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${receiptDate.year}-'
-                        '${receiptDate.month.toString().padLeft(2, '0')}-'
-                        '${receiptDate.day.toString().padLeft(2, '0')}',
+                            '${receiptDate.month.toString().padLeft(2, '0')}-'
+                            '${receiptDate.day.toString().padLeft(2, '0')}',
                         style: AppTextStyles.bodyMd,
                       ),
                     ),
-                    const Icon(
+                    Icon(
                       Icons.calendar_today_outlined,
                       size: 18,
-                      color: AppColors.outline,
+                      color: context.colors.outline,
                     ),
                   ],
                 ),

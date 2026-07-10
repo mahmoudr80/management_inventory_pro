@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_decoration.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
@@ -45,8 +45,8 @@ class _SalesTableState extends State<SalesTable> {
 
     return Container(
       decoration: AppDecorations.elevatedCard(
-        color: AppColors.surface,
-        borderColor: AppColors.border,
+        color: context.colors.surface,
+        borderColor: context.colors.border,
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -65,14 +65,14 @@ class _SalesTableState extends State<SalesTable> {
                   sortDirection: widget.sortDirection,
                   onSort: cubit.sortBy,
                 ),
-                const Divider(height: 1, color: AppColors.border),
+                Divider(height: 1, color: context.colors.border),
                 Expanded(
                   child: Scrollbar(
                     controller: _rowsScrollController,
                     child: ListView.separated(
                       controller: _rowsScrollController,
                       itemCount: widget.sales.length,
-                      separatorBuilder: (_, __) => const Divider(height: 1, color: AppColors.border),
+                      separatorBuilder: (_, __) => Divider(height: 1, color: context.colors.border),
                       itemBuilder: (context, index) {
                         final sale = widget.sales[index];
                         return SaleRow(
@@ -84,7 +84,7 @@ class _SalesTableState extends State<SalesTable> {
                     ),
                   ),
                 ),
-                const Divider(height: 1, color: AppColors.border),
+                Divider(height: 1, color: context.colors.border),
                 SaleTableFooter(
                   filteredTotal: widget.filteredTotal,
                   currentPage: widget.currentPage,
@@ -96,11 +96,6 @@ class _SalesTableState extends State<SalesTable> {
             ),
           );
 
-          // If the allocated width (e.g. table squeezed by an open details
-          // panel) is below the table's minimum comfortable width, scroll
-          // horizontally instead of overflowing. Vertical layout (the
-          // Expanded row list above) is unaffected since this only scrolls
-          // the horizontal axis.
           if (constraints.maxWidth >= AppBreakpoints.compact) {
             return tableCore;
           }
@@ -120,5 +115,3 @@ class _SalesTableState extends State<SalesTable> {
     );
   }
 }
-
-

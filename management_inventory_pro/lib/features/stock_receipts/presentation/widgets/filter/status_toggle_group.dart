@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_status.dart';
 
@@ -74,10 +74,10 @@ class _StatusChip extends StatelessWidget {
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primary : AppColors.surface,
+          color: isActive ? context.colors.primary : context.colors.surface,
           borderRadius: BorderRadius.circular(4),
           border: Border.all(
-            color: isActive ? AppColors.primary : AppColors.outlineVariant,
+            color: isActive ? context.colors.primary : context.colors.outlineVariant,
           ),
         ),
         alignment: Alignment.center,
@@ -86,7 +86,7 @@ class _StatusChip extends StatelessWidget {
           child: Text(
             label,
             style: AppTextStyles.bodySm.copyWith(
-              color: isActive ? AppColors.onPrimary : AppColors.onSurfaceVariant,
+              color: isActive ? context.colors.onPrimary : context.colors.onSurfaceVariant,
               fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
             ),
             overflow: TextOverflow.ellipsis,

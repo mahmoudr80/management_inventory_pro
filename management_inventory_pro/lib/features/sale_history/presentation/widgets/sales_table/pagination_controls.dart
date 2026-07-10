@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -30,9 +30,11 @@ class PaginationControls extends StatelessWidget {
           if (p == -1) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
-              child: Text(
-                '...',
-                style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary),
+              child: Builder(
+                builder: (context) => Text(
+                  '...',
+                  style: AppTextStyles.bodySm.copyWith(color: context.colors.textSecondary),
+                ),
               ),
             );
           }
@@ -86,8 +88,8 @@ class _PageButton extends StatelessWidget {
           icon,
           size: AppSpacing.lg,
           color: onTap != null
-              ? AppColors.textPrimary
-              : AppColors.border,
+              ? context.colors.textPrimary
+              : context.colors.border,
         ),
       ),
     );
@@ -115,14 +117,14 @@ class _PageNumberButton extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primary : Colors.transparent,
+          color: isActive ? context.colors.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(AppRadius.sm),
         ),
         child: Text(
           page.toString(),
           style: AppTextStyles.bodySm.copyWith(
             fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-            color: isActive ? AppColors.surface : AppColors.textPrimary,
+            color: isActive ? context.colors.surface : context.colors.textPrimary,
           ),
         ),
       ),

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../../core/theme/app_text_styles.dart';
 import '../../../../../../core/components/app_card.dart';
 import '../../../../../../core/components/status_chip.dart';
@@ -20,24 +20,24 @@ class ProductCard extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: context.colors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(4),
             ),
             child: product.imageUrl != null && product.imageUrl!.isNotEmpty
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      File(product.imageUrl!),
-                      width: 40,
-                      height: 40,
-                      fit: BoxFit.scaleDown,
-                    ),
-                  )
-                : const Icon(
-                    Icons.inventory_2_outlined,
-                    color: AppColors.primary,
-                    size: 40,
-                  ),
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(
+                File(product.imageUrl!),
+                width: 40,
+                height: 40,
+                fit: BoxFit.scaleDown,
+              ),
+            )
+                : Icon(
+              Icons.inventory_2_outlined,
+              color: context.colors.primary,
+              size: 40,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -77,7 +77,7 @@ class ProductCard extends StatelessWidget {
                     maxLines: 1,
                     style: AppTextStyles.dataMono.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                     ),
                   ),
                 ),
@@ -107,9 +107,9 @@ class ProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.delete_outline_rounded,
-                  color: AppColors.error,
+                  color: context.colors.error,
                 ),
                 onPressed: onDelete,
               ),

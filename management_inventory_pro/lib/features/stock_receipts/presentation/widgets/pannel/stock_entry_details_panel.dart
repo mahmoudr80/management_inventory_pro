@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/dialogs/dialog_utils.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_model.dart';
 import '../../cubit/stock_entry_cubit.dart';
@@ -20,9 +20,9 @@ class StockEntryDetailsPanel extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: context.colors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.outlineVariant),
+        border: Border.all(color: context.colors.outlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -71,9 +71,9 @@ class _PanelTopBar extends StatelessWidget {
     return Container(
       height: 48,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: AppColors.outlineVariant),
+          bottom: BorderSide(color: context.colors.outlineVariant),
         ),
       ),
       child: Row(
@@ -86,10 +86,10 @@ class _PanelTopBar extends StatelessWidget {
           const Spacer(),
           IconButton(
             onPressed: onClose,
-            icon: const Icon(
+            icon: Icon(
               Icons.close_rounded,
               size: 20,
-              color: AppColors.outline,
+              color: context.colors.outline,
             ),
             constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             tooltip: 'Close panel',
@@ -125,8 +125,8 @@ class _PanelActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.outlineVariant)),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: context.colors.outlineVariant)),
       ),
       child: Row(
         children: [
@@ -143,8 +143,8 @@ class _PanelActions extends StatelessWidget {
               icon: const Icon(Icons.print_rounded, size: 16),
               label: const Text('Print'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.onSurface,
-                side: const BorderSide(color: AppColors.outlineVariant),
+                foregroundColor: context.colors.onSurface,
+                side: BorderSide(color: context.colors.outlineVariant),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -160,9 +160,9 @@ class _PanelActions extends StatelessWidget {
               icon: const Icon(Icons.delete_outline_rounded, size: 16),
               label: const Text('Delete'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.error,
-                side: const BorderSide(color: AppColors.errorContainer),
-                backgroundColor: AppColors.errorContainer.withOpacity(0.3),
+                foregroundColor: context.colors.error,
+                side: BorderSide(color: context.colors.errorContainer),
+                backgroundColor: context.colors.errorContainer.withOpacity(0.3),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),

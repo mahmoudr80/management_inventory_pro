@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 
-class PosSearchBar extends StatelessWidget {
+class ProductSearchBar extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
-  const PosSearchBar({super.key, this.onChanged});
+  const ProductSearchBar({super.key, this.onChanged});
 
   @override
   Widget build(BuildContext context) {

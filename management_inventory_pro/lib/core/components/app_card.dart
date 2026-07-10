@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import '../theme/app_theme_extension.dart';
 import '../theme/app_decoration.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
@@ -31,10 +31,6 @@ class _AppCardState extends State<AppCard> {
 
   @override
   Widget build(BuildContext context) {
-    // NOTE: the original implementation nested an AnimatedContainer and an
-    // inner Container that both painted a border/background on top of one
-    // another (the inner one always won, so the hover border never showed).
-    // Collapsed into a single decorated AnimatedContainer.
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
@@ -42,15 +38,15 @@ class _AppCardState extends State<AppCard> {
         duration: AppAnimation.fast,
         decoration: widget.border != null
             ? BoxDecoration(
-                color: widget.backgroundColor ?? AppColors.surface,
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                border: widget.border,
-              )
+          color: widget.backgroundColor ?? context.colors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: widget.border,
+        )
             : AppDecorations.card(
-                color: widget.backgroundColor ?? AppColors.surface,
-                radius: AppRadius.md,
-                borderColor: isHovered ? AppColors.primary : AppColors.border,
-              ),
+          color: widget.backgroundColor ?? context.colors.surface,
+          radius: AppRadius.md,
+          borderColor: isHovered ? context.colors.primary : context.colors.border,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -75,7 +71,7 @@ class _AppCardState extends State<AppCard> {
                             overflow: TextOverflow.ellipsis,
                             style: AppTextStyles.headlineSm.copyWith(
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
+                              color: context.colors.textPrimary,
                             ),
                           ),
                         ),
@@ -86,7 +82,7 @@ class _AppCardState extends State<AppCard> {
                   ],
                 ),
               ),
-              const Divider(color: AppColors.border, height: 1.0),
+              Divider(color: context.colors.border, height: 1.0),
             ],
             Padding(
               padding: widget.padding ??

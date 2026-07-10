@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../theme/pos_theme_extension.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/pos_product.dart';
 
@@ -38,24 +38,24 @@ class _ProductCardState extends State<ProductCard> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
-            color: AppColors.posCardBg,
+            color: context.posColors.cardBg,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: widget.selected
-                  ? AppColors.posPrimary
+                  ? context.posColors.primary
                   : (_hovered && !disabled)
-                      ? AppColors.posPrimary.withOpacity(0.4)
-                      : AppColors.posBorder,
+                  ? context.posColors.primary.withOpacity(0.4)
+                  : context.posColors.border,
               width: widget.selected ? 2 : 1,
             ),
             boxShadow: (_hovered && !disabled)
                 ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 14,
-                      offset: const Offset(0, 6),
-                    ),
-                  ]
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
+              ),
+            ]
                 : [],
           ),
           transform: (_hovered && !disabled)
@@ -66,7 +66,6 @@ class _ProductCardState extends State<ProductCard> {
             child: Padding(
               padding: const EdgeInsets.all(12),
               child:Column(
-                //direction: Axis.vertical,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Stack(
@@ -78,7 +77,7 @@ class _ProductCardState extends State<ProductCard> {
                             borderRadius: BorderRadius.circular(12),
                             child: product.imageUrl==null?  Icon(
                               Icons.inventory_2_outlined,
-                              color: AppColors.primary,
+                              color: context.colors.primary,
                               size: 70,
                             ):
                             ClipRRect(
@@ -99,7 +98,7 @@ class _ProductCardState extends State<ProductCard> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             decoration: BoxDecoration(
-                              color: AppColors.posError,
+                              color: context.posColors.error,
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: const Center(
@@ -123,20 +122,20 @@ class _ProductCardState extends State<ProductCard> {
                     product.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: AppColors.posTextPrimary,
+                      color: context.posColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '\$${product.price.toStringAsFixed(2)}',
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
-                      color: AppColors.posPrimary,
+                      color: context.posColors.primary,
                     ),
                   ),
                   const SizedBox(height: 2),

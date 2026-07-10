@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
 
@@ -16,10 +16,10 @@ class InventoryValueWidget extends StatelessWidget {
     final isZero = impact == 0;
 
     final color = isZero
-        ? AppColors.outline
+        ? context.colors.outline
         : isPositive
-            ? AppColors.primary
-            : AppColors.error;
+        ? context.colors.primary
+        : context.colors.error;
 
     final formatted = NumberFormat.currency(symbol: '\$', decimalDigits: 2)
         .format(impact.abs());

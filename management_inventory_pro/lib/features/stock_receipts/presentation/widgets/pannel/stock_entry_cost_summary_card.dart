@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_model.dart';
 
@@ -22,9 +22,9 @@ class StockEntryCostSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: context.colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.outlineVariant),
+        border: Border.all(color: context.colors.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,20 +41,20 @@ class StockEntryCostSummaryCard extends StatelessWidget {
                 ? totalQty.toInt().toString()
                 : totalQty.toStringAsFixed(2),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Divider(height: 1, color: AppColors.outlineVariant),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Divider(height: 1, color: context.colors.outlineVariant),
           ),
           _SummaryRow(
             label: 'Total Cost',
             value: _currFmt.format(totalCost),
             labelStyle: AppTextStyles.bodyMd.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.onSurface,
+              color: context.colors.onSurface,
             ),
             valueStyle: AppTextStyles.bodyMd.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.primary,
+              color: context.colors.primary,
             ),
           ),
         ],
@@ -90,7 +90,7 @@ class _SummaryRow extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: (labelStyle ?? AppTextStyles.bodySm).copyWith(
-                  color: AppColors.outline,
+                  color: context.colors.outline,
                 ),
               ),
             ),
@@ -105,7 +105,7 @@ class _SummaryRow extends StatelessWidget {
               style: valueStyle ??
                   AppTextStyles.dataMono.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.onSurface,
+                    color: context.colors.onSurface,
                   ),
             ),
           ),

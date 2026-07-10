@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_decoration.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../cubit/suppliers_cubit.dart';
@@ -26,7 +26,7 @@ class _SuppliersToolbarSectionState extends State<SuppliersToolbarSection> {
   Widget build(BuildContext context) {
     return BlocBuilder<SuppliersCubit, SuppliersState>(
       buildWhen: (prev, curr) =>
-          prev.searchQuery != curr.searchQuery ||
+      prev.searchQuery != curr.searchQuery ||
           prev.filteredSuppliers.length != curr.filteredSuppliers.length,
       builder: (context, state) {
         return Row(
@@ -39,18 +39,18 @@ class _SuppliersToolbarSectionState extends State<SuppliersToolbarSection> {
                 onChanged: context.read<SuppliersCubit>().search,
                 decoration: AppDecorations.searchField(
                   hint: 'Search suppliers by name, email, phone…',
-                  prefix: const Padding(
-                    padding: EdgeInsets.only(left: 12, right: 8),
-                    child: Icon(Icons.search, size: 18, color: AppColors.outline),
+                  prefix: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 8),
+                    child: Icon(Icons.search, size: 18, color: context.colors.outline),
                   ),
                   suffix: state.searchQuery.isNotEmpty
                       ? IconButton(
-                          icon: const Icon(Icons.close, size: 16, color: AppColors.outline),
-                          onPressed: () {
-                            _searchCtrl.clear();
-                            context.read<SuppliersCubit>().clearSearch();
-                          },
-                        )
+                    icon: Icon(Icons.close, size: 16, color: context.colors.outline),
+                    onPressed: () {
+                      _searchCtrl.clear();
+                      context.read<SuppliersCubit>().clearSearch();
+                    },
+                  )
                       : null,
                 ),
               ),
@@ -61,9 +61,9 @@ class _SuppliersToolbarSectionState extends State<SuppliersToolbarSection> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLow,
+                color: context.colors.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.outlineVariant),
+                border: Border.all(color: context.colors.outlineVariant),
               ),
               child: Text(
                 '${state.filteredSuppliers.length} of ${state.suppliers.length}',

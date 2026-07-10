@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:management_inventory_pro/features/product/presentation/products/cubit/product_cubit.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../theme/pos_theme_extension.dart';
 import '../../../../../generated/assets.gen.dart';
 import '../../../data/models/pos_product.dart';
 import '../../cubit/pos_cubit.dart';
@@ -44,13 +43,6 @@ class ProductGrid extends StatelessWidget {
               ),
             ],
             Expanded(
-              //flex: 3,
-              // ProductCubit owns fetching from the repository (loading /
-              // success / error). PosCubit owns what's actually rendered
-              // (search-filtered results). The listener below is the only
-              // bridge between the two: every time the repository delivers
-              // a fresh product list, it's handed to PosCubit once — after
-              // that, search never touches the network again.
               child: BlocConsumer<ProductCubit, ProductState>(
                 listenWhen: (previous, current) => current is ProductSuccess,
                 listener: (context, state) {
@@ -69,8 +61,8 @@ class ProductGrid extends StatelessWidget {
                   if (productState is ProductSuccess) {
                     return BlocBuilder<PosCubit, PosState>(
                       buildWhen: (previous, current) =>
-                          previous.filteredProducts !=
-                              current.filteredProducts ||
+                      previous.filteredProducts !=
+                          current.filteredProducts ||
                           previous.searchQuery != current.searchQuery,
                       builder: (context, posState) {
                         if (posState.filteredProducts.isEmpty) {
@@ -119,7 +111,7 @@ class _ProductGrid extends StatelessWidget {
   int _columnsForWidth(double width) {
     const desiredCardWidth = 240.0;
     const spacing = 10.0;
-    const horizontalPadding = 32.0; // 16 left + 16 right
+    const horizontalPadding = 32.0;
 
     final available = width - horizontalPadding;
 
@@ -127,55 +119,6 @@ class _ProductGrid extends StatelessWidget {
         .floor()
         .clamp(2, 8);
   }
-  //  int _columnsForWidth(double width) {
-  //   if (width >= 1600){
-  //      if(showCart||showAnalytics){
-  //       return 6;
-  //     }
-  //     else{
-  //       return 7;
-  //     }
-  //   }
-  //   else if (width >= 1300) {
-  //    if(showCart||showAnalytics){
-  //       return 5;
-  //     }
-  //     else{
-  //       return 6;
-  //     }
-  //
-  //   }
-  //   else if (width >= 1100) {
-  //      if(showCart||showAnalytics){
-  //       return 4;
-  //     }
-  //     else{
-  //       return 5;
-  //     }
-  //
-  //   }
-  //   else if (width >= 900) {
-  //       if(showCart||showAnalytics){
-  //         return 3;
-  //       }
-  //       else{
-  //         return 4;
-  //       }
-  //
-  //   }
-  //   else{
-  //     if(showCart&&showAnalytics){
-  //       return 1;
-  //     }
-  //     else if(showCart||showAnalytics){
-  //       return 2;
-  //     }
-  //     else{
-  //       return 3;
-  //     }
-  //   }
-  //
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -184,23 +127,14 @@ class _ProductGrid extends StatelessWidget {
       builder: (context, constraints) {
         final crossAxisCount = _columnsForWidth(constraints.maxWidth);
 
-        const cardWidth = 230.0;
-        const spacing = 10.0;
-
-        // final crossAxisCount =
-        // ((constraints.maxWidth + spacing) /
-        //     (cardWidth + spacing))
-        //     .floor()
-        //     .clamp(2, 8);
-
         return GridView.builder(
           key:  ValueKey(crossAxisCount),
           controller: controller,
           padding: const EdgeInsets.all(16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
-            crossAxisSpacing: spacing,
-            mainAxisSpacing: spacing,
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
             childAspectRatio: crossAxisCount==3?1.1:0.9,
           ),
           itemCount: products.length,
@@ -216,8 +150,6 @@ class _ProductGrid extends StatelessWidget {
   }
 }
 
-/// Professional empty states shown when [PosState.filteredProducts] is
-/// empty. Purely presentational — never triggers a refetch.
 class _EmptySearchState extends StatelessWidget {
   final String searchQuery;
 
@@ -234,31 +166,31 @@ class _EmptySearchState extends StatelessWidget {
           Container(
             width: 64,
             height: 64,
-            decoration: const BoxDecoration(
-              color: AppColors.posSummaryBg,
+            decoration: BoxDecoration(
+              color: context.posColors.summaryBg,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.search_off_rounded,
               size: 30,
-              color: AppColors.posPrimary,
+              color: context.posColors.primary,
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'No products found',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 16,
-              color: AppColors.posTextPrimary,
+              color: context.posColors.textPrimary,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             hasQuery ? 'Try another search term' : 'No products available yet',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
-              color: AppColors.posTextMuted,
+              color: context.posColors.textMuted,
             ),
           ),
         ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_decoration.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_line_model.dart';
@@ -53,13 +53,13 @@ class StockEntryLineTable extends StatelessWidget {
             ],
           ),
         ),
-        const Divider(height: 1, color: AppColors.outlineVariant),
+        Divider(height: 1, color: context.colors.outlineVariant),
         // Lines
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: lines.length,
-          separatorBuilder: (_, _) => const Divider(height: 1, color: AppColors.outlineVariant),
+          separatorBuilder: (_, _) => Divider(height: 1, color: context.colors.outlineVariant),
           itemBuilder: (_, index) => EntryLineRow(
             index: index,
             line: lines[index],
@@ -68,7 +68,7 @@ class StockEntryLineTable extends StatelessWidget {
           ),
         ),
         // Add row button
-        const Divider(height: 1, color: AppColors.outlineVariant),
+        Divider(height: 1, color: context.colors.outlineVariant),
         InkWell(
           onTap: onAddLine,
           borderRadius: BorderRadius.circular(8),
@@ -76,11 +76,11 @@ class StockEntryLineTable extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
-                const Icon(Icons.add, color: AppColors.primary, size: 18),
+                Icon(Icons.add, color: context.colors.primary, size: 18),
                 const SizedBox(width: 8),
                 Text(
                   'Start typing to add a product...',
-                  style: AppTextStyles.bodyMd.copyWith(color: AppColors.outline),
+                  style: AppTextStyles.bodyMd.copyWith(color: context.colors.outline),
                 ),
               ],
             ),

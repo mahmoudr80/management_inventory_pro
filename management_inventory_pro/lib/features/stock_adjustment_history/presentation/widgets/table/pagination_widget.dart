@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
-/// Static (mock) pagination footer. Per spec, real pagination wiring is
-/// out of scope for this audit screen.
 class PaginationWidget extends StatelessWidget {
   const PaginationWidget({
     super.key,
@@ -30,7 +28,7 @@ class PaginationWidget extends StatelessWidget {
           Text(
             'Showing $start-$end of $totalCount results',
             style: AppTextStyles.bodySm.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: context.colors.onSurfaceVariant,
             ),
           ),
           Row(
@@ -62,10 +60,10 @@ class _PageButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.xs),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.outlineVariant),
+          border: Border.all(color: context.colors.outlineVariant),
           borderRadius: BorderRadius.circular(AppRadius.standard),
         ),
-        child: Icon(icon, size: AppIconSize.sm, color: AppColors.onSurfaceVariant),
+        child: Icon(icon, size: AppIconSize.sm, color: context.colors.onSurfaceVariant),
       ),
     );
   }
@@ -83,13 +81,13 @@ class _PageNumber extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isActive ? AppColors.primary : Colors.transparent,
+        color: isActive ? context.colors.primary : Colors.transparent,
         borderRadius: BorderRadius.circular(AppRadius.standard),
       ),
       child: Text(
         label,
         style: AppTextStyles.bodySm.copyWith(
-          color: isActive ? AppColors.onPrimary : AppColors.onSurfaceVariant,
+          color: isActive ? context.colors.onPrimary : context.colors.onSurfaceVariant,
           fontWeight: FontWeight.w600,
         ),
       ),

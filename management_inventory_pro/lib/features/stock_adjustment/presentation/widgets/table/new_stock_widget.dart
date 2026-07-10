@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
@@ -12,13 +12,13 @@ class NewStockWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color stockColor = AppColors.textPrimary;
+    Color stockColor = context.colors.textPrimary;
     if (item.isNegativeInventory) {
-      stockColor = AppColors.error;
+      stockColor = context.colors.error;
     } else if (item.isOutOfStock) {
-      stockColor = AppColors.error;
+      stockColor = context.colors.error;
     } else if (item.isLowStock) {
-      stockColor = AppColors.warning;
+      stockColor = context.colors.warning;
     }
 
     return Wrap(
@@ -38,7 +38,7 @@ class NewStockWidget extends StatelessWidget {
         else if (item.isOutOfStock)
           const WarningBadge(level: WarningLevel.out)
         else if (item.isLowStock)
-          const WarningBadge(level: WarningLevel.low),
+            const WarningBadge(level: WarningLevel.low),
       ],
     );
   }

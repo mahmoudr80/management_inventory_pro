@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../cards/supplier_statistics_card.dart';
 import '../../cubit/suppliers_cubit.dart';
 import '../../cubit/suppliers_state.dart';
@@ -46,7 +46,7 @@ class SuppliersStatisticsSection extends StatelessWidget {
                   icon: Icons.storefront_outlined,
                   subtitle: 'Registered in system',
                   badge: '— Steady',
-                  badgeColor: AppColors.surfaceContainerHigh,
+                  badgeColor: context.colors.surfaceContainerHigh,
                 ),
                 SupplierStatisticsCard(
                   label: 'Showing',

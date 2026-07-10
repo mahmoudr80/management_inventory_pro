@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 
 class CheckRow extends StatelessWidget {
   const CheckRow({super.key, required this.label, required this.done});
@@ -18,7 +18,7 @@ class CheckRow extends StatelessWidget {
             done ? Icons.check_circle_rounded : Icons.radio_button_unchecked,
             size: 16,
             color: done
-                ? AppColors.success
+                ? context.colors.success
                 : Theme.of(context).colorScheme.outlineVariant,
           ),
           const SizedBox(width: 8),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_theme_extension.dart';
 import '../theme/app_dimens.dart';
 
 class HoverableCard extends StatefulWidget {
@@ -42,14 +42,14 @@ class _HoverableCardState extends State<HoverableCard> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppRadius.md.r),
             border: Border.all(
-              color: _isHovered ? AppColors.primary : Colors.transparent,
+              color: _isHovered ? context.colors.primary : Colors.transparent,
             ),
             boxShadow: _isHovered
                 ? [
               BoxShadow(
                 blurRadius: 12,
                 offset: const Offset(0, 4),
-                color: AppColors.textPrimary.withOpacity(0.08),
+                color: context.colors.textPrimary.withOpacity(0.08),
               ),
             ]
                 : null,
