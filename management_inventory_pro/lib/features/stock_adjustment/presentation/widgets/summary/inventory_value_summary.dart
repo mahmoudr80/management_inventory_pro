@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_model.dart';
@@ -14,7 +14,7 @@ class InventoryValueSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
     final impact = adjustment.valuationImpact;
-    final impactColor = impact >= 0 ? AppColors.primary : AppColors.error;
+    final impactColor = impact >= 0 ? context.colors.primary : context.colors.error;
     final impactPrefix = impact >= 0 ? '+' : '';
 
     return Container(
@@ -23,9 +23,9 @@ class InventoryValueSummary extends StatelessWidget {
         horizontal: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.05),
+        color: context.colors.primary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        border: Border.all(color: context.colors.primary.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +33,7 @@ class InventoryValueSummary extends StatelessWidget {
           Text(
             'INVENTORY VALUATION IMPACT',
             style:
-                AppTextStyles.labelCaps.copyWith(color: AppColors.primaryDark),
+            AppTextStyles.labelCaps.copyWith(color: context.colors.primaryDark),
           ),
           const SizedBox(height: AppSpacing.xs),
           Wrap(
@@ -52,7 +52,7 @@ class InventoryValueSummary extends StatelessWidget {
                 'EGP',
                 style: AppTextStyles.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondary,
+                  color: context.colors.textSecondary,
                 ),
               ),
             ],

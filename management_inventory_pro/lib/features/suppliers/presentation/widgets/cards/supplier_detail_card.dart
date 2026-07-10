@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_decoration.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/supplier_model.dart';
@@ -19,12 +19,12 @@ class SupplierDetailCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: AppDecorations.card(color: AppColors.surfaceContainerLowest),
+      decoration: AppDecorations.card(color: context.colors.surfaceContainerLowest),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _DetailHeader(supplier: supplier, onEdit: onEdit, onClose: onClose),
-          const Divider(height: 1, color: AppColors.outlineVariant),
+          Divider(height: 1, color: context.colors.outlineVariant),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
@@ -54,7 +54,7 @@ class SupplierDetailCard extends StatelessWidget {
                     _NotesSection(notes: supplier.note!),
                   ],
                   const SizedBox(height: 24),
-                  const Divider(height: 1, color: AppColors.outlineVariant),
+                  Divider(height: 1, color: context.colors.outlineVariant),
                   const SizedBox(height: 16),
                   _MetaRow(
                     label: 'Created',
@@ -115,13 +115,13 @@ class _DetailHeader extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerHigh,
+              color: context.colors.surfaceContainerHigh,
               borderRadius: BorderRadius.circular(10),
             ),
             alignment: Alignment.center,
             child: Text(
               initials,
-              style: AppTextStyles.headlineSm.copyWith(color: AppColors.primary),
+              style: AppTextStyles.headlineSm.copyWith(color: context.colors.primary),
             ),
           ),
           const SizedBox(width: 12),
@@ -142,8 +142,8 @@ class _DetailHeader extends StatelessWidget {
             onPressed: onEdit,
             icon: const Icon(Icons.edit_outlined, size: 18),
             style: IconButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              backgroundColor: AppColors.surfaceContainer,
+              foregroundColor: context.colors.primary,
+              backgroundColor: context.colors.surfaceContainer,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             tooltip: 'Edit supplier',
@@ -153,7 +153,7 @@ class _DetailHeader extends StatelessWidget {
             onPressed: onClose,
             icon: const Icon(Icons.close, size: 18),
             style: IconButton.styleFrom(
-              foregroundColor: AppColors.outline,
+              foregroundColor: context.colors.outline,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             tooltip: 'Close',
@@ -182,7 +182,7 @@ class _InfoRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 16, color: AppColors.onSurfaceVariant),
+        Icon(icon, size: 16, color: context.colors.onSurfaceVariant),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -193,7 +193,7 @@ class _InfoRow extends StatelessWidget {
               Text(
                 value,
                 style: mono
-                    ? AppTextStyles.dataMono.copyWith(color: AppColors.onSurface)
+                    ? AppTextStyles.dataMono.copyWith(color: context.colors.onSurface)
                     : AppTextStyles.bodyMd,
               ),
             ],
@@ -214,22 +214,22 @@ class _NotesSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: context.colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: AppColors.outlineVariant),
+        border: Border.all(color: context.colors.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.notes_outlined, size: 14, color: AppColors.onSurfaceVariant),
+              Icon(Icons.notes_outlined, size: 14, color: context.colors.onSurfaceVariant),
               const SizedBox(width: 6),
               Text('Notes', style: AppTextStyles.labelCaps),
             ],
           ),
           const SizedBox(height: 6),
-          Text(notes, style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant)),
+          Text(notes, style: AppTextStyles.bodySm.copyWith(color: context.colors.onSurfaceVariant)),
         ],
       ),
     );
@@ -247,7 +247,7 @@ class _MetaRow extends StatelessWidget {
       children: [
         Text('$label:', style: AppTextStyles.labelCaps),
         const SizedBox(width: 6),
-        Text(value, style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant)),
+        Text(value, style: AppTextStyles.bodySm.copyWith(color: context.colors.onSurfaceVariant)),
       ],
     );
   }

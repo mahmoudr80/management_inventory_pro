@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/features/sale_history/presentation/widgets/sale_search_field.dart';
 import '../../../../core/widgets/dropdown_item.dart';
 import '../../../../core/widgets/filter_dropdown.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_decoration.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -49,18 +49,15 @@ class _SalesFiltersBarState extends State<SalesFiltersBar> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.md),
       decoration: AppDecorations.card(
-        color: AppColors.surface,
-        borderColor: AppColors.border,
+        color: context.colors.surface,
+        borderColor: context.colors.border,
       ),
       child: Wrap(
         spacing: AppSpacing.md,
         runSpacing: AppSpacing.md,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          // Search
           SaleSearchField(searchController: _searchController,),
-
-          // Date range filter
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 250),
             child: _DateRangeDropdown(
@@ -68,8 +65,6 @@ class _SalesFiltersBarState extends State<SalesFiltersBar> {
               onChanged: cubit.setDateRangeFilter,
             ),
           ),
-
-          // Payment method filter
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 320),
             child: _PaymentMethodDropdown(
@@ -77,8 +72,6 @@ class _SalesFiltersBarState extends State<SalesFiltersBar> {
               onChanged: cubit.setPaymentMethod,
             ),
           ),
-
-          // Reset
           if (widget.filters.hasActiveFilters)
             TextButton.icon(
               onPressed: () {
@@ -88,7 +81,7 @@ class _SalesFiltersBarState extends State<SalesFiltersBar> {
               icon: const Icon(Icons.refresh_rounded, size: AppIconSize.md),
               label: Text('Reset', style: AppTextStyles.bodyMd),
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.textSecondary,
+                foregroundColor: context.colors.textSecondary,
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.md, vertical: AppSpacing.sm),
               ),
@@ -99,8 +92,6 @@ class _SalesFiltersBarState extends State<SalesFiltersBar> {
   }
 }
 
-// ---------------------------------------------------------------------------
-
 class _DateRangeDropdown extends StatelessWidget {
   const _DateRangeDropdown({required this.value, required this.onChanged});
 
@@ -108,12 +99,12 @@ class _DateRangeDropdown extends StatelessWidget {
   final ValueChanged<DateRangeFilter> onChanged;
 
   String _label(DateRangeFilter f) => switch (f) {
-        DateRangeFilter.today => 'Today',
-        DateRangeFilter.yesterday => 'Yesterday',
-        DateRangeFilter.last7Days => 'Last 7 Days',
-        DateRangeFilter.thisMonth => 'This Month',
-        DateRangeFilter.custom => 'Custom Range',
-      };
+    DateRangeFilter.today => 'Today',
+    DateRangeFilter.yesterday => 'Yesterday',
+    DateRangeFilter.last7Days => 'Last 7 Days',
+    DateRangeFilter.thisMonth => 'This Month',
+    DateRangeFilter.custom => 'Custom Range',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -147,12 +138,11 @@ class _PaymentMethodDropdown extends StatelessWidget {
   final PaymentMethod value;
   final ValueChanged<PaymentMethod> onChanged;
 
-  // `mixed` acts as "All Payment Methods" sentinel in the filter
   String _label(PaymentMethod m) => switch (m) {
-        PaymentMethod.mixed => 'All Payment Methods',
-        PaymentMethod.cash => 'Cash',
-        PaymentMethod.card => 'Card',
-      };
+    PaymentMethod.mixed => 'All Payment Methods',
+    PaymentMethod.cash => 'Cash',
+    PaymentMethod.card => 'Card',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -178,5 +168,3 @@ class _PaymentMethodDropdown extends StatelessWidget {
     );
   }
 }
-
-

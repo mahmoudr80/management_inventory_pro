@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/supplier_model.dart';
 
@@ -27,10 +27,10 @@ class SupplierListTile extends StatelessWidget {
       duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
         color: isSelected
-            ? AppColors.secondaryContainer.withAlpha(90)
+            ? context.colors.secondaryContainer.withAlpha(90)
             : Colors.transparent,
         border: Border(
-          bottom: BorderSide(color: AppColors.outlineVariant.withAlpha(153)),
+          bottom: BorderSide(color: context.colors.outlineVariant.withAlpha(153)),
         ),
       ),
       child: InkWell(
@@ -52,7 +52,7 @@ class SupplierListTile extends StatelessWidget {
                     Text(
                       supplier.companyName,
                       style: AppTextStyles.headlineSm.copyWith(
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         fontSize: 14,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -61,7 +61,7 @@ class SupplierListTile extends StatelessWidget {
                     Text(
                       supplier.email,
                       style: AppTextStyles.bodySm.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                        color: context.colors.onSurfaceVariant,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -165,7 +165,7 @@ class _IconBtn extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
         child: Padding(
           padding: const EdgeInsets.all(6),
-          child: Icon(icon, size: 18, color: AppColors.outline),
+          child: Icon(icon, size: 18, color: context.colors.outline),
         ),
       ),
     );
@@ -179,21 +179,21 @@ class _MoreMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.more_vert, size: 18, color: AppColors.outline),
+      icon: Icon(Icons.more_vert, size: 18, color: context.colors.outline),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: const BorderSide(color: AppColors.outlineVariant),
+        side: BorderSide(color: context.colors.outlineVariant),
       ),
-      color: AppColors.surfaceContainerLowest,
+      color: context.colors.surfaceContainerLowest,
       elevation: 3,
       itemBuilder: (_) => [
         PopupMenuItem(
           value: 'delete',
           child: Row(
             children: [
-              const Icon(Icons.delete_outline, size: 16, color: AppColors.error),
+              Icon(Icons.delete_outline, size: 16, color: context.colors.error),
               const SizedBox(width: 8),
-              Text('Delete', style: AppTextStyles.bodyMd.copyWith(color: AppColors.error)),
+              Text('Delete', style: AppTextStyles.bodyMd.copyWith(color: context.colors.error)),
             ],
           ),
         ),

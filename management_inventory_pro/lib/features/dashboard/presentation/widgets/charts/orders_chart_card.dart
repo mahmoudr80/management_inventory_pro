@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme_extension.dart';
 import '../common/dashboard_card.dart';
 import 'chart_header.dart';
 import 'chart_placeholder.dart';
@@ -30,7 +30,7 @@ class OrdersChartCard extends StatelessWidget {
                 ? List.filled(7, 0)
                 : weeklyOrders,
             type: ChartType.line,
-            accentColor: AppColors.secondary,
+            accentColor: context.colors.secondary,
           ),
         ],
       ),
@@ -42,9 +42,10 @@ class _Legend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final coreColors = context.colors;
     return Row(
       children: [
-        const _LegendDot(color: AppColors.secondary),
+        _LegendDot(color: coreColors.secondary),
         const SizedBox(width: 4),
         Text(
           'Standard',
@@ -53,7 +54,7 @@ class _Legend extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        const _LegendDot(color: AppColors.primary),
+        _LegendDot(color: coreColors.primary),
         const SizedBox(width: 4),
         Text(
           'Priority',

@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../../../core/theme/app_dimens.dart';
 
-/// A single KPI card used in the summary row above the history table.
-///
-/// [trendPct] is optional — when provided it renders a small "+x%"/"-x%"
-/// badge with a matching trend arrow next to the value. [valueColor]
-/// overrides the value text color (used for the net-quantity and
-/// value-impact cards).
 class SummaryCard extends StatelessWidget {
   const SummaryCard({
     super.key,
@@ -31,13 +25,13 @@ class SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPositiveTrend = (trendPct ?? 0) >= 0;
-    final trendColor = isPositiveTrend ? AppColors.success : AppColors.error;
+    final trendColor = isPositiveTrend ? context.colors.success : context.colors.error;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        border: Border.all(color: AppColors.outlineVariant),
+        color: context.colors.surfaceContainerLowest,
+        border: Border.all(color: context.colors.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.xl),
       ),
       child: Column(
@@ -55,7 +49,7 @@ class SummaryCard extends StatelessWidget {
                   child: Text(
                     value,
                     style: AppTextStyles.display.copyWith(
-                      color: valueColor ?? AppColors.onSurface,
+                      color: valueColor ?? context.colors.onSurface,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -67,7 +61,7 @@ class SummaryCard extends StatelessWidget {
                   unit!,
                   style: AppTextStyles.bodySm.copyWith(
                     fontWeight: FontWeight.w500,
-                    color: AppColors.onSurfaceVariant,
+                    color: context.colors.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -97,7 +91,7 @@ class SummaryCard extends StatelessWidget {
           Text(
             caption,
             style: AppTextStyles.bodySm.copyWith(
-              color: AppColors.onSurfaceVariant.withOpacity(0.9),
+              color: context.colors.onSurfaceVariant.withOpacity(0.9),
             ),
           ),
         ],

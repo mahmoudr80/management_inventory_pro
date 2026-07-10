@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import 'pagination_controls.dart';
@@ -26,7 +26,7 @@ class SaleTableFooter extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
-      color: AppColors.surfaceContainerLow,
+      color: context.colors.surfaceContainerLow,
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -35,7 +35,7 @@ class SaleTableFooter extends StatelessWidget {
           Text(
             'Showing $start to $end of $filteredTotal results',
             style: AppTextStyles.bodySm.copyWith(
-              color: AppColors.textSecondary,
+              color: context.colors.textSecondary,
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -49,5 +49,3 @@ class SaleTableFooter extends StatelessWidget {
     );
   }
 }
-
-

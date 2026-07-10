@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_model.dart';
@@ -58,7 +58,7 @@ class _MetaField extends StatelessWidget {
               maxLines: 1,
               style: AppTextStyles.bodyMd.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: context.colors.textPrimary,
               ),
             ),
           ),

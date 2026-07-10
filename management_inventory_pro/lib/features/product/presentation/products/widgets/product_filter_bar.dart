@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/features/category/presentation/cubit/category_cubit.dart';
 import 'package:management_inventory_pro/features/product/presentation/products/widgets/category_filter_dropdown.dart';
-import 'package:management_inventory_pro/features/product/presentation/products/widgets/pos_search_bar.dart';
 import 'package:management_inventory_pro/features/product/presentation/products/widgets/product_view_toggle.dart';
 import 'package:management_inventory_pro/features/product/presentation/products/widgets/unit_filter_dropdown.dart';
 import 'package:management_inventory_pro/features/unit/presentation/cubit/unit_cubit.dart';
 import '../../../../../core/dialogs/app_confirm_dialog.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../cubit/product_cubit.dart';
+import 'product_search_bar.dart';
 import 'product_view_type.dart';
 
 class ProductFilterBar extends StatefulWidget {
@@ -90,7 +90,7 @@ class _ProductFilterBarState extends State<ProductFilterBar> {
 
             final children = [
               Expanded(
-                child: PosSearchBar(onChanged: (query) =>
+                child: ProductSearchBar(onChanged: (query) =>
                     context.read<ProductCubit>().searchProducts),
               ),
               _BarLabel(),
@@ -142,7 +142,7 @@ class _ProductFilterBarState extends State<ProductFilterBar> {
                   _BarLabel(),
                   const SizedBox(width: 14),
                   Expanded(
-                    child: PosSearchBar(onChanged: (query) =>
+                    child: ProductSearchBar(onChanged: (query) =>
                     context.read<ProductCubit>().searchProducts(query)),
                   ),
                   const SizedBox(width: 14),

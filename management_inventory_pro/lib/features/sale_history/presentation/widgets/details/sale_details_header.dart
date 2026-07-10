@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/sale_item_model.dart';
 import '../../../data/models/sale_model.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -16,25 +16,24 @@ class SaleDetailsHeader extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: context.colors.background,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.colors.border),
       ),
       child: Column(
         children: [
-          // Sale ID row with status badge
           Row(
             children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: AppColors.infoContainer,
+                  color: context.colors.infoContainer,
                   borderRadius: BorderRadius.circular(AppRadius.md),
                 ),
                 child: Icon(
                   Icons.receipt_rounded,
                   size: AppIconSize.xl,
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                 ),
               ),
               SizedBox(width: AppSpacing.sm),
@@ -53,10 +52,9 @@ class SaleDetailsHeader extends StatelessWidget {
             ],
           ),
           SizedBox(height: AppSpacing.md),
-          const Divider(height: 1, color: AppColors.border),
+          Divider(height: 1, color: context.colors.border),
           SizedBox(height: AppSpacing.md),
 
-          // Info grid
           _InfoRow(
             label: 'Date & Time',
             value: DateFormat('MMM d, yyyy hh:mm a').format(sale.createdAt),
@@ -95,9 +93,9 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, bg, fg) = switch (status) {
-      SaleStatus.completed => ('Completed', AppColors.successContainer, AppColors.success),
-      SaleStatus.refunded  => ('Refunded',  AppColors.warningContainer, AppColors.warning),
-      SaleStatus.cancelled => ('Cancelled', AppColors.errorContainer, AppColors.error),
+      SaleStatus.completed => ('Completed', context.colors.successContainer, context.colors.success),
+      SaleStatus.refunded  => ('Refunded',  context.colors.warningContainer, context.colors.warning),
+      SaleStatus.cancelled => ('Cancelled', context.colors.errorContainer, context.colors.error),
     };
 
     return Container(
@@ -133,7 +131,7 @@ class _InfoRow extends StatelessWidget {
             label,
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.bodyMd.copyWith(
-              color: AppColors.textSecondary,
+              color: context.colors.textSecondary,
             ),
           ),
         ),

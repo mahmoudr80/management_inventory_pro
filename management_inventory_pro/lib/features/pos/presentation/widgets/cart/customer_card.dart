@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../theme/pos_theme_extension.dart';
 
 class CustomerCard extends StatelessWidget {
   final String customerName;
@@ -17,8 +17,8 @@ class CustomerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.posBorder)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: context.posColors.border)),
       ),
       child: Row(
         children: [
@@ -26,10 +26,10 @@ class CustomerCard extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.posSummaryBg,
+              color: context.posColors.summaryBg,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.person_add_alt_1_rounded, color: AppColors.posPrimary, size: 20),
+            child: Icon(Icons.person_add_alt_1_rounded, color: context.posColors.primary, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -39,19 +39,19 @@ class CustomerCard extends StatelessWidget {
               children: [
                 Text(
                   customerName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
-                    color: AppColors.posTextPrimary,
+                    color: context.posColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10.5,
                     letterSpacing: 0.4,
-                    color: AppColors.posTextMuted,
+                    color: context.posColors.textMuted,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -61,7 +61,7 @@ class CustomerCard extends StatelessWidget {
           TextButton(
             onPressed: onEdit,
             style: TextButton.styleFrom(
-              foregroundColor: AppColors.posPrimary,
+              foregroundColor: context.posColors.primary,
               padding: const EdgeInsets.symmetric(horizontal: 8),
             ),
             child: const Text('Edit', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),

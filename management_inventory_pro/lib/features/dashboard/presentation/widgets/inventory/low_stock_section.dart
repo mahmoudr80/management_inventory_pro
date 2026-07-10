@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme_extension.dart';
+import '../../theme/dashboard_theme_extension.dart';
 import '../../../data/models/low_stock_product.dart';
 import '../common/dashboard_card.dart';
 import '../common/loading_card.dart';
@@ -20,7 +21,10 @@ class LowStockSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) return const LoadingCard(height: 200);
+    if (isLoading && products.isEmpty) return const LoadingCard(height: 200);
+
+    final coreColors = context.colors;
+    final dashColors = context.dashboardColors;
 
     return DashboardCard(
       padding: EdgeInsets.zero,
@@ -32,26 +36,26 @@ class LowStockSection extends StatelessWidget {
             child: SectionHeader(
               title: 'Low Stock Alerts',
               leadingIcon: Icons.notifications_active_outlined,
-              leadingIconColor: AppColors.error,
+              leadingIconColor: coreColors.error,
               trailing: products.isEmpty
                   ? null
                   : Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.errorContainer,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        '${products.length} ACTION ITEMS',
-                        style: const TextStyle(
-                          color: AppColors.error,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.08,
-                        ),
-                      ),
-                    ),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: dashColors.errorContainer,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '${products.length} ACTION ITEMS',
+                  style: TextStyle(
+                    color: coreColors.error,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.08,
+                  ),
+                ),
+              ),
             ),
           ),
           LowStockTable(products: products, onRestock: onRestock),

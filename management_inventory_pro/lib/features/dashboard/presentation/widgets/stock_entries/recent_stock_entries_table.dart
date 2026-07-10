@@ -5,7 +5,7 @@ import '../../../data/models/recent_stock_entry.dart';
 import '../common/empty_state.dart';
 import 'recent_stock_entry_row.dart';
 
-class RecentStockEntriesTable extends StatelessWidget {
+class RecentStockEntriesTable extends StatefulWidget {
   const RecentStockEntriesTable({
     super.key,
     required this.entries,
@@ -16,8 +16,21 @@ class RecentStockEntriesTable extends StatelessWidget {
   final void Function(RecentStockEntryRef) onSelectEntry;
 
   @override
+  State<RecentStockEntriesTable> createState() => _RecentStockEntriesTableState();
+}
+
+class _RecentStockEntriesTableState extends State<RecentStockEntriesTable> {
+  final ScrollController _horizontalController = ScrollController();
+
+  @override
+  void dispose() {
+    _horizontalController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (entries.isEmpty) {
+    if (widget.entries.isEmpty) {
       return const EmptyState(
         message: 'No stock entries found.',
         icon: Icons.move_to_inbox_outlined,
@@ -28,25 +41,31 @@ class RecentStockEntriesTable extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double minTableWidth = 500.0;
-        return Scrollbar(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: constraints.maxWidth,
-              ),
-              child: SizedBox(
-                width: math.max(minTableWidth, constraints.maxWidth),
-                child: Column(
-                  children: [
-                    _TableHeader(theme: theme),
-                    ...entries.take(8).map(
-                          (e) => RecentStockEntryRow(
-                            entry: e,
-                            onTap: () => onSelectEntry(e),
+        return ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: Scrollbar(
+            controller: _horizontalController,
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              controller: _horizontalController,
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: constraints.maxWidth,
+                ),
+                child: SizedBox(
+                  width: math.max(minTableWidth, constraints.maxWidth),
+                  child: Column(
+                    children: [
+                      _TableHeader(theme: theme),
+                      ...widget.entries.take(8).map(
+                            (e) => RecentStockEntryRow(
+                              entry: e,
+                              onTap: () => widget.onSelectEntry(e),
+                            ),
                           ),
-                        ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 
 class MarginCard extends StatelessWidget {
   const MarginCard({
@@ -23,16 +23,16 @@ class MarginCard extends StatelessWidget {
     final isOk = margin > 0;
 
     final bgColor = isGood
-        ? AppColors.successContainer
+        ? context.colors.successContainer
         : isOk
-            ? AppColors.warningContainer
-            : AppColors.errorContainer;
+        ? context.colors.warningContainer
+        : context.colors.errorContainer;
 
     final textColor = isGood
-        ? AppColors.success
+        ? context.colors.success
         : isOk
-            ? AppColors.onWarningContainer
-            : AppColors.error;
+        ? context.colors.onWarningContainer
+        : context.colors.error;
 
     return Container(
       margin: const EdgeInsets.only(top: 12),

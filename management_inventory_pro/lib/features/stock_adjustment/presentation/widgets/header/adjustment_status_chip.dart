@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_model.dart';
@@ -13,20 +13,20 @@ class AdjustmentStatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final (bg, fg, dot) = switch (status) {
       AdjustmentStatus.draft => (
-          AppColors.warningContainer,
-          AppColors.onWarningContainer,
-          AppColors.warning,
-        ),
+      context.colors.warningContainer,
+      context.colors.onWarningContainer,
+      context.colors.warning,
+      ),
       AdjustmentStatus.completed => (
-          AppColors.statusHealthyBg,
-          AppColors.statusHealthyFg,
-          AppColors.statusHealthyDot,
-        ),
+      context.colors.statusHealthyBg,
+      context.colors.statusHealthyFg,
+      context.colors.statusHealthyDot,
+      ),
       AdjustmentStatus.cancelled => (
-          AppColors.statusCancelledBg,
-          AppColors.statusCancelledFg,
-          AppColors.statusCancelledDot,
-        ),
+      context.colors.statusCancelledBg,
+      context.colors.statusCancelledFg,
+      context.colors.statusCancelledDot,
+      ),
     };
 
     return Container(

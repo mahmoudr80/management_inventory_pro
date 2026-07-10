@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/sale_model.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -11,16 +11,15 @@ class PaymentSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // All values derived from SaleModel & SaleItemModel — no extra fields needed
     final subtotal = sale.totalAmount;
     final totalQty = sale.totalQuantity;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: context.colors.background,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.colors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +47,7 @@ class PaymentSummaryCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            child: const Divider(height: 1, color: AppColors.border),
+            child: Divider(height: 1, color: context.colors.border),
           ),
           _SummaryRow(
             label: 'Total',
@@ -58,7 +57,7 @@ class PaymentSummaryCard extends StatelessWidget {
             ),
             valueStyle: AppTextStyles.headlineSm.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.primary,
+              color: context.colors.primary,
             ),
           ),
         ],
@@ -95,7 +94,7 @@ class _SummaryRow extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: labelStyle ??
                     AppTextStyles.bodyMd.copyWith(
-                      color: AppColors.textSecondary,
+                      color: context.colors.textSecondary,
                     ),
               ),
             ),

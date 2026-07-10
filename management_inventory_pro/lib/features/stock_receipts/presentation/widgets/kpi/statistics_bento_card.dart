@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_decoration.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
@@ -53,7 +53,6 @@ class StatBentoCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.display.copyWith(
-                    color: valueColor ?? AppColors.onBackground,
                     fontSize: 20,
                   ),
                 ),
@@ -71,7 +70,6 @@ class StatBentoCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.bodySm.copyWith(
-                      color: AppColors.outline,
                       fontSize: 10,
                     ),
                   ),
@@ -90,7 +88,7 @@ class StatBentoCard extends StatelessWidget {
               child: Icon(
                 decorativeIcon,
                 size: 96,
-                color: AppColors.onSurface.withOpacity(0.06),
+                color: context.colors.onSurface.withOpacity(0.06),
               ),
             ),
         ],

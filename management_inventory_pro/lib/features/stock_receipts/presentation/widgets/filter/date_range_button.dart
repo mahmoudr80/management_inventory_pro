@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
 class DateRangeButton extends StatelessWidget {
@@ -27,10 +27,10 @@ class DateRangeButton extends StatelessWidget {
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primaryFixed : AppColors.surface,
+          color: isActive ? context.colors.primaryFixed : context.colors.surface,
           borderRadius: BorderRadius.circular(4),
           border: Border.all(
-            color: isActive ? AppColors.primary : AppColors.outline,
+            color: isActive ? context.colors.primary : context.colors.outline,
             width: isActive ? 1.5 : 1,
           ),
         ),
@@ -41,16 +41,16 @@ class DateRangeButton extends StatelessWidget {
               Icons.calendar_today_outlined,
               size: 15,
               color: isActive
-                  ? AppColors.onPrimaryFixedVariant
-                  : AppColors.outline,
+                  ? context.colors.onPrimaryFixedVariant
+                  : context.colors.outline,
             ),
             const SizedBox(width: 2),
             Text(overflow: TextOverflow.ellipsis,
               isActive ? formatDateRange(selectedRange!) : 'Date range',
               style: AppTextStyles.bodySm.copyWith(
                 color: isActive
-                    ? AppColors.onPrimaryFixedVariant
-                    : AppColors.onSurfaceVariant,
+                    ? context.colors.onPrimaryFixedVariant
+                    : context.colors.onSurfaceVariant,
               ),
             ),
             if (isActive && onClear != null) ...[
@@ -61,7 +61,7 @@ class DateRangeButton extends StatelessWidget {
                 child: Icon(
                   Icons.close,
                   size: 14,
-                  color: AppColors.onPrimaryFixedVariant,
+                  color: context.colors.onPrimaryFixedVariant,
                 ),
               ),
             ],

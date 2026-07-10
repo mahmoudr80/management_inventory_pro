@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_theme_extension.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 
-/// Brand logo used on auth screens and empty states.
-///
-/// Refactor notes (responsive_rules.md):
-/// - Dropped `flutter_screenutil` (unused on this widget) in favor of the
-///   `core/theme` constants so sizing stays consistent across the desktop
-///   breakpoints instead of scaling arbitrarily.
-/// - The brand label is capped with `ConstrainedBox` + ellipsis so a
-///   long/localized product name never overflows in a narrow sidebar.
 class AppLogo extends StatelessWidget {
   final double? size;
   final bool showText;
@@ -20,7 +12,7 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logoSize = size ?? AppIconSize.xl * 3.75; // 120 -> derived from scale
+    final logoSize = size ?? AppIconSize.xl * 3.75;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -29,11 +21,11 @@ class AppLogo extends StatelessWidget {
           width: logoSize,
           height: logoSize,
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: context.colors.primary,
             borderRadius: BorderRadius.circular(logoSize / 4),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.3),
+                color: context.colors.primary.withOpacity(0.3),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -41,7 +33,7 @@ class AppLogo extends StatelessWidget {
           ),
           child: Icon(
             Icons.inventory_2_rounded,
-            color: AppColors.surface,
+            color: context.colors.surface,
             size: logoSize * 0.6,
           ),
         ),
@@ -55,7 +47,7 @@ class AppLogo extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: AppTextStyles.heading2.copyWith(
-                color: AppColors.primaryDark,
+                color: context.colors.primaryDark,
                 letterSpacing: 1.2,
               ),
             ),

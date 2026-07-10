@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 
 class RowActions extends StatelessWidget {
@@ -14,13 +14,13 @@ class RowActions extends StatelessWidget {
       child: InkWell(
         onTap: onDelete,
         borderRadius: BorderRadius.circular(AppRadius.sm),
-        hoverColor: AppColors.errorContainer,
-        child: const Padding(
-          padding: EdgeInsets.all(AppSpacing.sm),
+        hoverColor: context.colors.errorContainer,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Icon(
             Icons.delete_outline,
             size: AppIconSize.lg,
-            color: AppColors.outline,
+            color: context.colors.outline,
           ),
         ),
       ),

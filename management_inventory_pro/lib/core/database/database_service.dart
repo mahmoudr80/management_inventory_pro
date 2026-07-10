@@ -213,6 +213,31 @@ CREATE TABLE IF NOT EXISTS ${DatabaseConstants.stockAdjustmentItemsTable} (
 );
 """);
 
+    await db.execute("""
+CREATE TABLE IF NOT EXISTS ${DatabaseConstants.settingsTable} (
+
+    ${DatabaseConstants.idColumn} INTEGER PRIMARY KEY
+        CHECK(${DatabaseConstants.idColumn} = 1),
+
+    ${DatabaseConstants.storeNameColumn} TEXT NOT NULL,
+
+    ${DatabaseConstants.currencyColumn} TEXT NOT NULL DEFAULT 'EGP',
+
+    ${DatabaseConstants.currencySymbolColumn} TEXT NOT NULL DEFAULT 'E£',
+
+    ${DatabaseConstants.taxEnabledColumn} INTEGER NOT NULL DEFAULT 0
+        CHECK(${DatabaseConstants.taxEnabledColumn} IN (0,1)),
+
+    ${DatabaseConstants.taxPercentageColumn} REAL NOT NULL DEFAULT 14
+        CHECK(${DatabaseConstants.taxPercentageColumn} >= 0),
+
+    ${DatabaseConstants.pricesIncludeTaxColumn} INTEGER NOT NULL DEFAULT 0
+        CHECK(${DatabaseConstants.pricesIncludeTaxColumn} IN (0,1)),
+
+    ${DatabaseConstants.updatedAtColumn} TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+""");
+
   }
 
 }

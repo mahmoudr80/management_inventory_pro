@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import '../theme/app_theme_extension.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 
@@ -38,7 +38,7 @@ class PageHeader extends StatelessWidget {
                   title,
                   style: AppTextStyles.headlineMd.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: context.colors.textPrimary,
                   ),
                 ),
               ),
@@ -51,7 +51,7 @@ class PageHeader extends StatelessWidget {
                     subtitle!,
                     maxLines: 2,
                     style: AppTextStyles.bodySm.copyWith(
-                      color: AppColors.textSecondary,
+                      color: context.colors.textSecondary,
                     ),
                   ),
                 ),
@@ -81,7 +81,7 @@ class PageHeader extends StatelessWidget {
                         title,
                         style: AppTextStyles.headlineMd.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: context.colors.textPrimary,
                         ),
                       ),
                     ),
@@ -94,7 +94,7 @@ class PageHeader extends StatelessWidget {
                           subtitle!,
                           maxLines: 2,
                           style: AppTextStyles.bodySm.copyWith(
-                            color: AppColors.textSecondary,
+                            color: context.colors.textSecondary,
                           ),
                         ),
                       ),
@@ -104,8 +104,6 @@ class PageHeader extends StatelessWidget {
               ),
               if (actions != null && actions!.isNotEmpty) ...[
                 const SizedBox(width: AppSpacing.lg),
-                // Wrap (not Row) so extra actions fold onto a new line
-                // instead of overflowing on narrower desktop widths.
                 Wrap(
                   alignment: WrapAlignment.end,
                   spacing: AppSpacing.sm,

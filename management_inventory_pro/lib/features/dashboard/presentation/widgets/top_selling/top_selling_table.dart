@@ -5,7 +5,7 @@ import '../../../data/models/top_selling_product.dart';
 import '../common/empty_state.dart';
 import 'top_selling_row.dart';
 
-class TopSellingTable extends StatelessWidget {
+class TopSellingTable extends StatefulWidget {
   const TopSellingTable({
     super.key,
     required this.products,
@@ -14,8 +14,21 @@ class TopSellingTable extends StatelessWidget {
   final List<TopSellingProductRef> products;
 
   @override
+  State<TopSellingTable> createState() => _TopSellingTableState();
+}
+
+class _TopSellingTableState extends State<TopSellingTable> {
+  final ScrollController _horizontalController = ScrollController();
+
+  @override
+  void dispose() {
+    _horizontalController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (products.isEmpty) {
+    if (widget.products.isEmpty) {
       return const EmptyState(
         message: 'No sales data available yet.',
         icon: Icons.bar_chart_rounded,
@@ -26,22 +39,28 @@ class TopSellingTable extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double minTableWidth = 550.0;
-        return Scrollbar(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: constraints.maxWidth,
-              ),
-              child: SizedBox(
-                width: math.max(minTableWidth, constraints.maxWidth),
-                child: Column(
-                  children: [
-                    _TableHeader(theme: theme),
-                    ...products.take(5).toList().asMap().entries.map(
-                          (e) => TopSellingRow(product: e.value, rank: e.key + 1),
-                        ),
-                  ],
+        return ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: Scrollbar(
+            controller: _horizontalController,
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              controller: _horizontalController,
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: constraints.maxWidth,
+                ),
+                child: SizedBox(
+                  width: math.max(minTableWidth, constraints.maxWidth),
+                  child: Column(
+                    children: [
+                      _TableHeader(theme: theme),
+                      ...widget.products.take(5).toList().asMap().entries.map(
+                            (e) => TopSellingRow(product: e.value, rank: e.key + 1),
+                          ),
+                    ],
+                  ),
                 ),
               ),
             ),

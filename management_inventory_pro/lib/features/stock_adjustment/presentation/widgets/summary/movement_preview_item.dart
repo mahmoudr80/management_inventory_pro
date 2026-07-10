@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
@@ -13,7 +13,7 @@ class MovementPreviewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPositive = item.adjustmentQty > 0;
-    final adjColor = isPositive ? AppColors.primary : AppColors.error;
+    final adjColor = isPositive ? context.colors.primary : context.colors.error;
     final adjPrefix = isPositive ? '+' : '';
 
     return Container(
@@ -22,9 +22,9 @@ class MovementPreviewItem extends StatelessWidget {
         horizontal: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: context.colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadius.standard),
-        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.5)),
+        border: Border.all(color: context.colors.outlineVariant.withOpacity(0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +35,7 @@ class MovementPreviewItem extends StatelessWidget {
               item.productName,
               style: AppTextStyles.bodySm.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: context.colors.textPrimary,
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -47,23 +47,23 @@ class MovementPreviewItem extends StatelessWidget {
               _StockLabel(
                 label: 'FROM',
                 value: '${item.currentStock}',
-                color: AppColors.textPrimary,
+                color: context.colors.textPrimary,
               ),
-              const Icon(Icons.arrow_forward,
-                  size: AppIconSize.lg, color: AppColors.outline),
+              Icon(Icons.arrow_forward,
+                  size: AppIconSize.lg, color: context.colors.outline),
               _StockLabel(
                 label: 'TO',
                 value: '${item.newStock}',
                 color: item.isNegativeInventory || item.isOutOfStock
-                    ? AppColors.error
+                    ? context.colors.error
                     : isPositive
-                        ? AppColors.primary
-                        : AppColors.textPrimary,
+                    ? context.colors.primary
+                    : context.colors.textPrimary,
               ),
               Container(
                 width: AppBorder.thin,
                 height: 24,
-                color: AppColors.outlineVariant,
+                color: context.colors.outlineVariant,
               ),
               Text(
                 '$adjPrefix${item.adjustmentQty}',
@@ -80,8 +80,8 @@ class MovementPreviewItem extends StatelessWidget {
               level: item.isNegativeInventory
                   ? WarningLevel.negative
                   : item.isOutOfStock
-                      ? WarningLevel.out
-                      : WarningLevel.low,
+                  ? WarningLevel.out
+                  : WarningLevel.low,
             ),
           ],
         ],
@@ -104,7 +104,7 @@ class _StockLabel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(label,
-            style: AppTextStyles.bodySm.copyWith(color: AppColors.outline)),
+            style: AppTextStyles.bodySm.copyWith(color: context.colors.outline)),
         Text(
           value,
           style: AppTextStyles.dataMono.copyWith(

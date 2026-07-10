@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/sale_item_model.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
@@ -27,7 +27,7 @@ class _SaleItemsTableState extends State<SaleItemsTable> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.colors.border),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -44,25 +44,23 @@ class _SaleItemsTableState extends State<SaleItemsTable> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Header
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
                       decoration: BoxDecoration(
-                        color: AppColors.background,
+                        color: context.colors.background,
                         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.md)),
                       ),
                       child: Row(
                         children: [
-                          _buildHeaderCell('Product', flex: 4),
-                          _buildHeaderCell('Unit Price', flex: 2),
-                          _buildHeaderCell('Qty', flex: 1),
-                          _buildHeaderCell('Total', flex: 2),
+                          _buildHeaderCell(context, 'Product', flex: 4),
+                          _buildHeaderCell(context, 'Unit Price', flex: 2),
+                          _buildHeaderCell(context, 'Qty', flex: 1),
+                          _buildHeaderCell(context, 'Total', flex: 2),
                         ],
                       ),
                     ),
-                    const Divider(height: 1, color: AppColors.border),
+                    Divider(height: 1, color: context.colors.border),
 
-                    // Rows
                     ...items.asMap().entries.map((entry) {
                       final i = entry.key;
                       final item = entry.value;
@@ -70,7 +68,7 @@ class _SaleItemsTableState extends State<SaleItemsTable> {
                         children: [
                           _ItemRow(item: item),
                           if (i < items.length - 1)
-                            const Divider(height: 1, color: AppColors.border),
+                            Divider(height: 1, color: context.colors.border),
                         ],
                       );
                     }),
@@ -85,7 +83,7 @@ class _SaleItemsTableState extends State<SaleItemsTable> {
   }
 
 
-  Widget _buildHeaderCell(String label, {int flex = 1}) {
+  Widget _buildHeaderCell(BuildContext context, String label, {int flex = 1}) {
     return Expanded(
       flex: flex,
       child: Text(
@@ -93,7 +91,7 @@ class _SaleItemsTableState extends State<SaleItemsTable> {
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: AppTextStyles.labelCaps.copyWith(
-          color: AppColors.textSecondary,
+          color: context.colors.textSecondary,
         ),
       ),
     );
@@ -111,7 +109,6 @@ class _ItemRow extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
       child: Row(
         children: [
-          // Product name
           Expanded(
             flex: 4,
             child: Tooltip(
@@ -126,7 +123,6 @@ class _ItemRow extends StatelessWidget {
               ),
             ),
           ),
-          // Unit price (sellingPrice)
           Expanded(
             flex: 2,
             child: Tooltip(
@@ -136,12 +132,11 @@ class _ItemRow extends StatelessWidget {
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.bodyMd.copyWith(
-                  color: AppColors.textSecondary,
+                  color: context.colors.textSecondary,
                 ),
               ),
             ),
           ),
-          // Quantity
           Expanded(
             flex: 1,
             child: Text(
@@ -149,11 +144,10 @@ class _ItemRow extends StatelessWidget {
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.bodyMd.copyWith(
-                color: AppColors.textPrimary,
+                color: context.colors.textPrimary,
               ),
             ),
           ),
-          // Total (computed getter)
           Expanded(
             flex: 2,
             child: Tooltip(

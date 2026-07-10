@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
 class StockEntryEmptyState extends StatelessWidget {
@@ -24,7 +24,7 @@ class StockEntryEmptyState extends StatelessWidget {
           Icon(
             isFiltered ? Icons.filter_list_off : Icons.receipt_long_outlined,
             size: 56,
-            color: AppColors.outlineVariant,
+            color: context.colors.outlineVariant,
           ),
           const SizedBox(height: 16),
           Text(
@@ -32,7 +32,7 @@ class StockEntryEmptyState extends StatelessWidget {
                 ? 'No receipts match your filters'
                 : 'No stock receipts yet',
             style: AppTextStyles.headlineSm.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: context.colors.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
@@ -40,7 +40,7 @@ class StockEntryEmptyState extends StatelessWidget {
             isFiltered
                 ? 'Try adjusting or clearing your active filters.'
                 : 'Record your first inbound shipment to get started.',
-            style: AppTextStyles.bodyMd.copyWith(color: AppColors.outline),
+            style: AppTextStyles.bodyMd.copyWith(color: context.colors.outline),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -55,8 +55,8 @@ class StockEntryEmptyState extends StatelessWidget {
               icon: const Icon(Icons.add),
               label: const Text('Record Receipt'),
               style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.onPrimary,
+                backgroundColor: context.colors.primary,
+                foregroundColor: context.colors.onPrimary,
               ),
             ),
         ],

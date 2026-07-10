@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
-/// Generic single-select filter dropdown matching the filter bar styling.
-/// `null` represents the "All" / unset option, labeled via [allLabel].
 class FilterDropdown<T> extends StatelessWidget {
   const FilterDropdown({
     super.key,
@@ -26,8 +24,8 @@ class FilterDropdown<T> extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        border: Border.all(color: AppColors.outlineVariant),
+        color: context.colors.surfaceContainerLowest,
+        border: Border.all(color: context.colors.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: DropdownButtonHideUnderline(
@@ -37,10 +35,10 @@ class FilterDropdown<T> extends StatelessWidget {
           icon: Icon(
             Icons.keyboard_arrow_down,
             size: AppIconSize.lg,
-            color: AppColors.onSurfaceVariant,
+            color: context.colors.onSurfaceVariant,
           ),
-          style: AppTextStyles.bodySm.copyWith(color: AppColors.onSurfaceVariant),
-          dropdownColor: AppColors.surfaceContainerLowest,
+          style: AppTextStyles.bodySm.copyWith(color: context.colors.onSurfaceVariant),
+          dropdownColor: context.colors.surfaceContainerLowest,
           onChanged: onChanged,
           items: [
             DropdownMenuItem<T?>(
@@ -54,7 +52,7 @@ class FilterDropdown<T> extends StatelessWidget {
               ),
             ),
             ...items.map(
-              (item) => DropdownMenuItem<T?>(
+                  (item) => DropdownMenuItem<T?>(
                 value: item,
                 child: Tooltip(
                   message: labelBuilder(item),

@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_theme_extension.dart';
 import '../theme/app_decoration.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 
-/// Labeled text field used across forms.
-///
-/// Refactor notes (responsive_rules.md):
-/// - Removed `flutter_screenutil` (.h/.w/.r) in favor of `AppSpacing` /
-///   `AppRadius` so the field renders consistently from 900px up to
-///   ultrawide, instead of scaling relative to a mobile design frame.
-/// - Default decoration now goes through `AppDecorations.inputField()` so
-///   borders/radius/colors stay centralized in `core/theme`.
-/// - Label wrapped in a `Tooltip` + ellipsis: long field labels (e.g. from
-///   dynamic form configs) truncate cleanly instead of wrapping/overflowing.
 class CustomTextField extends StatelessWidget {
   final String label;
   final String? hint;
@@ -63,7 +53,7 @@ class CustomTextField extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.bodyMd.copyWith(
               fontWeight: FontWeight.w500,
-              color: AppColors.textPrimary,
+              color: context.colors.textPrimary,
             ),
           ),
         ),
@@ -85,14 +75,14 @@ class CustomTextField extends StatelessWidget {
                 prefixText: prefixText,
                 helperText: helperText,
                 hintStyle: hintStyle ??
-                    AppTextStyles.bodyMd.copyWith(color: AppColors.textSecondary),
+                    AppTextStyles.bodyMd.copyWith(color: context.colors.textSecondary),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppRadius.standard),
-                  borderSide: const BorderSide(color: AppColors.error),
+                  borderSide: BorderSide(color: context.colors.error),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppRadius.standard),
-                  borderSide: const BorderSide(color: AppColors.primary, width: AppBorder.thick),
+                  borderSide: BorderSide(color: context.colors.primary, width: AppBorder.thick),
                 ),
               ),
         ),

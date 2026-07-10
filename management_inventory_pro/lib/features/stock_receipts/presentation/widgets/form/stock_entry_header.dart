@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
 class StockEntryHeader extends StatelessWidget {
@@ -26,29 +26,29 @@ class StockEntryHeader extends StatelessWidget {
 
         final badge = receiptId.isNotEmpty
             ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: AppColors.outlineVariant),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: context.colors.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: context.colors.outlineVariant),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'RECEIPT ID: ',
+                style: AppTextStyles.labelCaps,
+              ),
+              Tooltip(
+                message: receiptId,
+                child: Text(
+                  receiptId,
+                  style: AppTextStyles.dataMono.copyWith(color: context.colors.primary),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'RECEIPT ID: ',
-                      style: AppTextStyles.labelCaps,
-                    ),
-                    Tooltip(
-                      message: receiptId,
-                      child: Text(
-                        receiptId,
-                        style: AppTextStyles.dataMono.copyWith(color: AppColors.primary),
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              ),
+            ],
+          ),
+        )
             : const SizedBox.shrink();
 
         if (isNarrow) {

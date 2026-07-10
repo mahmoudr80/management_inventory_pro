@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
 class CurrentStockWidget extends StatelessWidget {
@@ -20,7 +20,7 @@ class CurrentStockWidget extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: AppTextStyles.dataMono.copyWith(
         fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
+        color: context.colors.textPrimary,
       ),
     );
   }

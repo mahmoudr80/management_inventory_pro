@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
@@ -10,9 +10,9 @@ class AdjustmentTableHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 36,
-      decoration: const BoxDecoration(
-        color: AppColors.surfaceContainer,
-        border: Border(bottom: BorderSide(color: AppColors.outlineVariant)),
+      decoration: BoxDecoration(
+        color: context.colors.surfaceContainer,
+        border: Border(bottom: BorderSide(color: context.colors.outlineVariant)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,11 +38,11 @@ class _HeaderCell extends StatelessWidget {
   final TextAlign textAlign;
 
   const _HeaderCell(
-    this.label, {
-    required this.flex,
-    this.width,
-    this.textAlign = TextAlign.left,
-  });
+      this.label, {
+        required this.flex,
+        this.width,
+        this.textAlign = TextAlign.left,
+      });
 
   @override
   Widget build(BuildContext context) {

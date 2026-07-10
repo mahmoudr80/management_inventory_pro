@@ -1,21 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_theme_extension.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_text_styles.dart';
 import 'dropdown_item.dart';
 
-/// Compact filter chip/trigger that opens a popup menu of [DropdownItem]s.
-///
-/// Refactor notes (responsive_rules.md):
-/// - Removed `flutter_screenutil`; all sizing now comes from `AppSpacing` /
-///   `AppRadius` / `AppIconSize` constants.
-/// - Swapped ad-hoc `theme.colorScheme` / `theme.textTheme` lookups for the
-///   shared `AppColors` / `AppTextStyles` design tokens so this matches the
-///   rest of the design system instead of drifting from Material defaults.
-/// - The trigger label is now capped with `ConstrainedBox` + wrapped in a
-///   `Tooltip`, so a long selected-item name truncates with ellipsis
-///   instead of pushing the trigger wider than the layout can afford.
 class FilterDropdown<T> extends StatelessWidget {
   const FilterDropdown({
     super.key,
@@ -43,7 +32,6 @@ class FilterDropdown<T> extends StatelessWidget {
 
   final String? addLabel;
 
-  /// Caps how wide the trigger chip can grow before its label ellipsizes.
   final double maxTriggerWidth;
 
   @override
@@ -54,14 +42,14 @@ class FilterDropdown<T> extends StatelessWidget {
       tooltip: '',
       offset: Offset(0, AppSpacing.xl + AppSpacing.lg),
       elevation: 4,
-      color: AppColors.surface,
+      color: context.colors.surface,
       constraints: BoxConstraints(
         minWidth: 180,
         maxWidth: 320,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.lg),
-        side: BorderSide(color: AppColors.outlineVariant.withOpacity(0.5)),
+        side: BorderSide(color: context.colors.outlineVariant.withOpacity(0.5)),
       ),
       onSelected: (action) {
         switch (action.type) {
@@ -88,7 +76,7 @@ class FilterDropdown<T> extends StatelessWidget {
           ),
           if (items.isNotEmpty) const PopupMenuDivider(height: 1),
           ...items.map(
-            (item) => _menuItem(
+                (item) => _menuItem(
               context,
               text: item.label,
               icon: icon,
@@ -120,19 +108,19 @@ class FilterDropdown<T> extends StatelessWidget {
   }
 
   PopupMenuItem<_MenuAction<T>> _menuItem(
-    BuildContext context, {
-    required String text,
-    required IconData icon,
-    required _MenuAction<T> action,
-    bool selected = false,
-    bool isAdd = false,
-    bool deletable = false,
-  }) {
+      BuildContext context, {
+        required String text,
+        required IconData icon,
+        required _MenuAction<T> action,
+        bool selected = false,
+        bool isAdd = false,
+        bool deletable = false,
+      }) {
     final color = isAdd
-        ? AppColors.secondary
+        ? context.colors.secondary
         : selected
-            ? AppColors.primary
-            : AppColors.onSurface;
+        ? context.colors.primary
+        : context.colors.onSurface;
 
     return PopupMenuItem<_MenuAction<T>>(
       value: action,
@@ -145,10 +133,10 @@ class FilterDropdown<T> extends StatelessWidget {
             height: AppIconSize.xl,
             decoration: BoxDecoration(
               color: selected
-                  ? AppColors.primaryContainer.withOpacity(0.15)
+                  ? context.colors.primaryContainer.withOpacity(0.15)
                   : isAdd
-                      ? AppColors.secondaryContainer.withOpacity(0.5)
-                      : AppColors.surfaceContainerLow,
+                  ? context.colors.secondaryContainer.withOpacity(0.5)
+                  : context.colors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(AppRadius.standard),
             ),
             child: Icon(icon, size: AppIconSize.xs, color: color),
@@ -170,7 +158,7 @@ class FilterDropdown<T> extends StatelessWidget {
             ),
           ),
           if (selected)
-            Icon(Icons.check_rounded, size: AppIconSize.xs, color: AppColors.primary),
+            Icon(Icons.check_rounded, size: AppIconSize.xs, color: context.colors.primary),
           if (deletable && action.item != null) ...[
             SizedBox(width: AppSpacing.md),
             InkWell(
@@ -180,7 +168,7 @@ class FilterDropdown<T> extends StatelessWidget {
                 padding: const EdgeInsets.all(2),
                 child: Icon(
                   Icons.delete_outline_rounded,
-                  color: AppColors.error,
+                  color: context.colors.error,
                   size: AppIconSize.xs,
                 ),
               ),
@@ -219,11 +207,11 @@ class _DropdownTrigger extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
         decoration: BoxDecoration(
           color: active
-              ? AppColors.primaryContainer.withOpacity(0.15)
-              : AppColors.surfaceContainerLow,
+              ? context.colors.primaryContainer.withOpacity(0.15)
+              : context.colors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppRadius.md + AppRadius.xs),
           border: Border.all(
-            color: active ? AppColors.primary : AppColors.outlineVariant,
+            color: active ? context.colors.primary : context.colors.outlineVariant,
           ),
         ),
         child: Row(
@@ -232,7 +220,7 @@ class _DropdownTrigger extends StatelessWidget {
             Icon(
               icon,
               size: AppIconSize.xs,
-              color: active ? AppColors.primary : AppColors.onSurfaceVariant,
+              color: active ? context.colors.primary : context.colors.onSurfaceVariant,
             ),
             SizedBox(width: AppSpacing.sm),
             Flexible(
@@ -245,7 +233,7 @@ class _DropdownTrigger extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.bodySm.copyWith(
                     fontWeight: active ? FontWeight.w600 : FontWeight.w500,
-                    color: active ? AppColors.primary : AppColors.onSurfaceVariant,
+                    color: active ? context.colors.primary : context.colors.onSurfaceVariant,
                   ),
                 ),
               ),

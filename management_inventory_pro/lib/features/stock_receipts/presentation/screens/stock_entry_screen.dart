@@ -6,7 +6,7 @@ import 'package:management_inventory_pro/features/stock_receipts/data/models/pro
 import 'package:management_inventory_pro/features/stock_receipts/data/models/supplier_ref.dart';
 import 'package:management_inventory_pro/features/stock_receipts/data/respository/stock_entry_repository.dart';
 import '../../../../core/dialogs/dialog_utils.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/app_snackBar.dart';
 import '../../../home/cubit/home_cubit.dart';
@@ -134,7 +134,7 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.colors.background,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Column(
@@ -144,27 +144,27 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
               const SizedBox(height: 24),
 
               // ── KPI row ─────────────────────────────────────────────────
-            LayoutBuilder(
-                builder: (context, constraints) {
-                  final bool isNarrow = constraints.maxWidth > 1000;
-               if(isNarrow){
-                 return   BlocBuilder<StockEntryCubit, StockEntryState>(
-                   buildWhen: (p, c) =>
-                   p.summary != c.summary || p.loadStatus != c.loadStatus,
-                   builder: (_, state) => StockEntryKpiRow(
-                     summary: state.summary,
-                     isLoading: state.loadStatus == StockEntryLoadStatus.loading,
-                   ),
-                 );
-               }
-               return SizedBox.shrink();
-                }
-                ),
+              LayoutBuilder(
+                  builder: (context, constraints) {
+                    final bool isNarrow = constraints.maxWidth > 1000;
+                    if(isNarrow){
+                      return   BlocBuilder<StockEntryCubit, StockEntryState>(
+                        buildWhen: (p, c) =>
+                        p.summary != c.summary || p.loadStatus != c.loadStatus,
+                        builder: (_, state) => StockEntryKpiRow(
+                          summary: state.summary,
+                          isLoading: state.loadStatus == StockEntryLoadStatus.loading,
+                        ),
+                      );
+                    }
+                    return SizedBox.shrink();
+                  }
+              ),
 
               // ── Filter bar ──────────────────────────────────────────────
               BlocBuilder<StockEntryCubit, StockEntryState>(
                 buildWhen: (p, c) =>
-                    p.filter != c.filter ||
+                p.filter != c.filter ||
                     p.selectedSupplier != c.selectedSupplier,
                 builder: (context, state) {
                   return StockEntryFilterBar(
@@ -177,10 +177,10 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
                         .applyFilter(status: s, clearStatus: s == null),
                     onFilterSupplier: (supplier) {
                       context.read<StockEntryCubit>().applyFilter(
-                            selectedSupplier: supplier,
-                            supplierId: supplier?.id,
-                            clearSupplier: supplier == null,
-                          );
+                        selectedSupplier: supplier,
+                        supplierId: supplier?.id,
+                        clearSupplier: supplier == null,
+                      );
                     },
                     onFilterDateRange: (dr) => context
                         .read<StockEntryCubit>()
@@ -206,7 +206,7 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
                         child: Text(
                           state.loadError ?? 'Something went wrong.',
                           style: AppTextStyles.bodyMd
-                              .copyWith(color: AppColors.error),
+                              .copyWith(color: context.colors.error),
                         ),
                       );
                     }
@@ -226,7 +226,7 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
                           currentPage: state.currentPage,
                           pageSize: state.pageSize,
                           isLoadingMore: state.loadStatus ==
-                                  StockEntryLoadStatus.loading &&
+                              StockEntryLoadStatus.loading &&
                               state.entries.isNotEmpty,
                           onSelect: (entry) => context
                               .read<StockEntryCubit>()
@@ -298,8 +298,8 @@ class _StockEntryScreenState extends State<StockEntryScreen> {
             }
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.onPrimary,
+            backgroundColor: context.colors.primary,
+            foregroundColor: context.colors.onPrimary,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

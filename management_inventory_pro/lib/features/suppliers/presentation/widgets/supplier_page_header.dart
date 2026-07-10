@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/components/page_header.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../cubit/suppliers_cubit.dart';
 import '../cubit/suppliers_state.dart';
@@ -31,8 +31,8 @@ class _PageHeaderContent extends StatelessWidget {
             icon: const Icon(Icons.add, size: 18),
             label: const Text('Add Supplier'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.onPrimary,
+              backgroundColor: context.colors.primary,
+              foregroundColor: context.colors.onPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               elevation: 0,
@@ -41,4 +41,3 @@ class _PageHeaderContent extends StatelessWidget {
           )]);
   }
 }
-

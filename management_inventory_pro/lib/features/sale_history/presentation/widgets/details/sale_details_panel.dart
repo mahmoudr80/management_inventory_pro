@@ -5,7 +5,7 @@ import '../../cubit/sales_history_cubit.dart';
 import 'sale_details_header.dart';
 import 'sale_items_table.dart';
 import 'payment_summary_card.dart';
-import 'package:management_inventory_pro/core/theme/app_colors.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_decoration.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
@@ -35,8 +35,8 @@ class _SaleDetailsPanelState extends State<SaleDetailsPanel> {
 
     return Container(
       decoration: AppDecorations.elevatedCard(
-        color: AppColors.surface,
-        borderColor: AppColors.border,
+        color: context.colors.surface,
+        borderColor: context.colors.border,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,8 +72,6 @@ class _SaleDetailsPanelState extends State<SaleDetailsPanel> {
 }
 
 
-// ---------------------------------------------------------------------------
-
 class _PanelTopBar extends StatelessWidget {
   const _PanelTopBar({required this.onClose});
   final VoidCallback onClose;
@@ -82,8 +80,8 @@ class _PanelTopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.border)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: context.colors.border)),
       ),
       child: Row(
         children: [
@@ -98,7 +96,7 @@ class _PanelTopBar extends StatelessWidget {
           IconButton(
             onPressed: onClose,
             icon: Icon(Icons.close_rounded,
-                size: AppIconSize.md, color: AppColors.textSecondary),
+                size: AppIconSize.md, color: context.colors.textSecondary),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(
               minWidth: AppIconSize.lg + AppSpacing.xs,
@@ -136,8 +134,8 @@ class _PanelActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.border)),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: context.colors.border)),
       ),
       child: Wrap(
         spacing: AppSpacing.md,
@@ -161,12 +159,12 @@ class _PanelActions extends StatelessWidget {
               child: Text(
                 'Print Receipt',
                 overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.buttonText.copyWith(color: AppColors.textPrimary),
+                style: AppTextStyles.buttonText.copyWith(color: context.colors.textPrimary),
               ),
             ),
             style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.textPrimary,
-              side: const BorderSide(color: AppColors.border),
+              foregroundColor: context.colors.textPrimary,
+              side: BorderSide(color: context.colors.border),
               padding: EdgeInsets.symmetric(vertical: AppSpacing.md, horizontal: AppSpacing.md),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppRadius.md),
@@ -181,13 +179,13 @@ class _PanelActions extends StatelessWidget {
               child: Text(
                 'Delete Sale',
                 overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.buttonText.copyWith(color: AppColors.error),
+                style: AppTextStyles.buttonText.copyWith(color: context.colors.error),
               ),
             ),
             style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.error,
-              side: const BorderSide(color: AppColors.errorContainer),
-              backgroundColor: AppColors.errorContainer.withOpacity(0.3),
+              foregroundColor: context.colors.error,
+              side: BorderSide(color: context.colors.errorContainer),
+              backgroundColor: context.colors.errorContainer.withOpacity(0.3),
               padding: EdgeInsets.symmetric(vertical: AppSpacing.md, horizontal: AppSpacing.md),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppRadius.md),
@@ -216,7 +214,7 @@ class _PanelActions extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               'Cancel',
-              style: AppTextStyles.buttonText.copyWith(color: AppColors.textPrimary),
+              style: AppTextStyles.buttonText.copyWith(color: context.colors.textPrimary),
             ),
           ),
           TextButton(
@@ -233,10 +231,10 @@ class _PanelActions extends StatelessWidget {
               );
             },
             style: TextButton.styleFrom(
-                foregroundColor: AppColors.error),
+                foregroundColor: context.colors.error),
             child: Text(
               'Delete',
-              style: AppTextStyles.buttonText.copyWith(color: AppColors.error),
+              style: AppTextStyles.buttonText.copyWith(color: context.colors.error),
             ),
           ),
         ],

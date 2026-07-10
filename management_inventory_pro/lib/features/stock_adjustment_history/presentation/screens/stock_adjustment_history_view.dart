@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../cubit/stock_adjustment_history_cubit.dart';
 import '../cubit/stock_adjustment_history_state.dart';
@@ -16,7 +16,7 @@ class StockAdjustmentHistoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.surface,
+      color: context.colors.surface,
       child: BlocBuilder<StockAdjustmentHistoryCubit,
           StockAdjustmentHistoryState>(
         buildWhen: (previous, current) => previous.status != current.status
@@ -41,9 +41,6 @@ class StockAdjustmentHistoryView extends StatelessWidget {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // flex 10 (full width) with nothing selected, flex 7 once the
-              // right panel appears — so the list visibly expands/contracts
-              // rather than leaving empty space where the panel would be.
               Expanded(
                 flex: hasSelection ? 7 : 10,
                 child: Padding(
@@ -57,10 +54,6 @@ class StockAdjustmentHistoryView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const HistoryHeader(),
-                      // Filters (and, once wired up, the KPI summary row)
-                      // are page-level chrome — they must not depend on
-                      // whether a row is selected, so they're unconditional
-                      // here rather than gated on state.selectedAdjustment.
                       const SizedBox(height: AppSpacing.xs),
                       const FiltersSection(),
                       const SizedBox(height: AppSpacing.xs),
@@ -70,11 +63,6 @@ class StockAdjustmentHistoryView extends StatelessWidget {
                   ),
                 ),
               ),
-              // Only mounted once a row is selected — AdjustmentDetailsSection
-              // still has its own internal empty-state handling, but we don't
-              // want that empty state ("Select an adjustment...") taking up
-              // 30% of the screen when nothing's picked, so we skip mounting
-              // it entirely here instead.
               if (hasSelection)
                 const Expanded(
                   flex: 3,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_model.dart';
 import '../../../data/models/stock_entry_status.dart';
@@ -19,9 +19,9 @@ class StockEntryDetailsHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: context.colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.outlineVariant),
+        border: Border.all(color: context.colors.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,13 +32,13 @@ class StockEntryDetailsHeader extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: context.colors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.receipt_long_rounded,
                   size: 28,
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                 ),
               ),
               const SizedBox(width: 8),
@@ -50,7 +50,7 @@ class StockEntryDetailsHeader extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.dataMono.copyWith(
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
                     ),
@@ -63,7 +63,7 @@ class StockEntryDetailsHeader extends StatelessWidget {
           ),
 
           const SizedBox(height: 12),
-          const Divider(height: 1, color: AppColors.outlineVariant),
+          Divider(height: 1, color: context.colors.outlineVariant),
           const SizedBox(height: 12),
 
           // ── Info rows ───────────────────────────────────────────────────
@@ -114,7 +114,7 @@ class _InfoRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyles.bodySm.copyWith(color: AppColors.outline),
+          style: AppTextStyles.bodySm.copyWith(color: context.colors.outline),
         ),
         const SizedBox(width: 8),
         Flexible(
@@ -126,7 +126,7 @@ class _InfoRow extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.bodySm.copyWith(
                 fontWeight: FontWeight.w700,
-                color: AppColors.onSurface,
+                color: context.colors.onSurface,
               ),
             ),
           ),

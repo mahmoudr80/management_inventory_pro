@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
-/// Static column header row for the adjustment history table.
 class HistoryTableHeader extends StatelessWidget {
   const HistoryTableHeader({super.key});
 
@@ -26,8 +25,8 @@ class HistoryTableHeader extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceBright,
-        border: Border(bottom: BorderSide(color: AppColors.outlineVariant)),
+        color: context.colors.surfaceBright,
+        border: Border(bottom: BorderSide(color: context.colors.outlineVariant)),
       ),
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.md),
       child: Row(

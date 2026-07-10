@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/cubit/stock_entry_cubit.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/filter/status_toggle_group.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_filter.dart';
 import '../../../data/models/stock_entry_status.dart';
@@ -51,10 +51,10 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
       initialDateRange: _selectedDateRange,
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
-          colorScheme: const ColorScheme.light(
-            primary: AppColors.primary,
-            onPrimary: AppColors.onPrimary,
-            surface: AppColors.surfaceContainerLowest,
+          colorScheme: ColorScheme.light(
+            primary: context.colors.primary,
+            onPrimary: context.colors.onPrimary,
+            surface: context.colors.surfaceContainerLowest,
           ),
         ),
         child: child!,
@@ -95,8 +95,8 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
         final bool isNarrow = constraints.maxWidth < 750;
         final double? width = isNarrow
             ? (constraints.maxWidth < 500
-                ? double.infinity
-                : (constraints.maxWidth - 44) / 2)
+            ? double.infinity
+            : (constraints.maxWidth - 44) / 2)
             : null;
 
         final supplierDropdownWidget = BlocBuilder<StockEntryCubit, StockEntryState>(
@@ -127,27 +127,27 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
 
         final clearWidget = _hasActiveFilters
             ? TextButton.icon(
-                onPressed: () {
-                  widget.searchController.clear();
-                  setState(() => _selectedDateRange = null);
-                  widget.onClearFilters();
-                },
-                icon: const Icon(Icons.filter_list_off, size: 15),
-                label: Text('Clear', style: AppTextStyles.bodySm),
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.outline,
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  visualDensity: VisualDensity.compact,
-                ),
-              )
+          onPressed: () {
+            widget.searchController.clear();
+            setState(() => _selectedDateRange = null);
+            widget.onClearFilters();
+          },
+          icon: const Icon(Icons.filter_list_off, size: 15),
+          label: Text('Clear', style: AppTextStyles.bodySm),
+          style: TextButton.styleFrom(
+            foregroundColor: context.colors.outline,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            visualDensity: VisualDensity.compact,
+          ),
+        )
             : null;
 
         if (isNarrow) {
           return Container(
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLowest,
+              color: context.colors.surfaceContainerLowest,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.outlineVariant),
+              border: Border.all(color: context.colors.outlineVariant),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Wrap(
@@ -166,9 +166,9 @@ class _StockEntryFilterBarState extends State<StockEntryFilterBar> {
 
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: context.colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.outlineVariant),
+            border: Border.all(color: context.colors.outlineVariant),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(

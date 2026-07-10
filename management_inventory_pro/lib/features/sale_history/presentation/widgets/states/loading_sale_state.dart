@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 
 class _SalesLoadingStateState extends State<SalesLoadingState>
@@ -89,7 +89,7 @@ class _SkeletonCard extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: AppColors.border,
+        color: context.colors.border,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
     );
@@ -107,7 +107,7 @@ class _SkeletonLine extends StatelessWidget {
       width: width,
       height: height ?? AppSpacing.md,
       decoration: BoxDecoration(
-        color: AppColors.border,
+        color: context.colors.border,
         borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
     );
@@ -119,36 +119,35 @@ class _TableSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.colors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header placeholder
           Container(
             height: 20,
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
-            color: AppColors.surfaceContainerLow,
+            color: context.colors.surfaceContainerLow,
             child: Row(
               children: [50.0, 100.0, 10.0, 10.0, 40.0, 20.0, 20.0]
                   .map((w) => Padding(
-                        padding: const EdgeInsets.only(right: AppSpacing.xs),
-                        child: _SkeletonLine(width: w, height: 10),
-                      ))
+                padding: const EdgeInsets.only(right: AppSpacing.xs),
+                child: _SkeletonLine(width: w, height: 10),
+              ))
                   .toList(),
             ),
           ),
-          const Divider(height: 1, color: AppColors.border),
+          Divider(height: 1, color: context.colors.border),
           ...List.generate(
             8,
-            (i) => Column(
+                (i) => Column(
               children: [
                 Container(
                   height: 30,
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
-                  child: const Row(
+                  child: Row(
                     children: [
                       _SkeletonLine(width: 50),
                       SizedBox(width: AppSpacing.sm),
@@ -167,7 +166,7 @@ class _TableSkeleton extends StatelessWidget {
                   ),
                 ),
                 if (i < 7)
-                  const Divider(height: 1, color: AppColors.surfaceContainerLow),
+                  Divider(height: 1, color: context.colors.surfaceContainerLow),
               ],
             ),
           ),

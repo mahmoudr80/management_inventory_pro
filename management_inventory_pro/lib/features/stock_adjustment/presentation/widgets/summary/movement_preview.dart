@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_adjustment_item_model.dart';
@@ -23,8 +23,8 @@ class MovementPreview extends StatelessWidget {
             children: [
               Text('MOVEMENT PREVIEW', style: AppTextStyles.labelCaps),
               const SizedBox(width: AppSpacing.sm),
-              const Expanded(
-                child: Divider(color: AppColors.outlineVariant),
+              Expanded(
+                child: Divider(color: context.colors.outlineVariant),
               ),
             ],
           ),
@@ -33,13 +33,13 @@ class MovementPreview extends StatelessWidget {
           Text(
             'No adjustments yet',
             style: AppTextStyles.bodySm.copyWith(
-              color: AppColors.outline,
+              color: context.colors.outline,
               fontStyle: FontStyle.italic,
             ),
           )
         else
           ...filtered.map(
-            (item) => Padding(
+                (item) => Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: MovementPreviewItem(item: item),
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/features/stock_receipts/presentation/widgets/kpi/statistics_bento_card.dart';
 
-import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_theme_extension.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../data/models/stock_entry_summary.dart';
 import 'mini_progress_bar.dart';
@@ -30,8 +30,8 @@ class StockEntryKpiRow extends StatelessWidget {
         const double spacing = 16.0;
         final double itemWidth = isNarrow
             ? (constraints.maxWidth < 550
-                ? double.infinity
-                : (constraints.maxWidth - spacing) / 2)
+            ? double.infinity
+            : (constraints.maxWidth - spacing) / 2)
             : (constraints.maxWidth - (spacing * 2)) / 3;
 
         final card1 = SizedBox(
@@ -48,19 +48,19 @@ class StockEntryKpiRow extends StatelessWidget {
           child: StatBentoCard(
             title: 'Pending Receipts',
             value: _formatCount(summary.pendingReceipts),
-            valueColor: AppColors.error,
+            valueColor: context.colors.error,
             customFooter: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MiniProgressBar(
                   fraction: pendingFraction.toDouble(),
-                  color: AppColors.error,
+                  color: context.colors.error,
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Receipts awaiting verification',
                   style: AppTextStyles.bodySm.copyWith(
-                    color: AppColors.outline,
+                    color: context.colors.outline,
                   ),
                 ),
               ],
@@ -120,15 +120,15 @@ class _KpiRowSkeleton extends StatelessWidget {
         const double spacing = 16.0;
         final double itemWidth = isNarrow
             ? (constraints.maxWidth < 550
-                ? double.infinity
-                : (constraints.maxWidth - spacing) / 2)
+            ? double.infinity
+            : (constraints.maxWidth - spacing) / 2)
             : (constraints.maxWidth - (spacing * 2)) / 3;
 
         final skeletonCard = Container(
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: context.colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.outlineVariant),
+            border: Border.all(color: context.colors.outlineVariant),
           ),
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -173,7 +173,7 @@ class _Bone extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerHigh,
+        color: context.colors.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(4),
       ),
     );

@@ -1,36 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/app_colors.dart';
+import '../../theme/pos_theme_extension.dart';
 import '../../../../sale_history/data/models/sale_item_model.dart';
 
-/// Primary checkout CTA for the POS cart panel.
-///
-/// This is intentionally the single most visually dominant control in the
-/// cart — full width, filled with the brand primary color, with a soft
-/// elevated shadow that disappears on press. It sits directly beneath the
-/// payment method section and finalizes the sale via a confirmation dialog.
-///
-/// UI only: this widget does not mutate cart states itself. It surfaces a
-/// confirmation dialog and, once the cashier confirms, simply invokes
-/// [onConfirm] — the parent (which owns the cart/order states) is
-/// responsible for clearing the cart, resetting the payment method, and
-/// showing the success snackbar.
 class CompleteSaleButton extends StatefulWidget {
-  /// Final payable amount (subtotal + tax) to display in the confirmation dialog.
   final double totalAmount;
-
-  /// Total number of items in the cart (sum of line-item quantities).
   final int itemCount;
-
-  /// Name of the customer the sale is being completed for.
   final String customerName;
-
-  /// Currently selected payment method, or null if none has been chosen yet.
   final PaymentMethod? paymentMethod;
-
-  /// Whether the button is interactive. Should be false when the cart is empty.
   final bool isEnabled;
-
-  /// Called once the cashier taps "Confirm Sale" in the dialog.
   final VoidCallback onConfirm;
 
   const CompleteSaleButton({
@@ -89,12 +66,12 @@ class _CompleteSaleButtonState extends State<CompleteSaleButton> {
     final enabled = widget.isEnabled;
 
     final Color background = !enabled
-        ? AppColors.posBorder
+        ? context.posColors.border
         : (_pressed || _hovering)
-            ? AppColors.posPrimaryDark
-            : AppColors.posPrimary;
+        ? context.posColors.primaryDark
+        : context.posColors.primary;
 
-    final Color foreground = enabled ? Colors.white : AppColors.posTextMuted;
+    final Color foreground = enabled ? Colors.white : context.posColors.textMuted;
 
     return MouseRegion(
       cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
@@ -118,18 +95,18 @@ class _CompleteSaleButtonState extends State<CompleteSaleButton> {
             duration: const Duration(milliseconds: 180),
             curve: Curves.easeOut,
             width: double.infinity,
-            height: 56, // within the required 52-60px range
+            height: 56,
             decoration: BoxDecoration(
               color: background,
-              borderRadius: BorderRadius.circular(14), // matches active payment-button radius
+              borderRadius: BorderRadius.circular(14),
               boxShadow: enabled && !_pressed
                   ? [
-                      BoxShadow(
-                        color: AppColors.posPrimary.withAlpha(72),
-                        blurRadius: 16,
-                        offset: const Offset(0, 6),
-                      ),
-                    ]
+                BoxShadow(
+                  color: context.posColors.primary.withAlpha(72),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
+                ),
+              ]
                   : null,
             ),
             child: Row(
@@ -171,7 +148,7 @@ class _CompleteSaleDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: AppColors.posCardBg,
+      backgroundColor: context.posColors.cardBg,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
@@ -187,32 +164,32 @@ class _CompleteSaleDialog extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.posSummaryBg,
+                      color: context.posColors.summaryBg,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.shopping_cart_checkout_rounded, color: AppColors.posPrimary, size: 20),
+                    child: Icon(Icons.shopping_cart_checkout_rounded, color: context.posColors.primary, size: 20),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Complete Sale',
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: AppColors.posTextPrimary),
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: context.posColors.textPrimary),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 14),
-              const Text(
+              Text(
                 'Are you sure you want to finalize this sale?',
-                style: TextStyle(fontSize: 13.5, color: AppColors.posTextSecondary, height: 1.4),
+                style: TextStyle(fontSize: 13.5, color: context.posColors.textSecondary, height: 1.4),
               ),
               const SizedBox(height: 18),
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: AppColors.posSurface,
+                  color: context.posColors.surface,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.posBorder),
+                  border: Border.all(color: context.posColors.border),
                 ),
                 child: Column(
                   children: [
@@ -221,9 +198,9 @@ class _CompleteSaleDialog extends StatelessWidget {
                     _DialogRow(label: 'Items', value: '$itemCount'),
                     const SizedBox(height: 10),
                     _DialogRow(label: 'Payment Method', value: paymentLabel),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Divider(height: 1, color: AppColors.posBorder),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Divider(height: 1, color: context.posColors.border),
                     ),
                     _DialogRow(
                       label: 'Total Amount',
@@ -240,10 +217,10 @@ class _CompleteSaleDialog extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pop(false),
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: AppColors.posBorder),
+                        side: BorderSide(color: context.posColors.border),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        foregroundColor: AppColors.posTextPrimary,
+                        foregroundColor: context.posColors.textPrimary,
                       ),
                       child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
                     ),
@@ -253,7 +230,7 @@ class _CompleteSaleDialog extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () => Navigator.of(context).pop(true),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.posPrimary,
+                        backgroundColor: context.posColors.primary,
                         foregroundColor: Colors.white,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 14),
@@ -289,7 +266,7 @@ class _DialogRow extends StatelessWidget {
           style: TextStyle(
             fontSize: emphasize ? 14 : 13,
             fontWeight: emphasize ? FontWeight.w700 : FontWeight.w500,
-            color: emphasize ? AppColors.posTextPrimary : AppColors.posTextSecondary,
+            color: emphasize ? context.posColors.textPrimary : context.posColors.textSecondary,
           ),
         ),
         Text(
@@ -297,7 +274,7 @@ class _DialogRow extends StatelessWidget {
           style: TextStyle(
             fontSize: emphasize ? 16 : 13.5,
             fontWeight: emphasize ? FontWeight.w800 : FontWeight.w600,
-            color: emphasize ? AppColors.posPrimary : AppColors.posTextPrimary,
+            color: emphasize ? context.posColors.primary : context.posColors.textPrimary,
           ),
         ),
       ],
