@@ -11,12 +11,17 @@ class SaleHistoryDatasource {
   const SaleHistoryDatasource(this._database);
 
   Future<ApiResult> getSales() async {
-   try{
-     final rows = await _database.rawQuery('''
+    try{
+      final rows = await _database.rawQuery('''
 SELECT
     s.${DatabaseConstants.idColumn} AS ${DatabaseConstants.saleIdColumn},
     s.${DatabaseConstants.totalItemColumn},
     s.${DatabaseConstants.totalQuantityColumn},
+    s.${DatabaseConstants.subtotalColumn},
+    s.${DatabaseConstants.discountAmountColumn},
+    s.${DatabaseConstants.taxEnabledColumn},
+    s.${DatabaseConstants.taxPercentageColumn},
+    s.${DatabaseConstants.taxAmountColumn},
     s.${DatabaseConstants.totalAmountColumn},
     s.${DatabaseConstants.noteColumn},
     s.${DatabaseConstants.createdAtColumn},
@@ -48,24 +53,24 @@ INNER JOIN ${DatabaseConstants.productTable} p
 ORDER BY s.${DatabaseConstants.createdAtColumn} DESC
 ''');
 
-     final Map<String, SaleModel> salesMap = {};
+      final Map<String, SaleModel> salesMap = {};
 
-     for (final row in rows) {
-       final saleId = row['sale_id'] as String;
+      for (final row in rows) {
+        final saleId = row['sale_id'] as String;
 
-       final item = SaleItemModel.fromMap(row);
+        final item = SaleItemModel.fromMap(row);
 
-       if (!salesMap.containsKey(saleId)) {
-         salesMap[saleId] = SaleModel.fromMap( map: row,saleId: saleId,);
+        if (!salesMap.containsKey(saleId)) {
+          salesMap[saleId] = SaleModel.fromMap( map: row,saleId: saleId,);
 
-       }
-       salesMap[saleId]!.items.add(item);
-     }
+        }
+        salesMap[saleId]!.items.add(item);
+      }
 
-     return ApiResult.success(salesMap.values.toList());
-   }catch(e){
-     return ApiResult.failure(ApiErrorModel(message: e.toString()));
-   }
+      return ApiResult.success(salesMap.values.toList());
+    }catch(e){
+      return ApiResult.failure(ApiErrorModel(message: e.toString()));
+    }
 
   }
 }

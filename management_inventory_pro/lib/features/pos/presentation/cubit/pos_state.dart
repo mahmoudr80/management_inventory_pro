@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/services/sale_calculator.dart';
 import '../../data/models/cart_item.dart';
 import '../../data/models/pos_product.dart';
 
@@ -63,35 +64,27 @@ class PosState extends Equatable {
     this.searchQuery = '',
   });
 
-  /// The cubit's starting states: nothing loaded yet, no cart, no error.
   factory PosState.initial() => const PosState();
 
-  /// Number of unique product line items in the cart. `0` when there is
-  /// no cart yet.
   int get totalItems => cart?.totalItems ?? 0;
 
-  /// Sum of all item quantities in the cart. `0` when there is no cart yet.
   num get totalQuantity => cart?.totalQuantity ?? 0;
 
-  /// Sum of (quantity × sellingPrice) for every item in the cart. `0` when
-  /// there is no cart yet.
-  num get totalAmount => cart?.totalAmount ?? 0;
+  /// Tax-aware grand total the customer actually pays. Replaces the old
+  /// raw item-sum getter — never sum line totals directly for display.
+  num get totalAmount => cart?.totals.grandTotal ?? 0;
 
-  /// True when there is a cart and it contains at least one item.
+  /// Full tax/discount breakdown for the current cart. Widgets should
+  /// bind to this rather than computing anything themselves.
+  SaleTotals get totals => cart?.totals ?? const SaleTotals.zero();
+
   bool get hasItems => cart != null && cart!.items.isNotEmpty;
 
-  /// True when a search is active but it matched nothing — the trigger for
-  /// the "No products found" empty states in the UI.
   bool get hasNoSearchResults => searchQuery.isNotEmpty && filteredProducts.isEmpty;
 
-  /// Returns a copy of this states with the given fields replaced.
-  ///
-  /// [cart] and [errorMessage] are nullable fields. Dart's `??` operator
-  /// alone can't distinguish "field not passed" from "field explicitly set
-  /// to null", so [resetCart] and [clearError] are provided as explicit
-  /// flags to null out those fields on purpose (e.g. resetting the cart
-  /// after [ActionStatus.completeSale], or clearing a stale error once a
-  /// later action succeeds).
+
+
+
   PosState copyWith({
     PosStatus? status,
     ActionStatus? actionStatus,

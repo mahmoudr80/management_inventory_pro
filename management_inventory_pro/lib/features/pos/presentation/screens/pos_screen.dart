@@ -158,18 +158,23 @@ class _PosScreenState extends State<PosScreen> {
               Container(width: 1, color: context.posColors.border),
               BlocBuilder<PosCubit, PosState>(
                 builder: (context, state) {
-                  return CartPanel(
-                    items: state.cart?.items ?? [],
-                    selectedPayment: _payment,
-                    onSelectPayment: (m) =>
-                        setState(() => _payment = m as PaymentMethod),
-                    onIncrement: (item) async => await _increment(item),
-                    onDecrement: (item) async => await _decrement(item),
-                    onRemove: (item) async => await _remove(item),
-                    onEditCustomer: () {},
-                    onSplitPay: () {},
-                    onPrint: () {},
-                    onCompleteSale: _completeSale,
+                  return BlocBuilder<PosCubit, PosState>(
+                    builder: (context, state) {
+                      return CartPanel(
+                        items: state.cart?.items ?? [],
+                        totals: state.totals,
+                        selectedPayment: _payment,
+                        onSelectPayment: (m) =>
+                            setState(() => _payment = m as PaymentMethod),
+                        onIncrement: (item) async => await _increment(item),
+                        onDecrement: (item) async => await _decrement(item),
+                        onRemove: (item) async => await _remove(item),
+                        onEditCustomer: () {},
+                        onSplitPay: () {},
+                        onPrint: () {},
+                        onCompleteSale: _completeSale,
+                      );
+                    },
                   );
                 },
               ),

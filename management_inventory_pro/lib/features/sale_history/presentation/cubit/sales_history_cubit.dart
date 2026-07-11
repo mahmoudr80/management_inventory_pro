@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/networking/api_result.dart';
+import 'package:management_inventory_pro/core/services/sale_calculator.dart';
 import 'package:management_inventory_pro/features/sale_history/data/repository/sale_history_repository.dart';
 import 'package:management_inventory_pro/features/pos/data/models/pos_product.dart';
 import '../../data/models/sale_item_model.dart';
@@ -18,13 +19,13 @@ class SalesHistoryCubit extends Cubit<SalesHistoryState> {
 
   Future<void> loadSales() async {
     emit(const SalesHistoryLoading());
-      final response = await _repository.getSales();
-      switch(response){
-        case Success(data:final sales):
-          _emitLoaded(sales, const ActiveFilters());
-        case Failure(errorModel:final error):
-          emit(SalesHistoryError(message: error.message));
-      }
+    final response = await _repository.getSales();
+    switch(response){
+      case Success(data:final sales):
+        _emitLoaded(sales, const ActiveFilters());
+      case Failure(errorModel:final error):
+        emit(SalesHistoryError(message: error.message));
+    }
   }
 
   Future<void> refresh() async {
@@ -116,7 +117,7 @@ class SalesHistoryCubit extends Cubit<SalesHistoryState> {
     final current = state;
     if (current is! SalesHistoryLoaded) return;
     final newDirection = current.sortColumn == column &&
-            current.sortDirection == SortDirection.ascending
+        current.sortDirection == SortDirection.ascending
         ? SortDirection.descending
         : SortDirection.ascending;
     final sorted = _sortSales(
@@ -252,10 +253,10 @@ class SalesHistoryCubit extends Cubit<SalesHistoryState> {
   }
 
   List<SaleModel> _sortSales(
-    List<SaleModel> list,
-    SortColumn column,
-    SortDirection direction,
-  ) {
+      List<SaleModel> list,
+      SortColumn column,
+      SortDirection direction,
+      ) {
     list.sort((a, b) {
       int cmp;
       switch (column) {
@@ -320,8 +321,8 @@ class SalesHistoryCubit extends Cubit<SalesHistoryState> {
       final method = i % 3 == 0
           ? PaymentMethod.card
           : i % 5 == 0
-              ? PaymentMethod.card
-              : PaymentMethod.cash;
+          ? PaymentMethod.card
+          : PaymentMethod.cash;
 
       final items = [
         SaleItemModel(
@@ -352,6 +353,22 @@ class SalesHistoryCubit extends Cubit<SalesHistoryState> {
           ),
       ];
 
+      // Mirrors what PosCubit does at real checkout time: run the raw
+      // item sum through SaleCalculator so mock rows carry consistent,
+      // realistic tax data instead of hand-faked numbers. Every 3rd mock
+      // sale simulates tax being enabled (14%, prices exclusive) at the
+      // time it was made; the rest simulate tax having been disabled —
+      // exercising both branches of the summary/receipt UI.
+      final rawSubtotal = items.fold<double>(0, (sum, item) => sum + item.total);
+      final taxWasEnabled = i % 3 == 0;
+      final totals = SaleCalculator.calculate(
+        subtotal: rawSubtotal,
+        discountAmount: 0,
+        taxEnabled: taxWasEnabled,
+        taxPercentage: 14,
+        pricesIncludeTax: false,
+      );
+
       return SaleModel(
         id: 'SAL-${index.toString().padLeft(6, '0')}',
         items: items,
@@ -361,6 +378,12 @@ class SalesHistoryCubit extends Cubit<SalesHistoryState> {
         createdAt: date,
         updatedAt: date,
         notes: i % 4 == 0 ? 'Walk-in customer' : null,
+        subtotal: totals.subtotal,
+        discountAmount: totals.discountAmount,
+        taxEnabled: totals.taxEnabled,
+        taxPercentage: totals.taxPercentage,
+        taxAmount: totals.taxAmount,
+        totalAmount: totals.grandTotal,
       );
     });
   }
