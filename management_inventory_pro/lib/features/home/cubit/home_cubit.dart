@@ -51,7 +51,10 @@ class HomeCubit extends Cubit<HomeState> {
                 SaleItemModel(id: item.id, product: item.product, quantity: item.quantity,
                     sellingPrice: item.sellingPrice) ,).toList(),
             cashierName: sale.cashier, paymentMethod: sale.paymentMethod, status: sale.status,
-            createdAt: sale.date, updatedAt: sale.date)
+            createdAt: sale.date, updatedAt: sale.date,
+            subtotal: sale.subtotal, discountAmount: sale.discountAmount,
+            taxEnabled: sale.taxEnabled, taxPercentage: sale.taxPercentage,
+            taxAmount: sale.taxAmount, totalAmount: sale.totalAmount)
          )
     );
   }
@@ -67,7 +70,6 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
   void clearAction() {
-    NavigateState(currentIndex: state.currentIndex,action: PageAction.none );
-
+    emit(NavigateState(currentIndex: state.currentIndex, action: PageAction.none));
   }
 }
