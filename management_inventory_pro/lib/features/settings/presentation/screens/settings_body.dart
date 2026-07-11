@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
-import 'package:management_inventory_pro/core/theme/theme_preference_service.dart';
 import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
 
 import '../../../../core/dependency_injection/service_locator.dart';
+import '../../../unit/data/respository/unit_repository.dart';
+import '../../../unit/presentation/cubit/unit_cubit.dart';
 import '../theme/settings_theme_extension.dart';
 import '../cubit/settings_cubit.dart';
 import '../cubit/settings_state.dart';
@@ -45,8 +46,15 @@ class SettingsBody extends StatelessWidget {
 
     return Theme(
       data: themeWithSettingsColors,
-      child: BlocProvider(
-        create: (_) => SettingsCubit(themePreferenceService: getIt<ThemePreferenceService>()),
+      // Reuse the app-wide singleton (same instance main.dart reads for
+      // MaterialApp.themeMode) instead of constructing a second
+      // SettingsCubit here. A second instance would re-run the SQLite +
+      // shared_preferences load from scratch on every visit to this page
+      // and would drift out of sync with the app-level instance (e.g. an
+      // appearance change made here wouldn't show up in the other, and
+      // vice versa).
+      child: BlocProvider.value(
+        value: getIt<SettingsCubit>(),
         child: const _SettingsView(),
       ),
     );
@@ -65,9 +73,9 @@ class _SettingsView extends StatelessWidget {
       listener: (context, state) {
         final message = state.successMessage ?? state.errorMessage;
         if (message == null) return;
-        state.errorMessage != null ?
-        AppSnackBar.showError(context, message: message):
-        AppSnackBar.showSuccess(context, message: message);
+        state.errorMessage != null
+            ? AppSnackBar.showError(context, message: message)
+            : AppSnackBar.showSuccess(context, message: message);
 
         context.read<SettingsCubit>().dismissMessages();
       },
@@ -94,7 +102,10 @@ class _SettingsView extends StatelessWidget {
                     SizedBox(height: AppSpacing.xxl),
                     OverviewCardsSection(settings: settings),
                     SizedBox(height: AppSpacing.xxl),
-                    GeneralSection(general: settings.general, onChanged: cubit.updateGeneral),
+                    GeneralSection(
+                      general: settings.general,
+                      onChanged: cubit.updateGeneral,
+                    ),
                     SizedBox(height: AppSpacing.xl),
                     StoreInformationSection(
                       storeInfo: settings.storeInfo,
@@ -106,11 +117,35 @@ class _SettingsView extends StatelessWidget {
                       onChanged: cubit.updateCurrencyTax,
                     ),
                     SizedBox(height: AppSpacing.xl),
-                    ReceiptSection(receipt: settings.receipt, onChanged: cubit.updateReceipt),
+                    ReceiptSection(
+                      receipt: settings.receipt,
+                      onChanged: cubit.updateReceipt,
+                    ),
                     SizedBox(height: AppSpacing.xl),
-                    InventorySettingsSection(inventory: settings.inventory, onChanged: cubit.updateInventory),
+                    if (getIt.isRegistered<UnitRepository>())
+                      BlocProvider(
+                        create: (_) => UnitCubit(getIt<UnitRepository>()),
+                        child: Builder(
+                          builder: (context) => BlocBuilder<SettingsCubit, SettingsState>(
+                            builder: (context, state) => InventorySettingsSection(
+                              inventory: state.settings.inventory,
+                              onChanged: context.read<SettingsCubit>().updateInventory,
+                              unitCubit: context.read<UnitCubit>(),
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      InventorySettingsSection(
+                        inventory: settings.inventory,
+                        onChanged: cubit.updateInventory,
+                        unitCubit: null,
+                      ),
                     SizedBox(height: AppSpacing.xl),
-                    SecuritySection(security: settings.security, onChanged: cubit.updateSecurity),
+                    SecuritySection(
+                      security: settings.security,
+                      onChanged: cubit.updateSecurity,
+                    ),
                     SizedBox(height: AppSpacing.xl),
                     BackupSection(
                       backup: settings.backup,
@@ -123,7 +158,10 @@ class _SettingsView extends StatelessWidget {
                       onChanged: cubit.updateNotifications,
                     ),
                     SizedBox(height: AppSpacing.xl),
-                    AppearanceSection(appearance: settings.appearance, onChanged: cubit.updateAppearance),
+                    AppearanceSection(
+                      appearance: settings.appearance,
+                      onChanged: cubit.updateAppearance,
+                    ),
                     SizedBox(height: AppSpacing.xl),
                     AboutSection(about: settings.about),
                     SizedBox(height: AppSpacing.xxl),

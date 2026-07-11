@@ -4,7 +4,7 @@ import '../../theme/settings_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 import 'package:management_inventory_pro/core/widgets/secondary_button.dart';
-import '../../../models/settings_model.dart';
+import '../../../data/models/settings_model.dart';
 import '../cards/settings_card.dart';
 import '../fields/settings_number_field.dart';
 import '../fields/settings_switch_tile.dart';

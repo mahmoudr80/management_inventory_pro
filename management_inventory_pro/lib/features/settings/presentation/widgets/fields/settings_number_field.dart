@@ -65,7 +65,8 @@ class _SettingsNumberFieldState extends State<SettingsNumberField> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.label, style: AppTextStyles.bodyMd.copyWith(fontWeight: FontWeight.w500)),
+          Text(widget.label, style: AppTextStyles.bodyMd.copyWith(
+              fontWeight: FontWeight.w500,color: context.colors.secondary)),
           SizedBox(height: AppSpacing.xs),
           Row(
             children: [
@@ -95,7 +96,7 @@ class _SettingsNumberFieldState extends State<SettingsNumberField> {
                 ),
                 child: Text(
                   '${_formatValue(widget.value)}${widget.suffix != null ? ' ${widget.suffix}' : ''}',
-                  style: AppTextStyles.dataMono.copyWith(fontWeight: FontWeight.w700, color: badgeFg),
+                  style: AppTextStyles.dataMono.copyWith(fontWeight: FontWeight.w700,color: context.colors.secondary),
                 ),
               ),
             ],
@@ -111,7 +112,7 @@ class _SettingsNumberFieldState extends State<SettingsNumberField> {
           widget.label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.bodyMd.copyWith(fontWeight: FontWeight.w500, color: context.colors.textPrimary),
+          style: AppTextStyles.bodyMd.copyWith(fontWeight: FontWeight.w500,color: context.colors.secondary),
         ),
         SizedBox(height: AppSpacing.sm),
         TextField(

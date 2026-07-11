@@ -3,18 +3,14 @@ import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
-/// Labeled dropdown for small, fixed option lists (timezone, language,
-/// currency, date/time format, default unit...).
-///
-/// Deliberately simpler than `SearchSelectDropdown`: these lists are short
-/// enough that search would be overkill, so this stays a plain themed
-/// `DropdownButtonFormField`.
 class SettingsDropdown<T> extends StatelessWidget {
   final String label;
-  final T value;
+  final T? value;
   final List<T> options;
   final String Function(T) labelBuilder;
   final ValueChanged<T> onChanged;
+  final String placeholder;
+  final String? emptyMessage;
 
   const SettingsDropdown({
     super.key,
@@ -23,10 +19,17 @@ class SettingsDropdown<T> extends StatelessWidget {
     required this.options,
     required this.labelBuilder,
     required this.onChanged,
+    this.placeholder = 'Select an option',
+    this.emptyMessage,
   });
 
   @override
   Widget build(BuildContext context) {
+    final hasOptions = options.isNotEmpty;
+    // Only pass a value through if it actually matches an option —
+    // otherwise DropdownButtonFormField asserts and crashes.
+    final safeValue = (value != null && options.contains(value)) ? value : null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -36,12 +39,17 @@ class SettingsDropdown<T> extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.bodyMd.copyWith(
             fontWeight: FontWeight.w500,
-            color: context.colors.textPrimary,
           ),
         ),
         SizedBox(height: AppSpacing.sm),
         DropdownButtonFormField<T>(
-          value: value,
+          value: safeValue,
+          hint: Text(
+            hasOptions ? placeholder : (emptyMessage ?? placeholder),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.bodyMd,
+          ),
           icon: Icon(Icons.keyboard_arrow_down_rounded, color: context.colors.outline),
           style: AppTextStyles.bodyMd.copyWith(color: context.colors.textPrimary),
           dropdownColor: context.colors.surface,
@@ -68,18 +76,20 @@ class SettingsDropdown<T> extends StatelessWidget {
           items: options
               .map(
                 (option) => DropdownMenuItem<T>(
-                  value: option,
-                  child: Text(
-                    labelBuilder(option),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              )
+              value: option,
+              child: Text(
+                labelBuilder(option),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          )
               .toList(),
-          onChanged: (selected) {
+          onChanged: hasOptions
+              ? (selected) {
             if (selected != null) onChanged(selected);
-          },
+          }
+              : null,
         ),
       ],
     );
