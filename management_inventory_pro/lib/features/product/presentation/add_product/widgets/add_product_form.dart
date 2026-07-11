@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:management_inventory_pro/core/utils/app_snackBar.dart';
-import 'package:management_inventory_pro/features/product/presentation/add_product/cubit/add_product_cubit.dart';
-import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/product_section_card.dart';
-import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/product_summary_panel.dart';
-import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/basic_information_section.dart';
-import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/inventory_section.dart';
-import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/notes_section.dart';
-import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/pricing_section.dart';
-import 'package:management_inventory_pro/features/product/presentation/add_product/widgets/sections/product_image_section.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../../core/components/status_chip.dart';
+import '../../../../../core/utils/app_snackBar.dart';
 import '../../../data/models/product_model.dart';
+import '../cubit/add_product_cubit.dart';
 import 'marginCard.dart';
+import 'product_section_card.dart';
+import 'product_summary_panel.dart';
+import 'sections/basic_information_section.dart';
+import 'sections/notes_section.dart';
+import 'sections/pricing_section.dart';
+import 'sections/product_image_section.dart';
+import 'sections/product_inventory_section.dart';
 
 class AddProductForm extends StatefulWidget {
   const AddProductForm({super.key});
@@ -175,7 +175,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     marginPercent: _marginPercent,
                   ),
                 ),
-                InventorySection(
+                ProductInventorySection(
                   initialStockController: _initialStockController,
                   minStockController: _minStockController,
                 ),
