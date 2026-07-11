@@ -186,6 +186,7 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
   /// [widget.selected] (or clears it). Used for cancel / outside-tap,
   /// where there's no pending selection update to wait for.
   void _closeDropdown() {
+    if (!_open) return;
     _collapseOverlay();
     if (!mounted) return;
     setState(() {
@@ -194,8 +195,6 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
   }
 
   void _select(T? item) {
-    widget.onChanged(item);
-    _focusNode.unfocus();
     _collapseOverlay();
     // Set text from the item we just picked rather than widget.selected —
     // the parent hasn't rebuilt with the new selection yet, so
@@ -203,6 +202,8 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
     setState(() {
       _controller.text = item != null ? widget.labelBuilder(item) : '';
     });
+    _focusNode.unfocus();
+    widget.onChanged(item);
   }
 
   void _onChanged(String value) {
@@ -211,6 +212,29 @@ class _SearchSelectDropdownState<T> extends State<SearchSelectDropdown<T>> {
     // Rebuild with fresh filtered list.
     _showOverlay();
   }
+
+  @override
+  void initState() {
+    super.initState();
+    // Populate the field immediately if the widget is created with an
+    // already-selected value (e.g. navigated in with `initialProduct` set,
+    // as with dashboard "Restock" -> NewStockEntryScreen). Without this,
+    // the controller stays empty until the user taps the field, because
+    // only _openDropdown()/didUpdateWidget ever sync from widget.selected.
+    if (widget.selected != null) {
+      _controller.text = widget.labelBuilder(widget.selected as T);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant SearchSelectDropdown<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!_open && widget.selected != oldWidget.selected) {
+      _controller.text =
+      widget.selected != null ? widget.labelBuilder(widget.selected as T) : '';
+    }
+  }
+
 
   // ── Build ──────────────────────────────────────────────────────────────
 
