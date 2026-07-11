@@ -22,7 +22,7 @@ import 'features/category/data/datasource/category_datasource.dart';
 import 'features/home/cubit/home_cubit.dart';
 import 'features/home/home_screen.dart';
 import 'features/landing page/landing_page.dart';
-import 'features/settings/models/settings_model.dart';
+import 'features/settings/data/models/settings_model.dart';
 import 'features/settings/presentation/cubit/settings_cubit.dart';
 import 'features/settings/presentation/cubit/settings_state.dart';
 import 'features/unit/data/datasource/unit_datasource.dart';

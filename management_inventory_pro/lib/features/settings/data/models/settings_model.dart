@@ -171,7 +171,11 @@ class InventorySettings {
   final bool allowNegativeStock;
   final bool autoSku;
   final bool requireBarcode;
-  final String defaultUnit;
+  /// References `UnitModel.id`. `null` means "nothing selected" — a
+  /// valid, expected state whenever the units table is empty or the
+  /// user hasn't picked one yet. Can also go stale if the unit is later
+  /// deleted; see `DefaultUnitDropdown` for the self-healing check.
+  final int? defaultUnitId;
   final bool enableStockAlerts;
 
   const InventorySettings({
@@ -180,7 +184,7 @@ class InventorySettings {
     required this.allowNegativeStock,
     required this.autoSku,
     required this.requireBarcode,
-    required this.defaultUnit,
+    this.defaultUnitId,
     required this.enableStockAlerts,
   });
 
@@ -190,7 +194,8 @@ class InventorySettings {
     bool? allowNegativeStock,
     bool? autoSku,
     bool? requireBarcode,
-    String? defaultUnit,
+    int? defaultUnitId,
+    bool clearDefaultUnitId = false,
     bool? enableStockAlerts,
   }) {
     return InventorySettings(
@@ -199,7 +204,7 @@ class InventorySettings {
       allowNegativeStock: allowNegativeStock ?? this.allowNegativeStock,
       autoSku: autoSku ?? this.autoSku,
       requireBarcode: requireBarcode ?? this.requireBarcode,
-      defaultUnit: defaultUnit ?? this.defaultUnit,
+      defaultUnitId: clearDefaultUnitId ? null : (defaultUnitId ?? this.defaultUnitId),
       enableStockAlerts: enableStockAlerts ?? this.enableStockAlerts,
     );
   }

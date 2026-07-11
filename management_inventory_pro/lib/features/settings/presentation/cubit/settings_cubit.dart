@@ -2,9 +2,14 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/networking/api_result.dart';
+import '../../../../core/storage/storage_service.dart';
 import '../../../../core/theme/theme_preference_service.dart';
-import '../../mock/mock_settings.dart';
-import '../../models/settings_model.dart';
+import '../../data/local/default_settings.dart';
+import '../../data/local/settings_preferences_service.dart';
+import '../../data/models/settings_business_data.dart';
+import '../../data/repository/settings_repository.dart';
+import '../../data/models/settings_model.dart';
 import 'settings_state.dart';
 
 /// Owns every read/write for the Settings screen.
@@ -15,44 +20,138 @@ import 'settings_state.dart';
 /// keeps the file from growing into a god-class as new fields get added
 /// to a section.
 ///
-/// Persistence is intentionally out of scope for most sections: [save]
-/// simulates a write and swaps `_lastSaved` to the current draft. A
-/// repository can later be injected and called from [save] / the
-/// constructor without touching any UI code.
+/// Persistence is split across two stores, matching what each field
+/// actually is:
+///  - Store name + currency/tax fields → [SettingsRepository] → SQLite
+///    (the `settings` table).
+///  - Everything else (store info, receipt, inventory, security, backup,
+///    notifications, and the non-DB slices of general/appearance) →
+///    [SettingsPreferencesService] → shared_preferences, same tech
+///    [ThemePreferenceService] already uses for `appearance.themeMode`.
 ///
-/// The one exception is [AppearanceSettings.themeMode]: it's persisted
-/// immediately via [ThemePreferenceService] on every change (not gated
-/// behind [save]) so the app can switch light/dark/system live and the
-/// choice survives a restart even if the rest of the draft is discarded.
-/// If that immediate-persist behavior isn't what you want (e.g. you'd
-/// rather theme mode only stick after hitting Save like everything
-/// else), flag it and this can move into [save] instead.
+/// [settingsRepository] is nullable because SQLite is only initialized
+/// on Windows (see `service_locator.dart`); on other platforms the
+/// Cubit still works, it just can't persist the business fields.
+///
+/// The one exception to "everything waits for Save" is
+/// [AppearanceSettings.themeMode]: it's persisted immediately via
+/// [ThemePreferenceService] on every change (not gated behind [save])
+/// so the app can switch light/dark/system live and the choice survives
+/// a restart even if the rest of the draft is discarded.
 class SettingsCubit extends Cubit<SettingsState> {
-  SettingsCubit({required ThemePreferenceService themePreferenceService})
-      : _themePreferenceService = themePreferenceService,
-        super(SettingsState(settings: MockSettings.build())) {
+  SettingsCubit({
+    required ThemePreferenceService themePreferenceService,
+    required SettingsPreferencesService settingsPreferencesService,
+    SettingsRepository? settingsRepository,
+    StorageService? storageService,
+  })  : _themePreferenceService = themePreferenceService,
+        _settingsPreferencesService = settingsPreferencesService,
+        _settingsRepository = settingsRepository,
+        _storageService = storageService,
+        super(SettingsState(settings: DefaultSettings.build())) {
     _lastSaved = state.settings;
-    _loadPersistedThemeMode();
+    _loadPersistedSettings();
   }
 
   final ThemePreferenceService _themePreferenceService;
+  final SettingsPreferencesService _settingsPreferencesService;
+  final SettingsRepository? _settingsRepository;
+  final StorageService? _storageService;
 
   late SettingsModel _lastSaved;
 
-  /// Restores the previously-saved theme mode (if any) on startup.
-  /// This is a restore, not a user edit, so it does NOT set
-  /// `hasUnsavedChanges` and updates `_lastSaved` too, otherwise the app
-  /// would open with a spurious "unsaved changes" flag and a stray
-  /// Discard would revert the mode the user already chose last session.
-  Future<void> _loadPersistedThemeMode() async {
+  /// Restores everything persisted so far on startup: theme mode, the
+  /// SQLite-backed business fields, and every shared_preferences-backed
+  /// section. This is a restore, not a user edit, so it does NOT set
+  /// `hasUnsavedChanges` and it updates `_lastSaved` too — otherwise the
+  /// app would open with a spurious "unsaved changes" flag and a stray
+  /// Discard would revert values the user already saved last session.
+  Future<void> _loadPersistedSettings() async {
     final persistedMode = await _themePreferenceService.getThemeMode();
-    final updatedAppearance =
-    state.settings.appearance.copyWith(themeMode: persistedMode);
-    final updatedSettings =
-    state.settings.copyWith(appearance: updatedAppearance);
 
-    emit(state.copyWith(settings: updatedSettings));
-    _lastSaved = updatedSettings;
+    SettingsModel working = state.settings.copyWith(
+      appearance: state.settings.appearance.copyWith(themeMode: persistedMode),
+    );
+
+    // Business fields (store name, currency & tax) → SQLite. On first
+    // run (no row saved yet) this writes DefaultSettings — with the
+    // store name seeded from the landing-page profile when one exists
+    // — as the real first row, rather than leaving it as in-memory-only
+    // mock data that would vanish on the next launch.
+    final repository = _settingsRepository;
+    if (repository != null) {
+      final seededStoreName =
+          _seedStoreNameFromLandingPageUser() ?? DefaultSettings.general.storeName;
+      final defaultsBusiness = SettingsBusinessData(
+        storeName: seededStoreName,
+        currency: DefaultSettings.currencyTax.currency,
+        currencySymbol: DefaultSettings.currencyTax.currencySymbol,
+        taxEnabled: DefaultSettings.currencyTax.taxEnabled,
+        taxPercentage: DefaultSettings.currencyTax.taxPercent,
+        pricesIncludeTax: DefaultSettings.currencyTax.pricesIncludeTax,
+      );
+
+      final businessResult =
+          await repository.getOrSeedBusinessSettings(defaultsBusiness);
+      if (businessResult is Success<SettingsBusinessData>) {
+        final business = businessResult.data;
+        working = working.copyWith(
+          general: working.general.copyWith(storeName: business.storeName),
+          currencyTax: CurrencyTaxSettings(
+            currency: business.currency,
+            currencySymbol: business.currencySymbol,
+            decimalPrecision: working.currencyTax.decimalPrecision,
+            taxPercent: business.taxPercentage,
+            taxEnabled: business.taxEnabled,
+            pricesIncludeTax: business.pricesIncludeTax,
+          ),
+        );
+      }
+      // On failure, keep the in-memory defaults for this session rather
+      // than blocking startup; nothing was written, so the next
+      // successful Save will create the row.
+    }
+
+    // Every other section → shared_preferences, seeded the same way.
+    working = working.copyWith(
+      general: await _settingsPreferencesService.applyOrSeedGeneralExtra(
+        base: working.general,
+        defaults: DefaultSettings.general,
+      ),
+      storeInfo: await _settingsPreferencesService.loadOrSeedStoreInfo(
+        DefaultSettings.storeInfo,
+      ),
+      receipt: await _settingsPreferencesService.loadOrSeedReceipt(
+        DefaultSettings.receipt,
+      ),
+      inventory: await _settingsPreferencesService.loadOrSeedInventory(
+        DefaultSettings.inventory,
+      ),
+      security: await _settingsPreferencesService.loadOrSeedSecurity(
+        DefaultSettings.security,
+      ),
+      backup: await _settingsPreferencesService.loadOrSeedBackup(
+        DefaultSettings.backup,
+      ),
+      notifications: await _settingsPreferencesService.loadOrSeedNotifications(
+        DefaultSettings.notifications,
+      ),
+      appearance: await _settingsPreferencesService.applyOrSeedAppearanceExtra(
+        base: working.appearance,
+        defaults: DefaultSettings.appearance,
+      ),
+    );
+
+    emit(state.copyWith(settings: working));
+    _lastSaved = working;
+  }
+
+  String? _seedStoreNameFromLandingPageUser() {
+    final storage = _storageService;
+    if (storage == null) return null;
+    final users = storage.getAllUsers();
+    if (users.isEmpty) return null;
+    return users.first.name;
   }
 
   void _apply(SettingsModel updated) {
@@ -111,10 +210,45 @@ class SettingsCubit extends Cubit<SettingsState> {
 
     emit(state.copyWith(isSaving: true, clearMessages: true));
 
-    // Simulated latency for a repository write.
-    await Future<void>.delayed(const Duration(milliseconds: 600));
+    final settings = state.settings;
 
-    _lastSaved = state.settings;
+    // Business fields → SQLite.
+    final repository = _settingsRepository;
+    if (repository != null) {
+      final result = await repository.saveBusinessSettings(
+        SettingsBusinessData(
+          storeName: settings.general.storeName,
+          currency: settings.currencyTax.currency,
+          currencySymbol: settings.currencyTax.currencySymbol,
+          taxEnabled: settings.currencyTax.taxEnabled,
+          taxPercentage: settings.currencyTax.taxPercent,
+          pricesIncludeTax: settings.currencyTax.pricesIncludeTax,
+        ),
+      );
+      if (result is Failure<int>) {
+        emit(
+          state.copyWith(
+            isSaving: false,
+            errorMessage: result.errorModel.message,
+          ),
+        );
+        return;
+      }
+    }
+
+    // Everything else → shared_preferences.
+    await Future.wait([
+      _settingsPreferencesService.saveGeneralExtra(settings.general),
+      _settingsPreferencesService.saveStoreInfo(settings.storeInfo),
+      _settingsPreferencesService.saveReceipt(settings.receipt),
+      _settingsPreferencesService.saveInventory(settings.inventory),
+      _settingsPreferencesService.saveSecurity(settings.security),
+      _settingsPreferencesService.saveBackup(settings.backup),
+      _settingsPreferencesService.saveNotifications(settings.notifications),
+      _settingsPreferencesService.saveAppearanceExtra(settings.appearance),
+    ]);
+
+    _lastSaved = settings;
     emit(
       state.copyWith(
         isSaving: false,
@@ -125,7 +259,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   void restoreDefaults() {
-    final defaults = MockSettings.build();
+    final defaults = DefaultSettings.build();
     emit(
       state.copyWith(
         settings: defaults,
