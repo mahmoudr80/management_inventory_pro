@@ -55,6 +55,61 @@ class ProductLocalDatasource {
      return ApiResult.failure(ApiErrorModel(message: e.toString()));
    }
   }
+
+  /// Updates Product Master Data only.
+  ///
+  /// Deliberately strips current_stock, created_at, and id from the
+  /// payload before issuing the UPDATE — regardless of what
+  /// [product.toJson()] contains — so Edit Product can never be used to
+  /// move inventory or rewrite a product's identity/history. Inventory
+  /// quantity changes only through Stock Entry / Stock Adjustment.
+  /// updated_at is stamped here rather than trusted from the caller.
+  Future<ApiResult<int>> updateProduct(ProductModel product) async {
+    try {
+      final data = product.toJson();
+      data.remove(DatabaseConstants.currentStockColumn);
+      data.remove(DatabaseConstants.createdAtColumn);
+      data.remove(DatabaseConstants.idColumn);
+      data[DatabaseConstants.updatedAtColumn] = DateTime.now().toString();
+
+      final result = await _database.update(
+        DatabaseConstants.productTable,
+        data,
+        where: '${DatabaseConstants.idColumn}=?',
+        whereArgs: [product.id],
+      );
+      return ApiResult.success(result);
+    } catch (e) {
+      return ApiResult.failure(ApiErrorModel(message: e.toString()));
+    }
+  }
+
+  /// True if a product other than [excludeId] already uses [sku].
+  Future<bool> isSkuTaken(String sku, String excludeId) async {
+    if (sku.trim().isEmpty) return false;
+    final result = await _database.query(
+      DatabaseConstants.productTable,
+      where:
+          '${DatabaseConstants.skuColumn} = ? AND ${DatabaseConstants.idColumn} != ?',
+      whereArgs: [sku, excludeId],
+      limit: 1,
+    );
+    return result.isNotEmpty;
+  }
+
+  /// True if a product other than [excludeId] already uses [barcode].
+  Future<bool> isBarcodeTaken(String barcode, String excludeId) async {
+    if (barcode.trim().isEmpty) return false;
+    final result = await _database.query(
+      DatabaseConstants.productTable,
+      where:
+          '${DatabaseConstants.barcodeColumn} = ? AND ${DatabaseConstants.idColumn} != ?',
+      whereArgs: [barcode, excludeId],
+      limit: 1,
+    );
+    return result.isNotEmpty;
+  }
+
   Future<int> countProductsByCategory(String categoryName) async {
     final result = await _database.rawQuery(
       'SELECT COUNT(*) as count FROM ${DatabaseConstants.productTable} '

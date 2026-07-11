@@ -7,9 +7,18 @@ import 'package:path/path.dart' as p;
 class ImagePickerWidget extends StatefulWidget {
   final ValueChanged<String?> onImagePicked;
 
+  /// Path of the product's current image, if any. Only used by Edit
+  /// Product — Add Product leaves this null and starts from the empty
+  /// "select an image" state exactly as before. When set, the picker
+  /// opens already showing the existing image instead of an empty form
+  /// field, per "Image: Optional. Keep existing image if user does not
+  /// change it."
+  final String? initialImageUrl;
+
   const ImagePickerWidget({
     super.key,
     required this.onImagePicked,
+    this.initialImageUrl,
   });
 
   @override
@@ -19,6 +28,15 @@ class ImagePickerWidget extends StatefulWidget {
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File? _imageFile;
 
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initialImageUrl;
+    if (initial != null && initial.isNotEmpty) {
+      _imageFile = File(initial);
+    }
+  }
+
   Future<void> _pickImage() async {
     final result = await FilePicker.pickFiles(
       type: FileType.image,
@@ -26,14 +44,14 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     );
 
     if (result == null) {
-      widget.onImagePicked(null);
+      // User cancelled the picker — keep whatever image (existing or
+      // none) was already set instead of clearing it.
       return;
     }
 
     final sourcePath = result.files.single.path;
 
     if (sourcePath == null) {
-      widget.onImagePicked(null);
       return;
     }
 
