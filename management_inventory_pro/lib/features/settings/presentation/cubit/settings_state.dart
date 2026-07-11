@@ -1,4 +1,4 @@
-import '../../models/settings_model.dart';
+import '../../data/models/settings_model.dart';
 
 /// Immutable snapshot of the Settings screen.
 ///

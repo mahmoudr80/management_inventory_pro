@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:management_inventory_pro/features/pos/presentation/cubit/pos_cubit.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
@@ -15,6 +16,9 @@ import '../../features/product/data/datasource/product_datasource.dart';
 import '../../features/product/data/respository/product_repository.dart';
 import '../../features/sale_history/data/datasource/sale_history_datasource.dart';
 import '../../features/sale_history/data/repository/sale_history_repository.dart';
+import '../../features/settings/data/datasource/settings_local_datasource.dart';
+import '../../features/settings/data/local/settings_preferences_service.dart';
+import '../../features/settings/data/repository/settings_repository.dart';
 import '../../features/settings/presentation/cubit/settings_cubit.dart';
 import '../../features/stock_adjustment/data/datasource/stock_adjustment_datasource.dart';
 import '../../features/stock_adjustment/data/repository/stock_adjustment_repository.dart';
@@ -26,7 +30,9 @@ import '../../features/suppliers/data/datasource/supplier_datasource.dart';
 import '../../features/suppliers/data/repository/supplier_repository.dart';
 import '../../features/unit/data/datasource/unit_datasource.dart';
 import '../../features/unit/data/respository/unit_repository.dart';
+import '../components/sidebar/cubit/sidebar_cubit.dart';
 import '../database/database_service.dart';
+import '../storage/sidebar_preference_service.dart';
 import '../storage/storage_service.dart';
 import '../theme/theme_preference_service.dart';
 
@@ -44,11 +50,32 @@ Future<void> setupServiceLocator() async {
   final themePreferenceService = ThemePreferenceService();
   getIt.registerSingleton<ThemePreferenceService>(themePreferenceService);
 
+  // Settings preferences (all platforms — shared_preferences, same tech
+  // as ThemePreferenceService above). Backs every settings section that
+  // has no SQLite column. Registered here, cross-platform, so it's ready
+  // regardless of whether the Windows-only SettingsRepository below ends
+  // up registered too.
+  final settingsPreferencesService = SettingsPreferencesService();
+  getIt.registerSingleton<SettingsPreferencesService>(settingsPreferencesService);
+
   // Settings — registered as a lazy *singleton* (not a factory like
   // AuthCubit) since MaterialApp needs one long-lived instance whose
-  // appearance.themeMode drives the whole app's theme.
+  // appearance.themeMode drives the whole app's theme. settingsRepository
+  // and storageService are looked up defensively (isRegistered) since
+  // they're only registered on Windows, below — this factory runs lazily,
+  // after setupServiceLocator() has finished, so by the time it executes
+  // those registrations (if applicable) are already in place.
   getIt.registerLazySingleton<SettingsCubit>(
-        () => SettingsCubit(themePreferenceService: getIt<ThemePreferenceService>()),
+        () => SettingsCubit(
+      themePreferenceService: getIt<ThemePreferenceService>(),
+      settingsPreferencesService: getIt<SettingsPreferencesService>(),
+      settingsRepository: getIt.isRegistered<SettingsRepository>()
+          ? getIt<SettingsRepository>()
+          : null,
+      storageService: getIt.isRegistered<StorageService>()
+          ? getIt<StorageService>()
+          : null,
+    ),
   );
 
   if(!kIsWeb&&Platform.isWindows){
@@ -92,6 +119,8 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton(() => PosRepository(getIt<PosDatasource>()),);
 
 
+
+
     //pos
     getIt.registerLazySingleton<SaleHistoryDatasource>(() =>
         SaleHistoryDatasource(getIt<DatabaseService>().db),);
@@ -112,6 +141,14 @@ Future<void> setupServiceLocator() async {
         StockAdjustmentHistoryDatasource(getIt<DatabaseService>().db),);
     getIt.registerLazySingleton(() => StockAdjustmentHistoryRepository(getIt<StockAdjustmentHistoryDatasource>()),);
 
+    //settings
+    getIt.registerLazySingleton<SettingsLocalDatasource>(() =>
+        SettingsLocalDatasource(getIt<DatabaseService>().db),);
+    getIt.registerLazySingleton(() => SettingsRepository(getIt<SettingsLocalDatasource>()),);
+
+
+    getIt.registerLazySingleton<PosCubit>(() => PosCubit(getIt<PosRepository>(),
+        settingsRepository: getIt<SettingsRepository>()),);
 
     final storageService = StorageService();
     await storageService.init();
@@ -119,5 +156,12 @@ Future<void> setupServiceLocator() async {
     getIt.registerSingleton<StorageService>(storageService);
   }
 
+// Sidebar UI state persistence (all platforms — shared_preferences,
+  // same reasoning as ThemePreferenceService/SettingsPreferencesService).
+  final sidebarPreferenceService = SidebarPreferenceService();
+  getIt.registerSingleton<SidebarPreferenceService>(sidebarPreferenceService);
 
+  getIt.registerLazySingleton<SidebarCubit>(
+        () => SidebarCubit(getIt<SidebarPreferenceService>()),
+  );
 }
