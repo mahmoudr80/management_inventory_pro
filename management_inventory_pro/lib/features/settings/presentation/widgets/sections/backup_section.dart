@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/widgets/secondary_button.dart';
-import '../../../models/settings_model.dart';
+import '../../../data/models/settings_model.dart';
 import '../cards/backup_information_card.dart';
 import '../cards/settings_card.dart';
 import '../fields/settings_switch_tile.dart';

@@ -3,7 +3,7 @@ import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
-import '../../../models/settings_model.dart';
+import '../../../data/models/settings_model.dart';
 
 /// Live preview of a thermal receipt reflecting the current
 /// [ReceiptSettings] — width, header/footer text, and which optional

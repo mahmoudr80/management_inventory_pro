@@ -38,7 +38,10 @@ class SettingsSwitchTile extends StatelessWidget {
                 title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.bodyMd.copyWith(fontWeight: FontWeight.w600),
+                style: AppTextStyles.bodyMd.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: context.colors.secondary
+                ),
               ),
               if (description != null) ...[
                 SizedBox(height: AppSpacing.xxs),

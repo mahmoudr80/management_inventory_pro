@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 
-import '../../../models/settings_model.dart';
+import '../../../data/models/settings_model.dart';
 import '../cards/settings_card.dart';
 import '../fields/settings_dropdown.dart';
 import '../fields/settings_text_field.dart';

@@ -3,7 +3,7 @@ import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
-import '../../../models/settings_model.dart';
+import '../../../data/models/settings_model.dart';
 import '../cards/settings_card.dart';
 import '../fields/settings_dropdown.dart';
 import '../fields/settings_number_field.dart';
@@ -154,7 +154,7 @@ class _TaxEnginePreview extends StatelessWidget {
         children: [
           Text(
             'TAX ENGINE PREVIEW',
-            style: AppTextStyles.labelCaps.copyWith(color: context.colors.onPrimary.withOpacity(0.75)),
+            style: AppTextStyles.labelCaps
           ),
           SizedBox(height: AppSpacing.md),
           _row(context, 'Base Price', '$currencySymbol ${_fmt(basePrice)}'),

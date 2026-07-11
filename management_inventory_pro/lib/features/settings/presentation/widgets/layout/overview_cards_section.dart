@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 
-import '../../../models/settings_model.dart';
+import '../../../data/models/settings_model.dart';
 import '../cards/information_card.dart';
 
 /// Four-up row of at-a-glance KPI cards, wrapping on narrower desktop

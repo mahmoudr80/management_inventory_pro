@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
+import 'package:management_inventory_pro/features/unit/presentation/cubit/unit_cubit.dart';
 import '../../theme/settings_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
-import '../../../models/settings_model.dart';
+import '../../../data/models/settings_model.dart';
 import '../cards/settings_card.dart';
 import '../common/settings_section_title.dart';
-import '../fields/settings_dropdown.dart';
+import '../fields/default_unit_dropdown.dart';
 import '../fields/settings_number_field.dart';
 import '../fields/settings_switch_tile.dart';
-
-const _units = ['Piece', 'Kg', 'Liter', 'Box', 'Carton', 'Meter'];
 
 /// "Inventory" card — stock control rules: threshold sliders on the left,
 /// boolean toggles on the right, matching the two-column layout in the
@@ -17,8 +16,14 @@ const _units = ['Piece', 'Kg', 'Liter', 'Box', 'Carton', 'Meter'];
 class InventorySettingsSection extends StatelessWidget {
   final InventorySettings inventory;
   final ValueChanged<InventorySettings> onChanged;
+  final UnitCubit? unitCubit;   // was: required UnitCubit unitCubit
 
-  const InventorySettingsSection({super.key, required this.inventory, required this.onChanged});
+  const InventorySettingsSection({
+    super.key,
+    required this.inventory,
+    required this.onChanged,
+    required this.unitCubit,    // still required-to-pass, just nullable
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -107,32 +112,34 @@ class InventorySettingsSection extends StatelessWidget {
 
           final layout = isNarrow
               ? Column(
-                  children: [
-                    thresholds,
-                    SizedBox(height: AppSpacing.lg),
-                    toggles,
-                  ],
-                )
+            children: [
+              thresholds,
+              SizedBox(height: AppSpacing.lg),
+              toggles,
+            ],
+          )
               : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: thresholds),
-                    SizedBox(width: AppSpacing.lg),
-                    Expanded(child: toggles),
-                  ],
-                );
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: thresholds),
+              SizedBox(width: AppSpacing.lg),
+              Expanded(child: toggles),
+            ],
+          );
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               layout,
               SizedBox(height: AppSpacing.lg),
-              SettingsDropdown<String>(
-                label: 'Default Unit',
-                value: inventory.defaultUnit,
-                options: _units,
-                labelBuilder: (v) => v,
-                onChanged: (v) => onChanged(inventory.copyWith(defaultUnit: v)),
+              DefaultUnitDropdown(
+                unitCubit: unitCubit,
+                selectedUnitId: inventory.defaultUnitId,
+                onChanged: (id) => onChanged(
+                  id == null
+                      ? inventory.copyWith(clearDefaultUnitId: true)
+                      : inventory.copyWith(defaultUnitId: id),
+                ),
               ),
             ],
           );
