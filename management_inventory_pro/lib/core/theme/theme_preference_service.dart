@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../features/settings/models/settings_model.dart';
+import '../../features/settings/data/models/settings_model.dart';
 
 /// Persists the user's chosen appearance theme mode (light / dark /
 /// system) across app restarts.
