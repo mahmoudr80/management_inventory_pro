@@ -1,8 +1,22 @@
-
 import 'package:management_inventory_pro/core/database/database_constants.dart';
 import 'package:management_inventory_pro/features/sale_history/data/models/sale_item_model.dart';
 
-
+/// A completed sale, as persisted in the `sales` table.
+///
+/// Design notes:
+/// * [subtotal], [discountAmount], [taxEnabled], [taxPercentage],
+///   [taxAmount] and [totalAmount] are always the exact values that were
+///   computed by `SaleCalculator` and saved at the moment the sale was
+///   completed (see `PosCubit.completeSale` / `CartModel.toMap`). They
+///   are read straight back from the `sales` row in [SaleModel.fromMap]
+///   and are **never** recalculated here — a historical sale must keep
+///   showing whatever tax/discount actually applied at checkout, even if
+///   tax settings change afterwards.
+/// * [totalAmount] in particular used to be a getter that resummed
+///   `item.total` across [items]. That was wrong: it silently ignored
+///   any discount/tax that had been charged and just re-derived a raw
+///   total from current line items. It is now a plain stored field
+///   sourced from the persisted `total_amount` column.
 class SaleModel {
   final String id;
 
@@ -10,8 +24,23 @@ class SaleModel {
 
   final String? notes;
 
-  final int ?discount;
-  final int ?tax;
+  /// Raw sum of line items, tax-exclusive, before discount — exactly as
+  /// computed by `SaleCalculator` at checkout time.
+  final double subtotal;
+
+  final double discountAmount;
+
+  final bool taxEnabled;
+
+  /// The tax percentage that was actually applied to this sale. `0` when
+  /// [taxEnabled] is false.
+  final double taxPercentage;
+
+  final double taxAmount;
+
+  /// Final amount the customer paid for this sale (post discount/tax),
+  /// as persisted — never recomputed from [items].
+  final double totalAmount;
 
   final String cashierName;
 
@@ -31,7 +60,13 @@ class SaleModel {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
-    this.notes, this.discount=0, this.tax=0,
+    required this.subtotal,
+    required this.discountAmount,
+    required this.taxEnabled,
+    required this.taxPercentage,
+    required this.taxAmount,
+    required this.totalAmount,
+    this.notes,
   });
 
   int get totalItems => items.length;
@@ -39,32 +74,42 @@ class SaleModel {
   int get totalQuantity =>
       items.fold(0, (sum, item) => sum + item.quantity);
 
-  double get totalAmount =>
-      items.fold(0.0, (sum, item) => sum + item.total);
-
   bool get isCompleted => status == SaleStatus.completed;
 
-  factory SaleModel.fromMap({required String saleId,required  Map<String, Object?>map}){
-    return SaleModel(id: saleId,
+  factory SaleModel.fromMap({
+    required String saleId,
+    required Map<String, Object?> map,
+  }) {
+    return SaleModel(
+      id: saleId,
       items: [],
-      cashierName: (map[DatabaseConstants.cashierNameColumn]??'Admin') as String,
+      cashierName: (map[DatabaseConstants.cashierNameColumn] ?? 'Admin') as String,
 
       paymentMethod: PaymentMethod.values.firstWhere(
             (e) => e.name.toLowerCase() ==
-            ((map[DatabaseConstants.paymentMethodColumn]??'Cash') as String).toLowerCase(),
+            ((map[DatabaseConstants.paymentMethodColumn] ?? 'Cash') as String).toLowerCase(),
       ),
 
       status: SaleStatus.values.firstWhere(
             (e) => e.name.toLowerCase() ==
-            ((map[DatabaseConstants.statusColumn]??'Completed') as String).toLowerCase(),
+            ((map[DatabaseConstants.statusColumn] ?? 'Completed') as String).toLowerCase(),
       ),
 
       notes: map[DatabaseConstants.noteColumn] as String?,
+
+      subtotal: ((map[DatabaseConstants.subtotalColumn] as num?) ?? 0).toDouble(),
+      discountAmount: ((map[DatabaseConstants.discountAmountColumn] as num?) ?? 0).toDouble(),
+      taxEnabled: ((map[DatabaseConstants.taxEnabledColumn] as int?) ?? 0) == 1,
+      taxPercentage: ((map[DatabaseConstants.taxPercentageColumn] as num?) ?? 0).toDouble(),
+      taxAmount: ((map[DatabaseConstants.taxAmountColumn] as num?) ?? 0).toDouble(),
+      totalAmount: ((map[DatabaseConstants.totalAmountColumn] as num?) ?? 0).toDouble(),
+
       createdAt: DateTime.parse(
         map[DatabaseConstants.createdAtColumn] as String,
       ),
       updatedAt: DateTime.parse(
-        map['updated_at'] as String,
-      ),);
+        map[DatabaseConstants.updatedAtColumn] as String,
+      ),
+    );
   }
 }

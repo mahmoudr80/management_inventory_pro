@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:management_inventory_pro/core/services/sale_calculator.dart';
 import 'package:management_inventory_pro/features/pos/presentation/widgets/cart/payment_buttons.dart';
 import '../../theme/pos_theme_extension.dart';
 import '../../../../../core/theme/app_dimens.dart';
@@ -12,6 +13,13 @@ import 'order_summary.dart';
 
 class CartPanel extends StatelessWidget {
   final List<CartItemModel> items;
+
+  /// Tax/discount breakdown for [items], already computed by
+  /// `SaleCalculator` via `PosCubit`. This panel and everything inside it
+  /// (`OrderSummary`, `CompleteSaleButton`) only ever display this — they
+  /// never calculate tax themselves.
+  final SaleTotals totals;
+
   final PaymentMethod? selectedPayment;
   final ValueChanged<PaymentMethod> onSelectPayment;
   final void Function(CartItemModel) onIncrement;
@@ -26,6 +34,7 @@ class CartPanel extends StatelessWidget {
   const CartPanel({
     super.key,
     required this.items,
+    required this.totals,
     required this.selectedPayment,
     required this.onSelectPayment,
     required this.onIncrement,
@@ -38,10 +47,6 @@ class CartPanel extends StatelessWidget {
     this.customerName = 'Guest Customer',
   });
 
-  static const double _taxRate = 0.085;
-
-  double get subtotal => items.fold(0, (sum, item) => sum + item.lineTotal);
-  double get total => subtotal + (subtotal * _taxRate);
   int get itemCount => items.fold(0, (sum, item) => sum + item.quantity);
 
   @override
@@ -98,7 +103,7 @@ class CartPanel extends StatelessWidget {
               },
             ),
           ),
-          OrderSummary(subtotal: subtotal),
+          OrderSummary(totals: totals),
           PaymentButtons(
             selected: selectedPayment,
             onSelect: onSelectPayment,
@@ -108,7 +113,7 @@ class CartPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(AppSpacing.cardPadding, 0, AppSpacing.cardPadding, AppSpacing.cardPadding),
             child: CompleteSaleButton(
-              totalAmount: total,
+              totalAmount: totals.grandTotal,
               itemCount: itemCount,
               customerName: customerName,
               paymentMethod: selectedPayment,

@@ -1,54 +1,46 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/networking/api_result.dart';
+import 'package:management_inventory_pro/core/services/sale_calculator.dart';
 import 'package:management_inventory_pro/features/pos/data/repository/pos_repository.dart';
+import 'package:management_inventory_pro/features/settings/data/models/settings_business_data.dart';
+import 'package:management_inventory_pro/features/settings/data/repository/settings_repository.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../data/models/cart_item.dart';
 import '../../data/models/pos_product.dart';
 import 'pos_state.dart';
 
-/// Cubit responsible for all POS cart and product-search business logic:
-/// adding, updating and removing cart items, clearing the cart, completing
-/// a sale, and filtering the already-loaded product catalog as the
-/// cashier types into the search bar.
-///
-/// Design notes:
-/// * State is never mutated in place. Every list is copied (`[...list]`)
-///   before being changed, and every changed item/cart is rebuilt as a new
-///   object via its `copyWith`/constructor rather than having a field
-///   reassigned on the existing instance.
-/// * Totals ([CartModel.totalItems], [CartModel.totalQuantity],
-///   [CartModel.totalAmount]) are *never* incremented or decremented by
-///   hand. They are always recalculated from scratch from the current list
-///   of cart items (see [_rebuildCart]) so they can never drift out of
-///   sync with the actual line items.
-/// * Search never re-fetches from a repository. [setProducts] is the only
-///   entry point for new product data (called by the data-loading layer);
-///   [searchProducts] only ever re-filters [PosState.allProducts], which is
-///   left completely untouched — only [PosState.filteredProducts] changes.
 class PosCubit extends Cubit<PosState> {
-  PosCubit(this._repository) : super(PosState.initial());
+  PosCubit(this._repository, {SettingsRepository? settingsRepository})
+      : _settingsRepository = settingsRepository,
+        super(PosState.initial()) {
+    _settingsFuture = _loadTaxSettings();
+  }
+
   final PosRepository _repository;
+  final SettingsRepository? _settingsRepository;
   final Uuid _uuid = const Uuid();
 
-  // ---------------------------------------------------------------------
-  // Public API
-  // ---------------------------------------------------------------------
+  late final Future<SettingsBusinessData?> _settingsFuture;
 
-  /// Adds [product] to the cart.
-  ///
-  /// * If there is no cart yet, a new [CartModel] is created with a single
-  ///   [CartItemModel] for [product].
-  /// * If [product] is already in the cart, its line item's quantity is
-  ///   incremented by 1.
-  /// * Otherwise a new [CartItemModel] is appended to the cart.
+  Future<SettingsBusinessData?> _loadTaxSettings() async {
+    final repository = _settingsRepository;
+    if (repository == null) return null;
+
+    final result = await repository.getBusinessSettings();
+    return switch (result) {
+      Success(data: final data) => data,
+      Failure() => null,
+    };
+  }
+
   Future<void> addToCart(PosProduct product) async {
     try {
       final currentCart = state.cart;
 
       if (currentCart == null) {
         final newItem = _createItem(product);
-        final newCart = _rebuildCart(
+        final newCart = await _rebuildCart(
           CartModel(
             id: _uuid.v4(),
             items: const [],
@@ -70,7 +62,7 @@ class PosCubit extends Cubit<PosState> {
 
       final updatedItems = [...currentCart.items];
       final existingIndex = updatedItems.indexWhere(
-        (item) => item.product.id == product.id,
+            (item) => item.product.id == product.id,
       );
 
       if (existingIndex != -1) {
@@ -83,7 +75,7 @@ class PosCubit extends Cubit<PosState> {
         updatedItems.add(_createItem(product));
       }
 
-      final rebuiltCart = _rebuildCart(currentCart, updatedItems);
+      final rebuiltCart = await _rebuildCart(currentCart, updatedItems);
 
       emit(
         state.copyWith(
@@ -103,10 +95,6 @@ class PosCubit extends Cubit<PosState> {
     }
   }
 
-  /// Increases by 1 the quantity of the cart item whose product matches
-  /// [productId].
-  ///
-  /// No-op if there is no cart or the product isn't in it.
   Future<void> increaseQuantity(String productId) async {
     try {
       final currentCart = state.cart;
@@ -114,14 +102,14 @@ class PosCubit extends Cubit<PosState> {
 
       final updatedItems = [...currentCart.items];
       final index = updatedItems.indexWhere(
-        (item) => item.product.id == productId,
+            (item) => item.product.id == productId,
       );
       if (index == -1) return;
 
       final item = updatedItems[index];
       updatedItems[index] = _copyItemWithQuantity(item, item.quantity + 1);
 
-      final rebuiltCart = _rebuildCart(currentCart, updatedItems);
+      final rebuiltCart = await _rebuildCart(currentCart, updatedItems);
 
       emit(
         state.copyWith(
@@ -141,14 +129,6 @@ class PosCubit extends Cubit<PosState> {
     }
   }
 
-  /// Decreases by 1 the quantity of the cart item whose product matches
-  /// [productId].
-  ///
-  /// If the item's quantity is greater than 1, it is simply decremented.
-  /// If the item's quantity is exactly 1, the item is removed from the
-  /// cart entirely instead of letting it sit at quantity 0.
-  ///
-  /// No-op if there is no cart or the product isn't in it.
   Future<void> decreaseQuantity(String productId) async {
     try {
       final currentCart = state.cart;
@@ -156,7 +136,7 @@ class PosCubit extends Cubit<PosState> {
 
       final updatedItems = [...currentCart.items];
       final index = updatedItems.indexWhere(
-        (item) => item.product.id == productId,
+            (item) => item.product.id == productId,
       );
       if (index == -1) return;
 
@@ -168,7 +148,7 @@ class PosCubit extends Cubit<PosState> {
         updatedItems.removeAt(index);
       }
 
-      final rebuiltCart = _rebuildCart(currentCart, updatedItems);
+      final rebuiltCart = await _rebuildCart(currentCart, updatedItems);
 
       emit(
         state.copyWith(
@@ -188,10 +168,6 @@ class PosCubit extends Cubit<PosState> {
     }
   }
 
-  /// Removes the cart item whose product matches [productId] entirely,
-  /// regardless of its current quantity.
-  ///
-  /// No-op if there is no cart or the product isn't in it.
   Future<void> removeItem(String productId) async {
     try {
       final currentCart = state.cart;
@@ -201,7 +177,7 @@ class PosCubit extends Cubit<PosState> {
           .where((item) => item.product.id != productId)
           .toList(growable: false);
 
-      final rebuiltCart = _rebuildCart(currentCart, updatedItems);
+      final rebuiltCart = await _rebuildCart(currentCart, updatedItems);
 
       emit(
         state.copyWith(
@@ -221,8 +197,6 @@ class PosCubit extends Cubit<PosState> {
     }
   }
 
-  /// Removes every item from the cart and resets it (the next [addToCart]
-  /// call will start a brand new [CartModel]).
   Future<void> clearCart() async {
     try {
       emit(
@@ -243,14 +217,6 @@ class PosCubit extends Cubit<PosState> {
     }
   }
 
-  /// Registers (or refreshes) the full catalog of already-loaded products
-  /// for the POS screen.
-  ///
-  /// Call this once the product-fetching layer (e.g. `ProductCubit`)
-  /// successfully loads data — never re-fetches anything itself. The
-  /// current [PosState.searchQuery] (if any) is immediately re-applied to
-  /// [products] so an in-progress search stays consistent if the catalog
-  /// refreshes underneath it.
   void setProducts(List<PosProduct> products) {
     try {
       final allProducts = List<PosProduct>.unmodifiable(products);
@@ -272,14 +238,6 @@ class PosCubit extends Cubit<PosState> {
     }
   }
 
-  /// Filters the already-loaded [PosState.allProducts] by [query] and
-  /// updates [PosState.filteredProducts] accordingly.
-  ///
-  /// * Never touches the database/repository — it only re-filters products
-  ///   that are already in memory.
-  /// * Case-insensitive, and ignores leading/trailing whitespace.
-  /// * Matches against product name, SKU, and barcode.
-  /// * An empty (or whitespace-only) [query] shows every product again.
   void searchProducts(String query) {
     try {
       final normalizedQuery = query.trim();
@@ -303,11 +261,24 @@ class PosCubit extends Cubit<PosState> {
 
   /// Finalizes the current sale.
   ///
-  /// Emits [PosStatus.loading] while the (simulated) transaction is being
-  /// processed, then emits [PosStatus.success] with
-  /// [ActionStatus.completeSale] once it finishes and clears the cart so
-  /// the POS screen is ready for the next customer.
+  /// FIX: previously, if [state.cart] was null this method emitted
+  /// [PosStatus.loading] and then returned with no follow-up emission —
+  /// the UI would show a permanent loading spinner with no way to
+  /// recover. It now emits [PosStatus.failure] in that case instead, so
+  /// "complete sale" with an empty cart always resolves to a visible,
+  /// actionable state.
   Future<void> completeSale() async {
+    if (state.cart == null) {
+      emit(
+        state.copyWith(
+          status: PosStatus.failure,
+          actionStatus: ActionStatus.completeSale,
+          errorMessage: 'Cannot complete sale: cart is empty.',
+        ),
+      );
+      return;
+    }
+
     emit(
       state.copyWith(
         status: PosStatus.loading,
@@ -315,11 +286,9 @@ class PosCubit extends Cubit<PosState> {
         clearError: true,
       ),
     );
-    if(state.cart==null) {
-      return;
-    }
-    final response =await _repository.completeSale(state.cart!);
-    switch(response){
+
+    final response = await _repository.completeSale(state.cart!);
+    switch (response) {
       case Success():
         emit(
           state.copyWith(
@@ -329,7 +298,7 @@ class PosCubit extends Cubit<PosState> {
             clearError: true,
           ),
         );
-      case Failure(errorModel:final error):
+      case Failure(errorModel: final error):
         emit(
           state.copyWith(
             status: PosStatus.failure,
@@ -337,14 +306,8 @@ class PosCubit extends Cubit<PosState> {
           ),
         );
     }
-
   }
 
-  // ---------------------------------------------------------------------
-  // Private helpers
-  // ---------------------------------------------------------------------
-
-  /// Builds a brand new [CartItemModel] with quantity 1 for [product].
   CartItemModel _createItem(PosProduct product) {
     return CartItemModel(
       id: _uuid.v4(),
@@ -354,8 +317,6 @@ class PosCubit extends Cubit<PosState> {
     );
   }
 
-  /// Returns a *new* [CartItemModel] with [quantity] applied, leaving
-  /// [item] itself untouched (never does `item.quantity = ...`).
   CartItemModel _copyItemWithQuantity(CartItemModel item, int quantity) {
     return CartItemModel(
       id: item.id,
@@ -365,29 +326,6 @@ class PosCubit extends Cubit<PosState> {
     );
   }
 
-  /// Sum of (quantity × sellingPrice) across all [items].
-  double _calculateTotalAmount(List<CartItemModel> items) {
-    return items.fold<double>(
-      0,
-      (sum, item) => sum + (item.product.price * item.quantity),
-    );
-  }
-
-  /// Sum of all item quantities across [items].
-  double _calculateTotalQuantity(List<CartItemModel> items) {
-    return items.fold<double>(0, (sum, item) => sum + item.quantity);
-  }
-
-  /// Number of unique product line items in [items].
-  int _calculateTotalItems(List<CartItemModel> items) {
-    return items.length;
-  }
-
-  /// Returns a new, unmodifiable list containing only the [products] whose
-  /// name, SKU, or barcode contains [query] (case-insensitive).
-  ///
-  /// [query] is expected to already be trimmed by the caller. An empty
-  /// [query] short-circuits to "everything matches".
   List<PosProduct> _filterProducts(List<PosProduct> products, String query) {
     if (query.isEmpty) {
       return List<PosProduct>.unmodifiable(products);
@@ -406,18 +344,34 @@ class PosCubit extends Cubit<PosState> {
     }).toList(growable: false);
   }
 
-  /// Returns a new [CartModel] derived from [baseCart], with [items]
-  /// applied and every total recalculated from scratch.
-  ///
-  /// Previously stored totals are never trusted or carried forward — they
-  /// are always derived fresh from the current item list, which is the
-  /// only way to guarantee they can't go stale or get out of sync.
-  CartModel _rebuildCart(CartModel baseCart, List<CartItemModel> items) {
+  Future<CartModel> _rebuildCart(
+      CartModel baseCart,
+      List<CartItemModel> items,
+      ) async {
+    final settings = await _settingsFuture;
+
+    final rawTotal = items.fold<double>(
+      0,
+          (sum, item) => sum + item.lineTotal,
+    );
+
+    final totals = SaleCalculator.calculate(
+      subtotal: rawTotal,
+      discountAmount: 0,
+      taxEnabled: settings?.taxEnabled ?? false,
+      taxPercentage: settings?.taxPercentage ?? 0,
+      // TODO(tax): SettingsBusinessData does not expose `prices_include_tax`
+      // yet. Hardcoded to false (catalog prices are tax-exclusive) so this
+      // compiles against the current Settings model. Once the Settings
+      // feature adds `pricesIncludeTax` to SettingsBusinessData, swap this
+      // back to `settings?.pricesIncludeTax ?? false` — no other POS code
+      // needs to change, SaleCalculator already handles both branches.
+      pricesIncludeTax: false,
+    );
+
     return baseCart.copyWith(
       items: items,
-      totalItems: _calculateTotalItems(items),
-      totalQuantity: _calculateTotalQuantity(items),
-      totalAmount: _calculateTotalAmount(items),
+      totals: totals,
       updatedAt: DateTime.now(),
     );
   }

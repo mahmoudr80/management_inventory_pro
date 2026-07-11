@@ -32,7 +32,12 @@ class SaleItemModel {
   factory SaleItemModel.fromMap(Map<String,Object?>map){
     return SaleItemModel(
       id: map[DatabaseConstants.saleItemId] as String,
-      quantity: (map[DatabaseConstants.quantityColumn] as double).toInt() ,
+      // FIX: quantity is stored in a REAL column (see database_service.dart),
+      // and a Dart `int` written into it can come back as either `int` or
+      // `double` depending on the sqflite platform driver. Casting straight
+      // to `double` crashed whenever the driver returned an int. `as num`
+      // accepts either runtime type safely.
+      quantity: (map[DatabaseConstants.quantityColumn] as num).toInt(),
       sellingPrice: (map[DatabaseConstants.sellingPriceColumn] as num).toDouble(),
       product: PosProduct(
         id: map[DatabaseConstants.productIdColumn] as String,

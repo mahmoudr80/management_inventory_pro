@@ -43,17 +43,13 @@ import '../models/top_selling_product.dart';
   SELECT
       COALESCE(
           SUM(
-              ${DatabaseConstants.saleItemTable}.${DatabaseConstants.quantityColumn} *
-              ${DatabaseConstants.saleItemTable}.${DatabaseConstants.sellingPriceColumn}
+              ${DatabaseConstants.saleTable}.${DatabaseConstants.subtotalColumn} -
+              ${DatabaseConstants.saleTable}.${DatabaseConstants.discountAmountColumn}
           ),
           0
       ) AS ${DatabaseConstants.totalRevenue}
   
-  FROM ${DatabaseConstants.saleItemTable}
-  
-  INNER JOIN ${DatabaseConstants.saleTable}
-  ON ${DatabaseConstants.saleTable}.${DatabaseConstants.idColumn} =
-     ${DatabaseConstants.saleItemTable}.${DatabaseConstants.saleIdColumn}
+  FROM ${DatabaseConstants.saleTable}
   
   WHERE DATE(${DatabaseConstants.saleTable}.${DatabaseConstants.updatedAtColumn}) =
         DATE('now', '-$days day');
@@ -211,6 +207,11 @@ import '../models/top_selling_product.dart';
       s.${DatabaseConstants.totalItemColumn},
       s.${DatabaseConstants.totalQuantityColumn},
       s.${DatabaseConstants.totalAmountColumn},
+      s.${DatabaseConstants.subtotalColumn},
+      s.${DatabaseConstants.discountAmountColumn},
+      s.${DatabaseConstants.taxEnabledColumn},
+      s.${DatabaseConstants.taxPercentageColumn},
+      s.${DatabaseConstants.taxAmountColumn},
       s.${DatabaseConstants.noteColumn},
       s.${DatabaseConstants.paymentMethodColumn},
       s.${DatabaseConstants.cashierNameColumn},

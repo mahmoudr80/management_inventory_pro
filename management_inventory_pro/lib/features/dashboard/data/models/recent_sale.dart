@@ -12,12 +12,31 @@ class RecentSaleRef {
   final PaymentMethod paymentMethod;
   final List<RecentSaleItemRef> items;
 
+  /// Tax-exclusive, pre-discount sum of line items, exactly as persisted
+  /// on the sale at checkout time.
+  final double subtotal;
+
+  final double discountAmount;
+
+  final bool taxEnabled;
+
+  /// The tax percentage actually applied to this sale. `0` when
+  /// [taxEnabled] is false.
+  final double taxPercentage;
+
+  final double taxAmount;
+
    RecentSaleRef({
     required this.id,
     required this.date,
     required this.cashier,
     required this.totalAmount,
     required this.status,
+    required this.subtotal,
+    required this.discountAmount,
+    required this.taxEnabled,
+    required this.taxPercentage,
+    required this.taxAmount,
     List<RecentSaleItemRef>? items,
     this.paymentMethod=PaymentMethod.cash,
   }) : items = items ?? <RecentSaleItemRef>[];
@@ -34,6 +53,11 @@ class RecentSaleRef {
       ),
       cashier: map[DatabaseConstants.cashierNameColumn] as String,
       totalAmount: (map[DatabaseConstants.totalAmountColumn] as num).toDouble(),
+      subtotal: ((map[DatabaseConstants.subtotalColumn] as num?) ?? 0).toDouble(),
+      discountAmount: ((map[DatabaseConstants.discountAmountColumn] as num?) ?? 0).toDouble(),
+      taxEnabled: ((map[DatabaseConstants.taxEnabledColumn] as int?) ?? 0) == 1,
+      taxPercentage: ((map[DatabaseConstants.taxPercentageColumn] as num?) ?? 0).toDouble(),
+      taxAmount: ((map[DatabaseConstants.taxAmountColumn] as num?) ?? 0).toDouble(),
       paymentMethod: PaymentMethod.values.firstWhere(
             (e) => e.name == map[DatabaseConstants.paymentMethodColumn],
         orElse: () => PaymentMethod.cash,

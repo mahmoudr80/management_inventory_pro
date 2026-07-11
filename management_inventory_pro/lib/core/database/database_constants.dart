@@ -36,6 +36,9 @@ class DatabaseConstants {
   static const String stockEntryIdColumn = "stock_entry_id";
   static const String totalItemColumn = "total_items";
   static const String totalQuantityColumn = "total_quantity";
+  static const String subtotalColumn = "subtotal";
+  static const String discountAmountColumn = "discount_amount";
+  static const String taxAmountColumn = "tax_amount";
   static const String totalCostColumn = "total_cost";
   static const String totalColumn = "total";
   static const String totalAmountColumn = "total_amount"; //sale table

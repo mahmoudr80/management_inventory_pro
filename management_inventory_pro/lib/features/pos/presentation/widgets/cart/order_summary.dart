@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:management_inventory_pro/core/services/sale_calculator.dart';
 import '../../theme/pos_theme_extension.dart';
 
+/// Renders the cart's tax/discount breakdown. Never calculates anything
+/// itself — [totals] is always produced upstream by `SaleCalculator` (via
+/// `PosCubit`) and simply displayed here.
 class OrderSummary extends StatelessWidget {
-  final double subtotal;
-  final double taxRate;
+  final SaleTotals totals;
 
   const OrderSummary({
     super.key,
-    required this.subtotal,
-    this.taxRate = 0.085,
+    required this.totals,
   });
-
-  double get tax => subtotal * taxRate;
-  double get total => subtotal + tax;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +20,18 @@ class OrderSummary extends StatelessWidget {
       decoration: BoxDecoration(color: context.posColors.summaryBg),
       child: Column(
         children: [
+          _SummaryRow(label: 'Subtotal', value: totals.subtotal),
+          const SizedBox(height: 8),
+          _SummaryRow(label: 'Discount', value: -totals.discountAmount),
+          // Tax row disappears completely when tax is disabled.
+          if (totals.taxEnabled) ...[
+            const SizedBox(height: 8),
+            _SummaryRow(
+              label: 'Tax (${totals.taxPercentage.toStringAsFixed(0)}%)',
+              value: totals.taxAmount,
+            ),
+          ],
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -29,7 +40,7 @@ class OrderSummary extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: context.posColors.textPrimary),
               ),
               Text(
-                '\$${total.toStringAsFixed(2)}',
+                '\$${totals.grandTotal.toStringAsFixed(2)}',
                 style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: context.posColors.primary),
               ),
             ],
@@ -48,12 +59,13 @@ class _SummaryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isNegative = value < 0;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: TextStyle(color: context.posColors.textSecondary, fontSize: 13.5)),
         Text(
-          '\$${value.toStringAsFixed(2)}',
+          '${isNegative ? '-' : ''}\$${value.abs().toStringAsFixed(2)}',
           style: TextStyle(color: context.posColors.textPrimary, fontSize: 13.5, fontWeight: FontWeight.w600),
         ),
       ],

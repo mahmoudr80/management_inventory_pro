@@ -4,6 +4,10 @@ import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
 import 'package:management_inventory_pro/core/theme/app_dimens.dart';
 import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
 
+/// Renders the payment/receipt breakdown for a completed [sale]. Never
+/// calculates anything itself — every value here is exactly what was
+/// persisted at checkout time (see [SaleModel]'s docs), never
+/// recalculated from [sale.items].
 class PaymentSummaryCard extends StatelessWidget {
   const PaymentSummaryCard({super.key, required this.sale});
 
@@ -11,7 +15,6 @@ class PaymentSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtotal = sale.totalAmount;
     final totalQty = sale.totalQuantity;
 
     return Container(
@@ -41,17 +44,31 @@ class PaymentSummaryCard extends StatelessWidget {
             label: 'Total Quantity',
             value: totalQty.toString(),
           ),
-          _SummaryRow(
-            label: 'Subtotal',
-            value: '\$${subtotal.toStringAsFixed(2)}',
-          ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
             child: Divider(height: 1, color: context.colors.border),
           ),
           _SummaryRow(
-            label: 'Total',
-            value: '\$${subtotal.toStringAsFixed(2)}',
+            label: 'Subtotal',
+            value: '\$${sale.subtotal.toStringAsFixed(2)}',
+          ),
+          _SummaryRow(
+            label: 'Discount',
+            value: '-\$${sale.discountAmount.toStringAsFixed(2)}',
+          ),
+          // Tax row disappears completely when tax was disabled for this sale.
+          if (sale.taxEnabled)
+            _SummaryRow(
+              label: 'Tax (${sale.taxPercentage.toStringAsFixed(0)}%)',
+              value: '\$${sale.taxAmount.toStringAsFixed(2)}',
+            ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+            child: Divider(height: 1, color: context.colors.border),
+          ),
+          _SummaryRow(
+            label: 'Grand Total',
+            value: '\$${sale.totalAmount.toStringAsFixed(2)}',
             labelStyle: AppTextStyles.headlineSm.copyWith(
               fontWeight: FontWeight.w700,
             ),
