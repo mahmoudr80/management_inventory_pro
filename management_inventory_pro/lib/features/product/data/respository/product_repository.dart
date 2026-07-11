@@ -17,4 +17,20 @@ class ProductRepository {
   Future<ApiResult<int>>delete(String id) async {
     return await _datasource.delete(id);
   }
+
+  /// Updates Product Master Data only — see
+  /// [ProductLocalDatasource.updateProduct]. current_stock, created_at,
+  /// and id are never part of the UPDATE regardless of what [product]
+  /// contains.
+  Future<ApiResult<int>> updateProduct(ProductModel product) async {
+    return await _datasource.updateProduct(product);
+  }
+
+  Future<bool> isSkuTaken(String sku, String excludeId) async {
+    return await _datasource.isSkuTaken(sku, excludeId);
+  }
+
+  Future<bool> isBarcodeTaken(String barcode, String excludeId) async {
+    return await _datasource.isBarcodeTaken(barcode, excludeId);
+  }
 }

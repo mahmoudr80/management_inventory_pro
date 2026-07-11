@@ -9,11 +9,13 @@ class ProductGrid extends StatelessWidget {
     super.key,
     required this.products,
     required this.onDelete,
+    required this.onEdit,
     this.controller,
   });
 
   final List<ProductModel> products;
   final ValueChanged<String> onDelete;
+  final ValueChanged<String> onEdit;
   final ScrollController? controller;
 
   static int _columnsForWidth(double width) {
@@ -47,6 +49,7 @@ class ProductGrid extends StatelessWidget {
               key: ValueKey(product.id),
               product: product,
               onDelete: () => onDelete(product.id),
+              onEdit: () => onEdit(product.id),
             );
           },
         );

@@ -1,20 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_theme_extension.dart';
-import '../../../../../../core/theme/app_text_styles.dart';
-import '../../../../../../core/components/app_card.dart';
-import '../../../../../../core/components/status_chip.dart';
-import '../../../data/models/product_model.dart';
+import 'package:management_inventory_pro/core/theme/app_theme_extension.dart';
+import 'package:management_inventory_pro/core/theme/app_text_styles.dart';
+import 'package:management_inventory_pro/core/components/app_card.dart';
+import 'package:management_inventory_pro/core/components/status_chip.dart';
+import 'package:management_inventory_pro/features/product/data/models/product_model.dart';
 
 class ProductGridCard extends StatelessWidget {
   final ProductModel product;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   const ProductGridCard({
     super.key,
     required this.product,
     required this.onDelete,
+    required this.onEdit,
   });
 
   @override
@@ -65,6 +67,18 @@ class ProductGridCard extends StatelessWidget {
                   ),
                 ),
               ),
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                tooltip: 'Edit product',
+                icon: Icon(
+                  Icons.edit_outlined,
+                  size: 16,
+                  color: context.colors.primary,
+                ),
+                onPressed: onEdit,
+              ),
+              const SizedBox(width: 2),
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
