@@ -23,6 +23,12 @@ class CartItemModel {
     DatabaseConstants.sellingPriceColumn: product.price,
     DatabaseConstants.quantityColumn: quantity,
     DatabaseConstants.totalColumn: lineTotal,
+    // Snapshot the product's cost at the exact moment this line was
+    // added to a sale — the only point in the system where "current
+    // cost" and "cost at time of sale" are guaranteed to be the same
+    // value. Once written, this never changes even if the product's
+    // cost_price is later updated by a new stock receipt.
+    DatabaseConstants.costPriceAtSaleColumn: product.costPrice,
   };
 }
 

@@ -11,7 +11,7 @@ class SaleHistoryDatasource {
   const SaleHistoryDatasource(this._database);
 
   Future<ApiResult> getSales() async {
-    try{
+    try {
       final rows = await _database.rawQuery('''
 SELECT
     s.${DatabaseConstants.idColumn} AS ${DatabaseConstants.saleIdColumn},
@@ -35,12 +35,14 @@ SELECT
     si.${DatabaseConstants.quantityColumn},
     si.${DatabaseConstants.sellingPriceColumn},
     si.${DatabaseConstants.totalColumn},
+    si.${DatabaseConstants.costPriceAtSaleColumn},
 
     p.${DatabaseConstants.nameColumn},
     p.${DatabaseConstants.skuColumn},
     p.${DatabaseConstants.barcodeColumn},
     p.${DatabaseConstants.imageUrlColumn},
-    p.${DatabaseConstants.sellingPriceColumn} AS ${DatabaseConstants.productPrice}
+    p.${DatabaseConstants.sellingPriceColumn} AS ${DatabaseConstants.productPrice},
+    p.${DatabaseConstants.costPriceColumn} AS ${DatabaseConstants.productCostPrice}
 
 FROM ${DatabaseConstants.saleTable} s
 
@@ -52,7 +54,6 @@ INNER JOIN ${DatabaseConstants.productTable} p
 
 ORDER BY s.${DatabaseConstants.createdAtColumn} DESC
 ''');
-
       final Map<String, SaleModel> salesMap = {};
 
       for (final row in rows) {
@@ -61,16 +62,14 @@ ORDER BY s.${DatabaseConstants.createdAtColumn} DESC
         final item = SaleItemModel.fromMap(row);
 
         if (!salesMap.containsKey(saleId)) {
-          salesMap[saleId] = SaleModel.fromMap( map: row,saleId: saleId,);
-
+          salesMap[saleId] = SaleModel.fromMap(map: row, saleId: saleId);
         }
         salesMap[saleId]!.items.add(item);
       }
 
       return ApiResult.success(salesMap.values.toList());
-    }catch(e){
+    } catch (e) {
       return ApiResult.failure(ApiErrorModel(message: e.toString()));
     }
-
   }
 }

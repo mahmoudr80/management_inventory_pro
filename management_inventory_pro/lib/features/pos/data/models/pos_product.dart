@@ -5,6 +5,7 @@ class PosProduct {
   final String id;
   final String name;
   final double price;
+  final double costPrice; // NEW — needed to snapshot cost_price_at_sale at checkout
   final String? imageUrl;
   final bool outOfStock;
   final String category;
@@ -24,25 +25,28 @@ class PosProduct {
     required this.id,
     required this.name,
     required this.price,
+    required this.costPrice,
     this.imageUrl,
     this.outOfStock = false,
     this.category = 'General',
     this.sku,
-    this.barcode, this.currentStock, this.categoryId, this.unit,
+    this.barcode,
+    this.currentStock,
+    this.categoryId,
+    this.unit,
   });
 
   factory PosProduct.fromProduct(ProductModel product) => PosProduct(
-        id: product.id,
-        name: product.name,
-        price: product.sellingPrice,
-        imageUrl: product.imageUrl,
-        category: product.category ?? "generic",
-        outOfStock: product.status == StatusType.outOfStock,
-        // NOTE: adjust these two lines to match whatever your ProductModel
-        // actually calls these fields (e.g. `skuCode`, `barcodeNumber`) if
-        // the names differ — they're required for SKU/barcode search.
-        sku: product.sku,
-        barcode: product.barcode,
-        currentStock:product.currentStock
-      );
+    id: product.id,
+    name: product.name,
+    price: product.sellingPrice,
+    costPrice: product.costPrice, // assumed field on ProductModel — see note below
+    imageUrl: product.imageUrl,
+    category: product.category ?? "generic",
+    outOfStock: product.status == StatusType.outOfStock,
+    sku: product.sku,
+    barcode: product.barcode,
+    currentStock: product.currentStock,
+  );
+
 }

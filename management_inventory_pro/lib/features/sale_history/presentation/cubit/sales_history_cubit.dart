@@ -307,10 +307,10 @@ class SalesHistoryCubit extends Cubit<SalesHistoryState> {
 
     // Reusable mock PosProducts
     final products = [
-      PosProduct(id: 'p1', name: 'Coca Cola 330ml', price: 1.50, currentStock: 100, categoryId: 1, unit: 'pcs'),
-      PosProduct(id: 'p2', name: 'Pepsi 330ml', price: 1.50, currentStock: 100, categoryId: 1, unit: 'pcs'),
-      PosProduct(id: 'p3', name: 'Lays Classic', price: 2.25, currentStock: 50, categoryId: 2, unit: 'pcs'),
-      PosProduct(id: 'p4', name: 'Water 1.5L', price: 0.75, currentStock: 200, categoryId: 1, unit: 'pcs'),
+      PosProduct(id: 'p1', name: 'Coca Cola 330ml', price: 1.50, currentStock: 100, categoryId: 1, unit: 'pcs', costPrice: 0),
+      PosProduct(id: 'p2', name: 'Pepsi 330ml', price: 1.50, currentStock: 100, categoryId: 1, unit: 'pcs', costPrice: 0),
+      PosProduct(id: 'p3', name: 'Lays Classic', price: 2.25, currentStock: 50, categoryId: 2, unit: 'pcs', costPrice: 0),
+      PosProduct(id: 'p4', name: 'Water 1.5L', price: 0.75, currentStock: 200, categoryId: 1, unit: 'pcs' , costPrice: 0),
     ];
 
     final cashiers = ['Admin', 'John', 'Mary', 'Sara'];

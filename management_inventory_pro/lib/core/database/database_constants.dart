@@ -35,6 +35,7 @@ class DatabaseConstants {
   static const String productIdColumn = "product_id";//stock entry items table
   static const String stockEntryIdColumn = "stock_entry_id";
   static const String totalItemColumn = "total_items";
+  static const String receivedByColumn = "received_by";
   static const String totalQuantityColumn = "total_quantity";
   static const String subtotalColumn = "subtotal";
   static const String discountAmountColumn = "discount_amount";
@@ -53,6 +54,12 @@ class DatabaseConstants {
   static const String newStockColumn = "new_stock"; //stock adjustment Item table
   static const String totalInventoryValueChangeColumn = "total_inventory_value_change"; //stock adjustment Item table
   static const String inventoryValueChangeColumn = "inventory_value_change"; //stock adjustment Item table
+
+  static const String costPriceAtSaleColumn = "cost_price_at_sale";
+
+  static const productCostPrice = 'product_cost_price';
+
+
   // Settings table
   static const String storeNameColumn = "store_name";
   static const String currencyColumn = "currency";
