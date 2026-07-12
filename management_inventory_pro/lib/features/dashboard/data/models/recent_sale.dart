@@ -51,7 +51,7 @@ class RecentSaleRef {
       date: DateTime.parse(
         map[DatabaseConstants.createdAtColumn] as String,
       ),
-      cashier: map[DatabaseConstants.cashierNameColumn] as String,
+      cashier: (map[DatabaseConstants.cashierNameColumn] as String?) ?? 'Admin',
       totalAmount: (map[DatabaseConstants.totalAmountColumn] as num).toDouble(),
       subtotal: ((map[DatabaseConstants.subtotalColumn] as num?) ?? 0).toDouble(),
       discountAmount: ((map[DatabaseConstants.discountAmountColumn] as num?) ?? 0).toDouble(),
@@ -83,16 +83,20 @@ class RecentSaleItemRef {
   });
 
   double get total => quantity * sellingPrice;
+// recent_sale.dart
   factory RecentSaleItemRef.fromMap(Map<String, Object?> map) {
     return RecentSaleItemRef(
       id: map[DatabaseConstants.saleItemId] as String,
       quantity: (map[DatabaseConstants.quantityColumn] as num).toInt(),
-      sellingPrice:
-      (map[DatabaseConstants.sellingPriceColumn] as num).toDouble(),
+      sellingPrice: (map[DatabaseConstants.sellingPriceColumn] as num).toDouble(),
       product: PosProduct(
         id: map[DatabaseConstants.productIdColumn] as String,
         name: map[DatabaseConstants.nameColumn] as String,
         price: (map[DatabaseConstants.productPrice] as num).toDouble(),
+        costPrice: ((map[DatabaseConstants.costPriceAtSaleColumn] as num?) ??
+            (map[DatabaseConstants.productCostPrice] as num?) ??
+            0)
+            .toDouble(),
         imageUrl: map[DatabaseConstants.imageUrlColumn] as String?,
         sku: map[DatabaseConstants.skuColumn] as String?,
         barcode: map[DatabaseConstants.barcodeColumn] as String?,
