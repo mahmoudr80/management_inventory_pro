@@ -1,37 +1,55 @@
+import '../../../../core/logger/logger.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:management_inventory_pro/features/auth/presentation/cubit/auth_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
-import '../../../../generated/locale_keys.g.dart';
 import '../cubit/auth_state.dart';
+import 'login_screen.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+/// Reached ONLY by opening the password-recovery deep link
+/// (`managementinventory://auth?...&type=recovery`) — there is no button
+/// anywhere in the app that navigates here directly. The global
+/// `AuthDeepLinkListener` pushes this screen the moment [PasswordRecovery]
+/// is emitted, replacing whatever was on screen, since a stale recovery
+/// session shouldn't be left reachable via back navigation.
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  void _onResetPressed() {
+  String? _validateConfirmPassword(String? value) {
+    final passwordError = Validators.validatePassword(value);
+    if (passwordError != null) return passwordError;
+    if (value != _passwordController.text) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
+  void _onSubmit() {
     if (_formKey.currentState?.validate() ?? false) {
-      context.read<AuthCubit>().forgotPassword(_emailController.text.trim());
+      context.read<AuthCubit>().updatePassword(_passwordController.text);
     }
   }
 
-  void _showSuccessDialog(String email) {
+  void _showSuccessDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (dialogContext) {
         return Shortcuts(
           shortcuts: <LogicalKeySet, Intent>{
@@ -41,20 +59,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             actions: <Type, Action<Intent>>{
               DismissIntent: CallbackAction<DismissIntent>(
                 onInvoke: (_) {
-                  Navigator.of(dialogContext).pop();
+                  _goToLogin(dialogContext);
                   return null;
                 },
               ),
             },
             child: AlertDialog(
               icon: const Icon(
-                Icons.mark_email_read_outlined,
+                Icons.check_circle_outline,
                 color: AppColors.success,
                 size: 40,
               ),
-              title: const Text('Check your email'),
+              title: const Text('Password updated'),
               content: Text(
-                'We sent password reset instructions to $email.',
+                'Your password has been changed. Please sign in with your '
+                    'new password.',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.body.copyWith(
                   color: AppColors.textSecondary,
@@ -64,10 +83,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               actions: [
                 PrimaryButton(
                   text: 'Back to Login',
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: () => _goToLogin(dialogContext),
                 ),
               ],
             ),
@@ -77,19 +93,38 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
+  void _goToLogin(BuildContext dialogContext) {
+    Navigator.of(dialogContext).pop();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (route) => false,
+    );
+  }
+
+  @override
+  void initState(){
+    super.initState();
+     DebugLogger.log(
+        "ResetPasswordScreen init");
+
+  }
+
   @override
   void dispose() {
-    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
       body: SafeArea(
@@ -105,19 +140,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Icon(
-                      Icons.lock_reset_rounded,
+                      Icons.password_rounded,
                       size: 80.w,
                       color: AppColors.primary,
                     ),
                     SizedBox(height: 24.h),
                     Text(
-                      LocaleKeys.auth_forgot_password.tr(),
+                      'Set a new password',
                       style: AppTextStyles.heading1,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 16.h),
                     Text(
-                      'Enter your email address and we will send you instructions to reset your password.',
+                      'Choose a new password for your account.',
                       style: AppTextStyles.body.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -125,12 +160,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                     SizedBox(height: 48.h),
                     CustomTextField(
-                      label: LocaleKeys.auth_email.tr(),
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      hint: 'email@gmail.com',
-                      validator: Validators.validateEmail,
-                      prefixIcon: const Icon(Icons.email_outlined),
+                      label: 'New Password',
+                      controller: _passwordController,
+                      hint: '..........',
+                      obscureText: true,
+                      validator: Validators.validatePassword,
+                      maxLines: 1,
+                      prefixIcon: const Icon(Icons.lock_outline),
+                    ),
+                    SizedBox(height: 16.h),
+                    CustomTextField(
+                      label: 'Confirm New Password',
+                      controller: _confirmPasswordController,
+                      hint: '..........',
+                      obscureText: true,
+                      validator: _validateConfirmPassword,
+                      maxLines: 1,
+                      prefixIcon: const Icon(Icons.lock_outline),
                     ),
                     SizedBox(height: 32.h),
                     BlocConsumer<AuthCubit, AuthState>(
@@ -142,15 +188,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               backgroundColor: AppColors.error,
                             ),
                           );
-                        } else if (state is ForgotPasswordSent) {
-                          _showSuccessDialog(state.email);
+                        } else if (state is PasswordUpdated) {
+                          _showSuccessDialog();
                         }
                       },
                       builder: (context, state) {
                         return PrimaryButton(
-                          text: 'Reset Password',
+                          text: 'Update Password',
                           isLoading: state is AuthLoading,
-                          onPressed: _onResetPressed,
+                          onPressed: _onSubmit,
                         );
                       },
                     ),
