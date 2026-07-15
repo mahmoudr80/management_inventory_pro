@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:management_inventory_pro/features/auth/presentation/screens/auth_gate.dart';
 import '../../core/dependency_injection/service_locator.dart';
 import '../../core/storage/storage_service.dart';
 import '../home/cubit/home_cubit.dart';
@@ -66,11 +67,8 @@ class _LandingPageState extends State<LandingPage> {
     try {
       await _storageService.saveUser(name: name, imageFile: _pickedImage!);
       if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => BlocProvider(
-          create: (context) => HomeCubit(),
-          child: HomeScreen(),),
-      ));
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder:
+      (context) => AuthGate(startOnLandingPage: false,),), (route) => false,);
     } catch (e) {
       setState(() => _error = 'Could not save profile: $e');
     } finally {

@@ -48,6 +48,7 @@ import '../../features/unit/data/datasource/unit_datasource.dart';
 import '../../features/unit/data/respository/unit_repository.dart';
 import '../components/sidebar/cubit/sidebar_cubit.dart';
 import '../database/database_service.dart';
+import '../services/deep_link/deep_link_service.dart';
 import '../storage/sidebar_preference_service.dart';
 import '../storage/storage_service.dart';
 import '../theme/theme_preference_service.dart';
@@ -95,6 +96,11 @@ Future<void> setupServiceLocator() async {
   );
 
   if(!kIsWeb&&Platform.isWindows){
+
+    final storageService = StorageService();
+    await storageService.init();
+    getIt.registerSingleton<StorageService>(storageService);
+
     //Database
     DatabaseService databaseService=DatabaseService();
     await databaseService.init();
@@ -166,10 +172,7 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<PosCubit>(() => PosCubit(getIt<PosRepository>(),
         settingsRepository: getIt<SettingsRepository>()),);
 
-    final storageService = StorageService();
-    await storageService.init();
 
-    getIt.registerSingleton<StorageService>(storageService);
     
     getIt.registerLazySingleton<InventoryValuationLocalDataSource>
       (() => InventoryValuationLocalDataSource(getIt<DatabaseService>().db),);
@@ -216,6 +219,7 @@ Future<void> setupServiceLocator() async {
 
 
   }
+
 
 // Sidebar UI state persistence (all platforms — shared_preferences,
   // same reasoning as ThemePreferenceService/SettingsPreferencesService).

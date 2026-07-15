@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_inventory_pro/core/storage/storage_service.dart';
+import 'package:management_inventory_pro/features/auth/presentation/screens/auth_gate.dart';
 import 'package:management_inventory_pro/features/category/data/respository/category_repository.dart';
 import 'package:management_inventory_pro/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:management_inventory_pro/features/home/cubit/home_cubit.dart';
@@ -17,8 +19,12 @@ import 'package:management_inventory_pro/features/suppliers/data/repository/supp
 import 'package:management_inventory_pro/features/suppliers/presentation/cubit/suppliers_cubit.dart';
 import 'package:management_inventory_pro/features/suppliers/presentation/screens/suppliers_screen.dart';
 import 'package:management_inventory_pro/features/unit/data/respository/unit_repository.dart';
+import 'package:management_inventory_pro/main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/components/sidebar/side_bar_layout.dart';
 import '../../core/dependency_injection/service_locator.dart';
+import '../../core/logger/logger.dart';
+import '../../core/services/deep_link/deep_link_service.dart';
 import '../category/presentation/cubit/category_cubit.dart';
 import '../pos/presentation/cubit/pos_cubit.dart';
 import '../pos/presentation/screens/pos_screen.dart';
@@ -94,6 +100,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     DebugLogger.log(
+        "HomeScreen build");
     return BlocProvider.value(
       value: getIt<SidebarCubit>(),
       child: Scaffold(
@@ -106,9 +114,14 @@ class HomeScreen extends StatelessWidget {
                   onItemSelected: (value) => context.read<HomeCubit>().navigate(value),
                   onLogout: () async {
                     await getIt<StorageService>().clearUsers();
+                    await Supabase.instance.client.auth.signOut();
+                    final deepLinkService = DeepLinkService();
+                    await deepLinkService.registerWindowsProtocol(); // safe to call every launch
+                    await deepLinkService.init();
+                    if (!context.mounted) return;
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => LandingPage()),
+                      MaterialPageRoute(builder: (context) => AuthGate()),
                           (route) => false,
                     );
                   },

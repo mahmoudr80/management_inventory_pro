@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:management_inventory_pro/core/storage/storage_service.dart';
 
+import '../../../features/auth/data/models/local_user_model.dart';
 import '../../../generated/assets.gen.dart';
 import '../../dependency_injection/service_locator.dart';
 import '../../theme/app_dimens.dart';
@@ -41,7 +42,16 @@ class _SideBarLayoutState extends State<SideBarLayout> {
       context.read<SidebarCubit>().applyResponsiveOverride(isNarrow: isNarrow);
     });
 
-    final user = getIt<StorageService>().getAllUsers().first;
+// side_bar_layout.dart
+
+    final localUsers = getIt<StorageService>().getAllUsers();
+// A Supabase-authenticated user may not have a corresponding local
+// profile yet (e.g. cold start on an existing remote session that
+// never went through the local-profile setup step). Fall back to a
+// placeholder rather than crashing the whole sidebar.
+    final user = localUsers.isNotEmpty
+        ? localUsers.first
+        : User(name: 'User', imagePath: '', createdAt: DateTime.now());
 
     final items = [
       SidebarNavEntry(icon: SvgPicture.asset(Assets.icons.dashboardIcon), label: 'Dashboard'),
