@@ -7,13 +7,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:management_inventory_pro/core/services/deep_link/deep_link_service.dart';
 
 import 'package:management_inventory_pro/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp(startOnLandingPage: false,));
+    final deepLinkService = DeepLinkService();
+    await deepLinkService.registerWindowsProtocol(); // safe to call every launch
+    await deepLinkService.init();
+
+    await tester.pumpWidget(MyApp(deepLinkService: deepLinkService,));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
